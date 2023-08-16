@@ -6,9 +6,9 @@ layui.define(['utils','laydate','customer_cols'],function(exports){
     },
       
     initData: function(store){
-        var router = layui.router();//加载路由器
-        this.data.dataInfo['id']=typeof(router.search.id)!="undefined"?router.search.id:0;  //获取页面参数
-        this.data.dataInfo['bill_id']=typeof(router.search.bill_id)!="undefined"?router.search.bill_id:0;  //获取页面参数
+        var router = layui.router();
+        this.data.dataInfo['id']=typeof(router.search.id)!="undefined"?router.search.id:0; 
+        this.data.dataInfo['bill_id']=typeof(router.search.bill_id)!="undefined"?router.search.bill_id:0;
 
         if(this.data.dataInfo['id']){
             this.data["spellsInfo"]=layui.utils.post('sql_manage_api',{"unique_code":"spells_list",id:this.data.dataInfo['id'],limit:1});
@@ -19,14 +19,13 @@ layui.define(['utils','laydate','customer_cols'],function(exports){
             }
         }
 
-        //获取订舱详情
-        var initBillInfo =layui.utils.post('init_bill_info',{id:this.data.dataInfo['bill_id']});//加载订舱信息
+    
+        var initBillInfo =layui.utils.post('init_bill_info',{id:this.data.dataInfo['bill_id']});
         var cabinetNum=[];
         cabinetNum.push(JSON.parse(initBillInfo["bill_info"]["cabinet_num"]));
         store["data"]["cabinetNum"]=cabinetNum;
         store["data"]["cabinet_info"]=initBillInfo["cabinet_info"];
 
-        //获取订舱数据统计
         this.data['billTotal'] = layui.utils.post('sql_manage_api',{"unique_code":"spells_bill_info",id:this.data.dataInfo['bill_id'],limit:1});
 
         this.data.dataInfo["tj"]=this.data['billTotal']["bill_tj"];
@@ -38,20 +37,20 @@ layui.define(['utils','laydate','customer_cols'],function(exports){
         
         layui.utils.initTpl("form_tmp","#form_box",store);  
         setTimeout(function(){
-            layui.form.render();//渲染表单各个控件
-            layui.form.val("form-account-set", store["dataModel"]["accountCtr"]);//表单赋值
+            layui.form.render();
+            layui.form.val("form-account-set", store["dataModel"]["accountCtr"]);
         },500);
     },
     
     /**
-     * 保存操作
+     * save data
      * @param {type} obj
      * @param {type} store
      * @returns {Boolean}
      */
     saveData:function(obj,store){
         if(typeof(store["data"]["spell_list"])=="undefined"||store["data"]["spell_list"].length==0){
-            return {status:500,msg:"请添加拼货公司！",data:""};
+            return {status:500,msg:"Invalid parameters",data:""};
         }
 
         obj.field["create_user"]=store['data']['user']["user_name"];
@@ -59,7 +58,7 @@ layui.define(['utils','laydate','customer_cols'],function(exports){
         obj.field["unique_code"]="spells_update";
         obj.field["spell_list"]=layui.utils.jsonEncode(store["data"]["spell_list"]);
         var retInfo=layui.utils.post('sql_manage_api',obj.field);
-        layui.form.val("form-account-set", {id:retInfo['data']['ret1']});//表单赋值
+        layui.form.val("form-account-set", {id:retInfo['data']['ret1']});
         return retInfo;
     },
     
@@ -67,7 +66,7 @@ layui.define(['utils','laydate','customer_cols'],function(exports){
         data[0][1]["templet"]=function(d){
             var retInfo=d.bill_num;
             if(d.backPrcs==1){
-                return "<span style='color:red' title='退回原因："+d.comment+"' >"+d.bill_num+"&nbsp;(退回)</span>";
+                return "<span style='color:red' title='锟剿伙拷原锟斤拷"+d.comment+"' >"+d.bill_num+"&nbsp;(锟剿伙拷)</span>";
             }
             return retInfo;
         } 
@@ -88,7 +87,6 @@ layui.define(['utils','laydate','customer_cols'],function(exports){
             "total_mz":parseFloat(store["dataModel"]["accountCtr"]["mz"]),
             "total_tj":parseFloat(store["dataModel"]["accountCtr"]["tj"])
         }
-        //计算总毛重体积
         if(typeof(store["data"]["spell_list"])!="undefined"&&store["data"]["spell_list"].length>0){
             for(var index in store["data"]["spell_list"]){
                 var item=store["data"]["spell_list"][index];  
@@ -97,13 +95,12 @@ layui.define(['utils','laydate','customer_cols'],function(exports){
             }
         }
 
-        layui.form.val("form-account-set", formData);//表单赋值
-        //初始化订单列表
-        return  layui.table.render({elem: '#tab1',data:store["data"]["spell_list"],totalRow: true, cols: layui.customer_cols["spell_list"],toolbar: '#tab1Bar1',text: {  none: '暂无相关数据'}});
+        layui.form.val("form-account-set", formData);
+        return  layui.table.render({elem: '#tab1',data:store["data"]["spell_list"],totalRow: true, cols: layui.customer_cols["spell_list"],toolbar: '#tab1Bar1',text: {  none: '锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟?'}});
     },
     
     initTab2:function(store){
-        return layui.table.render({elem: '#tab2', data:store["data"]['cabinetNum'],cols:layui.customer_cols['cabinet_num'] ,toolbar: '<div>柜量信息</div>'});
+        return layui.table.render({elem: '#tab2', data:store["data"]['cabinetNum'],cols:layui.customer_cols['cabinet_num'] ,toolbar: '<div>锟斤拷锟斤拷锟斤拷息</div>'});
     },
     
     selectBill:function(store){

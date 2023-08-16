@@ -1,6 +1,6 @@
 layui.define(function(exports){ 
   var obj = {
-    "dataModel":{},//数据模型
+    "dataModel":{},
     "data":{},
     "params":{},
     "hook":"",

@@ -19,25 +19,20 @@ layui.define(['utils','laydate','order_cols'],function(exports){
             store["dataModel"]["formData"]["order_ids"]=store["dataModel"]["formData"]["order_ids"];
         }
         
-
-        
-        
         if(layui.utils.isEmpty(store["dataModel"]["formData"]["batch_num"])){            
             store["dataModel"]["formData"]["batch_num"]=layui.utils.post('get_batch_num',{});       
         }
      
-        layui.form.render();//渲染表单各个控件
-        layui.form.val("form-account-set", store["dataModel"]["formData"]);//表单赋值
+        layui.form.render();
+        layui.form.val("form-account-set", store["dataModel"]["formData"]);
     },
-    
-    
   
     initTab1:function (store){
         
         return layui.table.render({elem: '#tab1', url: layui.utils.urlData['provebill'],cols:layui.order_cols.order_list
             , where:{opt:"get_product_list",orderIds:store["dataModel"]["formData"]["order_ids"],"tuopan_list":true,limit:999}
             ,toolbar: '#tab1Bar1'
-            ,totalRow: true //开启合计行
+            ,totalRow: true 
             ,parseData: function(res){   
                 for(var index in res.data){ 
                     
@@ -57,7 +52,7 @@ layui.define(['utils','laydate','order_cols'],function(exports){
                     if(storeProduct){
                         for(var i in store["data"]['synFields']){
                             var item=store["data"]['synFields'][i];
-                            res.data[index][item] =storeProduct[item]?storeProduct[item]:res.data[index][item];//同步数据
+                            res.data[index][item] =storeProduct[item]?storeProduct[item]:res.data[index][item];//同锟斤拷锟斤拷锟斤拷
                         }
                     }
                 }
@@ -66,7 +61,6 @@ layui.define(['utils','laydate','order_cols'],function(exports){
             ,done: function(res, curr, count){
                 if(res.data){
                     var tableData=layui.table.cache["tab1"]
-                    //分组数量统计
                     var groupNums={};
                     for(var i in tableData){
                         if(tableData[i]["tuopanGroup"]){
@@ -77,7 +71,6 @@ layui.define(['utils','laydate','order_cols'],function(exports){
                         }
                     }
                     
-                    
                     var keyCross={"id":"orderlist_ids","orderNum":"order_nums","tuoPan":"pallets"}
                     
                     for(var index in res.data){ 
@@ -85,7 +78,7 @@ layui.define(['utils','laydate','order_cols'],function(exports){
                         store["data"]["orderLists"]["key_"+item['id']]={};
                         for(var i in store["data"]['synFields']){
                             var item_i=store["data"]['synFields'][i];
-                            store["data"]["orderLists"]["key_"+item['id']][item_i]=item[item_i];//同步数据
+                            store["data"]["orderLists"]["key_"+item['id']][item_i]=item[item_i];
                         }
                         
                         
@@ -98,7 +91,6 @@ layui.define(['utils','laydate','order_cols'],function(exports){
                         
                      
                         
-                        //分组算法
                         var mergeCols=["tuopanNum","tuopanWeight"];
                         if(item["tuopanGroup"]){
                           
@@ -123,20 +115,13 @@ layui.define(['utils','laydate','order_cols'],function(exports){
                 } 
                 
                 if(store['params']['id']==0){
-                    layui.form.val("form-account-set", store["dataModel"]["formData"]);//表单赋值
+                    layui.form.val("form-account-set", store["dataModel"]["formData"]);
                 }
                 
-                //layui.form.val("form-account-set", store["dataModel"]["formData"]);//表单赋值
             }
         });
     }
     
-    
-    
-    
-    
-    
-   
   };
  
   exports('tuopan', obj);

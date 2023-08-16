@@ -97,11 +97,11 @@ layui.define(['laytpl','upload','url_format','log_cols','table'],function(export
     
     getTemp:function(url){return this.ajaxGet(url,{},"html");},
     
-    //计算表格总数
+    //???????????
     tableSum:function(tableId,sumCols){
         //sumCols={"total_1":0,"num":0,"tuopan_num":0,"tuopan_weight":0,"mz_1":0,"jz_1":0,"tj_1":0};
         if(this.isEmpty(sumCols)||this.isEmpty(tableId)) return false;
-        var tableData=layui.table.cache[tableId];//获取表格所有数据
+        var tableData=layui.table.cache[tableId];//???????????????
         for(var index in tableData){
            var item= tableData[index];
            for(var i in sumCols){
@@ -122,16 +122,16 @@ layui.define(['laytpl','upload','url_format','log_cols','table'],function(export
     },
     
     /**
-     * 弹窗
-     * @param {type} url 窗口路径
-     * @param {type} title  窗口标题
-     * @param {type} width  窗口宽度
-     * @param {type} height 窗口高度
-     * @returns {unresolved} 返回窗口句柄
+     * ????
+     * @param {type} url ????·??
+     * @param {type} title  ???????
+     * @param {type} width  ???????
+     * @param {type} height ??????
+     * @returns {unresolved} ?????????
      */
     popup:function(option){
         if(!option['url']) return false;
-        option['title']=option['title']?option['title']:"无标题";      
+        option['title']=option['title']?option['title']:"?????";      
         option['width']=option['width']?option['width']:"500px";        
         option['height']=option['height']?option['height']:"300px";
         option['data']=option['data']?option['data']:{};
@@ -143,23 +143,23 @@ layui.define(['laytpl','upload','url_format','log_cols','table'],function(export
             type:2,
             content:option['url'],
             area:[option['width'],option['height']],
-            shade:0.6,  //显示遮罩
-            shadeClose :true, //点击遮罩关闭
+            shade:0.6,  //???????
+            shadeClose :true, //?????????
             maxmin:true
         });
     },
 
       /**
-       * 弹窗
-       * @param {type} url 窗口路径
-       * @param {type} title  窗口标题
-       * @param {type} width  窗口宽度
-       * @param {type} height 窗口高度
-       * @returns {unresolved} 返回窗口句柄
+       * ????
+       * @param {type} url ????·??
+       * @param {type} title  ???????
+       * @param {type} width  ???????
+       * @param {type} height ??????
+       * @returns {unresolved} ?????????
        */
       popup_fun: function (option,fun) {
           if (!option['url']) return false;
-          option['title'] = option['title'] ? option['title'] : "无标题";
+          option['title'] = option['title'] ? option['title'] : "?????";
           option['width'] = option['width'] ? option['width'] : "500px";
           option['height'] = option['height'] ? option['height'] : "300px";
           option['data'] = option['data'] ? option['data'] : {};
@@ -171,8 +171,8 @@ layui.define(['laytpl','upload','url_format','log_cols','table'],function(export
               type: 2,
               content: option['url'],
               area: [option['width'], option['height']],
-              shade: 0.6,  //显示遮罩
-              shadeClose: true, //点击遮罩关闭
+              shade: 0.6,  //???????
+              shadeClose: true, //?????????
               maxmin: true,
               end:arguments[1]?arguments[1]:''
           });
@@ -180,7 +180,7 @@ layui.define(['laytpl','upload','url_format','log_cols','table'],function(export
     
     showForm:function(option){
         if(!option['content']) return false;
-        option['title']=option['title']?option['title']:"无标题";      
+        option['title']=option['title']?option['title']:"?????";      
         option['width']=option['width']?option['width']:"500px";        
         option['height']=option['height']?option['height']:"300px";
         option['type']=option['type']?option['type']:1;
@@ -190,26 +190,26 @@ layui.define(['laytpl','upload','url_format','log_cols','table'],function(export
             type:option['type'],
             content:option['content'],
             area:[option['width'],option['height']],
-            shade:0.6,  //显示遮罩
-            shadeClose :true, //点击遮罩关闭
+            shade:0.6,  //???????
+            shadeClose :true, //?????????
             maxmin:true
         });
     },
     
     showImg:function(img){
         layer.open({
-            type: 2,//1:本地  2:url  
-            title: '图片查看',
+            type: 2,//1:????  2:url  
+            title: '????',
             shadeClose: true,
-            shade: 0.6,//遮罩层
+            shade: 0.6,//?????
             area: ['90%', '90%'],
-            anim:1,//动画  -1不显示
+            anim:1,//????  -1?????
             content: img
         }); 
     },
     
     /**
-     * 模板渲染弹窗
+     * ??????????
      */
     tempPopup:function(url,data,params){
         var that=this;
@@ -217,13 +217,13 @@ layui.define(['laytpl','upload','url_format','log_cols','table'],function(export
         var data=!this.isEmpty(data)?data:{};
         var tpl=this.getTemp(url); 
         layui.laytpl(tpl).render(data, function(html){
-            that.showForm({"title":params["title"],"content":html,"width":params["width"],"height":params["height"] });//弹窗显示页面                
+            that.showForm({"title":params["title"],"content":html,"width":params["width"],"height":params["height"] });//??????????                
         });
         return true;
     },
 
     /**
-     * 渲染上传控件
+     * ?????????
      * @param {type} element
      * @returns {unresolved}
      */
@@ -231,7 +231,7 @@ layui.define(['laytpl','upload','url_format','log_cols','table'],function(export
         var that=this;
         uploadStr=!this.isEmpty(uploadStr)?uploadStr:"";
         that.initUploadData(element,uploadStr,is_more);
-        //初始化上传控件
+        //???????????
         return  layui.upload.render({
             elem: '#'+element,
             url: '/general/erp4/controller/upload_k.php',
@@ -261,11 +261,11 @@ layui.define(['laytpl','upload','url_format','log_cols','table'],function(export
             }
         }
         
-        //同步渲染产品表格
+        //?????????????
         layui.table.render({elem: '#'+element+'_table', data:uploadList ,cols:[[
-            {field:'ID', title: '附件ID', width:400},
-            {field:'box', title: '容器',hide:true},
-            {field:'NAME', title:'附件名称', width:400, templet: function(d){
+            {field:'ID', title: '????ID', width:400},
+            {field:'box', title: '????',hide:true},
+            {field:'NAME', title:'????????', width:400, templet: function(d){
                 if(typeof(d.NAME)!="undefined"){
                     return '<span onclick=\"layui.utils.viewAtt1('+'\''+d.ID+'\''+','+'\''+d.NAME+'\''+')\" >'+d.NAME+'</span>'; 
                 }
@@ -273,18 +273,18 @@ layui.define(['laytpl','upload','url_format','log_cols','table'],function(export
             }, unresize: true ,event:'viewAtt'},
             {fixed: 'right', width: 100, align:'center', toolbar: '#tab1Upload'}
         
-        ]] ,toolbar: '<div>上传列表</div>'});        
+        ]] ,toolbar: '<div>????б?</div>'});        
     },
     
     viewAtt1:function(ID,NAME){
         NAME = this.getUrlEncode(NAME);
         var lay1 = layer.open({
-            title: '查看附件'
+            title: '??????'
             ,type:2
             ,content:'/general/erp4/view/common/viewAtt.php?attId='+ID+'&attName='+NAME
             ,area:['650px','300px']
-            ,shade:0.6  //显示遮罩
-            ,shadeClose :true //点击遮罩关闭
+            ,shade:0.6  //???????
+            ,shadeClose :true //?????????
         });
     },
     
@@ -310,14 +310,12 @@ layui.define(['laytpl','upload','url_format','log_cols','table'],function(export
     },
     
     /**
-     * 初始化上传数据
+     * ????????????
      * @param {type} element
      * @param {type} uploadStr
      * @returns {undefined}
      */
     initUploadData:function(element,uploadStr,is_more){
-       
-      
         var that=this;
         var data={
             'name':element,
@@ -337,25 +335,17 @@ layui.define(['laytpl','upload','url_format','log_cols','table'],function(export
                 }else{
                     uploadList=dataList;
                 }
-
                 uploadList.push(uploadItem);
             }
-            
-          
-            
             data['json_str']=layui.utils.jsonEncode(uploadList);
         }
-        
-      
-        that.initTpl("upload_control_tmp","#"+element+"_control_box",data);//渲染控件
-        that.initTpl("upload_tmp","#"+element+"_box",data);//渲染数据
+        that.initTpl("upload_control_tmp","#"+element+"_control_box",data);//??????
+        that.initTpl("upload_tmp","#"+element+"_box",data);//???????
         
         if(is_more){
             that.initUploadTable(element,uploadList)
         }
-
-        //that.initUpload(element,uploadStr);//重新绑定上传事件
-        //绑定点击事件
+        //???????
         if(uploadStr){
             layui.$("#"+element+"_name_input").click(function(){
                 that.viewAtt(uploadStr);
@@ -365,7 +355,7 @@ layui.define(['laytpl','upload','url_format','log_cols','table'],function(export
     
 
     /**
-     * 查看附件
+     * ??????
      * @param {type} str
      * @param {type} ary
      * @returns {Boolean}
@@ -374,16 +364,16 @@ layui.define(['laytpl','upload','url_format','log_cols','table'],function(export
         var data=JSON.parse(uploadStr);console.log(data);
         data.NAME = this.getUrlEncode(data.NAME);
         var lay1 = layer.open({
-            title: '查看附件'
+            title: '??????'
             ,type:2
             ,content:'/general/erp4/view/common/viewAtt.php?attId='+data.ID+'&attName='+data.NAME
             ,area:['650px','300px']
-            ,shade:0.6  //显示遮罩
-            ,shadeClose :true //点击遮罩关闭
+            ,shade:0.6  //???????
+            ,shadeClose :true //?????????
         });
     },
       /**
-       * 查看附件
+       * ??????
        * @param {type} str
        * @param {type} ary
        * @returns {Boolean}
@@ -391,38 +381,38 @@ layui.define(['laytpl','upload','url_format','log_cols','table'],function(export
       viewAtt2:function(uploadStr) {
           let IDS= []; var NAMES=[];
           var data=JSON.parse(uploadStr);
-          for(var p in data){//遍历json数组时，这么写p为索引，0,1
+          for(var p in data){//????json??????????дp???????0,1
               IDS.push(data[p].ID);
               NAMES.push(this.getUrlEncode(data[p].NAME));
           }
           var lay1 = layer.open({
-              title: '查看附件'
+              title: '??????'
               ,type:2
               ,content:'/general/erp4/view/common/viewAtt2.php?attIds='+IDS.join('/')+'&attNames='+NAMES.join('/')
               ,area:['650px','300px']
-              ,shade:0.6  //显示遮罩
-              ,shadeClose :true //点击遮罩关闭
+              ,shade:0.6  //???????
+              ,shadeClose :true //?????????
           });
       },
       viewAtt3:function(uploadStr,uploadStr2) {
           let IDS= []; var NAMES=[];
           var data=JSON.parse(uploadStr);
-          for(var p in data){//遍历json数组时，这么写p为索引，0,1
+          for(var p in data){//????json??????????дp???????0,1
               IDS.push(data[p].ID);
               NAMES.push(this.getUrlEncode(data[p].NAME));
           }
           var data2=JSON.parse(uploadStr2);
-          for(var p in data2){//遍历json数组时，这么写p为索引，0,1
+          for(var p in data2){//????json??????????дp???????0,1
               IDS.push(data2[p].ID);
               NAMES.push(this.getUrlEncode(data2[p].NAME));
           }
           var lay1 = layer.open({
-              title: '查看附件'
+              title: '??????'
               ,type:2
               ,content:'/general/erp4/view/common/viewAtt2.php?attIds='+IDS.join('/')+'&attNames='+NAMES.join('/')
               ,area:['650px','300px']
-              ,shade:0.6  //显示遮罩
-              ,shadeClose :true //点击遮罩关闭
+              ,shade:0.6  //???????
+              ,shadeClose :true //?????????
           });
       },
     
@@ -456,7 +446,7 @@ layui.define(['laytpl','upload','url_format','log_cols','table'],function(export
     },
    
     /**
-     * 初始化模板引擎
+     * ????????????
      * @param {type} tpl
      * @param {type} view
      * @param {type} data
@@ -486,7 +476,7 @@ layui.define(['laytpl','upload','url_format','log_cols','table'],function(export
     },
     
     /**
-     * 判断数组是否包含某一字符串
+     * ?ж??????????????????
      * @param {type} str
      * @param {type} ary
      * @returns {Boolean}
@@ -515,14 +505,14 @@ layui.define(['laytpl','upload','url_format','log_cols','table'],function(export
     },
     
     /**
-     * 获取表单完整数据（包含二维数组）
+     * ??????????????????????????飩
      * @param {type} data
      * @returns {undefined}
      */
     formDataArray:function(data){
         if(!data) return false;
         for(var index in data){
-            var temp=index.replace(/\[([^"^\]^\[]*)\]/g, "|$1");//匹配中括号
+            var temp=index.replace(/\[([^"^\]^\[]*)\]/g, "|$1");//?????????
             //var temp=temp.replace("][", "|");
             if(index!=temp){
                 var itemArray=temp.split("|");
@@ -541,7 +531,7 @@ layui.define(['laytpl','upload','url_format','log_cols','table'],function(export
     },
     
     /**
-     * 获取选中的列表
+     * ?????е??б?
      * @param {type} res
      * @param {type} arrayList
      * @returns {unresolved}
@@ -558,7 +548,7 @@ layui.define(['laytpl','upload','url_format','log_cols','table'],function(export
     },
     
     /**
-     * 数组去空值
+     * ????????
      * @param {type} params
      * @returns {Array|Boolean}
      */
@@ -604,7 +594,7 @@ layui.define(['laytpl','upload','url_format','log_cols','table'],function(export
     },
     
     /**
-     * 更新日志
+     * ???????
      * @param {type} data1
      * @param {type} data2
      * @param {type} type_flag
@@ -623,7 +613,7 @@ layui.define(['laytpl','upload','url_format','log_cols','table'],function(export
             }
         }
 
-        var userInfo=that.post('get_user_info',{});//获取用户登录信息
+        var userInfo=that.post('get_user_info',{});//????????????
         
         if(typeof(userInfo['user_id'])=="undefined") return false;
 
@@ -648,7 +638,7 @@ layui.define(['laytpl','upload','url_format','log_cols','table'],function(export
         var that=this;
         var tab1 = layui.table.render({elem:list_box, url:  that.urlData['provebill'] , cols:layui.log_cols['table_cols'],
             parseData: function(res){ 
-                //默认选中判断
+                //???????ж?
                 if(typeof(res.data)!='undefined'&&res.data){
                     for(var index in res.data){ 
                         if(res.data[index]["data1"]&&res.data[index]["data2"]){
@@ -660,12 +650,10 @@ layui.define(['laytpl','upload','url_format','log_cols','table'],function(export
                 return {"code": res.code,"msg": res.msg, "count": res.count, "data": res.data };
             },
             where:{opt:"sql_manage_api","unique_code":"get_log_list",type_flag:type_flag,case_id:case_id,order_desc:"id"}, 
-            page: true, toolbar: false, text: { none: '暂无相关数据' }
+            page: true, toolbar: false, text: { none: '???????????' }
         });
         return tab1;
     },
-
-    
     
     getArrayByPath:function(data,path){
         if(!Array.isArray(path)) return false;
@@ -717,42 +705,42 @@ layui.define(['laytpl','upload','url_format','log_cols','table'],function(export
     },
     
 
-    //拷贝对象
+    //????????
     objClone:function(target) {
-        // 定义一个变量
+        // ???????????
         let result;
-        // 如果当前需要深拷贝的是一个对象的话
+        // ??????????????????????????
         if (typeof target === 'object') {
-            // 如果是一个数组的话
+            // ??????????????
             if (Array.isArray(target)) {
-                result = []; // 将result赋值为一个数组，并且执行遍历
+                result = []; // ??result??????????飬??????б???
                 for (let i in target) {
-                    // 递归克隆数组中的每一项
+                    // ??????????е?????
                     result.push(this.objClone(target[i]))
                 }
-             // 判断如果当前的值是null的话；直接赋值为null
+             // ?ж????????????null???????????null
             } else if (target === null) {
                 result = null;
-             // 判断如果当前的值是一个RegExp对象的话，直接赋值 
+             // ?ж???????????????RegExp????????????? 
             } else if (target.constructor === RegExp) {
                 result = target;
             } else {
-                // 否则是普通对象，直接for in循环，递归赋值对象的所有值
+                // ????????????????for in???????鸳???????????
                 result = {};
                 for (let i in target) {
                     result[i] = this.objClone(target[i]);
                 }
             }
         } else {
-            // 如果不是对象的话，就是基本数据类型，那么直接赋值
+            // ??????????????????????????????????????
             result = target;
         }
-        // 返回最终结果
+        // ??????????
         return result;
     },
 
       /**
-       * 删除数组的元素
+       * ???????????
        * @param arr
        * @param val
        * @returns {boolean}
@@ -767,26 +755,26 @@ layui.define(['laytpl','upload','url_format','log_cols','table'],function(export
         }
         return found;
          },
-        //解析代办列表里的link字段
+        //?????????б????link???
         parseURL:function(str){
-            //如果参数不是对象。返回空对象
+            //?????????????????????
             if(typeof str!='string'){
                 return {}
             }
-            var paramObj = {},//保存最终输出的对象
+            var paramObj = {},//????????????????
                 _str = str.substr(str.indexOf('?')+1);
-            //解析中文
+            //????????
             paraArr = decodeURI(_str).split("&");
             var tmp , key, value, newValue;
             for(var i=0, len=paraArr.length; i<len;i++){
                 tmp = paraArr[i].split("=");
                 key = tmp[0];
                 value = tmp[1]||true;
-                //处理数字'100'=>100
+                //????????'100'=>100
                 if(typeof value === 'string' && isNaN(Number(value)) === false){
                     value = Number(value);
                 }
-                //如果key没有出现过(可能是0 或者false)
+                //???key??г????(??????0 ????false)
                 if(typeof paramObj[key] === "undefined"){
                     paramObj[key] = value;
                 }else{
@@ -797,38 +785,7 @@ layui.define(['laytpl','upload','url_format','log_cols','table'],function(export
             }
              return paramObj;
          },
-         parseURL2:function(str){
-            //如果参数不是对象。返回空对象
-            if(typeof str!='string'){
-                return {}
-            }
-            var paramObj = {},//保存最终输出的对象
-                _str = str.substr(str.indexOf('/')+1);
-            //解析中文
-            paraArr = decodeURI(_str).split("/");
-            var tmp , key, value, newValue;
-            for(var i=0, len=paraArr.length; i<len;i++){
-                tmp = paraArr[i].split("=");
-                key = tmp[0];
-                value = tmp[1]||true;
-                //处理数字'100'=>100
-                if(typeof value === 'string' && isNaN(Number(value)) === false){
-                    value = Number(value);
-                }
-                //如果key没有出现过(可能是0 或者false)
-                if(typeof paramObj[key] === "undefined"){
-                    paramObj[key] = value;
-                }else{
-                    newValue = Array.isArray(paramObj[key]) ? paramObj[key] : [paramObj[key]];
-                    newValue.push(value);
-                    paramObj[key] = newValue;
-                }
-            }
-             return paramObj;
-         }
 
-    
-    
   };
  
   exports('utils', obj);
