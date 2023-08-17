@@ -1,0 +1,68 @@
+<extend name="./app/Tpl/Public/base2.html"/>
+<block name="title">我要理财</block>
+<block name="body">
+<div id="bannerBox">
+   <div id="imgPlay">
+	<ul class="imgs" id="actor">
+		<?php if($banners): ?>
+	<?php foreach($banners as $v): ?>
+	  <li><a href="{$v['href']}"><img src="{$v['img']}"/></a></li>
+  <?php endforeach; ?>
+  <?php endif;?>
+	</ul>
+<!-- <div class="num">
+<p class="lc"></p>
+<p class="mc"></p>
+<p class="rc"></p></div> -->
+<div class="num" id="numInner"></div>
+<!-- <div class="prev">上一张</div>
+<div class="next">下一张</div>--></div> 
+ 
+ <!-- <div class="banner_proGo">
+    <a class="myrong" href="{:U('public/Public/document',array('handle' => '/html/proInfoBase'), false);}"><img src="/public/image/myrong.png"/></a>
+    <a class="myLicai" href="{:U('public/Public/document',array('handle' => '/html/finance/index'), false);}"><img src="/public/image/mylicai.png"/></a>
+ </div> -->
+</div>
+<div id="wrap">
+  <div class="product_list">
+     <div class="product_item item1">
+       <div class="title"><h2>高富帅</h2>理财产品</div>
+       <ul class="infolist">
+         <li>产品类目：短期借款项目等</li>
+         <li>日收益率： 1‰ - 3‰（年化 > 36%）</li>
+         <li>投资期限：3-15天</li>
+         <li>收益保障：本息担保</li>
+         <li>发布频率： >10个 / 周</li>
+       </ul>
+       <a href="{:U('Financing/Invest/plist')}" class="button">投 资</a>
+       <div class="bottomBg"></div>
+     </div>
+     <div class="product_item item2">
+       <div class="title"><h2>白富美</h2>理财产品</div>
+       <ul class="infolist">
+         <li>产品类目：私募基金等</li>
+         <li>年收益率：>10%</li>
+         <li>投资期限：6-36个月</li>
+         <li>收益保障：本息担保</li>
+         <li>投资起始：≥30万元</li>
+         <li>灵活性：可转让</li>
+       </ul>
+       <a href="{:U('Financing/Invest/plist',array('c'=>2))}" class="button">投 资</a>
+       <div class="bottomBg"></div>
+     </div>
+     <div class="product_item item3">
+       <div class="title"><h2>富二代</h2>理财产品</div>
+       <ul class="infolist">
+         <li>产品类目：受益权转让等</li>
+         <li>年收益率：>10%</li>
+         <li>投资期限：以日、月或年计</li>
+         <li>收益保障：本息担保</li>
+         <li>投资起始：不限</li>
+         <li>灵活性：受益权任意拆分转让</li>
+       </ul>
+       <a href="{:U('Financing/Invest/fed')}" class="button">投 资</a>
+       <div class="bottomBg"></div>
+     </div>
+  </div>
+ </div>
+</block>

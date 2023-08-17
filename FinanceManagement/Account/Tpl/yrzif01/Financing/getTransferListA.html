@@ -1,0 +1,44 @@
+<tr>
+    <td width="25%" class="tac borderBot">债权id</td>
+    <td width="30%" class="tac borderBot">投资人</td>
+    <td width="30%" class="tac borderBot">投资金额(元)</td>
+    <td width="15%" class="tac borderBot">合同</td>
+</tr>
+<?php foreach ($order as $v) { ?>
+<tr>
+    <td width="25%" class="tac">{$v['order_no']}</td>
+    <td width="30%" class="tac">{$v['real_name']}</td>
+    <td width="30%" class="tac">{$v['money_view']}</td>
+    <td width="15%" class="tac"><a href="/Index/Protocol/transferProtocol?oid={$v['id']}" class="blue">查看</a></td>
+</tr>
+<?php } ?>
+<tr>
+    <td width="25%" class="tac borderTop">
+        <?php if($page > 1) { ?>
+            <a href="javascript:;" class="{$v['id']}prePage">上一页 </a>
+        <?php } ?>
+    </td>
+    <td width="30%" class="tac borderTop"></td>
+    <td width="30%" class="tac borderTop"></td>
+    <td width="15%" class="tac borderTop">
+        <?php if($page < $total_page) { ?>
+            <a href="javascript:;"  class="{$v['id']}nextPage">下一页</a>
+        <?php } ?>
+    </td>
+</tr>
+<script>
+    if({$page} > 1){
+        $(".{$v['id']}prePage").click(function(){
+            $.get("/Account/Financing/getTransferListA?oid={$oid}&p="+({$page}-1),function(html){
+                $(".orderContent").html(html);
+            })
+        });
+    };
+    if({$page} < {$total_page}){
+        $(".{$v['id']}nextPage").click(function(){
+            $.get("/Account/Financing/getTransferListA?oid={$oid}&p="+({$page}+1),function(html){
+                $(".orderContent").html(html);
+            })
+        });
+    }
+</script>

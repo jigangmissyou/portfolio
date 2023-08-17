@@ -1,0 +1,24 @@
+<!-- 保理公司 -->
+<?php if(!empty($baoli)){ ?>
+<dl>
+  <h4><!-- <i class="icon_Greyinfo"></i> -->保理公司</h4>
+  <table class="globaltable">
+    <tr class="GreyBgcolor">
+      <td class="padLeft30" width="30%">企业名称</td>
+      <td>{$baoli.title}</td>
+    </tr>
+    <tr>
+      <td class="padLeft30">注册资金</td>
+      <td><?php echo $baoli['reg_money']; echo is_numeric($baoli['reg_money']) ? "万" : ""; ?></td>
+    </tr>
+    <tr class="GreyBgcolor">
+      <td class="padLeft30">所属行业</td>
+      <td>{$baoli.vocation|getTradeName}</td>
+    </tr>
+    <tr>
+      <td class="padLeft30">主营业务</td>
+      <td>{$baoli.main_business}</td>
+    </tr>
+  </table>
+</dl>
+<?php } ?>

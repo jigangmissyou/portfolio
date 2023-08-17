@@ -1,0 +1,45 @@
+<extend name="./app/Tpl/Public/base_hfhg.html"/>
+<block name="title">等待审核</block>
+<block name="keywords">机构理财信息填写,鑫合汇</block>
+<block name="description">机构理财信息填写,鑫合汇</block>
+<block name="body">
+  <div class="institutionInfo fixed">
+    <if condition="$getorginfo['proposer'] == 1">
+      <div class="institutionStepL">
+        <div class="institutionStepR"></div>
+        <div class="bigGreenR bigGreenR1"></div>
+      </div>
+      <div class="institutionStepLb">
+        <div class="institutionStepRb institutionStepRb4 fl"></div>
+      </div>
+      <ul class="institutionSfont font18">
+        <li class="li01 fl current">填写机构信息</li>
+        <li class="li02 fl current">填写法定代表人信息</li>
+        <li class="li03 fl current">确认填写信息</li>
+        <li class="li04 fl current">等待审核</li>
+      </ul>
+    <!-- proposer == 1 为代理人 -->
+    <elseif  condition="$getorginfo['proposer'] == 2" />
+      <div class="institutionStepL institutionStepLd">
+        <div class="bigGreenR bigGreenR1"></div>
+      </div>
+      <div class="institutionStepLb institutionStepLbd">
+        <div class="institutionStepRb institutionStepRbd institutionStepRbd5 fl"></div>
+      </div>
+      <ul class="institutionSfont font18">
+        <li class="li01 li01d fl current">填写机构信息</li>
+        <li class="li02 fl current">填写法定代表人信息</li>
+        <li class="li02 li01d fl current">填写代理人信息</li>
+        <li class="li03 fl li02d current">确认填写信息</li>
+        <li class="li04 fl current">等待审核</li>
+      </ul>
+    </if>
+  	<div class="waitStatus center">
+  		<i class="icon-registerSuc fl"></i>
+  		<div class="sucPop fl font18">
+  			<span class="poptitle fixed">恭喜您提交成功!</span>
+  			<span id="jBack" class="yelcolor">3</span> 秒后自动返回账户页面
+  		</div>
+  	</div>
+  </div>
+</block>

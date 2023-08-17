@@ -1,0 +1,318 @@
+<?php
+$jsonCorpTaxAffairs = json_encode($corpTaxAffairs['data']);
+function isEmptyColSame($fdata,$datakey){
+    $isEmpty = true;
+    foreach ($fdata as $key => $vo) {
+if(!empty($vo[$datakey])){
+$isEmpty = false;
+}
+}
+return $isEmpty;
+}
+?>
+
+<script>
+/**
+ * 点击行 切换图标 纳税情况里面用到
+ * @param  {[type]} obj [description]
+ * @return {[type]}     [description]
+ */
+
+var _jsonChartCorpTaxAffairs = <?php if(!empty($jsonCorpTaxAffairs)){echo $jsonCorpTaxAffairs;} else {echo "0";} ?>; // 两个图标的数据都在这里
+function toggleChart(obj){
+  var $this = $(obj);
+  var $corp_tax_scale_spline = $('[data-flag="corp_tax_scale_spline"]');
+  var type = $this.attr('type');
+  var xText = $this.attr('xtext');
+  var yData = [], yearMonthArr = [];
+  // 切换行的样式
+  $this.addClass('current').siblings().removeClass('current');
+
+  // 循环得出对应的数据
+  $.each(_jsonChartCorpTaxAffairs, function(i, vo){
+    if(!vo || type.length == 0){
+      return true;
+    }
+    // 拼出横轴数据
+    if(i.length){
+      yearMonthArr.push(i);
+    } else {
+      yearMonthArr.push(vo['year'] + '/' + vo['month']);
+    }
+
+    // 拼出纵轴数据
+    yData.push(parseInt(vo[type], 10));
+  });
+  // 动态生成图标
+  $corp_tax_scale_spline.highcharts({
+      chart: {
+          type: 'line'
+      },
+      title: {
+          text: ''
+      },
+      xAxis: {
+          categories: yearMonthArr
+      },
+      yAxis: {
+          title: {
+              text: xText
+          },
+          labels: {
+              formatter: function() {
+                  return this.value
+              }
+          }
+      },
+      tooltip: {
+          crosshairs: true,
+          shared: true
+      },
+      plotOptions: {
+        spline: {
+            marker: {
+                radius: 4,
+                lineColor: '#666666',
+                lineWidth: 1
+            }
+        }
+      },
+      series: [{
+        name: xText,
+        data: yData
+      }]
+  })
+}
+</script>
+<?php if(!empty($corpOperation['data']) || !empty($corpTaxAffairs['data']) || !empty($corpAssets['data']) || !empty($corpNeedGain['data'])){ ?>
+<dl>
+  <h4><!-- <i class="icon_Greyinfo"></i> -->运营状况</h4>
+
+  <?php if(!empty($corpOperation['data'])){ ?>
+  <dt>运营情况评价</dt>
+  <dd>
+    <?php if(!empty($corpOperation['data']['item_value'])){ // 有数据就展示 没有则不展示 ?>
+    {$corpOperation.data.item_value|nl2br}
+    <?php } else { ?>
+    无数据
+    <?php } ?>
+  </dd>
+  <?php } ?>
+
+  <?php if(!empty($corpTaxAffairs['data'])){ ?>
+  <dt>纳税情况</dt>
+  <div class="taxSituation fixed ml36px mb28px" data-flag="corp_tax_scale_spline">
+    图表加载中...
+  </div>
+  <table class="globaltable width966px">
+    <?php if(!isEmptyColSame($corpTaxAffairs['data'],'display_name')){ ?>
+    <tr>
+      <th width="18%" class="tal padLeft30">类目/年度</th>
+      <?php foreach ($corpTaxAffairs['data'] as $key => $vo) { ?>
+      <th width="12%" class="tal">{$vo.display_name}</th>
+      <?php } ?>
+    </tr>
+    <?php } ?>
+    <?php if(!isEmptyColSame($corpTaxAffairs['data'],'zengzhi_tax')){ ?>
+    <tr data-flag="optionChartTr" onclick="toggleChart(this)" type="zengzhi_tax" xtext="增值税额(万元)" class="GreyBgcolor">
+      <td class="padLeft30">增值税额</td>
+      <?php foreach ($corpTaxAffairs['data'] as $key => $vo) { ?>
+      <td class="tdHeadBg">{$vo.zengzhi_tax|floatParse='万元'}</td>
+      <?php } ?>
+    </tr>
+    <?php } ?>
+    <?php if(!isEmptyColSame($corpTaxAffairs['data'],'baoshui_xiaoshou')){ ?>
+    <tr data-flag="optionChartTr" onclick="toggleChart(this)" type="baoshui_xiaoshou" xtext="增值税报税销售额(万元)">
+      <td class="padLeft30">增值税报税销售额</td>
+      <?php foreach ($corpTaxAffairs['data'] as $key => $vo) { ?>
+      <td>{$vo.baoshui_xiaoshou|floatParse='万元'}</td>
+      <?php } ?>
+    </tr>
+    <?php } ?>
+    <?php if(!isEmptyColSame($corpTaxAffairs['data'],'rel_baoshui_xiaoshou')){ ?>
+    <tr data-flag="optionChartTr" onclick="toggleChart(this)" type="rel_baoshui_xiaoshou" xtext="关联企业增值税报税销售额(万元)" class="GreyBgcolor">
+      <td class="padLeft30">关联企业增值税报税销售额</td>
+      <?php foreach ($corpTaxAffairs['data'] as $key => $vo) { ?>
+      <td>{$vo.rel_baoshui_xiaoshou|floatParse='万元'}</td>
+      <?php } ?>
+    </tr>
+    <?php } ?>
+    <?php if(!isEmptyColSame($corpTaxAffairs['data'],'yingye')){ ?>
+    <tr data-flag="optionChartTr" onclick="toggleChart(this)" type="yingye" xtext="营业税额(万元)">
+      <td class="padLeft30">营业税额</td>
+      <?php foreach ($corpTaxAffairs['data'] as $key => $vo) { ?>
+      <td class="tdHeadBg">{$vo.yingye|floatParse='万元'}</td>
+      <?php } ?>
+    </tr>
+    <?php } ?>
+    <?php if(!isEmptyColSame($corpTaxAffairs['data'],'zhucedi_shuili_jijin')){ ?>
+    <tr data-flag="optionChartTr" onclick="toggleChart(this)" type="zhucedi_shuili_jijin" xtext="注册地水利基金缴纳额(万元)" class="GreyBgcolor">
+      <td class="padLeft30">注册地水利基金缴纳额</td>
+      <?php foreach ($corpTaxAffairs['data'] as $key => $vo) { ?>
+      <td>{$vo.zhucedi_shuili_jijin|floatParse='万元'}</td>
+      <?php } ?>
+    </tr>
+    <?php } ?>
+    <?php if(!isEmptyColSame($corpTaxAffairs['data'],'fei_zhucedi_yingye')){ ?>
+    <tr data-flag="optionChartTr" onclick="toggleChart(this)" type="fei_zhucedi_yingye" xtext="非注册地营业税(万元)">
+      <td class="padLeft30">非注册地营业税</td>
+      <?php foreach ($corpTaxAffairs['data'] as $key => $vo) { ?>
+      <td>{$vo.fei_zhucedi_yingye|floatParse='万元'}</td>
+      <?php } ?>
+    </tr>
+    <?php } ?>
+    <?php if(!isEmptyColSame($corpTaxAffairs['data'],'waijingzheng_jiaona')){ ?>
+    <tr data-flag="optionChartTr" onclick="toggleChart(this)" type="waijingzheng_jiaona" xtext="外经证缴纳额(万元)" class="GreyBgcolor">
+      <td class="padLeft30">外经证缴纳额</td>
+      <?php foreach ($corpTaxAffairs['data'] as $key => $vo) { ?>
+      <td>{$vo.waijingzheng_jiaona|floatParse='万元'}</td>
+      <?php } ?>
+    </tr>
+    <?php } ?>
+    <?php if(!isEmptyColSame($corpTaxAffairs['data'],'laowu_fapiao_dikou')){ ?>
+    <tr data-flag="optionChartTr" onclick="toggleChart(this)" type="laowu_fapiao_dikou" xtext="劳务发票抵扣部分(万元)">
+      <td class="padLeft30">劳务发票抵扣部分</td>
+      <?php foreach ($corpTaxAffairs['data'] as $key => $vo) { ?>
+      <td>{$vo.laowu_fapiao_dikou|floatParse='万元'}</td>
+      <?php } ?>
+    </tr>
+    <?php } ?>
+    <?php if(!isEmptyColSame($corpTaxAffairs['data'],'qiye_suode')){ ?>
+    <tr data-flag="optionChartTr" onclick="toggleChart(this)" type="qiye_suode" xtext="企业所得税税额(万元)" class="GreyBgcolor">
+      <td class="padLeft30">企业所得税税额</td>
+      <?php foreach ($corpTaxAffairs['data'] as $key => $vo) { ?>
+      <td class="tdHeadBg">{$vo.qiye_suode|floatParse='万元'}</td>
+      <?php } ?>
+    </tr>
+    <?php } ?>
+    
+  </table>
+  <?php } ?>
+
+  <?php if(!empty($corpAssets['data'])){ ?>
+  <!--固定资产 -->
+  <dt>固定资产</dt>
+  <table class="globaltable width966px">
+      <tr>
+        <th width="10%">编号</th>
+        <th width="20%" class="tal">资产类型</th>
+        <th width="22%" class="tal">资产名称</th>
+        <th width="20%" class="tal">购入时间</th>
+        <th width="16%" class="tal">购入价格</th>
+        <th width="12%" class="tal">现值</th>
+      </tr>
+      <?php if(!empty($corpAssets['data'])){ foreach ($corpAssets['data'] as $key => $vo) { ?>
+      <tr <?php if($key % 2 != 0){echo 'class="GreyBgcolor"';} ?>>
+        <td class="padLeft30" align="left"><?php echo $key + 1; ?></td>
+        <td textlength="10">{$vo.guding_zichan_zhonglei}</td>
+        <td textlength="10">{$vo.zichan_name}</td>
+        <td>{$vo.gouru_date}</td>
+        <td>{$vo.yuan_zhi|floatParse}</td>
+        <td>{$vo.jingzhi|floatParse}</td>
+      </tr>
+      <?php }} else { ?>
+      <tr>
+        <td colspan="6" class="noData">无数据</td>
+      </tr>
+      <?php } ?>
+  </table>
+  <?php } ?>
+
+  <?php if(!empty($corpNeedGain['data'])){ ?>
+  <!--应收应付款  -->
+  <dt>应收应付款</dt>
+  <div id="TocopePayable" class="fixed" data-tab>
+    <div id="TocopePayment">
+      <ul class="fixed tab-menu">
+        <li class="fl tac current"><span>应收账款</span></li>
+        <li class="fl tac"><span>应付账款</span></li>
+      </ul>
+    </div>
+    <div id="TocopePayCn" data-tabPanel>
+      <table class="globaltable width966px">
+        <tr>
+          <th width="10%" class="tal padLeft30">编号</th>
+          <th width="14%" class="tal">债务人</th>
+          <th width="26%" class="tal">账款性质</th>
+          <th width="10%" class="tal">金额</th>
+          <th width="10%" class="tal">占比</th>
+          <th width="10%" class="tal">账龄</th>
+        </tr>
+        <?php if(!empty($corpNeedGain['data'])){ foreach ($corpNeedGain['data'] as $key => $vo) { ?>
+        <tr <?php if($key % 2 != 0){echo 'class="GreyBgcolor"';} ?>>
+          <td class="padLeft30"><?php echo $key + 1; ?></td>
+          <td textlength="12">{$vo.zhaiwu_ren||marskName}</td>
+          <td>{$vo.zhangkuan_type}</td>
+          <td>{$vo.amount|floatParse}</td>
+          <td>{$vo.percent|floatParse}%</td>
+          <td><?php echo floatParse($vo['zhangling'], $vo['zhangling_unit']); ?></td>
+        </tr>
+        <?php }} else { ?>
+        <tr>
+          <td colspan="6" class="noData">无数据</td>
+        </tr>
+        <?php } ?>
+      </table>
+    </div>
+    <div id="TocopePayCn" data-tabPanel style="display:none;">
+      <table class="globaltable width966px">
+        <tr>
+          <th width="10%" class="tal padLeft30">编号</th>
+          <th width="14%" class="tal">债务人</th>
+          <th width="26%" class="tal">账款性质</th>
+          <th width="10%" class="tal">金额</th>
+          <th width="10%" class="tal">占比</th>
+          <th width="10%" class="tal">账龄</th>
+        </tr>
+        <?php if(!empty($corpNeedPay['data'])){ foreach ($corpNeedPay['data'] as $key => $vo) { ?>
+        <tr <?php if($key % 2 != 0){echo 'class="GreyBgcolor"';} ?>>
+          <td class="padLeft30"><?php echo $key + 1; ?></td>
+          <td textlength="12">{$vo.zhaiquan_ren||marskName}</td>
+          <td>{$vo.zhangkuan_type}</td>
+          <td>{$vo.amount|floatParse}</td>
+          <td>{$vo.percent|floatParse}%</td>
+          <td><?php echo floatParse($vo['zhangling'], $vo['zhangling_unit']); ?></td>
+        </tr>
+        <?php }} else { ?>
+        <tr>
+          <td colspan="6" class="noData">无数据</td>
+        </tr>
+        <?php } ?>
+      </table>
+    </div>
+  </div>
+  <?php } ?>
+</dl>
+<?php } ?>
+
+<script>
+/**
+ * 纳税情况
+ * @return {[type]} [description]
+ */
+;(function(){
+  var $corp_tax_scale_spline = $('[data-flag="corp_tax_scale_spline"]');
+  if(!_jsonChartCorpTaxAffairs || !_jsonChartCorpTaxAffairs.length){
+    $corp_tax_scale_spline.html('无数据，无法生成图表！');
+  }
+
+  // 点击不同的行，出现不同的图表
+  var $optionChartTr = $('tr[data-flag="optionChartTr"][type]');
+  $optionChartTr.eq(0).click();
+
+  // 鼠标放上去的效果
+  $optionChartTr.unbind('mouseenter').unbind('mouseleave').unbind('mouseover').unbind('mouseout').hover(function(e){
+    var $this = $(this);
+    var $target = $(e.target);
+    if(!$target.hasClass('current')){
+      $this.addClass('hover');
+    }
+  }, function(e){
+    var $this = $(this);
+    var $target = $(e.target);
+      if(!$target.hasClass('current')){
+        $this.removeClass('hover');
+      }
+  });
+}());
+</script>

@@ -1,0 +1,42 @@
+	<table class="ui-record-table">
+		<thead>
+			<tr>
+				<th width="10%">申请时间</th>
+				<th width="12%" class="tac">充值金额(元)</th>
+				<th width="20%" class="tac">充值方式</th>
+				<th width="15%" class="tac">转账银行</th>
+				<th width="20%" class="tac">备注</th>
+			</tr>
+		</thead>
+		<tbody>
+			<?php if(!empty($list['data'])){ foreach ($list['data'] as $key => $vo) { ?>
+			<tr>
+				<td>
+					<span class="time"><?php echo date("Y-m-d H:i", $vo['ctime']); ?></span>
+				</td>
+				<td class="tac orange">
+					<?php
+						echo "<em class='orange'>+".number_format($vo['apply_amount']/100, 2)."</em>";
+					?>
+				</td>
+				<td class="tac">转账</td>
+				<td class="tac">
+					<p>{$vo.bank_name}</p>
+					<!--<if condition="!empty($vo['out_account']['sub_bank'])"><p>{$vo.out_account.sub_bank}</p></if>-->
+					<p>尾号 <?php echo substr($vo['account_no'],-4); ?></p>
+				</td>
+				<td><p class="oh">{$vo['bak']}</p></td>
+			</tr>
+			<?php }} else { ?>
+      <tr>
+        <td colspan="100%" class="tac">没有相关数据</td>
+      </tr>
+      <?php } ?>
+		</tbody>
+	</table>
+	<?php $pageNavCallback = "ajaxAfter_Payment_PayAccount_getMyMoneyList"; ?>
+  <include file="./app/Tpl/Public/pageAjax.html" />
+  <input type="hidden" id="totalXTodo" value="{$totalXTodo}">
+    <input type="hidden" id="totalXSuccess" value="{$totalXSuccess}">
+    <input type="hidden" id="totalXFailed" value="{$totalXFailed}">
+    <input type="hidden" id="totalXTrack" value="{$totalXTrack}">

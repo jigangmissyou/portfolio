@@ -1,0 +1,14 @@
+<?php if($hasBlank){ ?>
+  <?php foreach($zhrbank as $bank){ ?>
+  <div class="grid85 grid85_bang">
+  <h3 class="grid_tit gird_left"><em class="lineIcon"></em><?php echo $bank['acount_name']; ?></h3>
+  <span class="hasCerified"><em class="cerifiedIcn"></em>已设置</span>
+  <div class="bank_name bank_name_bang">
+  	<span class="bank-name db bank_left" title="<?php echo $bank['sub_bank']; ?>"><?php echo $bank['sub_bank']; ?></span>
+	<span class="bank_num bankBang remove_top"><?php echo $bank['account_no_view']; ?></span>
+	<a class="editCard" colorbox="1" href="{:U('Account/FinancingManage/bindCard', array('id'=>$bank['id']))}" >修改</a>
+	<a class="delCard" event-click="bankCard.del" data-args="{$bank.id}">删除</a>
+  </div>
+  </div>
+  <?php } ?>
+<?php } ?>

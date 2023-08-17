@@ -1,0 +1,183 @@
+<script>
+URL_PUBLIC_SHARKBONUS_GETSHARKBONUSNUM = "{:U('Public/SharkBonus/getSharkBonusNum',array('order_id'=>$order_id))}";
+</script>
+<input type="hidden" name="order_id" value="{$order_id}">
+
+<link rel="stylesheet" href="/public/css/act/giftsPc.css"/>
+
+<style>
+  .red-display{
+    opacity: 0;
+    filter: alpha(opacity=0);
+  }
+  .red-closed{
+    z-index: 8;
+  }
+
+  .gif-lottery {
+    width: 443px;
+    height: 454px;
+    display: block;
+    position: relative;
+    /*background: url(/public/images/act/gifts/pc/bigRound.png) no-repeat center center;*/
+  }
+
+  .innerRound {
+    width: 157px;
+    height: 190px;
+    display: block;
+    margin: auto;
+    position: absolute;
+    top: 107px;
+    left: 142px;
+    background: url(/public/images/act/gifts/pc/innerRound.png) no-repeat center center;
+    cursor: pointer;
+  }
+
+  .restChance {
+    position: absolute;
+    top: 232px;
+    left: 165px;
+    width: 112px;
+    text-align: center;
+    color: #ffff5b;
+    font-size: 12px;
+  }
+
+  .lottery-text {
+    margin-top: 24px;
+    text-align: center;
+    margin-bottom: 6px;
+    color: orange;
+    font-size: 24px;
+  }
+
+  #turnplate-container{
+    height: 454px;
+  }
+
+  .gif-lottery{
+    width: auto;
+  }
+
+  .innerRound{
+    left: 424px;
+  }
+
+  .restChance{
+    left: 447px;
+  }
+
+  .btnShare2yuan{
+    position: relative;
+    margin-top: 10px;
+    left: 30%;
+  }
+
+  #turnplate{
+    position: relative;
+    left: 280px;
+  }
+
+  #lottery-result {
+    font-size: 30px;
+    color: #ffeb10;
+    margin: 0 10px;
+    font-weight: 700;
+    line-height: 40px;
+  }
+
+  #lottery-fail,#lottery-fail a{
+    font-size: 30px;
+    color: #ffeb10 !important;
+    margin: 0 10px;
+    font-weight: 700;
+    line-height: 40px;
+  }
+  .red-june-tips{
+    color: orange;
+    text-align: center;
+    font-size: 18px;
+    margin:10px auto 0;
+   }
+
+  .go2detail>a {
+    float: right;
+    color: white;
+    font-size: 20px;
+  }
+
+  #container{
+    width: 1000px;
+  }
+</style>
+
+<div id="red-june-flag"></div>
+
+<!--蒙版 start-->
+<div class="mask-detail red-mask-detail"></div>
+<!--抽奖-->
+<div class="red-container-box" style="top:39%;">
+  <!-- 关闭 按钮 -->
+  <a href="javascript:;" class="red-closed"></a>
+  <!-- 关闭 按钮 -->
+
+  <!--抽奖-->
+  <div class="red-june" id="red-june1">
+    <div class="lottery-text">恭喜，你拥有 <span class="praiseCount">0</span>次抽奖机会！</div>
+    <div class="roundBox">
+      <div id="turnplate-container">
+        <div class="gif-lottery">
+          <img id="turnplate" src="/public/images/act/gifts/pc/bigRound.png" alt=""/>
+          <div class="innerRound"></div>
+        </div>
+      </div>
+      <div class="restChance">您还有<span class="praiseCount">0</span>抽奖机会</div>
+    </div>
+    <div id="red-june-tips" class="red-june-tips"></div>
+    <div id="red-june-tips"></div>
+    <div class="go2detail"><a href="/Activity/RedJun/index">活动详情 》</a></div>
+      <div><a href="#" class="btnShare2yuan">分享得2元红包</a></div>
+  </div>
+
+  <!--恭喜抽中xx元红包，还有x次抽奖机会哟！ start-->
+  <div class="red-june RedpopBox dn" id="red-june2">
+    <div class="gif-cont-hit clearfix" id="chance-tips">
+      <p class="gif-poptips">你还有<span class="praiseCount"></span>次抽奖机会哟！</p>
+    </div>
+    <div class="clearfix gif-cont-redPack happyPack">
+      <div class="gif-cont-pack"><p id="lottery-result"></p></div>
+    </div>
+    <div class="gif-cont-btn">
+      <p>
+        <a href="javascript:;" class="gif-bp-icons gif-btn-luckyDraw goOnwin">继续抽奖</a>
+        <a href="javascript:;" class="gif-bp-icons gif-btn-luckyDraw waitForPrize" style="display: none;">坐等奖品</a>
+      </p>
+    </div>
+  </div>
+  <!--恭喜抽中xx元红包，还有x次抽奖机会哟！ end-->
+
+  <!--微信分享 start-->
+  <div class="red-june show-red-packet dn" id="red-june3">
+    <div class="show-red-code fl">
+      <img id="qrCodeUrl" src="">
+    </div>
+    <div class="sweepCode fr">
+      <img src="/public/images/rollredpacket/sweep_03.png" alt="">
+    </div>
+  </div>
+  <!--微信分享 end-->
+
+<!--出错-->
+  <div class="red-june RedpopBox dn" id="red-june4">
+    <div class="gif-cont-hit clearfix">
+      <!--<p class="gif-poptips">你还有<span class="praiseCount"></span>次抽奖机会哟！</p>-->
+    </div>
+    <div class="clearfix gif-cont-redPack cryPack">
+      <div class="gif-cont-pack"><p id="lottery-fail">未能成功抽奖</p></div>
+    </div>
+    <div class="gif-cont-btn"><p><a href="javascript:;" class="gif-bp-icons gif-btn-luckyDraw goOnwin">继续抽奖</a></p></div>
+  </div>
+
+</div>
+<!--蒙版 end-->

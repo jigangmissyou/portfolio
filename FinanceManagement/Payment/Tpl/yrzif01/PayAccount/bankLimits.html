@@ -1,0 +1,25 @@
+<div class="whether-overrun"><h3>请关注您的充值金额是否超限</h3></div>
+<div class="overrun">
+<?php
+    foreach($bankList as $bank){
+        if($bank['num'] > 0){
+?>
+<table <?php if($bank['bank'] != $default_bank['bank']) { ?> style="display:none;" <?php } ?> data-name="{$bank.bank}">
+	<caption>{$bank.bank_name}</caption>
+	<tbody>
+		<tr><th>银行卡种类</th><th>方式</th><th>单笔限额（元）</th><th>每日限额（元）</th><th>需要满足的条件</th></tr>
+
+		<tr><td rowspan="{$bank.num}">储蓄卡</td><td rowspan="{$bank.num}">充值和付款</td>
+            <td>{$bank['list1']['single_limit']}</td><td>{$bank.list1.day_limit}</td><td>{$bank.list1.condition_limit}</td></tr>
+        <?php
+            foreach($bank['list2'] as $list2){
+        ?>
+		<tr><td>{$list2.single_limit}</td><td>{$list2.day_limit}</td><td>{$list2.condition_limit}</td></tr>
+        <?php } ?>
+	</tbody>
+</table>
+<?php
+    }
+   }
+?>
+</div>

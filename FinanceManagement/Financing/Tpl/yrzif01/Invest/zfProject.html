@@ -1,0 +1,113 @@
+<extend name="./app/Tpl/Public/base2.html"/>
+<block name="title">政府项目</block>
+<block name="style">
+<style>
+	#container{width:auto;}
+	#projectList .pageWraper{display:none;}
+	#projectList .proListBox:nth-last-of-type(2){border-bottom:none;}
+</style>
+</block>
+<block name="body">
+<div class="zf-banner_01"></div>
+<div class="zf-banner_02"></div>
+<div class="go-buyPro">
+<img src="/public/images/zfxm/lilv.png" alt="">
+<!-- button 部分 star -->
+<if condition="$haveBid">
+  <a href="javascript:;" class="zf-orgBigBtn" id="goInvest">立即投资</a>
+<else />
+  <a href="javascript:;" class="zf-orgBigBtn zf-greenBigBtn">敬请期待</a>
+</if>
+<!-- button 部分 end -->
+</div>
+<!-- 项目介绍 star -->
+<div class="zf-colorBgBox">
+	<div class="zf-containerBox ovh">
+		<div class="zf-aboutPro-fl">
+			<h4 class="zf-title"><i class="zf-icons-name"></i>项目介绍</h4>
+			<ul class="content-list">
+				<li>政府直融项目：助力地方政府的污水处理环保工程</li>
+				<li>融资方：长兴县财政局旗下的长兴**有限公司</li>
+				<li><em class="red">AA级</em>担保：长兴县人民政府旗下的长兴交通投资集团有限公司</li>
+				<li>项目发行额度：5000万 ，期限：10个月</li>
+			</ul>
+			<div class="zf-proFeature">
+				鑫优势
+				<p class="zf-txt1">更安全</p>
+				<p class="zf-txt2">更有保障</p>
+				<p class="zf-txt3">更有公信力</p>
+			</div>
+		</div>
+		<div class="zf-aboutPro-fr"><img src="/public/images/zfxm/img_zf.png" alt=""></div>
+	</div>
+</div>
+<!-- 项目介绍 end -->
+<!-- 借款人详情 star -->
+<div class="zf-containerBox zf-containerBox-bd ovh">
+	<img src="/public/images/zfxm/img_zf1.png" style="margin:82px 0 0 6px; display:inline;" class="fl" alt="">
+	<div class="person-info fr">
+		<h4 class="zf-title"><i class="zf-icons-name"></i>借款人详情</h4>
+		<table class="person-info-tab">
+			<tbody>
+				<tr>
+					<td width="31%" class="pl-td tdBg-color">借款人</td>
+					<td class="pl-td-two" width="69%">长兴县财政局旗下的长兴**有限公司</td>
+				</tr>
+				<tr>
+					<td class="pl-td tdBg-color">注册资本</td>
+					<td class="pl-td-two">1亿元</td>
+				</tr>
+				<tr>
+					<td class="pl-td tdBg-color">公司类型</td>
+					<td class="pl-td-two">有限责任公司（法人独资）</td>
+				</tr>
+				<tr>
+					<td class="pl-td tdBg-color">经营范围</td>
+					<td class="pl-td-two">新农村建设、城镇基础设施建设、交通基础设施建设、水利基础设施建设、保障房建设、房屋拆迁、土地开发整理、旅游景区开发建设与经营、实业投资。</td>
+				</tr>
+				<tr>
+					<td class="pl-td tdBg-color">资金用途</td>
+					<td class="pl-td-two">政府污水纳管工程 </td>
+				</tr>
+				<tr>
+					<td class="pl-td tdBg-color">还款来源</td>
+					<td class="pl-td-two">土地出让返还资金 、污水纳管收入、贡茶院门票收入</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</div>
+<!-- 借款人详情 end -->
+<!-- 担保公司介绍 star -->
+<div class="zf-colorBgBox">
+	<div class="zf-containerBox ovh">
+		<div class="zf-aboutPro-fl">
+			<h4 class="zf-title"><i class="zf-icons-name"></i>担保人详情</h4>
+			<table class="person-info-tab">
+			<tbody>
+				<tr>
+					<td width="31%" class="pl-td tdBg-color-two">担保公司</td>
+					<td class="pl-td-two" width="69%">长兴县人民政府旗下的长兴交通投资集团有限公司。2014年6月26日由联合资信评级为：AA，注册资本15亿元，国有独资的有限责任公司。</td>
+				</tr>
+				<tr>
+					<td class="pl-td tdBg-color-two">经营范围</td>
+					<td class="pl-td-two">交通建设项目的策划、经营和管理；交通建设项目的经济技术咨询服务；土地开发；房地产开发；城市基础设施建设。</td>
+				</tr>
+				<tr>
+					<td class="pl-td tdBg-color-two">偿债及担保能力分析</td>
+					<td class="pl-td-two">土地出让收入为主，短期、长期偿债能力良好，拥有较强的直接融资能力，间接融资渠道畅通。</td>
+				</tr>
+			</tbody>
+		</table>
+		</div>
+		<div class="zf-aboutPro-fr" style="padding:64px 0 0;"><img src="/public/images/zfxm/img_zf2.png" alt=""></div>
+	</div>
+</div>
+<!-- 担保公司介绍 end -->
+<!-- 项目列表 star -->
+<div class="zf-containerBox zf-containerBox-bd" id="projectList" <if condition="!$haveBid">style="display:none;"</if>>
+	<h4 class="zf-title"><i class="zf-icons-name"></i>项目列表</h4>
+	<div class="zf-project-list loading" id="ajaxContent" _id="{:C('GUARANTOR_ID_CX')}"></div>
+</div>
+<!-- 项目列表 end -->
+</block>

@@ -1,0 +1,64 @@
+<extend name="./app/Tpl/Public/base_hfhg.html"/>
+<block name="title">我要理财-投资成功</block>
+<block name="keywords">我要理财</block>
+<block name="description">我要理财</block>
+
+<block name="style">
+</block>
+<block name="body">
+<?php // echo "<pre>"; print_r($prjInfo); ?>
+<div class="naviga_bar"><a href="{:U('Financing/Invest/plist')}" title="投资项目">投资项目</a><em>&gt;</em>投资成功</div>
+<div class="invest-success-container">
+  <div class="invest-success-content">
+      <h1 class="invest-success-name-pop">{$prjTypeName}: <span class="basenumber">{$prjName}</span></h1>
+      <div class="invest-success-path">
+        <div class="invest-success-state">
+          <em class="invest-success-icn-yes fl">
+          </em>
+          <dl class="invest-success-msg fr">
+            <dt>投资申请成功</dt>
+            <dd>{$orderCtime}</dd>
+          </dl>
+        </div>
+        <div class="clearfix"></div>
+       <div class="invest-success-btn-box invest-success-btn-other tac">
+          <label class="button-common-orange button-orange-w200 mr-value">
+            <a class="btns" href="{:U('Financing/InvestFund/plist')}">继续投资</a>
+          </label>
+          <label class="button-common-blue button-blue-w200 mr-value ">
+            <a class="btns" href="{:U('Account/Financing/fundIndex')}">查看投资记录</a>
+          </label>
+        </div>
+      </div>
+  </div>
+  <div class="invest-fundcoupon-tu tac">
+    <div class="invest-fundcoupon-tu-c">
+      <div class="invest-fundcoupon-list icn-fund-bg-01 tal fl">
+        <div class="invest-fund-content invest-fund-juan">
+        <p class="invest-fund-txt1"><em class="em">¥20</em></p>
+        <p class="invest-fund-txt2">首投红包</p>
+        <span class="useRule">使用规则</span>
+        </div>
+        <!--首投红包使用规则 start-->
+        <div class="OrangeTipBox-Red dn" data-flag="rateFloatTip">
+          <em class="OrangeTipBox_Arr1"><em class="OrangeTipBox_Arr2"></em></em>
+          <p>使用规则:</p>
+          <p>1.用户<span class="yelcolor">首次</span>使用活动红包进行投资，红包可用于投资平台上任意产品（企福鑫除外）;<br><span class="yelcolor">第二次起</span>，红包只可用于投资30天以上产品（企福鑫除外）；</p>
+          <p>2.用户单次投资可使用的红包金额为投资金额的<span class="yelcolor">1%</span>，单个项目累计可使用的红包金额<br><span class="yelcolor">上限为30元</span>；</p>
+          <p>3.活动红包有效期至<span class="yelcolor">2015年6月30日</span>；</p>
+          <p>4.该活动最终解释权归鑫合汇所有。</p>
+        </div>
+        <!--首投红包使用规则 end-->
+      </div>
+      <div class="invest-fundcoupon-list icn-fund-bg-02 tal fl">
+        <div class="invest-fund-content invest-fund-juan">
+        <p class="invest-fund-txt1"><em class="em">2.05%</em></p>
+        <p class="invest-fund-txt2">赠送年化红包</p>
+      </div>
+    </div>
+  </div>
+  <div class="fixed tac">
+    <span class="bgcolorfa inline-block"><i class="icon_OrangeSigh"></i>红包/资金服务费抵用券、提现次数于1个工作日内打入用户账户</span>
+  </div>
+</div>
+</block>

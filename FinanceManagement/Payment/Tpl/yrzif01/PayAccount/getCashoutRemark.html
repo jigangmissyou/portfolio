@@ -1,0 +1,25 @@
+<div id="cashoutView">
+  <!-- 查看备注 -->
+  <div id="titlebar">查看备注</div>
+  <div id="jqueryContent" class="w520">
+    <div class="jqueryscroll">
+      <if condition="!empty($cashoutRemark)">
+        <foreach name="cashoutRemark" item="vo">
+          <ul class="line_b_dashed ulListbox_pop">
+            <li>操作人员：{$vo.operator}
+	            <if condition="$vo.operator_role eq 1">（财务）
+				<elseif condition="$vo.operator_role eq 2"/>（客服）
+				<elseif condition="$vo.operator_role eq 3"/>（机器）
+				</if>
+			</li>
+            <li>操作时间：{$vo.ctime|date="Y-m-d H:i:s",###}</li>
+            <li class="lastLi">备注：{$vo.remark}</li>
+          </ul>
+        </foreach>
+      <else/>
+        <div class="tac">无备注</div>
+      </if>
+
+    </div>
+  </div>
+</div>

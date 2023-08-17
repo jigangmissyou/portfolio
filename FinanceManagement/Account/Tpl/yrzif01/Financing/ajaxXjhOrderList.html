@@ -1,0 +1,279 @@
+<table class="ui-record-table percentTable" style="width:980px;">
+    <thead>
+    <tr>
+        <th width="15%"  style="padding-left:2%;" order_field="order11"><a href="javascript:;" class="updown_sort">时间<i class="sort_normal"></i></a></th>
+        <th width="25%">明细</th>
+        <th width="15%" class="">状态</th>
+        <th width="15%" class="">合同</th>
+        <th width="25%" class="">详情</th>
+    </tr>
+    </thead>
+
+    <tbody>
+
+    <if condition="$xjh_begin">
+        <?php
+            if ($xjh_begin.value_day_date.$xjh_begin.value_day_time<$xjh_begin.ctime_date.$xjh_begin.ctime_time) {
+         ?>
+        <tr>
+            <td>
+                <p class="pro_name">{$xjh_begin.value_day_date}<br />{$xjh_begin.value_day_time}</p>
+            </td>
+            <td>
+                <p class="name-color">
+                    <b>理财计划开始计息</b><br/>以下为司马小鑫为您定制的理财计划
+                </p>
+            </td>
+            <td class="">
+                <span></span>
+            </td>
+            <td class="">
+                <span></span>
+            </td>
+            <td class="">
+                <span></span>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p class="pro_name">{$xjh_begin.ctime_date}<br />{$xjh_begin.ctime_time}</p>
+            </td>
+            <td>
+                <p class="name-color">
+                    <b>理财计划-{$xjh_begin.time_limit_day} 天</b><br />预期年化收益率：{$v.total_rate}
+
+                </p>
+            </td>
+            <td class="">
+                <span>委托成功</span>
+            </td>
+            <td class="">
+                <span></span>
+            </td>
+            <td class="">
+                    <span>
+                        委托金额：{$xjh_begin.money} 元
+                        <br/>
+                        到期收益：{$xjh_begin.total_yield} 元
+                        <!--加入总金额：{$xjh_begin.money} 元
+                        <br/>
+                        预期年化收益率：{$xjh_begin.year_rate}
+                        <?php if ($xjh_begin['addon_rate_raw'] > 0) { ?>
+                        + <?php echo $xjh_begin['addon_rate'] ?>加息
+                        <?php } ?>
+
+                        <br/>
+                        投资期限：{$xjh_begin.time_limit_day}天
+                        <br/>
+                        预期理财收益：{$xjh_begin.total_yield} 元
+                        <?php if ($xjh_begin['income_addon_raw'] > 0) { ?>
+                        (含 <?php echo $xjh_begin['income_addon'] ?> 元 加息)
+                        <?php } ?>-->
+                    </span>
+            </td>
+        </tr>
+        <?php   }else{ ?>
+
+        <tr>
+            <td>
+                <p class="pro_name">{$xjh_begin.ctime_date}<br />{$xjh_begin.ctime_time}</p>
+            </td>
+            <td>
+                <p class="name-color">
+                    <b>理财计划-{$xjh_begin.time_limit_day} 天</b><br />预期年化收益率：{$xjh_begin.total_rate}
+                   <!-- <?php if ($xjh_begin['addon_rate_raw'] > 0) { ?>
+                    + <?php echo $xjh_begin['addon_rate'] ?>加息
+                    <?php } ?>-->
+
+                </p>
+            </td>
+            <td class="">
+                <span>委托成功</span>
+            </td>
+            <td class="">
+                <span></span>
+            </td>
+            <td class="">
+                    <span>
+                        委托金额：{$xjh_begin.money} 元
+                        <br/>
+                        到期收益：{$xjh_begin.total_yield} 元
+                        <!--加入总金额：{$xjh_begin.money} 元
+                        <br/>
+                        预期年化收益率：{$xjh_begin.year_rate}
+                        <?php if ($xjh_begin['addon_rate_raw'] > 0) { ?>
+                        + <?php echo $xjh_begin['addon_rate'] ?>加息
+                        <?php } ?>
+
+                        <br/>
+                        投资期限：{$xjh_begin.time_limit_day}天
+                        <br/>
+                        预期理财收益：{$xjh_begin.total_yield} 元
+                        <?php if ($xjh_begin['income_addon_raw'] > 0) { ?>
+                        (含 <?php echo $xjh_begin['income_addon'] ?> 元 加息)
+                        <?php } ?>-->
+                    </span>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p class="pro_name">{$xjh_begin.value_day_date}<br />{$xjh_begin.value_day_time}</p>
+            </td>
+            <td>
+                <p class="name-color">
+
+                    <b>理财计划开始计息</b><br />以下为司马小鑫为您定制的理财计划
+                </p>
+            </td>
+            <td class="">
+                <span></span>
+            </td>
+            <td class="">
+                <span></span>
+            </td>
+            <td class="">
+                <span></span>
+            </td>
+        </tr>
+        <?php  }  ?>
+    </if>
+    <if condition="$list">
+        <foreach name="list" item="v">
+            <tr>
+                <td>
+                    <p class="pro_name">{$v.ctime_date}<br />{$v.ctime_time}</p>
+                </td>
+                <td>
+                    <p class="name-color">
+                        <a href="/Financing/Invest/view?id={$v.prj_id_view}" target="_blank" hidefocus="hidefocus"><b>投资项目</b>{$v.num} <br/>{$v.prj_type_view} {$v.prj_name}</a>
+                    </p>
+                </td>
+                <td class="">
+                    <span>{$v.status}</span>
+                </td>
+                <td class="">
+            <span>
+                <?php if ($v['have_transfer_protocol']) { ?>
+                <a href="javascript:;" hovercard="ajax@{:U('Account/Financing/getTransferList',array('oid'=>$v['id']))}" hovercard-options='{ "direction":"down","ajaxCached": false }'>债权转让合同</a>
+                    <br />
+                <?php } ?>
+                <?php if ($v['have_loan_protocol']) { ?>
+                <?php if ($v['contract_id']) { ?>
+                <a href="{:U('Signature/Sign/pdf_view',array('id'=>$v['contract_id']))}" target="_blank">借款合同</a>
+                <?php } else { ?>
+                <a href="javascript:;" hovercard="ajax@{:U('Index/Protocol/validateview',array('id'=>$v['id']))}" hovercard-options='{ "direction":"down","ajaxCached": false }'>借款合同</a>
+                <?php } ?>
+                <?php } ?>
+            </span>
+                </td>
+                <td class="">投资金额：{$v.money} 元<!--<br />预期年化收益率：{$v.total_rate}--></td>
+            </tr>
+        </foreach>
+    </if>
+    <if condition="$xjh_result">
+        <tr>
+            <td>
+                <p class="pro_name">{$xjh_result.finish_date}<br />{$xjh_result.finish_time}</p>
+            </td>
+            <td>
+                <!-- <p class="name-color">
+                     总计回款到账 ：本息收益 {$xjh_result.total_money}元
+                     <?php if ($xjh_result['income_addon']>0) { ?>
+                     (含{$xjh_result.income_addon}元加息奖励)
+                     <?php } ?>
+                 </p>-->
+                <p class="name-color">
+                    <b>到期结算</b> <br/><span style="color: red">总计回款： {$xjh_result.total_money}元</span>
+                </p>
+            </td>
+            <td class="">
+                <span>委托结束</span>
+            </td>
+            <td class="">
+                <span></span>
+            </td>
+            <td class="">
+
+                <p class="name-color">
+                    还款 ： 本息收益 {$xjh_result.actual_benxi} 元
+                    <?php if ($xjh_result['add_yield']>0) {?>
+                    <br/>
+                    红包奖励 ：<?php echo $xjh_result['add_yield'] ?> 元
+                    <?php } ?>
+                    <?php if ($xjh_result['minus_yield']>0) {?>
+                    <br/>
+                    扣除 ：平台服务费 <?php echo $xjh_result['minus_yield'] ?> 元
+                    <?php } ?>
+                    <?php if ($xjh_result['income_activity']>0) {?>
+                    <br/>
+                    平台奖励：<?php echo $xjh_result['income_activity'] ?> 元
+                    <?php } ?>
+                    <?php if ($xjh_result['income_addon']>0) {?>
+                    <br/>
+                    加成奖励：<?php echo $xjh_result['income_addon'] ?> 元
+                    <?php } ?>
+                    <?php if ($xjh_result['income_jiaxi']>0) {?>
+                    <br/>
+                    加息券奖励 ：<?php echo $xjh_result['income_jiaxi'] ?> 元
+                    <?php } ?>
+                </p>
+                <span>总计回款 = 还款
+                    <?php if ($xjh_result['add_yield']>0) { ?>
+                      +红包奖励
+                    <?php } ?>
+                    <?php if ($xjh_result['minus_yield']>0) { ?>
+                      -扣除
+                     <?php } ?>
+                    <?php if ($xjh_result['income_activity']>0) {?>
+                      +平台奖励
+                    <?php } ?>
+                    <?php if ($xjh_result['income_addon']>0) {?>
+                      +加成奖励
+                    <?php } ?>
+                    <?php if ($xjh_result['income_jiaxi']>0) {?>
+                    + 加息券奖励
+                    <?php } ?>
+                  </span>
+            </td>
+        </tr>
+        <!--<tr>
+            <td>
+                <p class="pro_name additive">{$xjh_result.finish_date}<br />{$xjh_result.finish_time}</p>
+            </td>
+            <td>
+                <p class="name-color">
+                    还款 ： 本息收益 {$xjh_result.actual_benxi} 元
+                    <?php if ($xjh_result['add_yield']>0) {?>
+                    <br/>
+                    红包奖励 ：<?php echo $xjh_result['add_yield'] ?> 元
+                    <?php } ?>
+                    <?php if ($xjh_result['minus_yield']>0) {?>
+                    <br/>
+                    扣除 ：平台服务费 <?php echo $xjh_result['minus_yield'] ?> 元
+                    <?php } ?>
+                    <?php if ($xjh_result['income_activity']>0) {?>
+                    <br/>
+                    平台奖励：<?php echo $xjh_result['income_activity'] ?> 元
+                    <?php } ?>
+                    <?php if ($xjh_result['income_addon']>0) {?>
+                    <br/>
+                    投资加成：<?php echo $xjh_result['income_addon'] ?> 元
+                    <?php } ?>
+                </p>
+            </td>
+            <td class="">
+                <span></span>
+            </td>
+            <td class="">
+                <span></span>
+            </td>
+            <td class="">
+                    <span>
+                    </span>
+            </td>
+        </tr>-->
+    </if>
+    </tbody>
+</table>
+<?php $pageNavCallback = "ajaxAfter_Account_Financing_index"; ?>
+<include file="./app/Tpl/Public/pageAjax.html" />

@@ -1,0 +1,274 @@
+<extend name="./app/Tpl/Public/base_user.html"/>
+<block name="title">修改存管账户银行卡</block>
+<block name="keywords"></block>
+<block name="description"></block>
+
+<block name="style">
+<link href="/public/css/banklogo.css" rel="stylesheet" />
+<link rel="stylesheet" href="/public/css/sasscss/act/zskh/index.css">
+<style>
+  .tipsy-red {
+    z-index: 112!important;
+  }
+  .selectCity{
+    overflow: scroll;
+    height: 300px;
+    width: 410px;
+    overflow-x: hidden;
+  }
+</style>
+</block>
+<block name="body">
+<div class="mask dn"></div>
+<div id="bind-bank-success" class="khcg openSuccess dn">
+    <div class="clearfix"></div>
+    <div class="tac khcg-txt" style="font-size:20px;">
+        <img src="/public/images/zskh/czcg.png" alt="" />提交成功！
+    </div>
+    <p class="mt20"></p>
+    <p class="tac introduceTxt mt20" style="width:90%;">你已向浙商银行提交存管账户银行卡变更申请，请等待浙商银行审核，预计1个工作日内变更成功，遇节假日顺延。</p>
+    <p class="mt20"></p>
+    <a href="/Account/User/account" class="rechargeBtn closeBtn">
+        关闭
+    </a>
+</div>
+
+<div id="" class="khcg openSuccess dn" style="height:140px;">
+
+    <div class="fr close-btn">
+        <a href="javascript:;"><img src="/public/images/zskh/close.png" alt="" /></a>
+    </div>
+    <div class="clearfix"></div>
+    <p class="khcg-content tac" style="width:380px;margin:30px auto;">
+        <img src="/public/images/zskh/czsb.png" alt="" />&nbsp;&nbsp;请输入正确的银行卡号
+    </p>
+</div>
+
+<div class="container-inner mt20">
+  <include file="./app/Tpl/Account/userMyBonusSider.html" />
+  <div class="main_area body-frame">
+  <div class="p20">
+  <h2 class="h2tit">修改存管账户银行卡</h2>
+  <!-- <div class="remind">
+    <h3><strong class="user">{$uname}</strong>你好！</h3>
+    <ol>
+      <li>1、此操作将解除旧邮箱的绑定状态。解除后，旧邮箱不能再用来登录鑫合汇；</li>
+    </ol>
+  </div> -->
+  <br />
+  <br />
+  <br />
+  <p class="orange tac">
+    
+  </p>
+  <form action="{:U('Account/User/editZsBankCard')}"  ajax="1" ajax-after="ajaxAfter_Account_Bank_confirmBindBankCard" method="post" id="formId_Account_Bank_confirmBindBankCard" >
+      <ul class="formList account-edit-form">
+        <li class="orange tac" style="padding-bottom:0px;">
+          新银行卡的预留手机号必须为{$zs_bank_mobile}，否则将修改失败。
+        </li>
+        <li style="padding-bottom:0px;">
+          <label class="li-label-name">用户姓名</label>
+          <span class="li-span-con">
+            {$zs_real_name}
+          </span>
+        </li>
+        <li style="padding-bottom:0px;">
+          <label class="li-label-name">现有银行卡</label>
+          <span class="li-span-con">
+            <img src="/public/images/bank/{$bank}.png" alt="" width="26px" />
+            {$bank_name}（{$zs_bind_bank_card}）
+          </span>
+        </li>
+        <li style="border-bottom:1px solid #ededed;width:700px;margin:auto;"></li><br />
+        <li>
+          <label class="li-label-name">新银行卡信息：</label>
+          <span class="li-span-con">
+          </span>
+        </li>
+        <li>
+          <label class="li-label-name">银行名称</label>
+          <span class="li-span-con">
+            <input type="hidden" name="bank_code" id="bankList" value=""/>
+            <input event-click="bankCard.selectBankNoCheck" valid="required" type="text" name="bank_name" class="inputCommon" value="">
+            <em data-elem="tips" class="red dn ml5">请选择银行</em>
+            <input type="hidden" name="bank_name" id="hidden-bank-name" value=""/>
+          </span>
+        </li>
+        <li>
+          <label class="li-label-name">银行卡号</label>
+          <span class="li-span-con">
+            <span id="bankPlaceholder" class="li-span-con placeholder" style="padding-left:0;width:100%;">
+                <input type="text" name="card_no" class="inputCommon" valid="required,qq,lengthRange@16~20|不能为空,请输入数字,请填写卡号（16-20位数字）" value="">
+                <!-- <span data-elem="tips" class="red dn"></span> -->
+             </span>
+          </span>
+        </li>
+        <li style="overflow:visible; height:46px;">
+          <label class="li-label-name">城市</label>
+          <span class="li-span-con" style="position:relative; z-index: 5;">
+            <input id="pop_city" event-focus="bankCard.getOpenCity" type="text" name="open_city" class="inputCommon" value="" valid="required">
+            <span data-elem="tips" class="red dn">请选择开户城市</span>
+            <input type="hidden" name="bank_province"/>
+            <input type="hidden" name="bank_city"/>
+            <div id="openCityWrap" class="bankaddPop selectCity dn" style="position:absolute;top:40px;left:20px;">
+              <span class="i_close" event-click="bankCard.closeOpenCity">×</span>
+              <div class="citylist" id="openCityList"></div>
+            </div>
+          </span>
+        </li>
+        <li style="overflow:visible; height:37px; ">
+          <label class="li-label-name">分支行</label>
+          <div class="li-span-con" style="position:relative; z-index:2 ">
+            <input id="pop_sub_bank" event-focus="bankCard.searchOpenBankPrecise" type="text" name="sub_bank" class="inputCommon" value="" valid="required">
+            <span data-elem="tips" class="red dn">请选择开户行</span>
+            <input type="hidden" name="sub_bank_id"/>
+            <div id="openBankListWrap" class="bankaddPop pr dn" style="position:absolute;top:36px;left:20px;">
+              <span class="i_close" event-click="bankCard.closeOpenBankList">×</span>
+              <div class="p10">
+                输入关键字<input type="text" id="bankKeyWord" style="width:200px;" class="inputCommon" value="">
+                <a event-click="bankCard.getOpenBankListPrecise" class="button-small-orange ml10" href="javascript:;">
+                  <span class="btns">查找</span>
+                </a>
+              </div>
+              <div class="scrollwrap bor_t_dot">
+                <ul class="content" style="overflow: auto" id="openBankList">
+                </ul>
+              </div>
+            </div>
+          </div>
+        </li>
+        <li>
+          <label class="li-label-name">预留手机号码</label>
+          <span class="li-span-con">
+            {$zs_bank_mobile}
+          </span>
+        </li>     
+        <li>
+          <label class="li-label-name">手机动态码：</label>
+          <span class="li-span-con">
+            <input type="text" style="width:195px;" valid="required,number,lengthRange@4~6" valid-msg-options='{"offset": 100}' class="inputCommon"  name="verifyCode"  value="" autocomplete="off">
+            <a href="javascript:void(0);" class="button-small-info" id="editZsCardSms" style="width: 96px;line-height: 46px;height: 46px;background-color: #6ad300;color: #fff;text-align: center;border-radius: 4px;" event-click="bankCard.getCodeZS">免费获取</a>
+            <span id="sms_cutdown_time" class="button-small-info time_send" style="display:none; line-height: 46px; height: 46px;background-color: rgb(189, 189, 189);color: #FFF;width: 96px;text-align: center;border-radius: 4px;">120</span>
+          </span>
+        </li>
+        <li class="lastBtns">
+          <label for="" class="li-label-name">&nbsp;</label>
+          <span class="li-span-con">
+            <span class="button-common-blue button-blue-w120">
+              <input type="submit" id="formsubmit" name="" value="确 定" class="btns">
+            </span>
+            <span class="button-common-gray button-gray-w120 ml20">
+              <input type="reset" name="" value="取 消" class="btns">
+            </span>
+          </span>
+        </li>
+      </ul>
+   </form>
+</div>
+</div>
+</div>
+<div class="dn">
+  <div id="bank-list">
+    <div class="pop-name-auth">
+      <div id="titlebar">选择银行</div>
+      <div class="jqueryscroll">
+        <div id="jqueryContent" class="pop-bank-list">
+          <div class="bank-list">
+            <label id="label_bank_01" class="bank_logo_box selected" for="bank_01">
+              <input type="radio" id="bank_01" value="CCB" name="bank_option" checked="checked" abbr="zheshang">
+              <span class="bank_logo bank_ccb" title="建设银行">建设银行</span>
+            </label>
+            <label id="label_bank_02" class="bank_logo_box" for="bank_02">
+              <input type="radio" id="bank_02" value="ABC" name="bank_option" abbr="zheshang">
+              <span class="bank_logo bank_abc" title="农业银行">农业银行</span>
+            </label>
+            <label id="label_bank_03" class="bank_logo_box" for="bank_03">
+              <input type="radio" id="bank_03" value="BOC" name="bank_option" abbr="zheshang">
+              <span class="bank_logo bank_boc" title="中国银行">中国银行</span>
+            </label>
+            <label id="label_bank_04" class="bank_logo_box" for="bank_04">
+              <input type="radio" id="bank_04" value="ICBC" name="bank_option" abbr="zheshang">
+              <span class="bank_logo bank_icbc" title="工商银行">工商银行</span>
+            </label>
+            <label id="label_bank_05" class="bank_logo_box" for="bank_05">
+              <input type="radio" id="bank_05" value="CMBC" name="bank_option" abbr="zheshang">
+              <span class="bank_logo bank_cmbc" title="民生银行">民生银行</span>
+            </label>
+
+            <label id="label_bank_07" class="bank_logo_box" for="bank_07">
+              <input type="radio" id="bank_07" value="CGB" name="bank_option" abbr="zheshang">
+              <span class="bank_logo bank_gdb" title="广发银行">广发银行</span>
+            </label>
+            <label id="label_bank_08" class="bank_logo_box" for="bank_08">
+              <input type="radio" id="bank_08" value="CZB" name="bank_option" abbr="zheshang">
+              <span class="bank_logo bank_czbank" title="浙商银行">浙商银行</span>
+            </label>
+            <label id="label_bank_09" class="bank_logo_box" for="bank_09">
+              <input type="radio" id="bank_09" value="CEB" name="bank_option" abbr="zheshang">
+              <span class="bank_logo bank_cebb" title="光大银行">光大银行</span>
+            </label>
+            <label id="label_bank_10" class="bank_logo_box" for="bank_10">
+              <input type="radio" id="bank_10" value="CITIC" name="bank_option" abbr="zheshang">
+              <span class="bank_logo bank_ecitic" title="中信银行">中信银行</span>
+            </label>
+            <label id="label_bank_11" class="bank_logo_box" for="bank_11">
+              <input type="radio" id="bank_11" value="CMB" name="bank_option" abbr="zheshang">
+              <span class="bank_logo bank_cmb" title="招商银行">招商银行</span>
+            </label>
+            <label id="label_bank_14" class="bank_logo_box" for="bank_14">
+              <input type="radio" id="bank_14" value="SZPAB" name="bank_option" abbr="zheshang">
+              <span class="bank_logo bank_pingan" title="平安银行">平安银行</span>
+            </label>
+            <label id="label_bank_32" class="bank_logo_box" for="bank_32">
+              <input type="radio" id="bank_32" value="CIB" name="bank_option" abbr="zheshang">
+              <span class="bank_logo bank_cib" title="兴业银行">兴业银行</span>
+            </label>
+            <label id="label_bank_33" class="bank_logo_box" for="bank_33">
+              <input type="radio" id="bank_33" value="BOCOM" name="bank_option" abbr="zheshang">
+              <span class="bank_logo bank_boco" title="交通银行">交通银行</span>
+            </label>
+            <label id="label_bank_15" class="bank_logo_box" for="bank_15">
+              <input type="radio" id="bank_15" value="BOS" name="bank_option" abbr="zheshang">
+              <span class="bank_logo bank_bosh" title="上海银行">上海银行</span>
+            </label>
+            <label id="label_bank_16" class="bank_logo_box" for="bank_16">
+              <input type="radio" id="bank_16" value="BOBJ" name="bank_option" abbr="zheshang">
+              <span class="bank_logo bank_bob" title="北京银行">北京银行</span>
+            </label>
+            <div class="clearfix"></div>
+            <!--<span id="button_bank" class="bank_logo_box other">-->
+            <!--<a class="">选择其他银行<i class="iar"></i></a>-->
+            <!--</span>-->
+            <!--<label id="label_bank_15" class="bank_logo_box" for="bank_15" style="display:none">-->
+            <!--<input type="radio" id="bank_15" value="NBCB" name="bank_option" abbr="shenfut">-->
+            <!--<span class="bank_logo bank_nbcb" title="宁波银行">宁波银行</span></label>-->
+            <!--<label id="label_bank_16" class="bank_logo_box" for="bank_16" style="display:none">-->
+            <!--<input type="radio" id="bank_16" value=BOB_D_B2C name="bank_option" abbr="yibatong">-->
+            <!--<span class="bank_logo bank_bob" title="北京银行">北京银行</span></label>-->
+            <!--<label id="label_bank_17" class="bank_logo_box" for="bank_17" style="display:none">-->
+            <!--<input type="radio" id="bank_17" value="HKBEA" name="bank_option" abbr="shenfut">-->
+            <!--<span class="bank_logo bank_hkbea" title="东亚银行">东亚银行</span></label>-->
+            <!--<label id="label_bank_18" class="bank_logo_box" for="bank_18" style="display:none">-->
+            <!--<input type="radio" id="bank_18" value="BOS" name="bank_option" abbr="shenfut">-->
+            <!--<span class="bank_logo bank_bosh" title="上海银行">上海银行</span></label>-->
+            <!--<label id="label_bank_20" class="bank_logo_box" for="bank_20" style="display:none">-->
+            <!--<input type="radio" id="bank_20" value="NJCB" name="bank_option" abbr="shenfut">-->
+            <!--<span class="bank_logo bank_njcb" title="南京银行">南京银行</span></label>-->
+            <!--<label id="label_bank_21" class="bank_logo_box" for="bank_21" style="display:none">-->
+            <!--<input type="radio" id="bank_21" value="CBHB" name="bank_option" abbr="shenfut">-->
+            <!--<span class="bank_logo bank_cbhb" title="渤海银行">渤海银行</span></label>-->
+            <!--<label id="label_bank_22" class="bank_logo_box" for="bank_22" style="display:none">-->
+            <!--<input type="radio" id="bank_22" value="BOCD" name="bank_option" abbr="shenfut">-->
+            <!--<span class="bank_logo bank_bocd" title="成都银行">成都银行</span></label>-->
+            <!--<label id="label_bank_24" class="bank_logo_box" for="bank_24" style="display:none">-->
+            <!--<input type="radio" id="bank_24" value="SRCB_D_B2C" name="bank_option" abbr="yibatong">-->
+            <!--<span class="bank_logo bank_srcb" title="上海农村商业银行">上海农村商业银行</span></label>-->
+          </div>
+          <div class="clearfix"></div>
+          <p class="tac"><a class="bind-bank-next btn-pop-auth" href="javascript:void(0);" event-click="closePop">确认</a></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</block>

@@ -1,0 +1,15 @@
+<div class="repayment-time">
+<i class="time-border-triangle"></i>
+<table>
+<tr><th>期次</th><th>投资时间</th></tr>
+  <?php if(!empty($data)){
+      foreach($data as $k=>$v){
+  ?>
+    <tr><td>{$v.term}</td><td>{$v.freeze_time}</td></tr>
+  <?php }?>
+  <?php }else{?>
+  <tr><td>暂无数据</td></tr>
+  <?php }?>
+<!--<tr><td>2</td><td>2015-11-20  16:00</td></tr>-->
+</table>
+</div>

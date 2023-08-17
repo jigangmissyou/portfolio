@@ -1,0 +1,213 @@
+<extend name="./app/Tpl/Public/base2.html"/>
+<block name="title">中新力合旗下投融平台</block>
+<block name="keywords"></block>
+<block name="description"></block>
+
+<block name="style">
+
+</block>
+
+<block name="body">
+  <include file="nav" />
+  <div class="main_area">
+
+    <div class="info_fill_step">
+      <span class="filling">项目信息</span>
+      <span class="filled"><i></i>备案登记信息</span>
+      <span class="filled"><i></i>运营报告</span>
+      <span class="filled"><i></i>重大事件披露</span>
+    </div>
+
+    <div class="form_container">
+      <form action="{:U('Financing/Product/add')}" method="post" id="ajaxForm_fundAdd" ajax="1" ajax-after="ajaxAfter_fundAdd_step1">
+        <div class="step step1">
+          <div class="pro_form_item">
+            <label class="li-label-name"><em class="red">*</em>基金管理人：</label>
+            <input type="text" name="" class="inputCommon" valid="required" value="">
+          </div>
+          <div class="pro_form_item">
+            <label class="li-label-name"><em class="red">*</em>基金名称：</label>
+            <div class="ui_select_box ui_select_short">
+              <select multipleone="1">
+                <option value="1">基金A</option>
+                <option value="2">基金B</option>
+              </select>
+            </div>
+          </div>
+          <div class="pro_form_item">
+            <label class="li-label-name"><em class="red">*</em>基金经理：</label>
+            <input type="text" name="fund_manager" class="inputCommon" valid="required" value="">
+          </div>
+          <div class="pro_form_item">
+            <label class="li-label-name"><em class="red">*</em>基金托管人：</label>
+            <input type="text" name="" class="inputCommon" valid="required" value="">
+          </div>
+          <div class="pro_form_item">
+            <label class="li-label-name"><em class="red">*</em>产品名称：</label>
+            <input type="text" name="" class="inputCommon" valid="required" value="">
+          </div>
+          <div class="pro_form_item">
+            <label class="li-label-name"><em class="red">*</em>募集规模：</label>
+            <input type="text" name="" class="inputCommon" valid="required" value="">
+            <span class="fill_explain">元</span>
+          </div>
+          <div class="pro_form_item">
+            <label class="li-label-name"><em class="red">*</em>募集期限：</label>
+            <input type="text" name="" class="inputCommon" valid="required,number" value="" style="width: 30px" maxlength="4">
+            <span class="fill_explain">个月以内（以实际募集天数为准）</span>
+          </div>
+          <div class="pro_form_item">
+            <label class="li-label-name"><em class="red">*</em>存续期：</label>
+            <input type="text" name="" class="inputCommon" valid="required,number" value="" style="width: 30px" maxlength="4">
+            <span class="fill_explain">个月</span>
+          </div>
+          <div class="pro_form_item">
+            <label class="li-label-name"><em class="red">*</em>预期年化收益：</label>
+            <span class="fill_explain">期限</span>
+            <input type="text" name="" id="expectRateLimit" class="inputCommon" value="" style="width: 30px" maxlength="4">
+            <div class="ui_select_box ui_select_short">
+              <select multipleone="1" id="expectRateType">
+                <option value="month">月</option>
+                <option value="year">年</option>
+              </select>
+            </div>
+            <br>
+            <span class="fill_explain">利率</span>
+            <input type="text" name="" id="expectRateValue" class="inputCommon" value="" style="width: 30px" maxlength="4">
+            <span class="fill_explain">% 年化利率</span>
+            <br>
+            <span class="fill_explain">浮动收益</span>
+            <input type="text" name="" id="expectRateOver" class="inputCommon" value="" style="width: 30px" maxlength="4">
+            <span class="fill_explain">%</span>
+            <br>
+            <span class="btn_bor_orange"><input type="button" class="btn_text step_next" value="添加" event-click="addExpectRateItem"></span>
+          </div>
+          <div class="pro_form_item" id="expectRateList"></div>
+          <div class="pro_form_item">
+            <label class="li-label-name"><em class="red">*</em>回款方式：</label>
+            <div class="ui_select_box ui_select_short">
+              <select multipleone="1">
+                <option value="1">到期赎回</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="pro_form_item">
+          <label class="li-label-name"><em class="red">*</em>起投额度：</label>
+          <input type="text" name="" class="inputCommon" valid="required" value="">
+        </div>
+        <div class="pro_form_item">
+          <label class="li-label-name"><em class="red">*</em>最高额度：</label>
+          <input type="text" name="" class="inputCommon" valid="required" value="">
+        </div>
+        <div class="pro_form_item">
+          <label class="li-label-name"><em class="red">*</em>递增额度：</label>
+          <input type="text" name="" class="inputCommon" valid="required" value="">
+        </div>
+        <div class="pro_form_item">
+          <label class="li-label-name"><em class="red">*</em>最高投资人数：</label>
+          <input type="text" name="" class="inputCommon" valid="required" value="">
+        </div>
+        <div class="info_area" style="padding:0 60px">
+          <div class="info_tit show">
+            <h3>托管账户</h3>
+          </div>
+          <div class="content">
+            <div class="pro_form_item">
+              <label class="li-label-name"><em class="red">*</em>户名：</label>
+              <input type="text" name="" class="inputCommon" valid="required" value="">
+            </div>
+            <div class="pro_form_item">
+              <label class="li-label-name"><em class="red">*</em>开户行：</label>
+              <input type="text" name="" class="inputCommon" valid="required" value="">
+            </div>
+            <div class="pro_form_item">
+              <label class="li-label-name"><em class="red">*</em>账户：</label>
+              <input type="text" name="" class="inputCommon" valid="required" value="">
+            </div>
+          </div>
+        </div>
+        <div class="info_area" style="padding:0 60px">
+          <div class="info_tit show">
+            <h3>募集账户</h3>
+          </div>
+          <div class="content">
+            <div class="pro_form_item">
+              <label class="li-label-name"><em class="red">*</em>户名：</label>
+              <input type="text" name="" class="inputCommon" valid="required" value="">
+            </div>
+            <div class="pro_form_item">
+              <label class="li-label-name"><em class="red">*</em>开户行：</label>
+              <input type="text" name="" class="inputCommon" valid="required" value="">
+            </div>
+            <div class="pro_form_item">
+              <label class="li-label-name"><em class="red">*</em>账户：</label>
+              <input type="text" name="" class="inputCommon" valid="required" value="">
+            </div>
+          </div>
+        </div>
+        <div class="pro_form_item">
+          <label class="li-label-name"><em class="red">*</em>基金的类别：</label>
+          <div class="ui_select_box ui_select_short">
+            <select multipleone="1">
+              <option value="1">契约型</option>
+              <option value="2">公司型</option>
+            </select>
+          </div>
+        </div>
+        <div class="info_area" style="padding:0 60px">
+          <div class="info_tit show">
+            <h3>基金份额结构</h3>
+          </div>
+          <div class="content">
+            <div class="pro_form_item">
+              <label class="li-label-name"><em class="red">*</em>投资人类别：</label>
+              <div class="ui_select_box ui_select_short">
+                <select multipleone="1">
+                  <option value="1">优先级</option>
+                  <option value="2">次级</option>
+                  <option value="3">劣后级</option>
+                </select>
+              </div>
+            </div>
+            <div class="pro_form_item">
+              <label class="li-label-name"><em class="red">*</em>收益分配方式：</label>
+              <textarea name="" class="ui_textarea" valid="required"></textarea>
+            </div>
+            <div class="pro_form_item">
+              <label class="li-label-name"><em class="red">*</em>运作方式：</label>
+              <div class="ui_select_box ui_select_short">
+                <select multipleone="1">
+                  <option value="1">封闭式</option>
+                  <option value="2">开放式</option>
+                </select>
+              </div>
+            </div>
+            <div class="pro_form_item">
+              <label class="li-label-name"><em class="red">*</em>基金投向：</label>
+              <textarea name="" class="ui_textarea" valid="required"></textarea>
+            </div>
+            <div class="pro_form_item">
+              <label class="li-label-name"><em class="red">*</em>基金支付费用及方式：</label>
+              <textarea name="" class="ui_textarea" valid="required"></textarea>
+            </div>
+            <div class="pro_form_item">
+              <label class="li-label-name"><em class="red">*</em>项目介绍：</label>
+              <textarea name="" class="ui_textarea" valid="required"></textarea>
+            </div>
+            <div class="pro_form_item">
+              <label class="li-label-name"><em class="red">*</em>风险提示：</label>
+              <textarea name="" class="ui_textarea" valid="required"></textarea>
+            </div>
+          </div>
+        </div>
+        <div class="control control1">
+          <div class="pro_form_item submit_area">
+            <span class="btn_bor_orange"><input type="button" class="btn_text step_next" value="提交" event-click="submitStep1"></span>
+          </div>
+        </div>
+      </form>
+    </div>
+
+  </div>
+</block>

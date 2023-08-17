@@ -1,0 +1,48 @@
+<extend name="./app/Tpl/Public/base2.html"/>
+<block name="title">中新力合旗下投融平台</block>
+<block name="keywords"></block>
+<block name="description"></block>
+
+<block name="style">
+<style>
+.step2,.control2{display: none;}
+</style>
+</block>
+
+<block name="body">
+
+<include file="nav" />
+<div class="main_area">
+  <div class="form_container">
+    <form action="{:U('Financing/InvestFund/addFundPrj')}" method="POST" enctype="multipart/form-data" id="ajaxForm" initForm="1" autocomplete="off">
+     
+     <label>基金管理人</label><input type="text" name="fund_manager">
+     <label>产品名称</label><input type="text" name="prj_name">
+     <label>预期收益率</label>
+     <ul>
+        <li>期限<input type="text" name="expect_rate[0][time_limit]">
+          <select name="expect_rate[0][time_limit_unit]">
+            <option value="day">日</option>
+            <option value="year">月</option>
+          </select>
+        </li>
+        <li>利率<input type="text" name="expect_rate[0][year_rate]"></li>
+        <li>浮动收益<input type="text" name="expect_rate[0][extra_income]"></li>
+     </ul>
+     <ul>
+        <li>期限<input type="text" name="expect_rate[1][time_limit]">
+          <select name="expect_rate[1][time_limit_unit]">
+            <option value="day">日</option>
+            <option value="month">月</option>
+          </select>
+        </li>
+        <li>利率<input type="text" name="expect_rate[1][year_rate]"></li>
+        <li>浮动收益<input type="text" name="expect_rate[1][extra_income]"></li>
+     </ul>
+     
+     <input type="submit" value="提交">
+  
+    </form>
+  </div>
+</div>
+</block>

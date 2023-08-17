@@ -1,0 +1,37 @@
+<form action="{:U('Financing/InvestFund/fundReportsList')}" method="post" id="ajaxForm_fundReportsList" ajax="1"
+      ajax-after="ajaxAfter_reportList" ajax-datatype="html">
+  <div class="control control1">
+    <div class="pro_form_item submit_area" style="padding-left: 80px;">
+      <span class="btn_bor_orange"><input type="button" class="btn_text step_next" value="添加新报告" event-click="step3.addNewReport"></span>
+    </div>
+  </div>
+  <div class="step step3">
+    <input type="hidden" name="prj_id" value="{$prj_id}"/>
+    <div id="listContainer" style="padding: 0 80px;">
+       <p>列表数据加载中...</p>
+    </div>
+  </div>
+</form>
+
+<div style="display: none;">
+  <div id="colorBox-uploadReport">
+    <div id="titlebar">上传运营报告</div>
+    <div style="padding: 18px 18px 0; color: red; background-color:#fff;"><strong>注意：请上传 .pdf 格式的文件</strong></div>
+    <div id="jqueryContent" style="width:300px;padding:20px">
+      <div class="indent_list singleUploadItem">
+        <div class="content" data-imgType="{$vo.id}" style="overflow: hidden; position: relative">
+          <div class="info mainWrapBox" style="float: left">
+            <input type="text" class="file_ipt" style="height: 22px; width: 220px;" value="{$vo.code_name}" oldval="{$vo.name}" readonly>
+          </div>
+          <div class="tool" style="float: right">
+            <a href="javascript:void(0)" id="uploadReportBtn_0" class="uploadEvidence" style="margin-bottom: 0">上传</a>
+          </div>
+          <div class="uploading"><span>资料上传中...</span></div>
+        </div>
+      </div>
+      <div class="tc mt20">
+        <span class="btn_bor_gray"><input type="button" class="btns" value="取消" event-click="cancel"></span>
+      </div>
+    </div>
+  </div>
+</div>

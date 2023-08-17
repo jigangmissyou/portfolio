@@ -1,0 +1,37 @@
+<dl>
+  <h4><!-- <i class="icon_Greyinfo"></i> -->借款个人信息</h4>
+  <table class="globaltable">
+    <tr class="GreyBgcolor">
+      <td class="padLeft30" width="30%">姓名</td>
+      <td><?php echo marskName($personInfo["cust_name"],1,0); ?></td>
+    </tr>
+    <tr>
+      <td class="padLeft30">性别</td>
+      <td><?php echo $personInfo["gender"]; ?></td>
+    </tr>
+    <tr class="GreyBgcolor">
+      <td class="padLeft30">年龄</td>
+      <td><?php echo $personInfo["age"]; ?>岁</td>
+    </tr>
+    <tr>
+      <td class="padLeft30">身份证号</td>
+      <td><?php echo person_id_view($personInfo["person_no"]); ?></td>
+    </tr>
+    <tr class="GreyBgcolor">
+      <td class="padLeft30" width="30%">籍贯</td>
+      <td><?php echo $personInfo["native_place"]; ?></td>
+    </tr>
+    <tr>
+      <td class="padLeft30">婚姻状况</td>
+      <td><?php echo $personInfo["marriage"]; ?></td>
+    </tr>
+    <tr class="GreyBgcolor">
+      <td class="padLeft30">联系方式</td>
+      <td><?php echo marskName($personInfo["mobile"],3,3);?></td>
+    </tr>
+    <tr>
+      <td class="padLeft30">紧急联系人</td>
+      <td><?php echo marskName($personInfo["emergency_person"],1,0); ?></td>
+    </tr>
+  </table>
+</dl>

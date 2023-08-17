@@ -1,0 +1,11 @@
+<extend name="./app/Tpl/Public/base_hfhg.html"/>
+<block name="title">合同管理</block>
+<block name="body">
+  <include file="fund_nav" />
+  <div class="main_area">
+    <form action="/Signature/Sign/ajaxContractList" ajax="1" ajax-after="ajaxAfter_action_callback" method="post" id="formId_ajaxList" ajax-datatype="html">
+      <input type="hidden" name="status" value="0">
+      <div id="ajaxContent" class="loading"></div>
+    </form>
+  </div>
+</block>

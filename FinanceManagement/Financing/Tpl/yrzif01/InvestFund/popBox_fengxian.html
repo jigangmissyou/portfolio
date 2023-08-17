@@ -1,0 +1,132 @@
+
+<!-- saved from url=(0071)http://test2.xinhehui.com:8080/Financialproduct/Product/popBox_fengxian -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"></head><body><div id="titlebar"></div>
+<div id="jqueryContent" class="outerContent">
+	<div class="fqaNoteBox">
+		<!-- 重要提示 star -->
+		<div class="fqaNote" id="apprTip">
+			<div class="noteIcnBox">
+				<em class="imNoteBig"></em>
+				<p class="txt">重要提示</p>
+			</div>
+			<div class="noteBtnsBox">
+				<p class="txt">您在投资该产品前还需完成投资风格测评</p>
+				<p class="pBtns">
+				<label class="redBigBtn" id="faqceshiGO"><a class="btns" href="javascript:;">确认</a></label>
+				</p>
+			</div>
+		</div>
+		<!-- 重要提示 end -->
+		<!-- 结果类型 star -->
+		<div class="fqaNote dn loading" id="apprResult">
+			<div class="in" style="visibility:hidden">
+				<div class="noteIcnBox">
+					<em class="imNoteBig greenIcn"></em>
+					<p class="txt">完成测评</p>
+				</div>
+				<div class="noteBtnsBox">
+					<p class="txt">您的风险承受能力<span id="apprBear"></span>，投资风格属于</p>
+					<p class="faqtype" id="apprType"></p>
+					<p class="pBtns">
+						<label class="redBigBtn" id="faqceshiGO"><a class="btns" id="apprOver" href="javascript:;">确认</a></label>
+					</p>
+				</div>
+			</div>
+		 </div>
+		<!-- 结果类型 end -->
+	</div>
+	<div class="faqbox" style="display:none">
+		<!-- 风险问题 star -->
+		<div class="riskStep prel">
+			<span id="progressBar" class="riskItem items_1"></span>
+			<button type="button" class="risk-btn risk-btn-item1 active"></button>
+			<button type="button" class="risk-btn risk-btn-item2"></button>
+			<button type="button" class="risk-btn risk-btn-item3"></button>
+			<button type="button" class="risk-btn risk-btn-item4"></button>
+			<button type="button" class="risk-btn risk-btn-item5"></button>
+			<button type="button" class="risk-btn risk-btn-item6"></button>
+			<button type="button" class="risk-btn risk-btn-item7"></button>
+			<button type="button" class="risk-btn risk-btn-item8"></button>
+		</div>
+		<div class="qbox">
+			<div class="fqlist">
+				<ul class="abox">
+						<li class="fQA"><label class="fl">Q1：</label><span class="fl">您的年龄？</span></li>
+						<li><label class="fl"><input value="1" name="age" type="radio"></label><span class="fl">25到40岁</span></li>
+						<li><label class="fl"><input value="2" name="age" type="radio"></label><span class="fl">40到50岁</span></li>
+						<li><label class="fl"><input value="3" name="age" type="radio"></label><span class="fl">50到60岁</span></li>
+						<li><label class="fl"><input value="4" name="age" type="radio"></label><span class="fl">60岁以上</span></li>
+					</ul>
+			</div>
+			<div class="fqlist dn">
+				<ul class="abox">
+						<li class="fQA"><label class="fl">Q2：</label><span class="fl">你计划投资多久？</span></li>
+						<li><label class="fl"><input value="1" name="time" type="radio"></label><span class="fl">3年以上</span></li>
+						<li><label class="fl"><input value="2" name="time" type="radio"></label><span class="fl">1至3年</span></li>
+						<li><label class="fl"><input value="3" name="time" type="radio"></label><span class="fl">6个月至一年</span></li>
+						<li><label class="fl"><input value="4" name="time" type="radio"></label><span class="fl">半年以下</span></li>
+					</ul>
+			</div>
+			<div class="fqlist dn">
+				<ul class="abox">
+						<li class="fQA"><label class="fl">Q3：</label><span class="fl">通过我平台投资基金的规模，预计占您金融性总资产的比例为多少？</span></li>
+						<li><label class="fl"><input value="1" name="ratio" type="radio"></label><span class="fl">低于30%</span></li>
+						<li><label class="fl"><input value="2" name="ratio" type="radio"></label><span class="fl">30%至50%</span></li>
+						<li><label class="fl"><input value="3" name="ratio" type="radio"></label><span class="fl">50%至75%</span></li>
+						<li><label class="fl"><input value="4" name="ratio" type="radio"></label><span class="fl">高于70%</span></li>
+					</ul>
+			</div>
+			<div class="fqlist dn">
+				<ul class="abox">
+						<li class="fQA"><label class="fl">Q4：</label><span class="fl">以下哪项描述正确反映了您的投资经验？</span></li>
+						<li><label class="fl"><input value="1" name="experience" type="radio"></label><span class="fl">丰富（5年以上），且希望自主理财</span></li>
+						<li><label class="fl"><input value="2" name="experience" type="radio"></label><span class="fl">熟悉（3至5年），但希望专业人士协助</span></li>
+						<li><label class="fl"><input value="3" name="experience" type="radio"></label><span class="fl">一般（1至3年），有一些理财意识</span></li>
+						<li><label class="fl"><input value="4" name="experience" type="radio"></label><span class="fl">非常有限，不具备投资经验</span></li>
+					</ul>
+			</div>
+			<div class="fqlist dn">
+				<ul class="abox">
+						<li class="fQA"><label class="fl">Q5：</label><span class="fl">您感觉目前负担的经济压力？</span></li>
+						<li><label class="fl"><input value="1" name="pressure" type="radio"></label><span class="fl">非常轻松，完全没有压力</span></li>
+						<li><label class="fl"><input value="2" name="pressure" type="radio"></label><span class="fl">一般，基本没有压力</span></li>
+						<li><label class="fl"><input value="3" name="pressure" type="radio"></label><span class="fl">较大，但尚能承受</span></li>
+						<li><label class="fl"><input value="4" name="pressure" type="radio"></label><span class="fl">很大，还贷等负担较重</span></li>
+					</ul>
+			</div>
+			<div class="fqlist dn">
+				<ul class="abox">
+						<li class="fQA"><label class="fl">Q6：</label><span class="fl">您在投资时最看重的是什么？</span></li>
+						<li><label class="fl"><input value="1" name="important" type="radio"></label><span class="fl">每年获得稳定收益，获得长期收益</span></li>
+						<li><label class="fl"><input value="2" name="important" type="radio"></label><span class="fl">获得短期的高收益</span></li>
+						<li><label class="fl"><input value="3" name="important" type="radio"></label><span class="fl">在通货膨胀时资产不贬值</span></li>
+						<li><label class="fl"><input value="4" name="important" type="radio"></label><span class="fl">保住本金</span></li>
+					</ul>
+			</div>
+			<div class="fqlist dn">
+				<ul class="abox">
+						<li class="fQA"><label class="fl">Q7：</label><span class="fl">如果短期内您的投资遭受一些损失，您的心理状态是？</span></li>
+						<li><label class="fl"><input value="1" name="mood" type="radio"></label><span class="fl">习以为常，也许是跟进的好机会</span></li>
+						<li><label class="fl"><input value="2" name="mood" type="radio"></label><span class="fl">司空见惯，只当是积累经验，但不再追加投资</span></li>
+						<li><label class="fl"><input value="3" name="mood" type="radio"></label><span class="fl">对情绪有一定影响，继续观望</span></li>
+						<li><label class="fl"><input value="4" name="mood" type="radio"></label><span class="fl">对情绪影响很大，想立即退出</span></li>
+					</ul>
+			</div>
+			<div class="fqlist dn">
+				<ul class="abox">
+						<li class="fQA"><label class="fl">Q8：</label><span class="fl">以下哪项是您可接受的投资价值波动程度？</span></li>
+						<li><label class="fl"><input name="endurance" value="1" type="radio"></label><span class="fl">投资成长并赚取最高回报潜力，能接受长期（3年以上）的负面波动，包括损失本金</span></li>
+						<li><label class="fl"><input name="endurance" value="2" type="radio"></label><span class="fl">寻求较高收益和成长性的最佳结合，愿意接受2-3年的负面波动，以使回报显著高于定期存款利息</span></li>
+						<li><label class="fl"><input name="endurance" value="3" type="radio"></label><span class="fl">保守投资，但可以接受低于2年的少许负面波动，以使回报显著高于定期存款利息</span></li>
+						<li><label class="fl"><input name="endurance" value="4" type="radio"></label><span class="fl">不希望投资本金承担风险，投资回报与定期存款利息持平即可</span></li>
+					</ul>
+			</div>
+			<div class="lastBtns dn">
+				<label class="button-common-blue button-blue-pop" id="apprComplete"><a class="btns" href="javascript:;">完成</a></label>
+			</div>
+		</div>
+		<!-- 风险问题 end -->
+	</div>
+</div>
+
+</body></html>

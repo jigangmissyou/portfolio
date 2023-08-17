@@ -1,0 +1,25 @@
+<p class="renzheng_tishi"><i class="icon ico-caution"></i>请填写完整、真实、有效的信息，上传的资料请确保其真实性与合法性并且清晰易识别！<br/>
+  <em class="red fwb" style="padding:0 0 0 20px;">注：认证资料提交通过后，账户即为融资账户，之后不可参与投资，请慎重填写！</em>
+</p>
+<input type="hidden" id="jumpTo" value="{$jumpTo}"/>
+<div class="info_fill_step">
+  <a href="javascript:" class="filled" data-flag="companyInfoBar" <?php if($corpinfo){ ?>event-click="goToStep"<?php } ?>>基本信息</a>
+  <a href="javascript:" class="filled" data-flag="uploadSourceBar" <?php if($corpinfo){ ?>event-click="goToStep"<?php } ?>><i></i>上传材料</a>
+  <a href="javascript:" class="filled" data-flag="bankCardBar" <?php if($corpinfo){ ?>event-click="goToStep"<?php } ?>><i></i>银行卡信息</a>
+</div>
+<div id="companyInfoBar" style="display: none">
+  <?php if($borrowerType == 2){ ?>
+  <include file="person_baseInfo" />
+  <?php } ?>
+  <?php if($borrowerType == 1){ ?>
+  <include file="company_baseInfo" />
+  <?php } ?>
+</div>
+<?php if($borrowerType == 1 || $borrowerType == 2){ ?>
+<div id="uploadSourceBar" class="zr_Uploaddata" style="display: none; ">
+  <include file="uploadSource" />
+</div>
+<div id="bankCardBar" class="ovh" style="display: none; padding:0 0 50px;">
+  <include file="bankCard" />
+</div>
+<?php } ?>

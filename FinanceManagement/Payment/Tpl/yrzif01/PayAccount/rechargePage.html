@@ -1,0 +1,185 @@
+<extend name="./app/Tpl/Public/base_user.html"/>
+<block name="title">我的账户-账户概况-充值</block>
+<block name="keywords">充值</block>
+<block name="description">充值</block>
+
+<block name="style">
+<link href="/public/css/banklogo.css" rel="stylesheet" />
+<link rel="stylesheet" href="/public/css/sasscss/act/zskh/index.css">
+</block>
+
+<block name="body">
+	<div class="dn">
+    <?php
+      if($role==2 || $role==6){
+    ?>
+    <div class="detailSurTab surTabUl mt30 mb20">
+        <ul>
+            <li><span class="roundTopborGy"><a href="{:U('Application/ProjectManage/index')}">项目管理</a></span><a class="hrwrite"></a></li>
+            <li><span class="roundTopborGy"><a href="{:U('Application/ProjectRepayment/index')}">还款计划</a></span><a class="hrwrite"></a></li>
+            <li><span class="roundTopborGy"><a href="{:U('Application/ProjectManage/getMyMoneyList')}">资金记录</a></span><a class="hrwrite"></a></li>
+            <li class="current"><span class="roundTopborGy"><a href="{:U('Application/ProjectManage/accountInfo')}">我的账户</a></span><a class="hrwrite"></a></li>
+        </ul>
+    </div>
+    <?php }else{ ?>
+    <include file="nav" />
+    <?php   } ?>
+    </div>
+
+<div class="main_area recharge_area">
+  <input type="hidden" id="is_id_auth" value="{$is_id_auth}"/>
+  <div class="selectRechargeWay">
+      <ul class="">
+          <li class="cur">普通账户充值</li>
+          <li class="rightBorder"></li>
+		  <a href="{:U('Payment/PayAccount/zsRechargePage')}"><li>存管账户充值</li></a>
+      </ul>
+  </div>
+
+
+  <!-- 普通 -->
+  <div class="tac <if condition='$userStatus.xhh_status eq 1'>dn</if>">
+      <div class="tac mt20">
+        <img src="/public/images/zskh/sick.png" alt="" class="mt20 mb20" />
+        <p class="tac introduceTxt" style="width:100%;">你未在普通账户绑定银行卡；向普通账户充值的资金可用于投资未存管的项目。</p>
+        <?php if(!$userStatus['is_id_auth']) { ?>
+        <a href="{:U('Account/Bank/identify')}" class="openAccountBtn mt40 orangeBg">
+            去绑卡
+        </a>
+        <?php } else { ?>
+        <a href="{:U('Account/Bank/identify', array('addbank'=>'1'))}" class="openAccountBtn mt40 orangeBg">
+            去绑卡
+        </a>
+        <?php } ?>
+      </div>
+  </div>
+  <div class="recharge_form  <if condition='$userStatus.xhh_status eq 0'>dn</if>">
+  	<form method="POST" id="submit_form" action="{:U('Payment/PayAccount/submit')}" target="_blank">
+  	<div class="insurance assume-title">
+  		<i class="protect"></i><em></em><span>鑫盾风控对您的资金流向进行全流程监控</span>
+  		<i class="lock"></i><em></em><span>银行级安全防护</span>
+  	</div>
+  	<div class="recharge-amount">账户余额：<span>{$remain_money}</span>元 </div>
+  	<ul class="formList form-area">
+  		<li class="topup-way">
+	  	  <label class="li-label-name">充值方式：</label>
+	  	  <span class="li-span-con">
+	  	  <ul class="recharge_mode">
+	  	    <?php if($is_xia_recharge == 1){ ?>
+            <li>
+              <input id="m_transfer" name="recharge_mode" type="radio" value="xianxia">
+              <label for="transfer">转账支付</label>
+              <span class="grayB5">（通过转账支付，<a href="{:U('Help/Help/viewHelpIndex?tpl=AboutUs-faq&type=3')}" target="blank"  class="blue">免收资金管理服务费</a>）</span>
+            </li>
+	  	  	<?php } ?>
+	  	  	<li>
+            <?php if($is_xia_recharge == 1){ ?>
+            <input id="m_bank" name="recharge_mode" type="radio" value="bank" checked><label for="online">网上银行支付</label>
+            <?php }else{ ?>
+            <input type="hidden" id="m_bank" name="recharge_mode" value="bank"/>
+            <?php } ?>
+            <include file="_bankList"/>
+	  	  	</li>
+	  	  	<!-- <li class="overrun">
+	  	  		<h3>请关注您的充值金额是否超限</h3>
+	  	  		<table>
+	  	  			<tr><th>银行卡种类</th><th>方式</th><th>单笔限额（元）</th><th>每日限额（元）</th><th>需要满足的条件</th></tr>
+	  	  			<tr><td rowspan="2">储蓄卡</td><td rowspan="2">充值和付款</td><td>500</td><td>500</td><td>开通大众版网上支付功能</td></tr>
+	  	  			<tr><td>客户自行设定</td><td>客户自行设定</td><td>开通大众版网上支付功能</td></tr>
+	  	  		</table>
+	  	  	</li> -->
+	  	  	<!--
+	  	  	<li>
+	  	  	  <input id="m_three_pay" name="recharge_mode" type="radio" value="three_pay"><label for="sanf">第三方支付平台支付</label>
+	  	  	   <div class="channel_list" id="channel_list">
+				<label id="label_bank_100" class="bank_logo_box" for="bank_100">
+				  <input type="radio" id="bank_100" value="100" name="bank_option" abbr="shenfut">
+				  <span class="bank_logo bank_shenfut" title="盛付通">盛付通</span></label>
+			  </div>
+	  	  	</li>
+	  	  	-->
+	  	  	<li style="display:none">
+	  	  		<label class="protocol_tip"><input name="readProtocol" type="checkbox" value="" <?php if($has_recharge){ ?>checked<?php } ?>>我同意《<a class="blue" colorbox='1' href="{:U('Index/Protocol/view',array('id'=>2))}" url="{:U('Index/Protocol/view',array('id'=>2))}">鑫合汇资金管理服务协议</a>》
+	  	  		<div id="protocolTip" class="ui_hovertips dn">
+	  	  			<i class="art"></i><i class="sidel"></i><i class="sider"></i>
+	  	  			<p class="cont">协议中有充值的相关收费规则，<br/>请您仔细阅读～<i class="face"></i></p>
+	  	  		</div><span id="readTips" class="red dn">请先阅读并同意《鑫合汇资金管理服务协议》</span>
+	  	  		</label>
+	  	  	</li>
+	  	  </ul>
+	  	</li>
+	  	<li class="pr topup-amount">
+	  	  <label class="li-label-name">充值金额：</label><span class="li-span-con"><input type="text" class="inputCommon" id="amount" valid="number,required"  name="amount" value="">
+	  	  <span class="fillNote">元
+	  	  <?php if($minMoney){ ?><span class="grayB5">(最低充值金额不少于{$minMoney}元)</span><?php } ?></span>
+
+	  	  <?php if(empty($_COOKIE['nextNotTip'])){ ?>
+	  	  <!-- 遮罩层 -->
+	  	  <!-- <div class="mask" style="display:block" id="maskLayer"></div>
+	  	  <div class="recharge_tip_d" id="recharge_tip_d"></div>
+	  	  <div class="recharge_tip" id="recharge_tip">
+				<span class="i_close closePopBox">×</span><a class="next nextStep closePopBox" href="javascript:;" hidefocus="hidefocus">知道了</a>
+				<div class="content">
+				  <p>目前<em class="blue">仅支持本人的借记卡</em>给自己的鑫合汇账户<em class="blue">转账充值</em>（借记卡的户名与鑫合汇账户实名一致），不支持给他人的鑫合汇账户转账充值。转账代付的<em class="blue">资金</em>将会被<em class="blue">退回原卡</em>，请知晓~</p>
+				  <p class="mt10"><label class="blue"><input type="checkbox" style="vertical-align:-2px;" id="nextNotTip">下次不再提示</label></p>
+				</div>
+			  </div> -->
+		  	<?php } ?>
+		  	</span>
+	  	</li>
+
+
+	  	<input type="hidden" id="payType" name="payType" value="{$recharge_bank.channel}"/>
+	  	<input type="hidden" id="bankCode" name="bankCode" value="{$default_bank.bank}"/>
+	  	<!-- <li><label for="" class="li-label-name">&nbsp;</label><span class="li-span-con"><i class="paul17px"></i>&ensp;第三方担保公司全额本息担保&emsp;<i class="safety17px"></i>&ensp;账户资金由人保财险保险承保</span></li> -->
+	  	<li class="lastBtns"><label class="li-label-name">&nbsp;</label>
+		  	<span class="li-span-con">
+		  		<div class="button-common-blue button-small-blue">
+            <input type="button" id="brecharge" name="recharge" value="登录到网上银行充值" class="btns online-bank">
+		  		</div>
+		  	</span>
+		</li>
+		<li><label class="li-label-name">&nbsp;</label>
+		  	<span class="li-span-con">
+		  		<ol class="noteTipText">
+					<li><em class="icon-warm-hints"></em><h3>温馨提示:</h3></li>
+				  	<!-- <li>1. 为了保护您的资金安全，请您在充值之前先进行<a href="{:U('Account/User/account')}" class="blue" title="实名认证">实名认证</a><i class="icon_id"></i></li> -->
+				  	<li>充值后未用于投资的金额，提现将收取0.2%的提现转账费用（由第三方支付平台收取）</li>
+				  	<li>在支付页面完成充值后，请点击“返回商户”按钮，不要直接关闭支付页面窗口，否则可能会造成充值金额延后到账每日的充值限额以各银行限额为准</li>
+				  	<!-- <li>4. 每日的充值限额以<a href="http://bbs.xinhehui.com/forum.php?mod=viewthread&tid=44&page=1&extra=#pid158" target="_blank" class="blue">各银行限额</a>为准</li> -->
+				  	<li>各个充值方式具体收费规则请<a href="{:U('Help/Help/viewHelpIndex', array('tpl'=>'AboutUs-faq','type'=>'3'))}" target="blank"  class="blue">点击</a></li>
+				  	<!-- <li>5. 点击“下一步”按钮，表示您已经仔细阅读并同意<a class="blue" colorbox='1' href="javascript:void(0)" url="{:U('Index/Protocol/view',array('id'=>2))}">鑫合汇资金管理服务协议</a></li> -->
+				</ol>
+		  	</span>
+		</li>
+  	</ul>
+  	</form>
+  	<div class="withdrawal-instructions">
+	    <h2>充值遇到问题怎么办？</h2>
+	    <p>（1）银行卡尚未开通网上银行支付功能，建议您按照银行的要求及时开通网上银行；</p>
+	    <p>（2）银行卡已过期、作废、挂失等，建议您咨询银行卡所属银行；</p>
+	    <p>（3）银行卡内余额不足，建议您及时充值；</p>
+	    <p>（4）银行系统数据传输出现异常，建议您稍后再试；</p>
+	    <p>（5）超过银行支付限额，请您与银行客服热线联系，咨询您的支付限额；</p>
+	    <p>（6）如果在电脑端无法充值，您也可以下载我们的<a class="mobile-client" href="/Index/Index/mobile">手机客户端</a>进行手机充值。</p>
+	    <p class="button-common-blue button-small-blue more"><a class="btns" href="{:U('Help/Help/viewHelpIndex', array('tpl'=>'AboutUs-faq','type'=>'1'))}">更多帮助</a></p>
+  	</div>
+
+  </div>
+  <input type="hidden" id="xx_url" value="{:U('Payment/PayAccount/xianxia1')}">
+  <input type="hidden" id="pay_url" value="{:U('Payment/PayAccount/submit')}">
+  <input type="hidden" id="record_url" value="{:U('Payment/PayAccount/getMyMoneyList')}">
+  <input type="hidden" id="minMoney" value="{$minMoney}">
+
+<div class="success-validation-popup dn">
+	<h2 id="titlebar">充值成功了吗？</h2>
+	<div class="pay-txt">
+		<h3>请您在新打开的网银页面完成支付后选择：</h3>
+		<p><span>充值成功</span> | 您可以选择： <a href="javascript:;">查看充值记录</a><a href="javascript:;">继续充值</a></p>
+		<p><em>充值失败</em> | 我们推荐您： <a href="/Index/Index/mobile">下载手机客户端充值</a><a href="javascript:;">查看帮助中心</a></p>
+	</div>
+	<div class="server-tel">您也可以致电我们的客服热线<br />400-821-8616</div>
+</div>
+
+</div>
+</block>

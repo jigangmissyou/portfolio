@@ -1,0 +1,132 @@
+<script>
+URL_PUBLIC_SHARKBONUS_GETSHARKBONUSNUM = "{:U('Public/SharkBonus/getSharkBonusNum',array('order_id'=>$order_id))}";
+</script>
+<input type="hidden" name="order_id" value="{$order_id}">
+
+<!--[if lte IE 9 ]>
+<style>
+  .red-display{
+    opacity: 0;
+    filter: alpha(opacity=0);
+  }
+</style>
+<![endif]-->
+<!-- red packet begin -->
+<div class="mask-detail red-mask-detail" data-flag="mask"></div>
+<div class="red-container-box" data-flag="maskContent">
+  <!-- 关闭 按钮 -->
+  <a href="javascript:;" class="red-closed" data-flag="closePop" data-status="1"></a>
+  <!-- 关闭 按钮 -->
+
+  <!-- 抽红包 -->
+  <div class="red-open-wrap-box" data-flag="chooseRedpackage">
+    <p class="red-font_01"><img src="/public/images/rollredpacket/font_01.png" alt=""></p>
+    <div class="red-show-list">
+      <span class="red-packet item_1" data-flag="redPackage">
+            <!-- 打开后的红包 begin -->
+             <p class="red-display display_item_1"></p>
+             <p class="red-display display_item_2"></p>
+             <p class="red-display display_item_3"></p>
+             <p class="red-display display_item_4"></p>
+             <p class="red-display display_item_5"></p>
+             <p class="red-display display_item_6"></p>
+             <p class="red-display display_item_7"></p>
+             <p class="red-display display_item_8"></p>
+             <p class="red-display display_item_9"></p>
+             <p class="red-display display_item_10"></p>
+             <p class="red-display display_item_11"></p>
+             <p class="red-display display_item_12"></p>
+             <p class="red-display display_item_13"></p>
+              <span class="red-packet-open">
+                <p class="red-open-body"></p>
+                <p class="red-open-lid"></p>
+                <p class="red-open-face"></p>
+              </span>
+            <!-- 打开后的红包 end -->
+       <em></em>
+      </span>
+      <span class="red-packet item_2" data-flag="redPackage">
+         <!-- 打开后的红包 begin -->
+             <p class="red-display display_item_1"></p>
+             <p class="red-display display_item_2"></p>
+             <p class="red-display display_item_3"></p>
+             <p class="red-display display_item_4"></p>
+             <p class="red-display display_item_5"></p>
+             <p class="red-display display_item_6"></p>
+             <p class="red-display display_item_7"></p>
+             <p class="red-display display_item_8"></p>
+             <p class="red-display display_item_9"></p>
+             <p class="red-display display_item_10"></p>
+             <p class="red-display display_item_11"></p>
+             <p class="red-display display_item_12"></p>
+             <p class="red-display display_item_13"></p>
+              <span class="red-packet-open">
+                <p class="red-open-body"></p>
+                <p class="red-open-lid"></p>
+                <p class="red-open-face"></p>
+              </span>
+            <!-- 打开后的红包 end -->
+         <em></em>
+      </span>
+      <span class="red-packet item_3" data-flag="redPackage">
+           <!-- 打开后的红包 begin -->
+             <p class="red-display display_item_1"></p>
+             <p class="red-display display_item_2"></p>
+             <p class="red-display display_item_3"></p>
+             <p class="red-display display_item_4"></p>
+             <p class="red-display display_item_5"></p>
+             <p class="red-display display_item_6"></p>
+             <p class="red-display display_item_7"></p>
+             <p class="red-display display_item_8"></p>
+             <p class="red-display display_item_9"></p>
+             <p class="red-display display_item_10"></p>
+             <p class="red-display display_item_11"></p>
+             <p class="red-display display_item_12"></p>
+             <p class="red-display display_item_13"></p>
+              <span class="red-packet-open">
+                <p class="red-open-body"></p>
+                <p class="red-open-lid"></p>
+                <p class="red-open-face"></p>
+              </span>
+            <!-- 打开后的红包 end -->
+          <em></em>
+      </span>
+    </div>
+  </div>
+
+  <!-- 红包个数 -->
+  <div class="red-open-num" style="display:none;" data-flag="showRedpackageNum">
+    <p class="red-num-text"><img src="/public/images/rollredpacket/yaoqing.png" alt=""><em data-flag="redPackageNum"></em><img src="/public/images/rollredpacket/yaoqing_01.png" alt=""></p>
+    <div class="show-red-packet">
+     <div class="show-red-friend" data-flag="clickQrCode">
+        <p class="weixin_bg dn"><img src="<?php echo U('Public/SharkBonus/qrcode',array('id'=>100,'size'=>180)); ?>"></p>
+     </div>
+     <span class="red-packet"><em class="nums"><span data-flag="redPackageNum"></span><img src="/public/images/rollredpacket/ge.png" alt=""  style="margin-top:30px"></em></span>
+    </div>
+    <div class="show-red-packet" data-flag="showQrCode" style="display:none;">
+      <div class="show-red-code fl">
+          <img data-flag="qrCodeUrl" url="<?php echo U('Public/SharkBonus/qrcode',array('size'=>180)); ?>" alt="">
+      </div>
+      <div class="sweepCode fr">
+        <img src="/public/images/rollredpacket/sweep_03.png" alt="">
+      </div>
+    </div>
+  </div>
+
+  <!-- 关闭分享弹窗的提示 -->
+  <div class="red-closed-note"  style="display:none;" data-flag="closeMsgPop">
+    <p class="red-num-text"><img src="/public/images/rollredpacket/font_02.png" alt=""></p>
+    <div class="tac red-button-box">
+      <a href="javascript:;" data-flag="toShare" class="red-button mr-40">我要分享</a><a href="javascript:;" data-flag="closePopForce" class="red-button gray-btn">残忍离去</a>
+    </div>
+  </div>
+
+  <!-- 关闭抽红包弹窗的提示 -->
+  <div class="red-closed-note"  style="display:none;" data-flag="closePackPop">
+    <p class="red-num-text"><img src="/public/images/rollredpacket/font3.png" alt=""></p>
+    <div class="tac red-button-box">
+      <a href="javascript:;" data-flag="backPack" class="red-button mr-40">点错了，回去拿红包</a><a href="javascript:;" data-flag="closePopForce" class="red-button gray-btn">残忍离去</a>
+    </div>
+  </div>
+</div>
+<!-- red packet end -->

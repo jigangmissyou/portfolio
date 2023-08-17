@@ -1,0 +1,117 @@
+<extend name="./app/Tpl/Public/base_hfhg.html"/>
+<block name="title">我的账户-账户概况-充值</block>
+<block name="keywords">充值</block>
+<block name="description">充值</block>
+
+<block name="style">
+<link href="/public/css/banklogo.css" rel="stylesheet" />
+<link rel="stylesheet" href="/public/css/sasscss/act/zskh/index.css">
+
+</block>
+
+<block name="body">
+<div class="mt20 recharge_form_area">
+    <div class="recharge_form_box">
+        <p class="orange">开户说明：</p>
+        <p>1.开户操作需跳转至浙商页面完成。<br />
+2.开户时需绑定<span class="blue">银行预留手机号</span>及银行卡（仅支持一张）<span class="blue">查看银行限额</span></p>
+        <div class="tac mt20">
+            <img src="/public/images/zskh/logo.png" alt="" class="mt20" />
+            <p class="fz20" style="color:#404040;">鑫合汇携手浙商银行</p>
+            <p class="tac introduceTxt">开通存管账户可投资银行存管项目</p>
+        </div>
+        <ul class="mt20">
+        <li class="ml100">
+            <label class="label-name">姓名：</label>
+            <span class="li-span-con">
+                <input type="text" class="inputBox red-border" id="amount" valid="number,required"  name="amount" value="">
+            </span>
+            <span class="red">输入姓名有误</span>
+        </li>
+        <li class="ml100">
+            <label class="label-name">身份证：</label>
+            <span class="li-span-con">
+                <input type="text" class="inputBox" id="amount" valid="number,required"  name="amount" value="">
+            </span>
+        </li>
+        <li class="ml100">
+            <label class="label-name">银行卡预留手机号：</label>
+            <span class="li-span-con">
+                <input type="text" class="inputBox" id="amount" valid="number,required"  name="amount" value="">
+            </span>
+        </li>
+        </ul>
+        <p class="tac">
+            <input type="" id="" name="" value="开通银行存管账户" class="blue-btn gary-btn" hidefocus="hidefocus" >
+        </p>
+    </div>
+</div>
+<div class="mask dn"></div>
+<div class="success-validation-popup khcg khcglm dn">
+    <h2 id="titlebar">开户成功了吗？</h2><a id="colorboxClose" href="javascript:;" class="del" style="z-index:503;" hidefocus="hidefocus"></a>
+    <div class="pay-txt">
+        <h3>请您在新打开的浙商页面完成支付后选择：</h3>
+        <p><span>开户成功</span> | 您可以选择： <a href="javascript:;">查看账户</a><a href="javascript:;">去充值</a></p>
+        <p><em>开户失败</em> | 我们推荐您： <a href="/Index/Index/mobile">查看帮助中心</a><a href="javascript:;">重新开户</a></p>
+    </div>
+    <div class="server-tel">您也可以致电我们的客服热线<br />400-821-8616</div>
+</div>
+
+<div class="success-validation-popup khcg yhxeb dn">
+    <h2 id="titlebar">银行限额表</h2><a id="colorboxClose" href="javascript:;" class="del" style="z-index:503;" hidefocus="hidefocus"></a>
+    <ul class="table-head">
+        <li>银行卡</li>
+        <li>单笔限额(元)</li>
+        <li>单日限额(元)</li>
+    </ul>
+    <ul class="table-main">
+        <li>建设银行</li>
+        <li>20万</li>
+        <li>50万</li>
+        <li>建设银行</li>
+        <li>20万</li>
+        <li>50万</li>
+        <li>建设银行</li>
+        <li>20万</li>
+        <li>50万</li>
+        <li>建设银行</li>
+        <li>20万</li>
+        <li>50万</li>
+        <li>建设银行</li>
+        <li>20万</li>
+        <li>50万</li>
+        <li>建设银行</li>
+        <li>20万</li>
+        <li>50万</li>
+        <li>建设银行</li>
+        <li>20万</li>
+        <li>50万</li>
+        <li>建设银行</li>
+        <li>20万</li>
+        <li>50万</li>
+        <li>建设银行</li>
+        <li>20万</li>
+        <li>50万</li>
+    </ul>
+</div>
+
+
+<div class="khcg dn">
+    <div class="fr close-btn">
+        <a href="javascript:;"><img src="/public/images/zskh/close.png" alt="" /></a>
+    </div>
+    <div class="clearfix"></div>
+    <div class="tac khcg-txt">
+        <img src="/public/images/zskh/dui.png" alt="" />恭喜您开通浙商存管户
+    </div>
+    <p class="khcg-content">
+        由于您的个人账户已升级为浙商存管户，需要将您账户余额<span class="orange">10000</span>元转移到浙商银行，预计今日17：30到账。
+    </p>
+    <a href="javascript:;">
+        <div class="start-btn">
+            开启全新理财体验
+        </div>
+    </a>
+</div>
+
+</block>

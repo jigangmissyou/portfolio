@@ -1,0 +1,85 @@
+<extend name="./app/Tpl/Public/base2.html"/>
+<block name="title">我的账户-融资记录</block>
+<block name="keywords">融资记录</block>
+<block name="description">融资记录</block>
+
+<block name="style">
+<style>
+.status_transfer,.status_corpfinancing{display: none;}
+</style>
+</block>
+
+<block name="body">
+<include file="./app/Tpl/Account/nav.html" />
+
+<script>
+var COUNTS={$counts};
+var URL_ACCOUNT_FINANCINGRECORD_INDEX = "{:U('Account/FinancingRecord/index',array('channel'=>'corpfinancing'))}";
+</script>
+
+<div class="main_area">
+  <form ajax="1" action="{:U('Account/FinancingRecord/index_ajax')}" ajax-after="ajaxAfter_Account_Financing_plist" method="post" id="formId_Account_Financing_plist" ajax-datatype="html" autocomplete="off">
+  <input type="hidden" name="ajax" value="1">
+  <input type="hidden" name="channel" value="{$channel}">
+  <input type="hidden" name="prj_type" value="0">
+  <input type="hidden" name="status_project" value="1">
+  <input type="hidden" name="status_transfer" value="0">
+  <input type="hidden" name="status_corpfinancing" value="0">
+
+    <div class="category">
+      <php>if(in_array(IdentityConst::PROD_PUBLISH_NO,$loginUser['identity_no']) ){</php>
+      <a <?php if($channel === 'project'){echo 'class="cur"';} ?> href="javascript:;" field="channel" rel="project">发布需求记录</a>
+      <php>}</php>
+      <!--a <?php if($channel === 'transfer'){echo 'class="cur"';} ?> href="javascript:;" field="channel" rel="transfer">债权转让记录</a-->
+      <a <?php if($channel === 'corpfinancing'){echo 'class="cur"';} ?> href="javascript:;" field="channel" rel="corpfinancing">企业融资记录</a>
+    </div>
+    <div class="statusMenus">
+      <a class="cur" href="javascript:;" field="prj_type" rel="0">所有产品</a>
+      <a href="javascript:;" field="prj_type" rel="1">日益升</a>
+      <a href="javascript:;" field="prj_type" rel="2">年益升</a>
+      <a href="javascript:;" field="prj_type" rel="5">月益升</a>
+    </div>
+    <div class="statusMenusLast status_project">
+      <a class="cur" href="javascript:;" field="status_project" rel="1" date_label="审核时间">审核未通过<span></span></a>
+      <a href="javascript:;" field="status_project" rel="2" date_label="开标时间">待开标<span></span></a>
+      <a href="javascript:;" field="status_project" rel="3" date_label="融资截止时间">投标中<span></span></a>
+      <a href="javascript:;" field="status_project" rel="4" date_label="融资截止时间">投资结束<span></span></a>
+      <a href="javascript:;" field="status_project" rel="5" date_label="还款时间">待还款<span></span></a>
+      <a href="javascript:;" field="status_project" rel="6" date_label="还款时间">已还款结束<span></span></a>
+    </div>
+    <div class="statusMenusLast status_transfer">
+      <a class="cur" href="javascript:;" field="status_transfer" rel="0" date_label="发布时间">全部<span></span></a>
+      <a href="javascript:;" field="status_transfer" rel="1" date_label="发布时间">转让中<span></span></a>
+      <a href="javascript:;" field="status_transfer" rel="2" date_label="转让时间">已转让<span></span></a>
+      <a href="javascript:;" field="status_transfer" rel="3" date_label="发布时间">已过期<span></span></a>
+    </div>
+    <div class="statusMenusLast status_corpfinancing">
+      <a class="cur" href="javascript:;" field="status_corpfinancing" rel="0">全部<span></span></a>
+      <a href="javascript:;" field="status_corpfinancing" rel="1">待审核<span></span></a>
+      <a href="javascript:;" field="status_corpfinancing" rel="2">审核未通过<span></span></a>
+      <a href="javascript:;" field="status_corpfinancing" rel="3">金融助理跟进<span></span></a>
+      <a href="javascript:;" field="status_corpfinancing" rel="4">项目已提交<span></span></a>
+      <a href="javascript:;" field="status_corpfinancing" rel="5">项目审核中<span></span></a>
+      <a href="javascript:;" field="status_corpfinancing" rel="6">项目已驳回<span></span></a>
+      <a href="javascript:;" field="status_corpfinancing" rel="7">放款中<span></span></a>
+      <a href="javascript:;" field="status_corpfinancing" rel="8">已放款<span></span></a>
+    </div>
+
+    <div class="simple_search">
+      关键字：
+      <input type="text" name="keyword" class="ipt_search" ghosttext="项目名称">
+      <span class="date_label">审核时间</span>
+      ：
+      <span class="date_pannel">
+        <input type="text" name="starttime" id="starttime" class="ipt_search" datepicker='{"endId": "endtime"}'> <i class="icon_time"></i>
+      </span>
+      <span class="mr10">—</span>
+      <span class="date_pannel">
+        <input type="text" name="endtime" id="endtime" class="ipt_search" datepicker='{"startId": "starttime"}'> <i class="icon_time"></i>
+      </span>
+      <input type="submit" class="btn_search_blue" value="搜索">
+    </div>
+  <div id="ajaxContent_Account_Financing_plist"></div>
+  </form>
+</div>
+</block>

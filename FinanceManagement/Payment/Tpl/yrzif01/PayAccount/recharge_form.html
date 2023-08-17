@@ -1,0 +1,74 @@
+<input type="hidden" id="advBox" value="1"/>
+<div id="titlebar">&nbsp;</div>
+<div id="jqueryContent">
+    <input type="hidden" name="id" value="{$data.id}"/>
+    <div class="pro_form_item">
+        <label class="li-label-name"><em class="red">*</em>充值金额：</label>
+        <input name="amount" type="text" value="{$data.amount}" class="inputCommon" valid="required,number"><span class="fill_explain">元</span>
+    </div>
+    <div class="pro_form_item">
+        <label class="li-label-name"><em class="red">*</em>充值用户：</label>
+        <label><input type="checkbox" value="{$data.to_uid_list}" name="uids" data-eventFn="onSelectUser"><span>指定</span>
+            <a style="color: #2c7dff" href="javascript:" data-eventFn="viewSelected">已选择<span id="selectedNum">{$data.to_uid_count}</span>位用户</a>
+        </label>
+    </div>
+    <div class="pro_form_item">
+        <label class="li-label-name"><em class="red">*</em>提现类型：</label>
+        <label><input type="radio" name="cashout_type" value="1" <?php if($data['cashout_type'] == '1'){ ?>checked<?php } ?>><span>可提现</span></label>
+        &nbsp;&nbsp;&nbsp;&nbsp;
+        <!-- <label><input type="radio" name="cashout_type" value="4" <?php if($data['cashout_type'] == '4'){ ?>checked<?php } ?>><span>免费提现额度</span></label>
+      &nbsp;&nbsp;&nbsp;&nbsp; -->
+        <label><input type="radio" name="cashout_type" value="5" <?php if($data['cashout_type'] == '5'){ ?>checked<?php } ?>><span>市场活动红包</span></label>
+    </div>
+
+    <div class="pro_form_item">
+      <label class="li-label-name"><em class="red">*</em>账户类型：</label>
+      <label><input type="radio" name="account_type" class="mr5 alm" value="1" <?php if($data['account_type'] == '1'){ ?>checked<?php } ?>><span>引流账户</span></label>
+      &nbsp;&nbsp;&nbsp;&nbsp;
+      <label class="ml20"><input type="radio" name="account_type" value="2"  <?php if($data['account_type'] == '2'){ ?>checked<?php } ?>><span>运营账户</span></label>
+      &nbsp;&nbsp;&nbsp;&nbsp;
+      <label class="ml20"><input type="radio" name="account_type" value="3"  <?php if($data['account_type'] == '3'){ ?>checked<?php } ?>><span>利率账户</span></label>
+      &nbsp;&nbsp;&nbsp;&nbsp;
+      <label class="ml20"><input type="radio" name="account_type" value="4"  <?php if($data['account_type'] == '4'){ ?>checked<?php } ?>><span>客服账户</span></label>
+    </div>
+
+    <div class="pro_form_item">
+      <label class="li-label-name"><em class="red">*</em>免手续费次数：</label>
+      <input name="free_tixian_times" type="text" value="{$data.free_tixian_times}" class="inputCommon" style="width: 80px;"><span class="fill_explain">次</span>
+    </div>
+    <div class="pro_form_item">
+        <label class="li-label-name"><em class="red">*</em>提现次数：</label>
+        <input name="cashout_times" type="text" value="{$data.cashout_times}" class="inputCommon" style="width: 80px;"><span class="fill_explain">次</span>
+    </div>
+    <div class="pro_form_item">
+        <label class="li-label-name"><em class="red">*</em>备注：</label>
+        <textarea class="inputCommon" name="bak" id="bak" style="width: 300px; height: 100px; max-width: 300px; max-height: 100px; font-size: 12px;">{$data.bak}</textarea>
+    </div>
+    <!--<div class="pro_form_item">-->
+        <!--<label class="li-label-name"><em class="red">*</em>验证码：</label>-->
+        <!--<input type="text" name="authCode" class="inputCommon" value="" style="width:150px;" valid="required,ajax@{:U('Index/Index/checkAuthCode')}" valid-msg-options='{"offset":212}'>-->
+        <!--<a href="javascript:;"><img data-eventFn="refreshCode" src="{:U('Index/Index/verify',array('version'=>uniqid()))}" id="VerifyCodeImg" width="120px"/></a>-->
+        <!--<a href="javascript:;" class="blue ml12" id="refreshVerifyCode" data-eventFn="refreshCode">刷新验证码</a>-->
+    <!--</div>-->
+    <div class="control control1" style="display: block;text-align: center;">
+        <div class="pro_form_item submit_area">
+            <a href="javascript:" class="btn_fixed_org" data-eventFn="rechargeManage.submitForm" data-args="{$data.id}">提交</a>
+            <a href="javascript:" class="btn_fixed_white ml20" data-eventFn="resetForm">重置</a>
+        </div>
+    </div>
+</div>
+<div style="display: none; width:500px;" id="box2-userSelected">
+    <div id="viewSelected" style="width:500px;">
+        <div id="titlebar">已选择用户</div>
+        <div id="jqueryContent" >
+            <ul class="userList">
+                <?php
+                    if(!empty($data['to_uid_list_obj'])){
+                    foreach($data['to_uid_list_obj'] as $item){
+                ?>
+                <li><span id="selectedUser_<?php echo $item['uid'] ?>"><?php echo $item['uname'] ?></span> <a data-eventFn="delUser" data-args="<?php echo $item['uid'] ?>" href="javascript:">X</a></li>
+                <?php }} ?>
+            </ul>
+        </div>
+    </div>
+</div>

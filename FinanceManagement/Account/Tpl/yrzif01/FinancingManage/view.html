@@ -1,0 +1,53 @@
+<extend name="./app/Tpl/Public/base2.html"/>
+<block name="title">项目管理-还款管理</block>
+<block name="body">
+  <div id="main_area">
+    <div class="hgroup">
+      <h1 class="h1tit">
+        还款明细（{$typeName}）</h1>
+      <h2 class="h2tit">
+        {$prjInfo.prj_name}
+        <span class="sub">
+          产品编号：{$prjInfo.prj_no}
+            <?php
+			   echo service("Financing/Financing")->getIco($prjInfo);
+			 ?>
+        </span>
+      </h2>
+    </div>
+    <!-- <div class="divline"></div>
+  -->
+  <div class="pro_item_list pro_info">
+    <ul>
+      <li>
+        融资规模： <strong class="orange">{$prjInfo.demand_amount_name}</strong>
+      </li>
+      <li>
+        预期利率：{$prjInfo.rate_view}{$prjInfo['rate_symbol']} 
+		 <a href="javascript:;" title="按{$prjInfo.rate_type_name}计算">
+			<em class="icon_date">{$prjInfo.rate_type_name}</em>
+		   </a>
+      </li>
+      <li>期限：{$prjInfo.time_limit}{$prjInfo.time_limit_unit_name}</li>
+      <li>还款方式：{$prjInfo.repay_way_name}</li>
+      <li>保障措施：{$prjInfo.addcredit.way}</li>
+      <li>
+        担保人：
+        <span class="blue">{$prjInfo.guarantor.title}</span>
+      </li>
+      <li>融资开标时间：{$prjInfo.start_bid_time_view}</li>
+      <li>融资截止时间：{$prjInfo.end_bid_time_view}</li>
+      <li>投资起始金额：{$prjInfo.min_bid_amount_name}</li>
+      <?php if($prjInfo['step_bid_amount']): ?>
+      <li>递增额度：{$prjInfo.step_bid_amount_name}</li>
+      <?php endif;?>
+    </ul>
+  </div>
+  <form action="{:U('Account/FinancingManage/repaymentList')}" ajax="1" ajax-after="ajaxAfter_Application_ProjectRepayment_repaymentList" method="post" id="formId_Application_ProjectRepayment_repaymentList" ajax-datatype="html">
+    <input type="hidden" name="id" value="{$id}">
+    <input type="hidden" name="early_repay_id" value="{$early_repay_id}">
+    <div id="ajaxContent_Application_ProjectRepayment_repaymentList" class="mt20"></div>
+  </form>
+</div>
+
+</block>

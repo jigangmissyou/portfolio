@@ -1,0 +1,85 @@
+<div id="colorBox-ajaxPay">
+  <div id="titlebar">缴费</div>
+  <div id="jqueryContent">
+    <div class="zhirong_jifei_Tk">
+      <table class="zhirong_jifei_table">
+        <tr>
+          <td class="biaoti">融资规模</td>
+          <td class="neirong1"><span>{$project.demand_amount_name}</span></td>
+          <td class="biaoti">期限</td>
+          <td class="neirong2">{$project.time_limit}{$project.time_limit_unit_view}</td>
+        </tr>
+        <tr>
+          <td class="biaoti">年化利率</td>
+          <td class="neirong1"><span><?php echo number_format($project['year_rate']/10,2);?>%</span></td>
+          <td class="biaoti">还款方式</td>
+          <td class="neirong2">{$project.repay_way_name}</td>
+        </tr>
+        <tr>
+          <td class="biaoti">募集天数</td>
+          <td class="neirong1" colspan="3">{$project.muji_day} 天</td>
+        </tr>
+      </table>
+      <table class="zhirong_jifei_table2">
+        <?php if($status == '1'){ ?>
+        <tr>
+          <td class="t2_biaoti">
+            <!--<a class="icon_unknown" hovercard="div@ct01" hovercard-options='{"direction":"up"}'></a>
+            <div class="dn" hovercard-id="ct01"><p class="hoverPinfo">预缴平台服务费= 融资规模 * 2%/年 * 期限 / 365 (期限按天计算)</p></div>-->
+            平台管理费：
+          </td>
+          <td class="t2_neirong">{$info.fee.pt_guanli} 元</td>
+        </tr>
+        <tr>
+          <td class="t2_biaoti">
+            <!--<a class="icon_unknown" hovercard="div@ct02" hovercard-options='{"direction":"up"}'></a>
+            <div class="dn" hovercard-id="ct02"><p class="hoverPinfo">预缴募集期资金占用费=融资规模×预期年化收益率×募集期（按天计算）/365天</p></div>-->
+            募集期资金占用费：
+          </td>
+          <td class="t2_neirong">{$info.fee.muji_zhanyong} 元</td>
+        </tr>
+        <tr>
+          <td class="t2_biaoti">募集期保证金：</td>
+          <td class="t2_neirong">{$info.fee.muji_bzh} 元</td>
+        </tr>
+        <tr>
+          <td class="t2_biaoti">共计：</td>
+          <td class="t2_neirong">{$info.fee.hj} 元</td>
+        </tr>
+        <?php } ?>
+
+        <?php if($bid_status == 8 || $bid_status == 4){ ?>
+        <tr>
+          <td class="t2_biaoti">
+            <!--<a class="icon_unknown" hovercard="div@ct01" hovercard-options='{"direction":"up"}'></a>
+            <div class="dn" hovercard-id="ct01"><p class="hoverPinfo">项目所需的风险保证金 = 项目实际借款金额 50%</p></div>-->
+            项目所需风险保证金：
+          </td>
+          <td class="t2_neirong"> <?php echo $fee['prjtzotalBazh_view']; ?>元</td>
+        </tr>
+        <tr>
+          <td class="t2_biaoti">
+            <!--<a class="icon_unknown" hovercard="div@ct02" hovercard-options='{"direction":"up"}'></a>
+            <div class="dn" hovercard-id="ct02"><p class="hoverPinfo">募集期保证金在募集结束后直接转为风险保证金</p></div>-->
+            已有风险保证金：
+          </td>
+          <td class="t2_neirong"> <?php echo $fee['repay_freeze_money_view']; ?>元</td>
+        </tr>
+        <tr>
+          <td class="t2_biaoti">追加风险保证金：</td>
+          <td class="t2_neirong"> <?php echo $fee['zhujia_view']; ?>元</td>
+        </tr>
+        <?php } ?>
+      </table>
+      <div class="tac">
+        <?php if($bid_status == 4 || $bid_status == 8):?>
+        <label for="" class="button-common-blue button-blue-pop"><a href="{:U('Payment/PayAccount/repayxianxia',array('deposit_prj_id'=>$prj_id,'amount'=>$fee['zhujia']/100,'zr_type'=>4))}" class="btns">充&nbsp;&nbsp;&nbsp;值</a></label>
+        <?php else: ?>
+        <?php if($info['fee'][9999]>0): ?>
+        <label for="" class="button-common-blue button-blue-pop"><a href="{:U('Payment/PayAccount/repayxianxia',array('zhr_re_prj_id'=>$prj_id))}" class="btns">充&nbsp;&nbsp;&nbsp;值</a></label>
+        <?php endif;?>
+      </div>
+      <?php endif;?>
+    </div>
+  </div>
+</div>

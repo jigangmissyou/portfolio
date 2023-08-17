@@ -1,0 +1,18 @@
+<table class="ui-record-table">
+  <thead>
+    <tr>
+      <th width="20%" class="tac">还款日期</th>   
+      <th width="15%" class="tac">状态</th>
+      <th class="tac">还款金额</th>
+    </tr>
+    <tr class="line"><th colspan="100%"></th></tr>
+  </thead>
+   <tr>
+   	<?php 
+   	import_app("Financing.Model.PrjModel");
+   	 ?>
+      <td class="tac"><?php echo $info['bid_status'] <= PrjModel::BSTATUS_FULL ? $info['last_repay_date_view'] : $info['actual_repay_time_view']; ?></td>
+      <td class="tac"><?php echo $info['bid_status'] == PrjModel::BSTATUS_BIDING ? "投标中":$info['bid_status_view']; ?></td>
+      <td class="tac"><?php echo $total; ?></td>
+    </tr>
+  </table>

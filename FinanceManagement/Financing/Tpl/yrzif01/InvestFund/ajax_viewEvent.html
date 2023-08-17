@@ -1,0 +1,15 @@
+<style>
+  .viewPrjdl dd{margin: 12px 0;}
+  #cboxLoadedContent{background: white;}
+</style>
+<div id="colorBox-newEvent">
+  <div id="titlebar">查看重大事件</div>
+  <div id="jqueryContent">
+    <dl class="viewPrjdl w520">
+      <dd>事件标题：{$data.title}</dd>
+      <dd>添加日期：{$data.ctime}</dd>
+      <!-- <dd>状态：<?php echo $item['status'] == 1 ? '未提交' : '已提交'; ?></dd> -->
+      <dd>事件内容：{$data.message}</dd>
+    </dl>
+  </div>
+</div>

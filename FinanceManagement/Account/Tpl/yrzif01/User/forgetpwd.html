@@ -1,0 +1,42 @@
+<extend name="./app/Tpl/Public/base_hfhg.html"/>
+<block name="title">忘记密码</block>
+<block name="body">
+<div class="container-inner container-colorbg">
+  <div class="p-lr-40">
+  <h2 class="h2tit h2tit-login">找回密码</h2>
+  <div class="account-edit-mobile">
+    <ul>
+      <li class="li-first current">1 安全验证<span class="edit-jiao"></span></li>
+      <li class="li-other">2 重置密码<span class="edit-jiao"></span></li>
+    </ul>
+  </div>
+  <div class="forgetContainer">
+  <form method="post" action="__URL__/doforgetpwd" id="forgetPwdForm">
+    <ul class="formList account-edit-form">
+      <li>
+        <label class="li-label-name">
+        <em class="red">*</em>用户名：</label>
+        <span class="li-span-con"><input type="text" name="account" valid="required" class="inputCommon ui_ipt_prompt" >
+        <span class="extra_tips"><i class="caution"></i><em class="text">请输入用户名、手机号或邮箱</em></span>
+         </span>
+      </li>
+      <li>
+        <label class="li-label-name">
+        <em class="red">*</em>验证码：</label>
+        <span class="li-span-con"><input type="text" valid="required,ajax@{:U('Index/Index/checkAuthCode')}" valid-msg-options='{"offset":205}' name="authCode" style="width:190px;" class="inputCommon">
+        <a href="javascript:;" class="ml10"><img src="{:U('Index/Index/verify',array('version'=>uniqid()))}" id="VerifyCodeImg" width="95px" height="46px"></a>
+         <!--  <a href="javascript:;" class="blue ml12"  id="refreshVerifyCode" >刷新验证码</a> -->
+         </span>
+      </li>
+      <li class="lastBtns">
+        <label class="li-label-name">&nbsp;</label>
+        <span class="li-span-con">
+        <span class="button-common-blue button-blue-w200"><input type="button" id="toNextStep" class="btns" value="下一步"></span>
+        </span>
+      </li>
+    </ul>
+ 		</form>
+  </div>
+  </div>
+</div>
+</block>

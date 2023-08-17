@@ -1,0 +1,39 @@
+<table class="ui-record-table">
+  <thead>
+  <tr>
+    <th>用户名</th>
+    <th width="10%">姓名</th>
+    <th width="14%" order_field="totalAccount" <eq name="order_field" value="totalAccount"> order_type="{$order_type}"</eq>>账户总资产</th>
+    <th width="13%" order_field="amount" <eq name="order_field" value="amount"> order_type="{$order_type}"</eq>>可用余额</th>
+    <th width="13%" order_field="(buy_freeze_money + cash_freeze_money)" <eq name="order_field" value="(buy_freeze_money + cash_freeze_money)"> order_type="{$order_type}"</eq>>冻结金额</th>
+    <th width="13%" >待收金额</th>
+    <th width="10%" order_field="ctime" <eq name="order_field" value="ctime"> order_type="{$order_type}"</eq>>记录时间</th>
+    <th class="tac" width="12%">操作</th>
+  </tr>
+  <tr class="line">
+    <th colspan="100%"></th>
+  </tr>
+  </thead>
+  <tbody>
+  <?php if(!empty($list['data'])){ ?>
+  <foreach name="list.data" item="item">
+    <tr>
+      <td>{$item['user']['uname']}</td>
+      <td>{$item['user']['real_name']}</td>
+      <td><?php echo humanMoney($item['totalAccount'], 2, false); ?>元</td>
+      <td><?php echo humanMoney($item['amount'] + $item['reward_money'] + $item['invest_reward_money'], 2, false); ?>元</td>
+      <td><?php echo humanMoney($item['buy_freeze_money'] + $item['cash_freeze_money'], 2, false); ?>元</td>
+      <td><?php echo humanMoney($item['will_principal']+$item['will_profit'], 2, false); ?>元</td>
+      <td><span class="time">{$item.ctime|date='Y-m-d',###}</span></td>
+      <td class="tac"><a class="button-small-info" href="javascript:" event-click="view" data-args="{$item.uid}"><span class="btns">查看</span></a></td>
+    </tr>
+  </foreach>
+  <?php }else{ ?>
+  <tr>
+    <td colspan="9">没有相关数据</td>
+  </tr>
+  <?php } ?>
+  </tbody>
+</table>
+<?php $pageNavCallback = "ajaxAfter_userAccountListPaging"; ?>
+<include file="./app/Tpl/Public/pageAjax.html" />

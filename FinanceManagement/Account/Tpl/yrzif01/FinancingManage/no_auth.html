@@ -1,0 +1,30 @@
+<style type="text/css">
+  #companyInfoBar dl{padding: 10px 155px; color: red}
+  #companyInfoBar dl dd{margin: 4px 0}
+  #companyInfoBar dl .btn_dd{padding: 20px 0}
+</style>
+<p class="renzheng_tishi"><i class="icon ico-caution"></i>请填写完整、真实、有效的信息，上传的资料请确保其真实性与合法性并且清晰易识别！</p>
+<input type="hidden" id="jumpTo" value="{$jumpTo}"/>
+<div class="info_fill_step">
+  <a href="javascript:" class="filled" data-flag="companyInfoBar" <?php if($corpinfo){ ?>event-click="goToStep"<?php } ?>>基本信息</a>
+  <a href="javascript:" class="filled" data-flag="uploadSourceBar" <?php if($corpinfo){ ?>event-click="goToStep"<?php } ?>><i></i>上传材料</a>
+  <a href="javascript:" class="filled" data-flag="bankCardBar" <?php if($corpinfo){ ?>event-click="goToStep"<?php } ?>><i></i>银行卡信息</a>
+</div>
+<div id="companyInfoBar">
+  <ul class="zrBaseInfo">
+    <li class="pro_form_item">
+      <label class="li-label-name"><em class="red">*</em>用户类型：</label>
+      <label><input event-click="selectBorrowType" type="radio" name="borrowerType" value="2" checked/>个人用户</label>
+      &nbsp;&nbsp;
+      <label><input event-click="selectBorrowType" type="radio" name="borrowerType" value="1" />企业用户</label>
+    </li>
+  </ul>
+  <dl>
+    <dt>个人用户融资需认证</dt>
+    <dd>1. 实名认证</dd>
+    <dd>2. 手机认证</dd>
+    <dd class="btn_dd">
+      <a class="btn_fixed_org" href="{:U('Account/User/account')}">去认证</a>
+    </dd>
+  </dl>
+</div>

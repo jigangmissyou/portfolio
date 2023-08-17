@@ -1,0 +1,35 @@
+<table class="ui-record-table" width="100%">
+  <thead>
+  <tr>
+    <th width="20%" class="tac">上传日期</th>
+    <th width="50%">文件名</th>
+    <th width="10%" class="tac">状态</th>
+    <th width="20%" class="tac">操作</th>
+  </tr>
+  <tr class="line"><th colspan="100%"></th></tr>
+  </thead>
+  <tbody>
+  <if condition="$list">
+    <foreach name="list" item="item">
+      <tr>
+        <td class="tac">{$item.ctime}</td>
+        <td>{$item.file_name}</td>
+        <td class="tac" data-status>
+          <?php echo $item['status'] == 1 ? '未提交' : '已提交'; ?>
+        </td>
+        <td class="tac">
+          <a class="blue"  href="javascript:" event-click="toggleStatus" data-args="toggleFundReportStatus,{$item.id},{$item.status}">
+            <?php echo $item['status'] == 1 ? '提交' : '删除'; ?>
+          </a>
+        </td>
+      </tr>
+    </foreach>
+  <else />
+    <tr>
+      <td colspan='100%'>没有数据</td>
+    </tr>
+  </if>
+  </tbody>
+</table>
+<?php $pageNavCallback = "ajaxAfter_reportList"; ?>
+<include file="./app/Tpl/Public/pageAjax.html" />

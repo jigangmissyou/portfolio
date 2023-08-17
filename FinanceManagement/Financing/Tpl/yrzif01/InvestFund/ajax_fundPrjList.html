@@ -1,0 +1,76 @@
+  <div class="ovh">
+  <div class="statusMenusLast fl">
+    <a href="javascript:" <?php if($status == 0){ ?>class="cur"<?php } ?> event-click="getPrjList"
+    data-args="0">全部({$total_cnt})</a>
+    <a href="javascript:" <?php if($status == 1){ ?>class="cur"<?php } ?> event-click="getPrjList"
+    data-args="1">待审核({$wait_approve_num})</a>
+    <a href="javascript:" <?php if($status == 2){ ?>class="cur"<?php } ?> event-click="getPrjList"
+    data-args="2">审核未通过({$un_approve_num})</a>
+    <a href="javascript:" <?php if($status == 3){ ?>class="cur"<?php } ?> event-click="getPrjList"
+    data-args="3">待开标({$will_openBid_num})</a>
+    <a href="javascript:" <?php if($status == 4){ ?>class="cur"<?php } ?> event-click="getPrjList"
+    data-args="4">投资中({$biding_num})</a>
+    <a href="javascript:" <?php if($status == 5){ ?>class="cur"<?php } ?> event-click="getPrjList"
+    data-args="5">投资结束({$bid_ed_num})</a>
+    <a href="javascript:" <?php if($status == 6){ ?>class="cur"<?php } ?> event-click="getPrjList"
+    data-args="6">待赎回({$bid_paying_num})</a>
+    <a href="javascript:" <?php if($status == 7){ ?>class="cur"<?php } ?> event-click="getPrjList" data-args="7">已赎回({$bid_payed_num})</a>
+
+  </div>
+  <span class="button-small-orange fr"><a class="btns step_next" href="{:U('Financing/InvestFund/toAddFundPrj')}">添 加</a></span>
+</div>
+<table class="ui-record-table" width="100%">
+  <thead>
+  <tr>
+    <th width="20%" style="padding-left: 4px">项目名称</th>
+    <th width="15%">预期年化收益率</th>
+    <th width="10%" class="tac">期限</th>
+    <th width="15%" class="tac">募集规模</th>
+    <th width="20%" class="tac">发布时间</th>
+    <th width="10%" class="tac">状态</th>
+    <th width="10%" class="tac">操作</th>
+  </tr>
+  <tr class="line"><th colspan="100%"></th></tr>
+  </thead>
+  <tbody>
+  <if condition="$list">
+    <foreach name="list" item="item">
+      <tr>
+        <td>{$item.prj_name}</td>
+        <td>{$item.rate_range.rate_range}</td>
+        <td class="tac" style="padding-left: 4px">{$item.rate_range.time_range}</td>
+        <td class="tac">{$item.demand_amount}</td>
+        <td class="tac">{$item.ctime}</td>
+        <td class="tac">{$item._status}</td>
+        <td class="tac">
+          <div class="action_box">
+            <a href="javascript:void(0);" class="btn_edit" hovercard="div@ctl{$item.id}"></a>
+            <div class="dn" hovercard-id="ctl{$item.id}">
+              <ul class="action_item">
+                <li><a class="tab-click" href="{:U('Financing/InvestFund/viewFundPrjInfo', Array('pid'=>$item['id']))}">查看</a></li>
+
+                <?php if($item['bid_status'] == 4 || $item['bid_status'] == 8 || $item['status'] == 3){ ?>
+                <li><a href="{:U('Financing/InvestFund/toAddFundPrj', Array('pid'=>$item['id']))}"
+                       event-click="editPrj" data-args="{$item.id}">修改</a></li>
+                <?php } ?>
+                <?php if($item['show_closebtn']){ ?>
+                  <li><a href="javascript:void(0)" url="{:U('Financing/InvestFund/closePrjmanual', Array('prj_id'=>$item['id']))}" event-click="biddingClose">截标</a></li>
+                <?php } ?>
+                <?php if($item['status'] == 3){ //审核不通过 ?>
+                <li><a href="javascript:" event-click="delPrj" data-args="{$item.id}">删除</a></li>
+                <?php } ?>
+              </ul>
+            </div>
+          </div>
+        </td>
+      </tr>
+    </foreach>
+  <else />
+    <tr>
+      <td colspan='100%'>没有数据</td>
+    </tr>
+  </if>
+  </tbody>
+</table>
+<?php $pageNavCallback = "ajaxAfter_fundPrjList"; ?>
+<include file="./app/Tpl/Public/pageAjax.html" />

@@ -1,0 +1,96 @@
+<table class="ui-record-table percentTable">
+      <thead>
+        <tr>
+          <th width="10%" class="tac" order_field="order11" <eq name="order_field" value="order11"> order_type="{$order_type}"</eq>>赎回日期</th>
+          <th width="10%">项目名称</th>
+          <th width="10%">预期年化收益率</th>
+          <th width="10%">期限</th>
+          <th width="10%" class="tar" order_field="order14" <eq name="order_field" value="order14"> order_type="{$order_type}"</eq>>投资金额</th>
+          <th width="10%" class="tar" order_field="order15" <eq name="order_field" value="order15"> order_type="{$order_type}"</eq>>本息收益</th>
+          <th width="10%" class="tac" order_field="order16" <eq name="order_field" value="order16"> order_type="{$order_type}"</eq>>成交时间</th>
+          <th width="10%" class="tac">状态</th>
+          <th width="10%" class="tac">合同</th>
+        </tr>
+        <tr class="line"><th colspan="100%"></th></tr>
+    </thead>
+      <tbody>
+       <if condition="$list">
+      <foreach name="list" item="v">
+        <?php  
+           $title = service("Financing/Financing")->getTitle($v,$v['is_fed']);
+         ?>
+        <tr >
+          <td class="tac" <?php echo $title; ?>><if condition="empty($v['expect_repay_time'])">--<else />{$v['expect_repay_time_view']}</if>
+            <?php if($v['bid_status'] == PrjModel::BSTATUS_REPAID): ?>
+               <br>已赎回
+            <?php endif;?>
+          </td>
+          <td <?php echo $title; ?>>
+            <p class="pro_name">
+                <?php $url = $v['is_fed'] ? U('Financing/Invest/viewFed',array('id'=>$v['id_view'])):U('Financing/InvestFund/view',array('id'=>$v['id_view'])); ?>
+                <a href="{$url}">{$v['prj_name']}</a></p>
+                             <?php 
+               echo service("Financing/Financing")->getIco($v,$v['is_fed'],$v['prjid']);
+             ?>
+          </td>
+          
+          
+          <td class="money" <?php echo $title; ?>>
+            {$v['rate_show']}
+      </td>
+          <td>
+            {$v['r_time_limit']}<if condition="$v.r_time_limit_unit eq 'month'">个</if><?php echo service("Financing/Project")->getTimeLimitUnit($v['r_time_limit_unit']); ?>
+          </td>
+          <td class="tar"  <?php echo $title; ?>><span class="mr12">{$v['money_view']}</span>
+            <?php if($v['order_ext_totle'] > 0): ?>
+                <br><span class="mr12">(
+                <?php echo "使用红包:".humanMoney($v['order_ext_totle'],2,false)."元";?>)
+                </span>
+            <?php endif; ?>
+          </td>
+          <td class="tac" <?php echo $title; ?>><div class="pr envelopes_parent">{$v['pri_interest_view']}</div></td>
+          <td  <?php echo $title; ?>><p style="margin-left:5px">{$v['order_create_time_view']}</p></td>
+          <!-- <td class="tac">
+      <div class="fina_round_bar" percent="{$v.schedule}">
+        <a href="javascript:;" <?php if($v["schedule"] == 100){echo 'style="display:block"';} ?>>
+        {$v.schedule}%
+        </a>
+        </div>
+          </td> -->
+          <td class="tac"  <?php echo $title; ?>>
+              <span  class="underline" href="javascript:" hovercard="ajax@{:U('Account/Financing/ajaxShowRepay?id=')}{$v['id']}" hovercard-options='{"direction":"down","theme":"light"}'>
+              <?php echo $v['bid_status_view']; ?>
+              </span>
+          </td>
+          <td class="tac">
+        <?php if(($v['prj_type'] != PrjModel::PRJ_TYPE_C) && ($v['bid_status'] > PrjModel::BSTATUS_FULL) && !in_array($v['bid_status'], array(PrjModel::BSTATUS_FAILD, PrjModel::BSTATUS_END))):?>
+            <div class="action_box">
+              <a href="javascript:void(0);" class="btn_edit" hovercard="div@ctl{$v.id}"></a>
+              <div class="dn" hovercard-id="ctl{$v.id}">
+                <ul class="action_item">
+                  <li><a colorbox="1" href="javascript:void(0)" url="{:U('/Index/Protocol/validateView',array('id'=>$v['id']))}">基金合同查看</a></li>
+                  <li><a colorbox="1" href="javascript:void(0)" url="{:U('/Index/Protocol/validateView',array('id'=>$v['id'], 'index' => 2))}">认购确认书查看</a></li>
+                </ul>
+              </div>
+            </div>
+         <?php else: ?>
+             --
+        <?php endif; ?>
+         </td>
+        </tr>
+      </foreach>
+        <else />
+        <tr>
+          <td colspan="100%" class="tac">没有相关数据</td>
+        </tr>
+      </if>
+      </tbody>
+    </table>
+    <?php $pageNavCallback = "ajaxAfter_Account_Financing_index"; ?>
+    <include file="./app/Tpl/Public/pageAjax.html" />
+    <input type="hidden" name="totalAll" value="{$totalAll}">
+    <input type="hidden" name="totalBiding" value="{$totalBiding}">
+    <input type="hidden" name="totalEnd" value="{$totalEnd}">
+    <input type="hidden" name="totalFull" value="{$totalFull}">
+    <input type="hidden" name="totalRepaying" value="{$totalRepaying}">
+    <input type="hidden" name="totalRepaySuccess" value="{$totalRepaySuccess}">

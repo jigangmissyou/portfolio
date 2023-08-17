@@ -1,0 +1,92 @@
+<?php if($prjInfo['borrower_type'] == 1 && $prjInfo['corp_register_no']){ ?>
+<h4><!-- <i class="icon_Greyinfo"></i> -->评级信息(借款人)</h4>
+<dl>
+  <dt>蛛网图、评级结果、描述</dt>
+  <div class="riskPoint">
+    <!-- 蜘蛛网图 开始-->
+    <div class="riskPointTu" data-flag="riskSpiderChart"></div>
+    <!-- 蜘蛛网图 结束 -->
+    <div class="riskPointCn">
+      <p>风险点：</p>
+      <p>
+        <ul>
+          <li>{$showQuotaChart.desc|nl2br}</li>
+        </ul>
+      </p>
+    </div>
+  </div>
+  <dt>风险分析</dt>
+  <dd data-flag="riskAnincyDesc">风险得分：<?php echo $showQuotaChart['whole_chart'][0]['field']; ?>&emsp;&emsp;&emsp;<!-- 同行业企业平均得分：19.8 --></dd>
+</dl>
+<?php 
+  $dim_chart_list = json_encode($showQuotaChart['dim_chart_list']);
+ ?>
+<script>
+;(function(){
+  var dimObj = <?php if(!empty($dim_chart_list)){echo $dim_chart_list;} else {echo "0";} ?>;
+  var $riskSpiderChart = $('[data-flag="riskSpiderChart"]');
+
+  var dimNameArr = [];
+  var paramObjs = [], obj, nowData;
+  if(dimObj && dimObj.length){
+    $.each(dimObj, function(i){
+      nowData = this['dim'];
+      obj = {};
+      obj['name'] = '';
+      obj['pointPlacement'] = 'on';
+      obj['data'] = [];
+
+      $.each(nowData, function(key){
+        if(i == 0){
+          dimNameArr.push(key);
+        }
+        var value = parseFloat(Math.round(nowData[key]*100)/100, 10); 
+        obj['data'].push(value);
+      });
+      if(obj['data'] && obj['data'].length){
+        paramObjs.push(obj);
+      }
+    })
+  }
+
+  if(paramObjs.length && $riskSpiderChart.length){
+    $riskSpiderChart.highcharts({
+        chart: {
+            polar: true,
+            type: 'line'
+        },      
+        title: {
+            text: ''
+        },      
+        pane: {
+          size: '70%'
+        },      
+        xAxis: {
+            categories: dimNameArr,
+            tickmarkPlacement: 'on',
+            lineWidth: 0
+        },          
+        yAxis: {
+            gridLineInterpolation: 'polygon',
+            lineWidth: 0,
+            min: 0
+        },      
+        tooltip: {
+          shared: true,
+            pointFormat: '<span style="color:{series.color}">分值: <b>{point.y:,0.f}</b><br/>'
+        },
+        legend: {
+            align: 'left',
+            verticalAlign: 'top',
+            y: 10000,
+            layout: 'vertical'
+        },
+        series: paramObjs
+    });
+  }else{
+      $riskSpiderChart.html('无数据');
+  }
+
+}());
+</script>
+<?php } ?>

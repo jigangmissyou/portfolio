@@ -1,0 +1,19 @@
+<div id="titlebar">申请提前还款</div>
+<div id="jqueryContent" style="width: 350px;">
+	<form action="{:U('Account/FinancingManage/applyEarlyRepay')}" ajax="1" id="formId_Application_ProjectManage_applyEarlyRepay" ajax-after="ajaxAfter_Application_ProjectManage_applyEarlyRepay" method="post">
+		<input type="hidden" name="isAjax" value="1">
+		<input type="hidden" name="prj_id" value="{$prj_id}">
+		<div class="repay_content">
+			<label for="repay_date">预计提前还款时间</label>	
+			<?php $minDate=date('Y-m-d',$dateparam['mindate']);$maxDate=date('Y-m-d',$dateparam['maxdate']); ?>
+			<input type="text" datepicker="1" name="repay_date" valid="required" class="" id="repay_date" onFocus="WdatePicker({onpicked:dateChanged,minDate:'<?php  echo $minDate?>',maxDate:'<?php  echo $maxDate?>'})"/>
+		</div>
+		<p class="repay_tips">注：提前还款需缴纳剩余利息的<span class="ratio"></span>%。预计本项目需要支付给投资人的利息补偿为<span class="repay_money"></span>元。</p>
+		<div class="tc mt20">
+			<span class="btn_bor_blue btn_repay">
+				<input type="submit" class="btns" value="确定" hidefocus="hidefocus" id="repay_submit">
+			</span>
+		</div>
+	</form>
+	<?php //print_r($dateparam); ?>
+</div>

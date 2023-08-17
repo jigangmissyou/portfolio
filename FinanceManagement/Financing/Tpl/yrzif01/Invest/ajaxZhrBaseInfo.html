@@ -1,0 +1,25 @@
+<!-- 基本信息 -->
+<?php D('Financing/Prj'); ?>
+<dl class="firstdl">
+	<p>本项目为保理公司提供的保理项目</p>
+  	<h4><!-- <i class="icon_Greyinfo"></i> -->基本信息</h4>
+  	<?php if(isset($prjInfo['ext']['money_using']) && $prjInfo['ext']['money_using']){ ?>
+  	<dt>资金用途</dt>
+  	<dd>{$prjInfo['ext']['money_using']}</dd>
+  	<?php } ?>
+  	<?php if(isset($prjInfo['ext']['repay_origin']) && $prjInfo['ext']['repay_origin']){ ?>
+  	<dt>还款来源</dt>
+  	<dd>{$prjInfo['ext']['repay_origin']}</dd>
+  	<?php } ?>
+</dl>
+
+<!-- 借款人信息 -->
+<include file="view_borrower_info" />
+
+<!-- 证书展示 start -->
+<include file="view_img"/>
+<!-- 证书展示 end  -->
+
+<!-- bbs相关 开始 -->
+<include file="view_baseinfo_bbs" />
+<!-- bbs相关 结束 -->

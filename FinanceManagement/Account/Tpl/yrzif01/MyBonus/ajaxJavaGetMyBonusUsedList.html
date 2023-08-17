@@ -1,0 +1,67 @@
+<?php //dump($data);?>
+
+<div class="red-record-list">
+  <?php if(!empty($data)){ ?>
+    <ul>
+      <?php foreach ($data as $key => $vo) { ?>
+        <li>
+          <h1><span>￥</span><?php echo ($vo['amount'] - $vo['restAmount']); ?></h1>
+          <div class="content">
+            <?php if($vo['prjObjType'] == 0){ ?>
+            <p>{$vo.actEvent}</p>
+            <?php }else{ ?>
+            <p class="xingu-tag xingu-tag1">
+              <?php if($vo['prjObjType'] == 1){
+                echo '央企融专享'; 
+              }else if($vo['prjObjType'] == 2){
+                echo '创客融专享'; 
+              }else if($vo['prjObjType'] == 3){
+                echo '鑫股一号专享'; 
+              }else if($vo['prjObjType'] == 4){
+                echo '鑫银一号专享'; 
+              }?>
+            </p>
+            <?php }?>
+            <p>使用比例：<?php echo $vo['rate'];?></p>
+            <p title="{$vo.useTip}">使用条件：{$vo.useTip}</p>
+          </div>
+          <div class="time <?php if($vo['userBonusStatus'] != 1 || $vo['userBonusStatus'] != 4){ echo 'used';} ?>">
+            <h3>有效期：</h3>
+            <p>{$vo.startTime}-{$vo.endTime}</p>
+          </div>
+<!--           <div class="src">
+            <p title="<?php echo $vo['actEvent'];?>">来源：{$vo.actEvent}</p>
+          </div> -->
+          <div class="usage-record"><a href="javascript:;" hovercard-options='{"direction":"down"}' hovercard="ajax@{:U('Account/MyBonus/getMyRewardUsedRecord?type=1&userRewardId=')}{$vo['bonusId']}">使用记录></a></div>
+        </li>
+      <?php }?>
+    </ul>
+  <?php }else{ ?>
+  <!--未使用 无数据的表现-->
+  <if condition="$usedStatus == 6">
+    <div class="no-red">
+      <div class="face"><img src="/public/images/invest/fail-face.png"></div>
+      <h3>您暂时没有可用红包</h3>
+    </div>
+  <else/>
+    <div class="no-data"><?php if($msg){ echo $msg;}else{ echo '暂无数据';}?></div>
+  </if>
+  <?php } ?>
+</div>
+
+<?php $pageNavCallback = "ajaxAfter_Account_MyBonus_ajaxGetMyBonusList"; ?>
+   <include file="./app/Tpl/Public/pageAjax.html" />
+  <input type="hidden" name="p" value="1"/>
+  
+<div class="howget clearfix">
+  <h1>如何获取红包？</h1>
+  <div class="join">
+    <ul>
+      <li><i class="icon-reward"></i><span class="activity">参与平台活动</span><br /><span>参与平台活动，有机会获得红包哦。</span></li>
+      <li><div class="button-common-blue button-blue-w120"><a class="btns gosee-width" href="{:U('Activity/Zone/index')}">去看看</a></div></li>
+      <li><i class="icon-join"></i><span class="activity">做任务拿红包</span><br /><span>做任务有机会获得红包哦。</span></li>
+      <li><div class="button-common-blue button-blue-w120"><a class="btns gosee-width" href="javascript:;">去看看<em>产品经理正在努力憋，敬请期待~~</em></a></div>
+      </li>
+    </ul>
+  </div>
+</div>

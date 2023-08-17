@@ -1,0 +1,212 @@
+<!-- 奖励使用情况 -->
+<!-- 类名  .used为使用过的 unused-->
+<div id="quanbox">
+    <div class="red-record-list">
+        <!--    --><?php //var_dump($data)?>
+        <?php if (!empty($data)){ ?>
+        <ul>
+            <?php foreach ($data as $key => $vo) { ?>
+
+            <li <?php if ($vo['userXpfundStatus'] == 1){ ?>class='unused' <?php }else{ ?>class="used"<?php } ?>
+                style="margin:10px 0 0 16px">
+
+                <h1><span>￥</span><?php echo $vo['amount']; ?></h1>
+                <div class="content">
+                    <?php /*if($vo['userXpfundStatus']==1){*/ ?><!--
+                        <p>￥<?php /*echo $vo['amount'];*/ ?></p>
+                    <?php /*}else{*/ ?>--><?php /*}*/ ?>
+                    <p><?php echo $vo['actEvent']?></p>
+                    <p>使用条件：仅限理财金体验标</p>
+                    <p>适用项目期限：<?php echo $vo['prjTerm']; ?>天</p>
+                </div>
+                <div class="time used"><!--/Financing/Invest/plist-->
+                    <h3>有效期：</h3>
+                    <p><?php echo $vo['startTime']; ?>-<?php echo $vo['endTime']; ?></p>
+                </div>
+                <?php if ($vo['userXpfundStatus'] == 1){ ?>
+                <div data-target=<?php echo $vo['xpfundId'] ?> class="usage-record usequan
+                "><a href="javascript:;" hidefocus="hidefocus">马上使用&gt;</a>
+    </div>
+    <?php }else if ($vo['userXpfundStatus'] == 3){ ?>
+
+    <?php }else{ ?>
+    <div data-target=<?php echo $vo['xpfundId'] ?> class="usage-record userjl
+    "><a href="javascript:;" >使用记录></a></div>
+<?php } ?>
+<div style="display: none" data-prjName="<?php echo $vo['prjName']?>" data-rate="<?php echo $vo['rate']?>" data-prjTerm="<?php echo $vo['prjTerm']?>" data-instantTime="<?php echo $vo['instantTime'] ?>" data-preRepayTime="<?php echo $vo['preRepayTime'] ?>" data-amount="<?php echo $vo['amount']?>" data-profit="<?php echo $vo['profit'] ?>">
+</div>
+<!--<div style="display: none" data-global=<?php /*echo $vo['prjName'] */ ?>,<?php /*echo $vo['rate'] */ ?>,<?php /*echo $vo['expDate'] */ ?>,<?php /*echo $vo['instantTime'] */ ?>,<?php /*echo $vo['preRepayTime'] */ ?>,<?php /*echo $vo['amount'] */ ?>,<?php /*echo $vo['profit'] */ ?>>
+</div>-->
+
+</li>
+<?php } ?>
+</ul>
+<?php } else { ?>
+    <?php if($status=="1"){?>
+        <!--未使用 无数据的表现-->
+        <!--<if condition="$usedStatus != 6">-->
+        <div class="no-red" style="height: 197px;line-height: 63px;">
+            <div class="face"><img src="/public/images/invest/xiaoxin.png"></div>
+            <p style="height:20px;width:100%;text-align:center">您暂未获得专享理财金</p>
+        </div>
+        <!--<else/>-->
+        <!--<div class="no-data"><?php /*if($msg){ echo $msg;}else{ echo '您暂未获得专享理财金';}*/ ?></div>-->
+        <!--</if>-->
+    <?php }else{ ?>
+        <div class="no-red" style="height: 197px;line-height: 63px;">
+            <p style="top: 50%;position: relative;width:100%;text-align:center;">暂无数据</p>
+        </div>
+    <?php }?>
+
+<?php } ?>
+</div>
+<?php $pageNavCallback = "ajaxAfter_Account_MyBonus_ajaxGetMyLcjList"; ?>
+<include file="./app/Tpl/Public/pageAjax.html"/>
+</div>
+
+
+<input type="hidden" name="p" value="1" hidefocus="hidefocus">
+
+<!--确认投资的弹窗 -->
+<div class="mask dn"></div>
+<div id="gotouse" class="closelijbox invest-container pop-invest1 invest-sure dn">
+    <div id="projectTitle">
+        <div class="projectTL"><!-- <em class="proIcon"></em> -->
+            <span id="prjName"></span>
+            <span class="classIcons">
+        <em class="icn_s"></em>
+      </span>
+        </div>
+        <div class="projectTR">
+            <i class="hot"></i><!-- <i class="icon_redSigh"></i> -->鑫合汇提醒您：投资有风险！<a href="/Help/Help/education"
+                                                                                    title="投资者保障" hidefocus="hidefocus">[详情]</a>
+        </div>
+    </div>
+    <div class="clearfix stand">
+        <div class="standardDl">
+            <div class="standardDt">
+                <ul>
+                    <li class="annualRev">
+              <span class="title">
+                预期年化收益率
+              </span>
+                        <span id="rate" class="details">
+                20<em>%</em>
+              </span>
+                    </li>
+                    <li class="invesPeriod">
+              <span class="title">
+                项目期限
+              </span>
+                        <span id="prjTerm" class="details">
+                30<em>天</em>
+              </span>
+                    </li>
+                </ul>
+            </div>
+            <div class="qixiri">
+                <p><span>起息日：<span id="instantTime"></span></span>　　　　<span>还款日：<span id="preRepayTime">2016.10.10</span></span>
+                </p>
+            </div>
+        </div>
+
+        <div class="standardright">
+            <p>投资理财金：　　　　　<em id="amount">1,000.00</em>元</p>
+            <p>预期收益：　　　　　　<em id="profit">1,000.00</em>元</p>
+            <p id="gotopay"><a href="javascript:;">确认支付</a></p>
+        </div>
+    </div>
+    <div id="xpfundidbox" style="display: none" data-xpfundid=""></div>
+</div>
+
+
+
+<script type="text/javascript">
+    window.ajaxAfter_Account_MyBonus_ajaxGetMyLcjList = function (html) {/*注册理财金使用券回调函数*/
+        var status = $(".myBonus-see").last().attr("post-status");
+        var json = {
+            "usedStatus": status,
+            "pageSize": 8,
+//            "p": 1
+        };
+        var getalldateurl = html.url;
+        $.post(getalldateurl, json, function (html) {
+            $("#quanbox").remove();
+            $("#topbox").after(html)
+        })
+    }
+    $(window).ready(function () {
+        $(".userjl").on("mouseover", function (e) {/*理财金使用券的使用记录*/
+            e.stopPropagation();
+            if($("#forloadbox").length>0){
+                return;
+            }
+            if($("#uselinebox").length>0){
+                return;
+            }
+            var $this=$(this);
+            $this.append("<div id='forloadbox' class='record-txt' style='width:150px;height:80px;position: absolute' ><div class='loading'></div></div>");
+            var target = $(this).attr("data-target");
+            var datajson = {
+                "userRewardId": target,
+                "type": 4
+            };
+            var url = "/index.php/Account/MyBonus/getMyRewardUsedRecord";
+            $.post(url, datajson, function (e) {
+                if($("#uselinebox").length>0){
+                    $("#uselinebox").remove();
+                }
+                $("#forloadbox").remove();
+                $this.append(e);
+
+            });
+        }).on("mouseout",function(e){
+            e.stopPropagation();
+            if($("#uselinebox").length>0){
+                $("#uselinebox").remove();
+            }
+        });
+        $(".usequan").on("click", function (e) {/*使用券弹出确认投资*/
+            e.stopPropagation();
+            var xpfundid = $(this).attr("data-target");
+            var $this = $(this).next();
+            $("#xpfundidbox").attr("data-xpfundid", xpfundid);
+            var $gotouse = $("#gotouse");
+            $("#prjName").text($this.attr("data-prjName"));
+            $("#rate").html($this.attr("data-rate")+"<em>%</em>");
+            $("#prjTerm").html($this.attr("data-prjTerm")+"<em>天</em>");
+            $("#instantTime").text($this.attr("data-instantTime"));
+            $("#preRepayTime").text($this.attr("data-preRepayTime"));
+            $("#amount").text($this.attr("data-amount"));
+            $("#profit").text($this.attr("data-profit"));
+            $gotouse.removeClass("dn");
+            $(".mask").show();
+        });
+        $(".closelijbox").on("click",function(e){
+            e.stopPropagation();
+        });
+        $("body").on("click",function(){
+            if($("#uselinebox").length>0){
+                $("#uselinebox").remove();
+            }
+            if($(".closelijbox").length!=0){
+                $(".closelijbox").addClass("dn");
+                $(".mask").hide();
+            }
+        });
+        $("#gotopay").on("click", function () {/*确认投资弹框确认支付*/
+            var xpfundid = $("#xpfundidbox").attr("data-xpfundid");
+            var datajson={
+                "xpfundid":xpfundid
+            };
+            var url="/index.php/Account/MyBonus/buySuccessLcj";
+            $.post(url,datajson,function(e){
+                $("#gotouse").after(e);
+                $("#gotouse").addClass("dn");
+                /*$(".mask").hide();*/
+            });
+
+
+        })
+    })
+</script>

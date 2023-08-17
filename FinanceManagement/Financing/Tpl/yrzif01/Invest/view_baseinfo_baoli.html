@@ -1,0 +1,107 @@
+<!--原始债权人 -->
+<?php if($prjInfo['borrower_type'] == 1 && $borrower){ // 企业借款人 ?>
+<dl>
+  <p>本项目为保理公司提供的保理项目</p>
+  <h4><!-- <i class="icon_Greyinfo"></i> -->原始债权人信息</h4>
+  <table class="globaltable">
+    <?php if($borrower['trade']){  // 所属行业 ?>
+    <tr class="GreyBgcolor">
+      <td class="padLeft30" width="30%">所属行业</td>
+      <td>{$borrower['trade']}</td>
+    </tr>
+    <?php } ?>
+    <?php if($borrower['fund_date']){  // 成立日期 ?>
+    <tr>
+      <td class="padLeft30">成立日期</td>
+      <td>{$borrower['fund_date']}年</td>
+    </tr>
+    <?php } ?>
+    <?php if($borrower['fund_date']){  // 注册资本 ?>
+    <tr>
+      <td class="padLeft30">注册资本</td>
+      <td><?php echo $borrower['register_capital']; echo is_numeric($borrower['register_capital'])?"万":""; ?></td>
+    </tr>
+    <?php } ?>
+    <?php if($borrower['fund_date']){  // 主营业务 ?>
+    <tr class="GreyBgcolor">
+      <td class="padLeft30">主营业务</td>
+      <td>{$borrower['main_business']}</td>
+    </tr>
+    <?php } ?>
+    <?php if($borrower['last_year_sale_amount']){  // 上一年度销售收入 ?>
+    <tr class="GreyBgcolor">
+      <td class="padLeft30">上一年度销售收入</td>
+      <td>{$borrower['last_year_sale_amount']}万</td>
+    </tr>
+    <?php } ?>
+    <?php if(!$prjInfo['zhr_apply_id']&&!empty($borrower['corp_scale'])){  // 企业规模 ?>
+    <tr class="GreyBgcolor">
+      <td class="padLeft30">企业规模</td>
+      <td><?php 
+        echo getCodeItemName("A137",$borrower['corp_scale']);
+      ?></td>
+    </tr>
+    <?php } ?>
+    <?php if($borrower['sharehold_radio']){  // 企业主持股比例 ?>
+    <tr class="GreyBgcolor">
+      <td class="padLeft30">企业主持股比例</td>
+      <td><?php if($borrower['sharehold_radio']) echo $borrower['sharehold_radio']."%";?></td>
+    </tr>
+    <?php } ?>
+  </table>
+</dl> 
+<?php } else if($prjInfo['borrower_type'] == 2 && $borrower){  // 个人借款人 ?>
+<dl>
+  <p>本项目为保理公司提供的保理项目</p>
+  <h4><!-- <i class="icon_Greyinfo"></i> -->原始债权人信息</h4>
+  <table class="globaltable">
+    <tr class="GreyBgcolor" width="30%">
+      <td class="padLeft30">性别</td>
+      <td><?php echo getCodeItemName("A001",$borrower['sex']);?></td>
+    </tr>
+    <?php if($borrower['age']){ ?>
+    <tr>
+      <td class="padLeft30">年龄</td>
+      <td><?php echo $borrower['age']; ?></td>
+    </tr>
+    <?php } ?>
+    <?php if($borrower['educational']){ ?>
+    <tr class="GreyBgcolor">
+      <td class="padLeft30">学历</td>
+      <td><?php echo getCodeItemName("A003",$borrower['educational']);?></td>
+    </tr>
+    <?php } ?>
+    <?php if($borrower['matrimonial']){ ?>
+    <tr>
+      <td class="padLeft30">婚姻状况</td>
+      <td><?php echo getCodeItemName("A002",$borrower['matrimonial']);?></td>
+    </tr>
+    <?php } ?>
+  </table>
+</dl> 
+<?php } ?>
+<!-- 保理公司 -->
+<?php if(false){ //!empty($baoli) ?>
+<dl>
+  <p>本项目为保理公司提供的保理项目</p>
+  <h4><!-- <i class="icon_Greyinfo"></i> -->保理公司</h4>
+  <table class="globaltable">
+    <tr class="GreyBgcolor">
+      <td class="padLeft30" width="30%">企业名称</td>
+      <td>{$baoli.title}</td>
+    </tr>
+    <tr>
+      <td class="padLeft30">注册资金</td>
+      <td><?php echo $baoli['reg_money']; echo is_numeric($baoli['reg_money']) ? "万" : ""; ?></td>
+    </tr>
+    <tr class="GreyBgcolor">
+      <td class="padLeft30">所属行业</td>
+      <td>{$baoli.vocation|getTradeName}</td>
+    </tr>
+    <tr>
+      <td class="padLeft30">主营业务</td>
+      <td>{$baoli.main_business}</td>
+    </tr>
+  </table>
+</dl>
+<?php } ?>

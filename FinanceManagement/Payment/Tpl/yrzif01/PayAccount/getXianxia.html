@@ -1,0 +1,92 @@
+<form action="" ajax="1" ajax-after="ajaxAfter_Payment_PayAccount_getXianxia" method="post" id="formId_Payment_PayAccount_getXianxia">
+  <div id="titlebar" class="showpass">取消申请</div>
+  <div id="jqueryContent" class="showpass w520"><!--{:U('Payment/PayAccount/saveXianxia')}-->
+    <input type="hidden" name="id" value="{$id}">    
+      <ul class="formList formList_pop">
+       <!-- <li>
+          <label class="li-label-name">充值金额：</label>
+          <span class="li-span-con"><input type="text" class="inputCommon" name="apply_amount" value="{$data.apply_amount}" valid="required" style="width:130px;">    
+          <span class="fill_explain">元</span>
+          </span>
+&lt;!&ndash;           <span class="fill_text">（伍万元整）</span> &ndash;&gt;
+        </li>
+        <li>
+          <label class="li-label-name">转账银行：</label>
+          <span class="li-span-con">
+          <select id="bank" name="bank"  multipleOne="1" valid="required" valid-msg-options='{"gravity": "n"}'>
+      		<option value="">--请选择--</option>
+      		<if condition="!empty($bankList)">
+				<volist name="bankList" id="vo">
+					<option value="{$vo.code}" <?php if($vo['code'] == $data['bank']) echo "selected"; ?>>{$vo.name}</option>
+				</volist>
+			</if>
+        </select>
+      </span>
+        </li>
+       <li>
+      	<label class="li-label-name">银行账号：</label>
+        <span class="li-span-con">
+      	<input type="text" class="inputCommon" name="account_no" value="{$data.account_no}" valid="required">
+        </span>
+    	</li>
+        <li>
+          <label class="li-label-name">备注：</label>
+          <span class="li-span-con">
+          <textarea name="bak" class="inputCommon" style="height:90px;">{$data.bak}</textarea>
+          </span>
+        </li>--><!--onclick="upgTool.closeBox(this)"-->
+          <li style="text-align: center">确认要取消充值申请吗？</li>
+        <li class="lastBtns"><label for="" class="li-label-name">&nbsp;</label><span class="li-span-con">
+          <span class="button-common-blue button-blue-pop">
+              <input class="dn forgetid" type="text" value="/Payment/PayAccount/cancelApply?id=<?php echo $id?>"/>
+              <input type="button" style="cursor:pointer" id="submitcancle" class="btns" value="确定"></span>
+        <a onclick="" class="hidefor button-common-gray button-gray-pop ml20" href="javascript:;">
+          <span class="btns">取消</span>
+        </a>
+        </span></li>
+      </ul>
+      <div class="tc mt20">
+        
+      </div>
+  </div>
+
+
+    <div id="titlebar" class="dn shownopass">无法取消</div>
+    <div id="jqueryContent" class="w520 dn shownopass">
+        <input type="hidden" name="id" value="{$id}">
+        <ul class="formList formList_pop">
+            <li style="text-align: center">太晚啦，申请处理中，无法取消。</li>
+            <li class="lastBtns" style="text-align: center"><!--label for="" class="li-label-name">&nbsp;</label>--><span style="width: 100%;padding:0" class="li-span-con">
+          <span class="button-common-blue button-blue-pop"><input type="submit" class="forfresh btns" value="知道了" onclick="upgTool.closeBox(this)"></span>
+                <!--<a class="button-common-gray button-gray-pop ml20" href="javascript:void(0);" onclick="upgTool.closeBox(this)">
+                  <span class="btns">取消</span>
+                </a>-->
+        </span></li>
+        </ul>
+        <div class="tc mt20">
+
+        </div>
+    </div>
+
+
+
+</form>
+<!--处于待跟踪状态不能取消-->
+
+<script>
+    $("document").ready(function(){
+        $("#colorbox").show();
+        $(".showpass").show();
+        $(".shownopass").hide();
+        $("#cboxWrapper").show();
+        $("#cboxOverlay").show();
+    })
+
+    $(document).on("click",".hidefor",function(){
+        $("#colorbox").hide();
+        $("#cboxOverlay").hide();
+    })
+    $(document).on("click",".forfresh",function(){
+        $("#getMyXianxiaList_type").click();
+    })
+</script>

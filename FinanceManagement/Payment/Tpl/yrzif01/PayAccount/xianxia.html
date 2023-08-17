@@ -1,0 +1,307 @@
+<extend name="./app/Tpl/Public/base_user.html"/>
+<block name="title">我的账户-账户概况-充值-充值预约</block>
+<block name="keywords">充值-转账支付</block>
+<block name="description">充值-转账支付</block>
+
+<block name="style">
+<link rel="stylesheet" href="/public/css/sasscss/act/zskh/index.css">
+</block>
+
+<block name="body">
+  <!--   <?php
+      if($role==2 || $role==6){
+    ?>
+    <div class="detailSurTab surTabUl mt30 mb20">
+        <ul>
+            <li><span class="roundTopborGy"><a href="{:U('Application/ProjectManage/index')}">项目管理</a></span><a class="hrwrite"></a></li>
+            <li><span class="roundTopborGy"><a href="{:U('Application/ProjectRepayment/index')}">还款计划</a></span><a class="hrwrite"></a></li>
+            <li><span class="roundTopborGy"><a href="{:U('Application/ProjectManage/getMyMoneyList')}">资金记录</a></span><a class="hrwrite"></a></li>
+            <li class="current"><span class="roundTopborGy"><a href="{:U('Application/ProjectManage/accountInfo')}">我的账户</a></span><a class="hrwrite"></a></li>
+        </ul>
+    </div>
+    <?php }else{ ?>
+    <include file="nav" />
+    <?php   } ?> -->
+  <style>
+    *{
+      margin:0;
+      padding:0;
+      list-style: none;
+      font-style: normal;
+    }
+
+    /*.box{
+      left: 319px;
+      top: -27px;
+      !* width: 400px; *!
+      !* height: 300px; *!
+      !* margin: 100px auto; *!
+      position: relative;
+    }*/
+    .show{
+      position: absolute;
+      /* background: url(account-hover.png) no-repeat; */
+      background: url(/public/images/account/account-hover.png) no-repeat;
+      height: 48px;
+      display:none;
+      width: 230px;
+      text-align: center;
+      top: -50px;
+      left: -96px;
+      line-height: 21px;
+      background-size: 100% 100%;
+      font-size: 12px;
+      color: #333;
+      filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(
+              src='/public/images/account/account-hover.png',
+              sizingMethod='scale');
+    }
+    /*.wenhao:hover + span.show{
+      display: block;
+    }*/
+    .czyy{
+      position: relative;
+    }
+    .box{
+      position: absolute;
+      left:525px;
+      top:85px;
+    }
+    .wenhao{
+      position: absolute;
+      width:18px;
+      height: 18px;
+      top: 2px;
+      margin-left: 13px;
+      background: url(/public/images/account/icons/quest.png) no-repeat;
+    }
+  </style>
+<div class="main_area recharge_area">
+  <!-- <h2 class="h2tit">转账支付</h2>
+  <div class="nocodeTip mb20">
+  	<p class="noteTipName org"><em class="icon-note-heart"></em>温馨提示:</p>
+  	<ol class="noteTipText">
+  	  <li>1. 您可以通过网银系统进行转账支付，目前不支持现金汇款及银行柜台转账</li>
+  	  <li>2. 转账完成后，请尽快填写并提交该页的信息，三天内未收到汇款信息将作废</li>
+  	  <li>3. 网上银行转账如果产生手续费，所需手续费按银行规定由银行收取</li>
+  	  <li>4. 请在转账汇款备注项上填写您的用户名，以便我们尽快确认您的汇款</li>
+      <li>5. 若您有多笔汇款，请在备注中注明</li>
+  	  <li>6. 如有问题可以和网站客服联系（电话：400-821-8616，工作时间：周一至周五9:00-17:00）</li>
+  	</ol>
+  </div> -->
+  <!-- <div class="transfer-pay-txt">
+    <h1>转账支付</h1>
+    <div class="main-txt">
+      <h2><em class="icon-warm-hints"></em>温馨提示：</h2>
+      <p>1. 您可以通过网银系统进行转账支付，目前不支持现金汇款及银行柜台转账</p>
+      <p>2. 转账完成后，请尽快填写并提交该页的信息，三天内未收到汇款信息将作废</p>
+      <p>3. 网上银行转账如果产生手续费，所需手续费按银行规定由银行收取 </p>
+      <p>4. 请在转账汇款备注项上填写您的用户名，以便我们尽快确认您的汇款</p>
+      <p>5. 若您有多笔汇款，请在备注中注明</p>
+      <p>6. 如有问题可以和网站客服联系（电话：400-821-8616，工作时间：周一至周五9:00-17:00）</p>
+    </div>
+  </div> --> 
+  <div class="recharge_form czyy" style="margin-top:0;padding-top:0;">
+  <h2 class="h2tit" style="margin-bottom:35px;">充值预约</h2>
+  <div class="box">
+    <em class="wenhao"></em>
+    <span class="show">如您在工作日充值，当日24:00前充值到账；节假日顺延。</span>
+  </div>
+  <ul class="formList">
+  <form method="POST" style="height: 400px" id="xianxia_form" ajax="1" ajax-after="ajaxAfter_Payment_PayAccount_submit" action="{:U('Payment/PayAccount/submit')}">
+  	<!-- <li <?php if($is_init == 1) echo 'class="dn"';?>>
+          <label class="li-label-name">汇款账户：</label>
+          <span class="li-span-con remit-account">
+            <strong class="card-number">{$ptAccountNo}</strong>
+            <strong>{$subBank}</strong>
+            <strong>{$ptAccountName}</strong>
+          </span>
+        </li>
+            <li  <?php if($is_init == 0) echo 'class="dn"';?>>
+          <div class="accountUl clearfix">
+            <label class="li-label-name"><em class="red">*</em>汇款账户：</label>
+              <span class="li-span-con">
+                <span class="firstLi"><input type="radio" name="is_zs" value="0" style="margin-bottom:60px;"></span>
+                <div class="secondLi" style="display:inline-block;">
+                  <span class="CallAccount" style="height:auto;">
+                    <em>{$ptAccountNo}</em>
+                    <p class="dash-line"></p>
+                    <em>{$subBank}</em><br />
+                    <em>{$ptAccountName}</em>
+                  </span>
+                </div>
+                <br />
+                <span class="firstLi"><input type="radio" name="is_zs" value="1" style="margin-bottom:60px;"></span>
+                <div class="secondLi" style="display:inline-block;">
+                  <span class="CallAccount" style="height:auto;">
+                    <em>3310010010121880139201</em>
+                    <p class="dash-line"></p>
+                    <em>浙商银行杭州分行</em><br />
+                    <em>浙商银行内部户</em>
+                  </span>
+                </div>
+              </span>
+          </div>
+        </li> -->
+    <li>
+      <label class="li-label-name"><!-- <em class="red">*</em> -->充值金额</label>
+      <span class="li-span-con">
+      <input type="text" class="inputCommon" name="amount" value="{$amount}" valid="number,required"><span class="fillNote">元<!-- <span class="grayB5 pl10" id="upperDigit"></span> --></span>
+      <span class="daozhang">　充值到账
+        <!--<em class="wenhao" style="">
+
+       </em>-->
+
+         <!--<p style="width:100px;height:100px;background: url(/public/images/account/account-hover.png) no-repeat;">
+
+        </p>-->
+      </span>
+    </span>
+    </li>
+    <li>
+      <label class="li-label-name"><!-- <em class="red">*</em> -->充值银行</label>
+
+      <span class="li-span-con">
+        <!-- <input type="text" value="中国建设银行6217 **** **** 9981"> -->
+        <!--<?php var_dump($bindBanks)?>-->
+        <select name="out_account_no" id="getbankkind" class="banksec" style="width: 220px">
+            <!--<option value="">暂未绑定银行卡</option>-->
+          <foreach name="bindBanks" item="vo">
+            <option value="{$vo['acount_name']}">{$vo.bank_name}{$vo.account_no}</option>
+          </foreach>
+          <!--<option value="中国建设银行6217 **** **** 9981">中国建设银行6217 **** **** 9981</option>
+          <option value="中国建设银行6217 **** **** 9981">中国建设银行6217 **** **** 9981</option>-->
+        </select>
+        <select name="bankCode" id="forbankname" class="dn">
+          <foreach name="bindBanks" item="vo">
+            <option value="{$vo['bank']}">{$vo['acount_name']}</option>
+          </foreach>
+          <!--<option value="中国建设银行6217 **** **** 9981">中国建设银行6217 **** **** 9981</option>
+          <option value="中国建设银行6217 **** **** 9981">中国建设银行6217 **** **** 9981</option>-->
+        </select>
+
+        <p id="cli_addbank" class="addyh"><a href="javascript:;">+添加银行卡</a></p>
+        <!-- <select id="bankList" name="bankCode"  multipleOne="1" valid="required" valid-msg-options='{"gravity": "n"}' multiselect-options='{"minWidth":"164","height":"150"}'>
+          <option value="">--请选择--</option>
+          <if condition="!empty($bankList)">
+              <volist name="bankList" id="vo">
+                <option value="{$vo.code}" abbr="{$vo.url}">{$vo.name}</option>
+              </volist>
+            </if>
+        </select> -->
+      </span> 
+    </li>
+    <!-- <li>
+      <label class="li-label-name"><em class="red">*</em>银行账号：</label>
+      <span class="li-span-con">
+      <input type="text" class="inputCommon" name="out_account_no" value="" valid="required">
+    </span>
+    </li> -->
+    <!-- <li>
+      <label class="li-label-name">&nbsp;</label>
+      <span class="li-span-con">
+      <span class="red">请先</span><a id="goBank" class="" href="javascript:void(0);"><span class="btns goonline">去网上银行转账</span></a>
+    </span>
+    </li> -->
+    <li>
+  	  <label class="li-label-name">备注</label>
+      <span class="li-span-con"><textarea name="bak" class="ui_textarea note-textarea" placeholder="如您分多笔充值，请注明" style="padding:8px;"></textarea><!-- <span class="grayB5 fillNote db">可注明姓名、转账银行卡卡号、转账时间、共几笔转账, 每笔转载流水等  信息，以便我们尽快确定您的资金</span> -->
+  	</span>
+      <input id="phonenumber" value=<?php echo $mobile?> class="dn" />
+    </li>
+  	<li>
+      <label class="li-label-name"><!-- <em class="red">*</em> -->验证码</label>
+      <span class="li-span-con">
+      	<!--<input type="text" name="authCode" class="inputCommon" value="" style="width:190px;" valid="required,ajax@{:U('Index/Index/checkAuthCode')}" valid-msg-options='{"offset":212}'>-->
+        <input type="text" id="checkcodefor" name="authCode" class="inputCommon" value="" style="width:190px;">
+      	<a href="javascript:;" class="verifyCode"><img src="{:U('Index/Index/verify',array('version'=>uniqid()))}" id="VerifyCodeImg" /></a>
+      	<a href="javascript:;" class="blue ml12" id="refreshVerifyCode" style="color:#00a0e9;">刷新验证码</a>
+        <span class="dn" id="checkcodebox" style="color:red;margin-left: 10px">验证码错误或已过期</span>
+      </span>
+
+    </li>
+    <li class="lastBtns"><label for="" class="li-label-name">&nbsp;</label><span class="li-span-con">
+      <div class="button-common-orange button-plist-btn"><input type="button" id="brecharge" name="brecharge" value="提交" class="btns"></div>
+    </span></li>
+    <input type="hidden" id="payType" name="payType" value="xianxia"/>
+  </form>
+    <div class="transfer-pay-txt" style="padding-left:10px;">
+    <div class="main-txt nocodeTip">
+      <p class="noteTipName">温馨提示</p>
+      <p>1. 提交充值申请后，您将获得充值操作指引。</p>
+      <p>2. 建议您在充值提交后24小时内完成充值。</p>
+      <p>3. 充值申请可在PC端投资管理->资金记录->充值管理查看。</p>
+      <p>4. 更多问题，请联系客服（电话：400-821-8616，周一至周五 09:00-21:00，双休/节假日09:00-17：00）</p>
+    </div>
+  </div>
+
+      <?php
+      if($role==2 || $role==6 || $role==3){
+    ?>
+      <input type="hidden" id="record_url" value="{:U('Application/ProjectManage/getMyMoneyList', array('showP'=>'getMyXianxiaList'))}">
+  <input type="hidden" id="record_r_url" value="{:U('Application/ProjectManage/getMyMoneyList', array('showP'=>'getMyRecordList'))}">
+      <?php }else{ ?>
+      <input type="hidden" id="record_url" value="{:U('Payment/PayAccount/getMyMoneyList', array('showP'=>'getMyXianxiaList'))}">
+      <input type="hidden" id="record_r_url" value="{:U('Payment/PayAccount/getMyMoneyList', array('showP'=>'getMyRecordList'))}">
+      <?php } ?>
+  <input type="hidden" id="user_index" value="{:U('Account/User/index')}">
+  <input type="hidden" id="minMoney" value="{$minMoney}">
+  </ul>
+  </div>
+
+</div>
+  <div  style="display: none">
+    <div id="modify-bank-success">
+      <div class="pop-name-auth">
+        <div id="titlebar">银行卡修改</div>
+        <div id="jqueryContent" class="tac">
+          <img src="/public/images/pop/sprite_global_01.png" alt="">
+          <p id="editbankfor" class="green font26 mt20 mb28">银行卡修改成功</p>
+          <p><a href="javascript:;" class="btn-pop-auth" event-click="closeColorbox">确定</a></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+    <script>
+        var role="<?php echo $role;?>";
+    </script>
+  <script>
+   $("#getbankkind").on("change",function(){
+     var _val=$(this).val();
+     $("#forbankname").val(_val)
+   })
+    $(".wenhao").hover(function(){
+      $(".show").show();
+    }).mouseleave(function () {
+      $(".show").hide();
+    });
+  </script>
+  <script type="text/javascript">
+    if( !('placeholder' in document.createElement('input')) ){
+
+      $('input[placeholder],textarea[placeholder]').each(function(){
+        var that = $(this),
+                text= that.attr('placeholder');
+        if(that.val()===""){
+          that.val(text).addClass('placeholder');
+        }
+        that.focus(function(){
+          if(that.val()===text){
+            that.val("").removeClass('placeholder');
+          }
+        })
+                .blur(function(){
+                  if(that.val()===""){
+                    that.val(text).addClass('placeholder');
+                  }
+                })
+                .closest('form').submit(function(){
+          if(that.val() === text){
+            that.val('');
+          }
+        });
+      });
+    }
+  </script>
+</block>

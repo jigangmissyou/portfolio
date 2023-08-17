@@ -1,0 +1,26 @@
+<!-- 用户基本信息设置 邮箱 -->
+<div id="setUserinfo">
+  <div id="titlebar">用户基本信息设置</div>
+  <div id="jqueryContent">
+    <div class="mail-verify w520">
+      <div class="hd fixed"><i class="ico-mail"></i><h4>请验证你的邮箱..</h4>
+        <p>我们已经发送验证邮件到您的邮箱：<span class="blue">{$email}</span></p>
+        <if condition="$loginUrl">
+        <p class="tac"><a class="button-common-orange button-orange-w200 wid mt20" href="{$loginUrl}"><span class="btns">进入邮箱激活</span></a></p>
+        </if>
+      </div>
+      <div class="bd">
+        <dl>
+          <dt>收不到邮件？</dt>
+          <dd>● 有可能您的邮箱设置屏蔽了我们的邮件，建议设置 xinhehui.com 为白名单域名</dd>
+          <dd>● 有可能被误判为垃圾邮件了，请到垃圾邮件文件夹找找。可能由于网络问题，验证邮件会有1-10分钟的延迟，请稍候片刻</dd>
+          <dd>● 请联系网站客服<em>400-821-8616</em></dd>
+          <input type="hidden" id="uid" value="{$user['uid']}">
+          <input type="hidden" id="email" value="{$email}" >
+          <dd>● <a class="blue" href="javascript:" id="resetSendEmail">重发邮件</a></dd>
+          <dd class="tc mt20 org"><em class="icon-note-heart"></em>温馨提示：确保您的账户安全，必须完成用户基本信息设置！</dd>
+        </dl>
+      </div>
+    </div>
+  </div>
+</div>

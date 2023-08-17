@@ -1,0 +1,117 @@
+<style>
+  .total-statistics{float: right;}
+</style>
+<table class="ui-record-table">
+  <thead>
+    <tr>
+      <th width="8%">充值时间</th>
+      <th width="7%">站点</th>
+      <th width="10%">充值用户</th>
+      <th width="7%">真实姓名</th>
+      <th width="7%">盖标用户</th>
+      <th width="7%">充值类型</th>
+      <th width="<?php echo $status == 4 ? '10%':'10%';?>">银行账号</th>
+      <th width="12%" class="tar">申请充值金额</th>
+      <?php if($status != 1 && $status !=4){ ?><th width="10%" class="tar">实际充值金额</th><?php }?>
+      <th width="10%" class="tac">资金渠道</th>
+      <th width="<?php if($status == 3){ ?>10%<?php } else { ?>10%<?php }?>">备注</th>
+      <?php if($status == 4 || $status == 1) : ?>
+      <th width="8%" class="tac">跟踪记录</th>
+      <?php endif;?>
+      <?php if($status == 3){ ?><th width="10%">说明</th> <?php }?>
+       <?php if($status == 1){ ?>
+       		<th class="tac">操作</th> 
+       <?php } else {?>
+       		<th width="8%">处理时间</th> 
+       <?php }?>
+    </tr>
+    <tr class="line">
+      <th colspan="107%"></th>
+    </tr>
+  </thead>
+  <tbody>
+    <?php if(!empty($list['data'])){ foreach ($list['data'] as $key => $vo) { ?>
+    <tr>
+      <td>
+        <span class="time"><?php echo date("Y-m-d H:i", $vo['ctime']); ?></span>
+      </td>
+      <td>
+        <span class="mi_name"><?php echo $mi_list[$vo['user']['mi_no']]['mi_name']; ?></span>
+      </td>
+      <td>
+        <span class="show_userinfo">{$vo.user.uname}</span>
+      </td>
+      <td>{$vo.user.real_name}</td>
+      <td>{$vo.special_user}</td>
+      <td><?php service('Payment/Payment');
+if($vo['channel'] == PaymentService::TYPE_XIANXIA){ echo "转账支付";} else if($vo['channel'] == PaymentService::TYPE_STOCK_TRADING){ echo "代理注册";} ?></td>
+      <td>{$vo['account_no']}</td>
+      <td class="tar"><?php echo number_format($vo['apply_amount']/100, 2)."元";?></td>
+      <?php if($status != 1 && $status !=4){ ?> <td class="tar"><?php echo number_format($vo['real_amount']/100, 2)."元";?></td> <?php }?>
+      <td class="tac">{$vo['bank_name']}</td>
+      <td textlength="<?php echo $status == 1 ? '20':'11';?>">{$vo['bak']}</td>
+      <?php if($vo['status'] == 3){ ?> <td textlength="11">{$vo['explain']}</td> <?php }?>
+      <?php if($status == 4 || $status == 1) : ?>
+      <td class="tac">
+        <?php if($vo['track_desc']): ?>
+        <a href="{:U('Payment/PayAccount/shwoTrace',array('id'=>$vo['id']))}" colorbox=1 class='blue'>查看</a>
+        <?php endif;?>
+      </td>
+      <?php endif;?>
+
+      <?php if($vo['status'] == 1){ ?>
+      <td>
+        <div class="action_box">
+          <a href="javascript:void(0);" class="btn_edit" hovercard="ul@getXianxiaList_<?php echo $vo['id']; ?>" hovercard-options='{"noArrow":true}'></a>
+          <ul class="action_item dn" hovercard-id="getXianxiaList_<?php echo $vo['id']; ?>">
+            <li>
+              <a colorbox="1" href="{:U('Payment/PayAccount/getDealXianxia',array('id'=>$vo['id'],'status'=>1))}">通过</a>
+            </li>
+            <li>
+              <a colorbox="1" href="{:U('Payment/PayAccount/getDealXianxia',array('id'=>$vo['id'],'status'=>2))}">不通过</a>
+            </li>
+             <li>
+              <a colorbox="1" href="{:U('Payment/PayAccount/getDealXianxia',array('id'=>$vo['id'],'status'=>4))}">待跟踪</a>
+            </li>
+          </ul>
+        </div>
+       </td>
+       <?php } else { ?>
+        <td><span class="time"><?php echo date("Y-m-d H:i", $vo['deal_time']); ?></span></td>
+       <?php } ?>
+    </tr>
+    <?php }} else { ?>
+    <tr><td colspan="107%" class="tac">没有相关数据</td></tr>
+    <?php } ?>
+  </tbody>
+</table>
+
+<?php
+    $this_total = 0;
+    $this_total_sum = 0;
+
+    if($status == 1){
+      $this_total = $totalTodo1;
+      $this_total_sum = $totalTodo_sum;
+    }else if($status == 2){
+      $this_total = $totalSuccess1;
+      $this_total_sum = $totalSuccess_sum;
+    }else if($status == 3){
+      $this_total = $totalFailed1;
+      $this_total_sum = $totalFailed_sum;
+    }else if($status == 4){
+      $this_total = $totalWait1;
+      $this_total_sum = $totalWait_sum;
+    }
+
+  ?>
+
+<div class="total-statistics">
+  共计{$this_total}条数据/{$this_total_sum}元
+</div>
+<?php $pageNavCallback = "ajaxAfter_Payment_PayAccount_getXianxiaList"; ?>
+<include file="./app/Tpl/Public/pageAjax.html" />
+<input type="hidden" id="totalTodo" value="{$totalTodo}">
+    <input type="hidden" id="totalSuccess" value="{$totalSuccess}">
+    <input type="hidden" id="totalFailed" value="{$totalFailed}"> 
+    <input type="hidden" id="totalWait" value="{$totalWait}">

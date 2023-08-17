@@ -1,0 +1,98 @@
+<!--专享理财金提取收益弹框-->
+<?php /*if ($gotStatus == 1) { */?><!--
+    <div id="js-lcj-container" style="position: absolute" class="lcj-container-pop">
+        <div id="titlebar">专享理财金收益</div>
+        <div class="lcj-Content-pop" style="background-color: white">
+            <div class="lcj-one-pop">
+                <em class="imgNoteBig_Green"></em>
+                <div class="txt-pop">
+                    <p class="p1">专享理财金收益{$yield}元已成功提取</p>
+                </div>
+            </div>
+        </div>
+    </div>
+--><?php /*} else { */?>
+<div id="cboxWrapper" class="closelijbox" style="height: 209px; width: 400px;position: fixed;top: 40%;left: 40%">
+    <div>
+        <div id="cboxTopLeft" style="float: left;"></div>
+        <div id="cboxTopCenter" style="float: left; width: 400px;"></div>
+        <div id="cboxTopRight" style="float: left;"></div>
+    </div>
+    <div style="clear: left;">
+        <div id="cboxMiddleLeft" style="float: left; height: 209px;"></div>
+        <a href="javascript:;" class="del" style="z-index:503;"></a>
+        <div id="cboxContent" style="float: left; width: 400px; height: 230px;border-radius: 6px">
+            <div id="cboxLoadedContent" style="width: 100%; overflow: hidden;height: 100%;border-radius: 6px">
+                <!--<div id="titlebar">&nbsp;</div>-->
+                <?php if ($gotStatus == 1) { ?>
+                    <div class="lcj-Content-pop" style="background-color: white;width: 400px">
+                        <div class="lcj-one-pop" style="border:none">
+                            <em class="imgNoteBig_Green"></em>
+                            <div class="txt-pop">
+                                <b class="p1" style="color: #848484">提取成功</b>
+                            </div>
+                        </div>
+                        <div class="lcj-one-pop" style="border:none">
+                            <div class="txt-pop">
+                                <p class="p1" style="color: #B7B7B7;font-size: 15px">专享理财金收益{$yield}元已成功提取</p>
+                            </div>
+                        </div>
+                        <div class="colorboxClose" style="width:114px;height:28px;background-color: #27B8FF;color: white;margin: 0 auto;text-align: center;line-height: 28px;border-radius: 3px;margin-top: 20px;cursor:pointer;">关闭</div>
+                    </div>
+                <?php } else { ?>
+                    <div class="msg-pop-box">
+                        <div id="jqueryContent">
+                            <div class="msg-pop-box-body">
+                                <div class="msg-pop-txt maxWidth700"><img src="/public/images/pop/error.png"
+                                                                          align="absmiddle" class="mb10">
+                                    <b style="font-size: 20px">&nbsp;&nbsp;提取失败</b>
+                                </div>
+                                <div class="colorboxClose" style="width:114px;height:28px;background-color: #27B8FF;color: white;margin: 0 auto;text-align: center;line-height: 28px;border-radius: 3px;margin-top: 60px;cursor:pointer;">关闭</div>
+                            </div>
+                        </div>
+                    </div>
+                <?php } ?>
+
+            </div>
+            <div id="cboxLoadingOverlay" style="float: left; display: none;"></div>
+            <div id="cboxLoadingGraphic" style="float: left; display: none;"></div>
+            <div id="cboxTitle" style="float: left; display: block;"></div>
+            <div id="cboxCurrent" style="float: left; display: none;"></div>
+            <div id="cboxNext" style="float: left; display: none;"></div>
+            <div id="cboxPrevious" style="float: left; display: none;"></div>
+            <div id="cboxSlideshow" style="float: left; display: none;"></div>
+            <div id="cboxClose" style="float: left;"></div>
+        </div>
+        <div id="cboxMiddleRight" style="float: left; height: 209px;"></div>
+    </div>
+    <div style="clear: left;">
+        <div id="cboxBottomLeft" style="float: left;"></div>
+        <div id="cboxBottomCenter" style="float: left; width: 400px;"></div>
+        <div id="cboxBottomRight" style="float: left;"></div>
+    </div>
+</div>
+<script>
+    $(window).ready(function(){
+        $(".colorboxClose").on("click",function(){/*关闭提取收益弹框*/
+            $("#cboxWrapper").remove();
+            $(".mask").hide();
+            $("#wait-yield").text("0.00");
+            $("#tiqubox").css("background-color","#BDBDBD");
+            $("#get-now").find("a").attr("data-mark","0");
+            window.location.reload();
+        })
+        $(".closelijbox").on("click",function(e){
+            e.stopPropagation();
+        });
+        $("body").on("click",function(){
+            $(".closelijbox").remove();
+            $(".mask").hide();
+            window.location.reload();
+        });
+    })
+
+</script>
+
+<!--<div class="loading">
+
+</div>-->

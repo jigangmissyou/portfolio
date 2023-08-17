@@ -1,0 +1,139 @@
+<style type="text/css">
+/* .investConfir_tab .zero2-tip{
+  color: #FB822B;
+  line-height: 50px;
+} */
+</style>
+<div class="investConfir invest_confirm">
+  <table class="investConfir_tab">
+    <thead>
+    <tr>
+      <th><h2>投资确认</h2></th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+      <td>
+        <div class="standardna_name">
+          <?php echo service('Financing/Prj')->getPrjTitleShow($info['id'], $info, $activity);?>
+                <span class="classIcons">
+                  {$info.icon}
+                </span>
+        </div>
+      </td>
+    </tr>
+    <tr class="dn">
+      <td class="td-line-pt">
+        <div class="clearfix">
+                  <span class="rate_content LeftC <?php if($activity && ($activity['reward_money_rate'] > 0)){  // 有活动奖励 ?> leftC-w-4 <?php } else { ?> leftC-w <?php } ?>">
+                    预期年化利率：<em class="org_6e">{$info.year_rate_show}</em>
+                    <?php if($activity && ($activity['reward_money_rate'] > 0)){  // 有活动奖励 ?>
+                 + <em class="prize-pro-icn"></em><em class="org_6e ml10">{$activity['reward_money_rate']}%</em>
+                    <?php } ?><span id="show_jiaxi" style="display:none;"> + 加息券<em id="jiaxi_rate" class="org_6e ml10"></em></span></span>
+                   <span class="LeftC leftC-w">期限：
+                     {$info['time_limit_extend_unit']}
+                   </span>
+          <span class="LeftC leftC-w">还款方式：<em class="grey_66">{$info.repay_way_name}</em></span>
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td class="td-line-pt">
+        <div class="greybgc">
+               <span id="tzje" class="LeftC leftC-w-new">
+                   投资金额：<em class="orange_dark" data-flag="confirmMoneyTotal"></em>元
+               </span>
+          <br />
+          <?php if(!$activity['reward_money_rate']){  // 有活动奖励 ?>
+                 <span class="LeftC leftC-w">使用<if condition="$info['act_prj_ext']['is_deposit'] eq 1">存管<else/>普通</if>账户余额：<em class="green" data-flag="confirmMoneyPay"><?php if($remain_money){echo $remain_money;}else { echo 0;} ?></em>元
+                 </span>
+          <?php } ?>
+        </div>
+      </td>
+    </tr>
+    <!-- 有红包活动奖励 -->
+    <?php if($activity && ($activity['reward_money_rate'] > 0)){  // 有活动奖励 ?>
+    <tr>
+      <td><div class="greybgc">
+               <span class="LeftC leftC-w">使用<if condition="$info['act_prj_ext']['is_deposit'] eq 1">存管<else/>普通</if>账户余额：<em class="green" data-flag="confirmMoneyPay">0</em>元
+               <!--<i class="font12">=(利息收益<em class="green" data-flag="benjinGain">0</em>元+奖励收益<em class="green" data-flag="hongbaoGain">0</em>元)</i>-->
+               </span>
+                 </div>
+      </td>
+    </tr>
+    <?php } ?>
+    <?php if($activity && ($activity['reward_money_rate'] > 0)){  // 有活动奖励 ?>
+    <tr class="dn">
+      <td class="td-line-pt">
+        <span class="LeftC">额外奖励：<i class="icon_OrangeAward"></i><em class="orange_6e">奖年化利率 {$reward_money_rate}%</em><i class="icon_greyMark" hovercard="div@popAwardMoney"></i></span>
+        <div class="dn" hovercard-id="popAwardMoney">
+          <p class="hoverPinfo">
+            <?php if($activity['is_invest_icon'] == 1){ ?>
+            {$activity['tips_show']}
+            <?php } else { ?>
+            奖励年化利率{$reward_money_rate}%：本金*{$reward_money_rate}%/年*投资期限（按项目持有期限进行计算，<br/>奖励年化利率不可转让），投资到期后，奖励金额于一个工作日内打入用户账户内
+            <?php } ?>
+          </p>
+        </div>
+      </td>
+    </tr>
+    <?php } ?>
+    <tr>
+      <td class="expect">
+        <div class="value">
+          预期年化收益率：<i>{$info.rateShow}</i>
+          投资期限：
+          <span class="details">
+            <em class="gred_num">{$info.time_limit}</em>
+            <?php if($info['time_limit_unit'] == 'month'){echo "个".$info["time_limit_unit_name"];}else{
+                if($info['prj_type'] != 'H'){echo $info["time_limit_unit_name"];}
+            } ?>
+            <?php if(!empty($info['time_show'][2]['time_limit_extend'])){echo '（可能存在展期）';}?>
+          </span>
+        </div>
+      </td>
+    </tr>
+    <!-- <tr>
+      <td class="zero2-tip">0元购网站端暂不支持使用奖励，如您有可用奖励，请登录APP端购买该商品。</td>
+    </tr> -->
+    <tr>
+      <td class="moment dn" style="font-size:30px;color:#dadada;padding-top:35px;">
+        暂无可使用奖励
+      </td>
+      <td id="tickets-container">
+        <div class="more" style="display: none;" event-click="showJiaxiList"><a href="javascript:;">查看更多</a></div>
+        <div class="less" style="display: none;" event-click="hideJiaxiList"><a href="javascript:;">收起</a></div>
+        <div class="dn" id="choose-none" style="color:red;margin-top: 10px;">您未选中奖励</div>
+        <ul id="recommend-ticket">
+          <!-- <li class="packet"><i>￥</i><em>10</em><span>红包</span><br />可抵投资额度的 1%<u class="recommend-tips"></u></li> -->
+        </ul>
+        <ul class="stamps " id="jiaxi-list" style="display: none;">
+          <!-- <li class="packet"><i>￥</i><em>10</em><span>红包</span><br /><span>可抵投资额度的 1% </span><br /><b class="use-time">2016-2-5过期</b></li>
+          <li class="rate-coupon"><i>0.8</i><em>%</em><span>加息券</span><br />加息0.8% <br /><b class="use-time">2016-2-5过期</b></li>
+          <li class="packet"><i>￥</i><em>10</em><span>红包</span><br />可抵投资额度的 1% <br /><b class="use-time">2016-2-5过期</b></li>
+          <li class="rate-coupon"><i>0.8</i><em>%</em><span>加息券</span><br /><span>加息0.8% </span><br /><b class="use-time">2016-2-5过期</b></li>
+          <li class="packet"><i>￥</i><em>10</em><span>红包</span><br />可抵投资额度的 1% <br /><b class="use-time">2016-2-5过期</b></li>
+          <li class="rate-coupon"><i>0.8</i><em>%</em><span>加息券</span><br />加息0.8% <br /><b class="use-time">2016-2-5过期</b></li>
+          <li class="packet"><i>￥</i><em>10</em><span>红包</span><br />可抵投资额度的 1% <br /><b class="use-time">2016-2-5过期</b></li>
+          <li class="rate-coupon"><i>0.8</i><em>%</em><span>加息券</span><br />加息0.8% <br /><b class="use-time">2016-2-5过期</b></li> -->
+        </ul>
+      </td>
+    </tr>
+    <tr class="dn">
+      <td class="td-line-pt">
+        <p class="friendshippro">
+          <i class="icon_OrangeSigh"></i>
+          <?php if($info['act_prj_ext']['is_extend'] || $info['act_prj_ext']['early_repay_days']){ ?>
+          友情提示：当前预估收益为项目正常还款时的项目利息收益，本项目存在提前还款或展期还款的可能性。<br/>
+          请确认您在点击“确认支付”前已全面了解投资相关信息，谨慎决策，并自行承担投资风险。
+          <?php } else { ?>
+          友情提示：请确认您在点击“确认支付”前已全面了解投资相关信息，谨慎决策，并自行承担投资风险。
+          <?php } ?>
+        </p>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+  <div class="writetriangle">
+  </div>
+</div>

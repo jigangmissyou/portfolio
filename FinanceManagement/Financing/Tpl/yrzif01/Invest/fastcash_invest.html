@@ -1,0 +1,25 @@
+<div class="standardMs fixed standardMs-zj">
+  <form method="POST" id="formId_Financing_Invest_buy">
+    <input type="hidden" value="{$id}" id="bidId"/>
+    <input type="hidden" value="{$hashId}" id="bidHashId"/>
+    <input type="hidden" name="prjid" id="prjid" value="{$info.id}" >
+    <input type="hidden" name="step" value="<?php echo $info['step_bid_amount']/100; ?>">
+    <input type="hidden" name="minVal" value="<?php echo $info['min_bid_amount']/100; ?>">
+    <input type="hidden" name="maxVal" value="<?php echo $info['max_bid_amount']/100; ?>">
+    <input type="hidden" name="reward_type" value="<?php echo $reward_info['selected']['rewardType']; ?>">
+    <input type="hidden" name="reward_id" value="<?php echo $reward_info['selected']['id']; ?>">
+    <input type="hidden" name="reward_amount" value="0">
+    <input type="hidden" name="reward_rate" value="0">
+    <input type="hidden" value="{$xprjIdAccess}" name="xprjIdAccess"/>
+
+    <include file="_normalInvest"/>
+
+    <!-- 投资确认明细 开始 -->
+    <include file="_investConfirm"/>
+    <!-- 投资确认明细 结束 -->
+
+    <!-- 预约投资金额确认 开始 -->
+    <include file="_investConfirmPre"/>
+    <!-- 预约投资金额确认 结束 -->
+  </form>
+</div>

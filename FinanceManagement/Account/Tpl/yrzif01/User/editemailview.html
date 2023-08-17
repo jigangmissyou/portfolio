@@ -1,0 +1,57 @@
+<extend name="./app/Tpl/Public/base_user.html"/>
+<block name="title">重新认证邮箱</block>
+<block name="keywords"></block>
+<block name="description"></block>
+
+<block name="style">
+<link href="/public/css/banklogo.css" rel="stylesheet" />
+</block>
+<block name="body">
+<div class="container-inner mt20">
+  <include file="./app/Tpl/Account/userMyBonusSider.html" />
+  <div class="main_area body-frame">
+  <div class="p20">
+  <h2 class="h2tit">重新认证邮箱</h2>
+  <!-- <div class="remind">
+    <h3><strong class="user">{$uname}</strong>你好！</h3>
+    <ol>
+      <li>1、此操作将解除旧邮箱的绑定状态。解除后，旧邮箱不能再用来登录鑫合汇；</li>
+    </ol>
+  </div> -->
+  <div class="account-edit-mobile">
+    <ul>
+      <li class="li-first current">1 安全验证<span class="edit-jiao"></span></li>
+      <li class="li-other">2 重新绑定<span class="edit-jiao"></span></li>
+    </ul>
+  </div>
+  <form method='post'  action="{:U('Account/User/editEmailView2')}">
+  <ul class="formList account-edit-form">
+    <li>
+      <label class="li-label-name">当前邮箱：</label><span class="li-span-con">
+        <input type="text" class="inputCommon"  valid="required,email" name="oldemail" value="" autocomplete="off">
+      </span>
+    </li>
+    <li>
+      <label class="li-label-name">手机动态码：</label><span class="li-span-con">
+        <input type="text"   valid="required" class="inputCommon"  name="code"  value="" autocomplete="off">
+        <span class="email-btn_sblue button-small-info" id="editEmailSms"><a href="javascript:void(0);" style="line-height:30px;height:30px;background-color:#34B9FF;" class="btns">免费获取</a></span>
+        <span class="email-btn_sgray button-small-info" id="sms_cutdown_time" style="display:none"><a class="btns" style="line-height:30px;height:30px;background-color:#BDBDBD;" href="javascript:void(0)">120</a></span>
+      </span>
+    </li>
+    <li class="lastBtns">
+      <label for="" class="li-label-name">&nbsp;</label>
+      <span class="li-span-con">
+        <span class="button-common-blue button-blue-w120">
+          <input type="submit" name="" value="下一步" class="btns">
+        </span>
+        <span class="button-common-gray button-gray-w120 ml20">
+          <input type="reset" name="" value="取 消" class="btns">
+        </span>
+      </span>
+    </li>
+  </ul>
+   </form>
+</div>
+</div>
+</div>
+</block>

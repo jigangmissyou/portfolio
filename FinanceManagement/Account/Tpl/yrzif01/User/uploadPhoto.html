@@ -1,0 +1,50 @@
+<div id="titlebar" class="titlebar">上传头像</div>
+<div id="jqueryContent" style="width:600px">
+  <input type="hidden" id="uploadPhotoImg" name="uploadPhotoImg" />
+  <input type="hidden" id="avatarX" name="avatarX" />
+  <input type="hidden" id="avatarY" name="avatarY" />
+  <input type="hidden" id="avatarW" name="avatarW" />
+  <input type="hidden" id="avatarH" name="avatarH" />
+  <div class="">
+    <a class="btn_upload_blue" id="uploadPhotoBtn" href="javascript:void(0);"> <i class="icon_local"></i>
+      本地上传
+    </a>
+    <span style="position: absolute;top: 80px;">（温馨提示：您可以上传JPG、GIF或PNG文件，图片最大4M）</span>
+    <!-- <a class="btn_upload_gray" id="webCamBtn" href="javascript:void(0)"> <i class="icon_camera"></i>
+      拍照上传
+    </a> -->
+  </div>
+  <div class="photo_upload_area">
+    <div class="photo_show">
+      <div class="photo_upload_first" id="localUpload">
+        <div id="defaultBg">
+          <h3 class="tac">选择你要上传头像的方式</h3>
+          <p><a href="javascript:;">本地照片</a>选着一张本地图片编辑后上传为头像<!-- <br/>拍照上传：通过摄像头拍照后上传为头像 --></p>
+        </div>
+      </div>
+      <!--无摄像头-->
+      <div class="camera_no" id="camUpload" style="display:none">
+        <h3><i class="icon_warn"></i>没有检测到摄像头</h3>
+        <p>1.检查电脑是否连接到摄像头；<br/>2.检查摄像头是否被其他程序占用了；<br/>3.检查是否拒绝了FlashPlayer的访问：鼠标<br/>右键->设置->允许；<br/>4.如果不是以上原因，<a href="">单击此处</a>刷新页面。</p>
+      </div>
+      <div class="row imgchoose" id="imgchoose" style="display:none;">
+        <img src="" id="targetPhotoImg"/>
+      </div>
+      <div id="camContainer" style="display:none;"></div>
+    </div>
+    <!-- <div class="line_v"></div> -->
+    <div class="photo_preview" style="width:115px;height:115px; overflow:hidden;"><span>没有预览可用</span><img id="preview" src="/public/image/default_01.jpg" /></div>
+  </div>
+  <div style="text-align: center;">
+    <a class="button-small-save btn-submit" href="javascript:void(0);" style="display: block;">
+      <span class="btns upload-save" id="jcorpBtn" style="">提交</span>
+    </a>
+    <a class="button-small-save btn-process" href="javascript:void(0);" style="display: none;background-color: #ddd;">
+      <span class="btns upload-save" style="background-color: #ddd;">提交中...</span>
+    </a>
+    <a class="button-small-save btn-success" href="javascript:void(0);" style="display: none;background-color: #34B9FF;">
+      <span class="btns upload-save" style="background-color: #34B9FF;">设置成功</span>
+    </a>
+  </div>
+  <!-- <a class="button-small-info" href="#"><span class="btns" id="btnShoot">拍照</span></a> -->
+</div>

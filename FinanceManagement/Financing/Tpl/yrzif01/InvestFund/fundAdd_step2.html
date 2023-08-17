@@ -1,0 +1,67 @@
+<form action="{:U('Financing/InvestFund/addInvestFundFiling')}" method="post" id="ajaxForm_addInvestFundFiling" ajax="1" ajax-after="ajaxAfter_fundAdd_step2">
+  <div class="step step2">
+    <ul class="formList">
+    <input type="hidden" name="prj_id" value="{$prj_id}"/>
+    <li>
+      <label class="li-label-name">基金成立日期：</label>
+      <span class="li-span-con">
+      <input datepicker='1' type="text" name="fund_establish_time" class="inputCommon" value="<if condition="$fund_filing_data['fund_establish_time']">{$fund_filing_data._fund_establish_time}</if>" style="width: 100px;" valid-msg-options='{"offset":30}'><i class="icon_time"></i>      </span>
+    </li>
+    <li>
+      <label class="li-label-name"><em class="red">*</em>基金投资者人数：</label>
+      <span class="li-span-con">
+      <input type="text" name="fund_invest_num" class="inputCommon" valid="required,number" value="{$fund_filing_data.fund_invest_num}">
+     </span>
+    </li>
+    <li>
+      <label class="li-label-name"><em class="red">*</em>基金备案登记号：</label>
+      <span class="li-span-con">
+      <input type="text" name="fund_filing_no" class="inputCommon" valid="required" value="{$fund_filing_data.fund_filing_no}">
+     </span>
+    </li>
+    </ul
+    <div class="info_area" style="padding:0 20px">
+      <div class="info_tit show">
+        <h3>材料上传</h3>
+      </div>
+      <div class="content">
+        <div style="padding: 0 55px; color: red"><strong>注意：请上传jpg, jpeg, png, gif格式的图片文件</strong></div>
+        <!--上传材料开始-->
+        <div class="project_materials pro_item_list bor_t" style="padding-right: 50px">
+          <?php if($is_edit){ //修改?>
+          <?php foreach ($fund_filing_material as $vo) { ?>
+          <div class="content" data-imgType="{$vo.id}">
+            <div class="info mainWrapBox" style="width: auto">
+              <input type="text" class="file_ipt" style="background:none; width: 280px" value="{$vo.code_name}" oldval="{$vo.name}" readonly>
+              <?php foreach ($vo['child'] as $imgs) { ?>
+              <div event-click="viewThumbImg" class="thumbnail thumbnailWrap" style="cursor: pointer;" url="{$imgs.thumbs.big}"><img width="50" height="50" src="{$imgs.thumbs.tiny}"><i event-click="delThumbImg" mid="{$imgs.id}" class="close delMateriaBtn" title="删除材料">×</i></div>
+              <?php } ?>
+            </div>
+            <div class="tool">
+              <a href="javascript:void(0)" id="uploadEvidence_{$vo.code_no}" class="uploadEvidence">上传</a>
+            </div>
+            <div class="uploading"><span>资料上传中...</span></div>
+          </div>
+          <?php } ?>
+          <?php }else{ //新增?>
+          <?php foreach ($upload_items as $vo) { ?>
+          <div class="content" data-imgType="{$vo.id}">
+            <div class="info mainWrapBox" style="width: auto">
+              <input type="text" class="file_ipt" style="background:none;  width: 280px" value="{$vo.code_name}" oldval="{$vo.name}" readonly>
+            </div>
+            <div class="tool">
+              <a href="javascript:void(0)" id="uploadEvidence_{$vo.code_no}" class="uploadEvidence">上传</a>
+            </div>
+            <div class="uploading"><span>资料上传中...</span></div>
+          </div>
+          <?php } ?>
+          <?php } ?>
+        </div>
+        <!--上传材料结束-->
+      </div>
+    </div>
+  </div>
+   <ul class="formList mb20">
+     <li class="lastBtns"><label for="" class="li-label-name">&nbsp;</label><span class="li-span-con"><span class="button-common-blue button-blue-w200"><input type="button" class="btns w250 step_next" value="提交" event-click="step2.submitForm"></span></span></li>
+   </ul>
+</form>

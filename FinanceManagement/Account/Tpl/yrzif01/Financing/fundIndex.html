@@ -1,0 +1,45 @@
+<extend name="./app/Tpl/Public/base_hfhg.html"/>
+<block name="title">理财记录</block>
+<block name="body">
+<include file="./app/Tpl/Account/nav.html" />
+<div class="main_area">
+<form ajax="1" ajax-before="ajaxBefore_Account_Financing_index" ajax-after="ajaxAfter_Account_Financing_index" method="post" id="formId_Account_Financing_index" ajax-datatype="html">
+  <input type="hidden" name="status" value="1">
+  <div class="class_box">
+    <div class="category">
+      <a href="{:U('Account/Financing/index')}">我的投资</a>
+      <a class="cur" href="javascript:;">我的理财</a>
+      <a href="{:U('Account/Fastcash/listIndex')}">投资变现</a>
+      <a href="{:U('Account/Financing/preInvest')}">预售投资</a>
+    </div>
+    <div class="statusMenus" id="product_type">
+    <a class="cur" href="javascript:;" url="{:U('Account/Financing/fundList',array('pclass' => 2, 'ptype'=>0))}" type="4">所有系列</a>   
+    <a href="javascript:;" url="{:U('Account/Financing/fundList',array('pclass' => 2, 'ptype'=>4))}" type="1">鑫湖一号</a>
+    </div>
+    <div class="statusMenusLast" id="product_status">
+    <a class="cur" href="javascript:;"  status='0'>全部(<span id="totalAll">0</span>)</a>
+    <a href="javascript:;"  status='1'>投标中(<span id="totalBiding">0</span>)</a>
+    <a  href="javascript:;" status='4'>待赎回(<span id="totalRepaying">0</span>)</a>
+    <a href="javascript:;"  status='5'>已赎回(<span id="totalRepaySuccess">0</span>)</a>
+    </div>
+    <div class="simple_search" id="search">
+    关键字：<input type="text" name="prjname" class="ipt_search" style="width:140px;"  ghosttext="项目名称" value="">
+    <select name="timeType"  multipleOne="1" multiselect-options='{"minWidth": "120"}'>
+          <option value="1">成交日期</option>
+          <option value="2">还款日期</option>
+    </select>
+    <span class="date_pannel ml10">
+    <input type="text" name="startDate" id="startDate" class="ipt_search" style="width:110px;"  datepicker='{"endId": "endDate"}'>
+    <i class="icon_time"></i>
+    </span>
+    <span class="mr10">—</span><span class="date_pannel">
+    <input type="text" name="endDate" id="endDate" class="ipt_search" style="width:110px;"  datepicker='{"startId": "startDate"}'>
+    <i class="icon_time"></i>
+    </span>
+    <label for="" class="button-small-orange finRecsou_but"><input type="submit" name="submit" class="btns noOutline" value="搜索"></label>
+    </div>
+  </div>
+  <div class="verify_bd" id="ajaxContent_Account_Financing_index"></div>
+</form>
+</div>
+</block>

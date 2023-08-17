@@ -1,0 +1,35 @@
+<table class="ui-record-table" width="100%">
+  <thead>
+  <tr>
+    <th width="20%" class="tac">上传日期</th>
+    <th width="50%">标题</th>
+    <th width="10%" class="tac">状态</th>
+    <th width="20%" class="tac">操作</th>
+  </tr>
+  <tr class="line"><th colspan="100%"></th></tr>
+  </thead>
+  <tbody>
+  <if condition="$list">
+    <foreach name="list" item="item">
+      <tr>
+        <td class="tac">{$item.ctime}</td>
+        <td><a href="{:U('Financing/InvestFund/viewEvent', array('prj_id' => $item['prj_id'], 'id' => $item['id']))}" colorbox="1">{$item.title}</a></td>
+        <td class="tac" data-status>
+          <?php echo $item['status'] == 1 ? '未提交' : '已提交'; ?>
+        </td>
+        <td class="tac">
+          <a class="blue"  href="javascript:" event-click="toggleStatus" data-args="toggleFundEventStatus,{$item.id},{$item.status}">
+            <?php echo $item['status'] == 1 ? '提交' : '删除'; ?>
+          </a>
+        </td>
+      </tr>
+    </foreach>
+  <else />
+    <tr>
+      <td colspan='100%'>没有数据</td>
+    </tr>
+  </if>
+  </tbody>
+</table>
+<?php $pageNavCallback = "ajaxAfter_fundEventList"; ?>
+<include file="./app/Tpl/Public/pageAjax.html" />

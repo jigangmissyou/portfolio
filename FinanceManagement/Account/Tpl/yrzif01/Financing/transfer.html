@@ -1,0 +1,40 @@
+<div id="titlebar">转让</div>
+<div id="jqueryContent" style="width:400px">
+  <if condition="$detail">
+  <form action="{:U('Financing/Product/do_transfer')}" method="POST" enctype="multipart/form-data" id="ajaxForm" initForm="1" autocomplete="off">
+  <input type="hidden" name="ord_id" value="{$detail.id}" />
+  <input type="hidden" name="transfer_no" value="{$detail.transfer_no}" />
+
+  <div class="list_item">
+    <label class="li-label-name">转让价格：</label>
+    {$moneyView}
+  </div>
+
+  <div class="list_item">
+    <label class="li-label-name">手机动态码：</label>
+ <input type="text" name="code" class="inputCommon" style="width:90px" valid="ajax@{:U('Financing/Product/check_mcode_transfer')}" valid-msg-options='{"offset":80}'>
+    <a href="javascript:void(0)" class="button-code-no ml10" id="freeToGetCode">免费获取</a>
+    <a style="display:none;" href="javascript:void(0)" class="button-code-on ml10" id="reGetCode"><span id="miaoCountDown"></span>秒后失效</a>
+  </div>
+
+  <div class="list_item">
+    <label class="li-label-name">有效期至：</label>{$viewexpireTime}
+  </div>
+
+  <div class="list_item">
+    <label class="li-label-name">&nbsp;</label>
+    <input type="checkbox" checked="checked" name="agree" value="1" valid="ajax@{:U('Financing/Product/ajax_check_transfer')}"  valid-msg-options='{"offset":220}' />
+    <label for="agree">同意《<a href="{:U('Index/Protocol/view',array('id'=>10))}"  class="blue view_protocol">鑫合汇债权再转让协议</a>》</label>
+  </div>
+
+  <div class="list_item">
+    <label class="li-label-name">&nbsp;</label>
+    <span class="btn_bor_blue"><input type="submit" id="do_transfer" class="btns" value="发布" /></span>
+  </div>
+
+  </form>
+  <else/>
+ <div class="list_item"> 未找到可转让产品。</div>
+  </if>
+</div>
+

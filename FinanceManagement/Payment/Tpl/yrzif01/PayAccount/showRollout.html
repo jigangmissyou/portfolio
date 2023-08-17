@@ -1,0 +1,26 @@
+<extend name="./app/Tpl/Public/base2.html"/>
+<block name="title">我的账户-账户概况-转出还款支付余额-到可用余额</block>
+<block name="keywords">转出还款支付余额-到可用余额</block>
+<block name="description">转出还款支付余额-到可用余额</block>
+
+<block name="style">
+</block>
+
+<block name="body">
+<include file="nav" />
+<div class="main_area">
+  <h2 class="h2tit">转出还款支付余额到可用余额</h2>
+  <div class="rollout_form">
+  <form method="POST" id="rollout_form" ajax="1" ajax-after="ajaxAfter_Payment_PayAccount_submit" action="{:U('Payment/PayAccount/rollout')}">
+  	<div class="list_item">
+      <label class="li-label-name">还款支付余额：</label><span class="fill_text"><strong>{$repay_freeze_view}</strong></span>
+    </div>
+    <div class="list_item">
+      <label class="li-label-name"><em class="red">*</em>转出金额：</label>
+      <input type="text" class="inputCommon" name="money" value="{$money}" valid="number,required"><span class="fill_explain">元<span class="grayB5 pl10" id="upperDigit"></span></span>
+    </div>
+  	<div class="list_item"><div class="button-common-orange button-orange-w200 mt10"><input type="button" id="brollout" name="brollout" value="提&nbsp;&nbsp;交" class="btns"></div></div>
+  </form>
+  </div>
+</div>
+</block>

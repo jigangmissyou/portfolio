@@ -1,0 +1,90 @@
+<div class="simple_search" style="padding:0;">
+  <input type="hidden" id="exportRlistByUidUrl" data="{$parameter.startTime}" value="{:U('Payment/PayAccount/exportRecordListByUid', array('startTime' => $parameter['startTime'], 'endTime' => $parameter['endTime'], 'uid' => $parameter['uid']))}">
+  <a class="btn_fixed_org fr ml20" href="{:U('Payment/PayAccount/toGetUserAccountList')}">返回</a>
+  <a style="margin-top:0" href="javascript:" class="btn_nobg fr" hidefocus="hidefocus" event-click="exportExcel" data-args="2">导出</a>
+  提现时间：
+      <span class="date_pannel">
+        <input type="text" readonly="" value="{$startTime}" id="start_time" class="ipt_search" datepicker="1" hidefocus="hidefocus" style="cursor: pointer;"> <i class="icon_time"></i>
+      </span>
+  <span class="mr10">&mdash;</span>
+      <span class="date_pannel">
+        <input type="text" readonly="" value="{$endTime}" id="end_time" class="ipt_search" datepicker="1" hidefocus="hidefocus" style="cursor: pointer;"> <i class="icon_time"></i>
+      </span>
+  <input type="submit" class="btn_search_blue" value="搜索" hidefocus="hidefocus" event-click="view" data-args="{$uid}">
+  <div style="text-align:right;font-size:14px;margin-top:10px;">
+	<span>存入：<em class="orange">{$statisticsData.inamount|sprintf='%0.2f',###}元</em></span>
+	&nbsp;&nbsp;&nbsp;&nbsp;<span>支出：<em class="green">{$statisticsData.outamount|sprintf='%0.2f',###}元</em></span>
+  </div>
+</div>
+<!-- 资金记录-查看收支记录 -->
+    <table class="ui-record-table">
+        <thead>
+        <tr>
+            <th width="10%" class="tac">资金流水号</th>
+            <th width="10%" class="tac">项目类别</th>
+            <th>项目名称/编号</th>
+            <th width="10%">类型</th>
+            <th width="9%" class="tar">冻结</th>
+            <th width="10%" class="tar">存入</th>
+            <th width="10%" class="tar">支出</th>
+            <th width="12%" class="tar">可用余额</th>
+            <th width="10%"><span class="ml10">时间</span></th>
+        </tr>
+        <tr class="line"><th colspan="100%"></th></tr>
+        </thead>
+        <tbody>
+        <?php if(!empty($list['data'])){ ?>
+        <foreach name="list.data" item="item">
+        <tr>
+            <td>{$item.record_no}</td>
+            <td class="tac">
+<?php if(!empty($item['prj_name'])){ 
+		if($item['prj_type'] == 'A')	echo "日益升";	
+		else if($item['prj_type'] == 'B')	echo "年益升";
+		else if($item['prj_type'] == 'F')	echo "月益升";
+
+		if($item['is_transfer'] == 1) echo "-投资转让";	
+ } ?>
+			</td>
+<td>
+<p>
+          <?php if(!empty($item['prj_name'])){ ?>
+            {$item.prj_name}
+		<if condition="$item['safeguards'] eq '1'">
+        <a class="i_vouch" href="{:U('Help/Help/viewHelpIndex',array('tpl'=>'AboutUs-partners'))}" title="100%担保本金和利息">保</a>
+        <else />
+        <a class="i_vouch" href="{:U('Help/Help/viewHelpIndex',array('tpl'=>'AboutUs-partners'))}" title="100%担保本金">本</a>
+        </if>
+          </p>
+          <p class="blue">{$item.prj_no}</p>
+          <?php } ?>
+</td>
+            <td>{$item.type}</td>
+            <td class="tar"><span class="orange"><?php if($item['freeze_money']){ if($item['in_or_out'] == 1) echo "+"; else echo "-";} ?><?php echo number_format($item['freeze_money']/100, 2)."元";?></span></td>
+            <td class="tar"><span class="green"><?php if($item['mod_money'] && $item['in_or_out'] == 1){ echo "+".number_format($item['mod_money']/100, 2)."元";} ?></span></td>
+            <td class="tar"><?php if($item['mod_money'] && $item['in_or_out'] == 2){ echo "-".number_format($item['mod_money']/100, 2)."元";} ?>
+            <?php if( ($item['reward_money'] > 0 || $item['invest_reward_money'] > 0)&& $item['in_or_out'] == 2){ 
+					echo "<div class='green'>(含活动奖励： ";
+					$flag = 0;
+					if($item['reward_money'] > 0){
+						echo "可提现奖励".number_format($item['reward_money']/100, 2)."元";
+						$flag = 1;
+					}
+					if($flag == 1) echo "<br>";
+					if($item['invest_reward_money'] > 0) echo "投资后可提现奖励".number_format($item['invest_reward_money']/100, 2)."元";
+					echo ")<div>";
+			} ?>
+            </td>
+            <td class="tar"><?php echo number_format(($item['amount'] + $item['reward_money'] + $item['invest_reward_money'])/100, 2)."元";?></td>
+            <td><span class="time ml10">{$item.ctime|date='Y-m-d H:i',###}</span></td>
+        </tr>
+        </foreach>
+        <?php }else{ ?>
+        <tr>
+            <td colspan="100%" class="tac">没有相关数据</td>
+        </tr>
+        <?php } ?>
+        </tbody>
+    </table>
+    <?php $pageNavCallback = "ajaxAfter_recordListPaging"; ?>
+    <include file="./app/Tpl/Public/pageAjax.html" />

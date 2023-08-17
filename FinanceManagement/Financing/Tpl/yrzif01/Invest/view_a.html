@@ -1,0 +1,472 @@
+<extend name="./app/Tpl/Public/base2.html"/>
+<block name="title">我要理财-项目详情</block>
+<block name="keywords">我要理财</block>
+<block name="description">我要理财</block>
+
+<block name="style">
+</block>
+
+<block name="body">
+<include file="nav" />
+<div id="maskLayer" class="mask mask_zs" style="display: none"></div>
+<div class="main_area">
+<input type="hidden" value="{$id}" id="bidId"/>
+<input type="hidden" value="{$hashId}" id="bidHashId"/>
+<div class="invest_area clearfix">
+  <!--标题部分-->
+  <div class="ui_tit">
+    <h2 id="prjName">
+      {$info['prj_type_name']}-<?php if($info['huodong']): ?><a href="{:U('Index/Act/billion')}" target="_blank" class="orange">{$info.prj_name}</a><?php else:?>
+      <?php if($activity): ?>
+      <a href="<?php echo $activity['url']?$activity['url']:'javascript:;';?>" target="_blank" class="orange">{$info.prj_name}</a>
+      <?php else:?>
+      {$info.prj_name}
+      <?php endif;?>
+      <?php endif;?>
+    </h2>
+    <span class="sub">项目编号：{$info.prj_no}</span>
+    <span id="iconInfo">
+      <?php echo service("Financing/Financing")->getIco($info); ?>
+    </span>
+    <?php $title = service("Financing/Financing")->getTitle($info); ?>
+  </div>
+  <!--//标题部分-->
+  <!--标的详情介绍-->
+  <div class="main">
+    <div class="acc_data clearfix">
+      <!--预期年化利率-->
+      <div class="item bd01">
+        <h4>预期年化利率</h4>
+        <?php if($info['huodong']==1): ?>
+          <div class="award org">奖红包<em class="f14">6%</em><a class="icon_unknown" hovercard="div@ct1" hovercard-options='{"direction":"down"}'></a></div>
+          <div class="dn" hovercard-id="ct1"><p class="hoverPinfo">年化红包2%： 本金*2%/年*投资期限，首次投资并按项<br/>目持有期限进行计算。投资到期后，红包于一个工作日内打入用户账户内</p></div>
+        <?php endif;?>
+        <?php if($activity && ($activity['reward_money_rate']>0)): ?>
+          <div class="award org">
+            奖红包<b class="f14">
+            <?php
+              $reward_money_rate = $activity['reward_money_rate'];
+              if($activity['reward_money_rate_type'] =='month'){
+                $reward_money_rate = $reward_money_rate*12;
+              }
+              if($activity['reward_money_rate_type'] =='day'){
+                $reward_money_rate = $reward_money_rate*365/10;
+              }
+              echo $reward_money_rate ;
+            ?></b>%
+            <a class="icon_unknown" hovercard="div@ct1" hovercard-options='{"direction":"down"}'></a>
+          </div>
+          <div class="dn" hovercard-id="ct1">
+            <p class="hoverPinfo">年化红包<?php echo $reward_money_rate ;?>%：本金*<?php echo $reward_money_rate ;?>%/年*投资期限（按项目持有期限进行计算，<br/>红包不可转让），投资到期后，红包于一个工作日内打入用户账户内</p>
+          </div>
+        <?php endif;?>
+        <strong class="red">
+          <a id="yearRate" href="javascript:;" <?php echo $title; ?> class="red">
+              <?php echo number_format($info['year_rate']/10,2); ?>%
+          </a>
+          <i class="f12 pl10 red">年</i>
+        </strong>
+        <i class="icon"></i>
+        <div class="ui_poptip_arrow"><em>◆</em><span>◆</span></div>
+      </div>
+      <!--//预期年化利率-->
+      <!--期限-->
+      <div class="item bd02">
+        <h4>期限</h4>
+        <strong class="blue"><i class="grayB5 ft24">{$info.time_limit}</i><i class="pl10"><?php if($info['time_limit_unit'] == 'month'): ?>个<?php endif; ?>{$info.time_limit_unit_name}</i></strong>
+        <i class="icon"></i>
+        <div class="ui_poptip_arrow"><em>◆</em><span>◆</span></div>
+      </div>
+      <!--//期限-->
+      <!--还款方式-->
+      <div class="item bd03">
+        <h4>还款方式</h4>
+        <strong class="green">{$info.repay_way_name}</strong>
+        <a class="icon_unknown" hovercard="div@ct0" hovercard-options='{"direction":"up"}'></a>
+        <div class="dn" hovercard-id="ct0">
+          <!-- 每月等额本息图标解释 -->
+          <?php if($info['repay_way'] == PrjModel::REPAY_WAY_PERMONTH){ ?>
+          <p class="hoverPinfo">将借款本金和利息总额之和等月拆分，借款人<br />每月偿还相同数额的本息部分（<a class="blue" href="
+          /Help/Help/viewHelpIndex?tpl=HelpCenter-helpQuestionList&data-type=4&qid=44">了解详情</a>）</p>
+          <!-- 按月付息，到期还本图标解释 -->
+          <?php } elseif($info['repay_way'] == PrjModel::REPAY_WAY_D){ ?>
+          <p class="hoverPinfo">借款人在贷款到期日一次性归还贷款本金，利息按<br />月归还（<a class="blue" href="
+          /Help/Help/viewHelpIndex?tpl=HelpCenter-helpQuestionList&data-type=4&qid=43">了解详情</a>）</p>
+          <!-- 到期还本付息 -->
+          <?php } else { ?>
+          <p class="hoverPinfo">借款人在贷款到期日一次性归还贷款本金及利息（<a class="blue" href="
+          /Help/Help/viewHelpIndex?tpl=HelpCenter-helpQuestionList&data-type=4&qid=42">了解详情</a>）</p>
+          <?php } ?>
+        </div>
+        <i class="icon"></i>
+        <div class="ui_poptip_arrow"><em>◆</em><span>◆</span></div>
+      </div>
+      <!--//还款方式-->
+    </div>
+    <!--具体信息-->
+    <div class="pro_item_list">
+      <ul class="ulInfoBox">
+        <li>保障措施：{$info.addcredit.way}
+            <?php if(!empty($danbaohan)){ ?>
+            &nbsp;&nbsp;<a  class="blue" data-imgUrl="<?php echo $danbaohan; ?>" href="javascript:">查看同意担保函</a>
+            <div id="danbaoImg" style="display:none;">
+              <?php foreach (explode(',', $danbaohan) as $key => $url) { ?>
+              <img src="{$url}" alt="担保函">
+              <?php } ?>
+            </div>
+            <?php } ?>
+        </li>
+        <?php // echo "<pre>"; print_r($info['guarantor']); ?>
+        <?php if($info['guarantor']['title']): ?>
+        <li>担保人：<?php if($info['guarantor']['desr_url']){?><a href="<?php echo $info['guarantor']['desr_url'];?>" class="blue"><?php echo $info['guarantor']['title'];?></a><?php }else{?> <span class="blue"><?php echo $info['guarantor']['title'];?></span><?php }?><?php echo $info['guarantor']['corp_type']? "<span class=\"red\">（".$info['guarantor']['corp_type']."）</span>":"" ?>
+        </li>
+        <?php endif; ?>
+        <li>保障性质：<if condition="$info['safeguards'] eq 1">
+              <a class="icon_vouch" href="{:U('Help/Help/viewHelpIndex',array('tpl'=>'AboutUs-partners'))}" title="100%担保本金和利息">保</a>
+              <else />
+              <a class="icon_vouch" href="{:U('Help/Help/viewHelpIndex',array('tpl'=>'AboutUs-partners'))}" title="100%担保本金">本</a>
+          </if><?php if($info['safeguards'] == 1): ?>100%本息保障<?php else: ?>保本<?php endif;?>
+        </li>
+        <li>起息日：T（成交日）+ <strong class="orange">{$info.value_date_shadow}</strong> 天
+              <?php if($info['value_date_shadow']==0):?>
+                   <a class="icon_unknown" hovercard-options='{"direction":"up"}' hovercard="div@ct6"></a>
+                   <div class="dn" hovercard-id="ct6"><p class="hoverPinfo">成交日当日计息，项目到期后次日13:00前回款</p></div>
+                <?php else:?>
+ <a class="icon_unknown" hovercard-options='{"direction":"up"}' hovercard="div@ct6"></a><div class="dn" hovercard-id="ct6"><p class="hoverPinfo">
+成交日后<?php echo PrjModel::addInterestDate($info['value_date_shadow']); ?>计息，项目到期后当日24:00前回款</p></div>
+              <?php endif;?>
+        </li>
+        <?php if($activity && $activity['jiangli']): ?>
+        <li>额外奖励：<i class="icon_prize">奖</i><?php echo $activity['jiangli'];?></li>
+        <?php endif;?>
+        <?php if($isEndate || (($info['repay_way'] == PrjModel::REPAY_WAY_E) && ($info['prj_type']!=PrjModel::PRJ_TYPE_B) && ($info['prj_type']!=PrjModel::PRJ_TYPE_F))): ?>
+        <li>还款日期：<span class="red">{$info.next_repay_date_view}
+              <?php if($info['value_date_shadow']==0):?>(预计13:00之前到账)<?php else:?>(预计16:00-24:00到账)<?php endif;?></span>
+        </li>
+        <?php endif;?>
+      </ul>
+      <ul class="ulInfoBox">
+        <li>融资规模：<strong class="orange">{$info.demand_amount_name}</strong></li>
+        <li>融资进度：<?php if($info['bid_status'] >= PrjModel::BSTATUS_FULL): ?><span class="red">--</span><?php else:?><span id="infoSchedule"><span class="loading-data-text">数据加载中...</span></span><?php endif;?></li>
+        <li>剩余可投资金额：<?php if($info['bid_status'] >= PrjModel::BSTATUS_FULL): ?><span class="red">--</span><?php else:?><strong id="remainAmout" class="fyahei f14"><span class="loading-data-text">数据加载中...</span></strong><?php endif;?></li>
+         <li id="bidTime"></li>
+      </ul>
+      <ul class="bor_t">
+        <?php if($info['is_can_transfer']):?>
+          <li class="fn">是否可以转让：是</li>
+        <?php endif;?>
+        <li class="fn">是否可以提前结束募集：<?php echo $info['act_prj_ext']['is_early_close']? "是":"否"; ?></li>
+        <li class="fn">是否可以提前还款：<?php echo $info['act_prj_ext']['is_early_repay']? "是":"否"; ?></li>
+        
+        <?php if(!$info['zhr_apply_id']):?>
+          <?php if($info['ext']['product']['title']): ?>
+          <li class="fn">适用产品：<span class="blue">{$info.ext.product.title}</span></li>
+          <?php endif;?>
+          <?php if(($info['prj_type'] == PrjModel::PRJ_TYPE_F) && $info['ext']['custodian_url']):?>
+          <li class="fn">托管机构：
+            <a href="<?php echo $info['ext']['custodian_url']; ?>" class="blue" target="_blank"><?php echo $info['ext']['custodian']; ?></a>
+          </li>
+          <?php endif;?>
+          <li class="fn">发布机构：<span>{$info['publish_inst']}</span></li>
+          <li class="fn">产品简介：<?php if($info['prj_type'] == PrjModel::PRJ_TYPE_F):?>聚优宝是一款基于私募债券受益权进行转让的标准化产品，企业私募债券经股权市场进行备案与挂牌销售，并由法定机构承销与发行。
+            <?php endif;?>
+            <?php if($info['prj_type'] == PrjModel::PRJ_TYPE_A):?>日益升是一款投资中小企业短期贷款的产品，通过第三方资产管理公司将持有企业的短期债权以债权转让的形式转给投资者，并由合作担保公司提供连带责任保证担保；或是借款企业通过平台发布借款需求，并由合作的担保公司提供连带责任保证担保。
+            <?php endif;?>
+            <?php if($info['prj_type'] == PrjModel::PRJ_TYPE_B):?>年益升是一款投资中小企业中长期借款的产品，通过第三方资产管理公司将持有企业的中长期债权以债权转让的形式转给投资者，并在债权到期后通过还款担保的方式保障投资者的权益。
+            <?php endif;?></li>
+        <?php else:?>
+          <li class="fn">
+          <?php 
+          	if($info['prj_type'] == PrjModel::PRJ_TYPE_A){
+				echo '日益升-直融产品介绍：<span>借款企业通过平台发布借款需求，并由合作的担保公司提供连带责任保证担保。</span>';
+			}elseif($info['prj_type'] == PrjModel::PRJ_TYPE_B){
+				echo '年益升-直融产品介绍：<span>是一款中小企业中长期借款的投资产品，借款企业通过平台发布借款需求，并由合作的担保公司提供连带责任保证担保。</span>';
+			}elseif($info['prj_type'] == PrjModel::PRJ_TYPE_F){
+				echo '聚优宝-直融产品介绍：<span>是一款基于私募债券受益权进行转让的标准化产品，企业私募债券经股权市场进行备案与挂牌销售，并由法定机构承销与发行。</span>';
+			}
+          ?>
+          </li>
+        <?php endif;?>
+      </ul>
+    </div>
+  </div>
+  <!--//标的介绍-->
+  <!--右边投标确认部分-->
+  <div class="aside">
+    <div class="content" style="position: relative; z-index: 30; background: #ffffff;">
+      <if condition="$info['bid_status'] eq 1">
+        <!-- 未登录 -->
+        <if condition='$islogin == 0'>
+          <div class="invest_amount">
+            <dl>
+              <dt>计划投资金额：</dt>
+              <dd class="list_item pr">
+                <input type="text" id="valiableMoney" name="" value="" class="inputCommon" style="width:90px">元
+                <cite class="invest_tips">温馨提示：计划投资金额目前仅作为项目统计之用，不代表投标成功呦~</cite>
+              </dd>
+            </dl>
+            <p class="visitor">
+              只有<a href="{:U('Account/User/register')}" class="blue">注册用户</a>才可以提交！<br/>
+              现在<a href="{:U('Account/User/login',array('url'=>$url))}" class="blue">登录</a>
+            </p>
+          </div>
+        <else />
+          <div class="invest_amount tc">
+            <?php if($hasIntention): ?>
+              <div class="button-common-gray button-gray-w200
+"><input type="button" id="" name="" value="已提交意向" class="btns"></div>
+            <?php else: ?>
+              <div class="list_item">投资起始金额：{$info.min_bid_amount_name}</div>
+              <div class="list_item">投资递增额度：{$info.step_bid_amount_name}</div>
+              <?php $startTime = $info['startTimeParam']; ?>
+              <div style="margin-left: -10px">将于<span class="rft">{$startTime['y']}</span>年<span class="rft">{$startTime['m']}</span>月<span class="rft">{$startTime['d']}</span>日<span class="rft">{$startTime['h']}:{$startTime['i']}</span>开标</div>
+              <?php if($info['max_bid_amount']): ?>
+                <div class="list_item">最高投资额度：{$info.max_bid_amount_name}</div>
+              <?php endif;?>
+            <?php endif;?>
+          </div>
+        </if>
+      <else />
+        <!-- 已开标 -->
+        <?php
+          import_app("Financing.Model.PrjModel");
+          if($info['status'] == PrjModel::STATUS_PASS):
+          if($info['bid_status'] >= PrjModel::BSTATUS_FULL):
+        ?>
+        <!-- 满标 -->
+        <div class="tc blank">
+          <div class="button-common-gray button-gray-w200
+">
+            <input type="button" id="" name="" value="{$info['bid_status_view']}" class="btns">
+          </div>
+          <p class="mt20">
+            <?php
+              if($info['bid_status'] == PrjModel::BSTATUS_REPAYING || $info['bid_status'] == PrjModel::BSTATUS_FULL
+                    || $info['bid_status'] == PrjModel::BSTATUS_END || $info['bid_status'] == PrjModel::BSTATUS_REPAY_IN):?>
+              <span class="red">预计<?php if(!$isEndate): ?>下次<?php endif; ?>还款日{$info.next_repay_date_view}</span>
+            <?php endif;?>
+            <?php if($info['bid_status'] == PrjModel::BSTATUS_REPAID): ?>
+              <span class="red">已于{$info.actual_repay_time_view}还款完成</span>
+            <?php endif;?>
+          </p>
+        </div>
+        <?php elseif($isEnd): ?>
+        <div class="tc blank">
+          <div class="button-common-gray button-gray-w200
+"><input type="button" id="" name="" value="截止投标" class="btns"></div>
+          <div>预计<?php if(!$isEndate): ?>下次<?php endif; ?>还款日:<span class="red"><?php echo $info['last_repay_date_view'] ?> </span></div>
+        </div>
+        <?php else: ?>
+          <!-- 未登录 -->
+          <php>if(!$islogin):</php>
+          <div class="surplus">
+            <dl>
+              <dt>剩余可投资额度：</dt>
+              <dd><strong>{$info.remaining_amount_view}</strong></dd>
+            </dl>
+            <p class="visitor">
+              只有<a href="{:U('Account/User/register')}" class="blue">注册用户</a>才可以提交！<br/>
+              现在<a href="{:U('Account/User/login',array('url'=>$url))}" class="blue">登录</a>
+            </p>
+            </div>
+         <php>elseif($info['mi_no'] != $user['mi_no']):</php>
+		        <div class="blank">
+		            <!-- <dl>
+                    <dt>剩余可投资额度：</dt>
+                    <dd><strong>{$info.remaining_amount_view}</strong></dd>
+                </dl> -->
+                <cite class="visitor">
+                  <p class="orange" style="margin-bottom:5px;"><em class="no_gan"  style="margin-left:0;"></em>温馨提示：</p>
+                  <p>亲爱的用户：该项目目前是用户专享投资项目，您暂时不可以投资哦 ~</p>
+                </cite>
+               <div class="tac"><label class="button-common-orange button-orange-w200" style="width:auto"><a href="{:U('Financing/Invest/plist')}" style="width:200px" class="btns">查看其它项目</a></label></div>
+		        </div>
+          <php>else:</php>
+          <!-- 投资 -->
+          <div class="form_container">
+            <form method="post" action="__URL__/buyCheck" id="formId_Financing_Invest_buy">
+            <?php if($isBidAmountChange){ ?>
+              <div class="list_item" style="margin-bottom: 0;">投资起始金额：<span style="text-decoration: line-through;">{$info.min_bid_amount_name}</span></div>
+              <div class="list_item" style="padding-left: 84px; margin-bottom: 0; font-weight: bold; color: #FF0000; font-size: 14px;">{$info.step_bid_amount_name}</div>
+            <?php }else{ ?>
+              <div class="list_item">投资起始金额：{$info.min_bid_amount_name}</div>
+            <?php } ?>
+            <div class="list_item">投资递增额度：{$info.step_bid_amount_name}</div>
+            <?php if($info['max_bid_amount_name']): ?>
+              <div class="list_item">最高投资金额：{$info.max_bid_amount_name}</div>
+            <?php endif;?>
+            <div class="list_item" style="position: relative">
+              当前账户余额：<span id="userAccountFund"><span class="loading-data-text">数据加载中...</span></span>
+            </div>
+            <?php if($money_notEnough){ ?>
+              <!--余额不足-->
+              <p class="visitor blank_no org"><i class="no_gan"></i>您当前账户可用余额不足</p>
+              <div class="tac">
+                <span class="button-common-orange button-orange-w200"><a href="{:U('Payment/PayAccount/rechargePage')}" class="btns" style="width:180px;">充值</a></span>
+              </div>
+              <?php }else if ($info['act_prj_ext'] && $info['act_prj_ext']['is_college'] && !$user_college_ext){ ?>
+              <p class="visitor blank_no org">您不是大学生，不能参加大学生专属项目</p>
+            <?php }else{ ?>
+              <div class="list_item">
+                投资金额：<input type="text" id="jdmoney" <?php if( $mustDisable or !$client_permission){echo "disabled='disabled'";} ?> autocomplete="off" name="money" value="<?php echo $max_invest_money; ?>" valid="required" class="inputCommon" style="width:110px; font-size: 18px; font-weight: bold; height: 22px;">元
+              </div>
+              <div class="list_item">
+                预估收益：
+                <?php if($isEndate || (!service("Financing/Invest")->isShowPlan($info['id']))): ?>
+                <span id="income">0.00元</span>
+                <?php else: ?>
+                <a class="blue" id="income" hovercard="ajax@{:U('Financing/Invest/ajaxShowRepay?id=')}{$info.id}&money=<?php echo $info['min_bid_amount']/100; ?>" hovercard-options='{"direction":"left","theme":"light", "ajaxCached":false}'>{$income}</a>
+                <?php endif; ?>
+                <?php if($activity){ ?>
+                <p class="grayB5">(不含红包收益)</p>
+                <?php } ?>
+              </div>
+              <div class="list_item">投资后账户余额：<span class="green" id="remaind">{$remaind}</span></div>
+              <div class="list_item pr">支付密码：
+                <input id="payPwdInput" type="password" ghosttext="请输入密码"
+                       valid-msg-options="{&quot;gravity&quot;:&quot;e&quot;,&quot;offset&quot;:-240}"
+                       valid="required" <?php if( $mustDisable or !$client_permission){echo "disabled='disabled'";} ?> name="authCode" style="width:146px;" class="inputCommon">
+                <!--投资确认弹出框-->
+                <div class="pwdProInfo" id="pwdProInfo" style="display: none">
+                  <div class="points_go"></div>
+                  <h4 class="topName blue">投资确认</h4>
+                  <div class="infosBox">
+                    <div class="proNames" id="pop_prjName_and_iconInfo"></div>
+                    <p class="textSy">
+                      <em class="grayB5">预期年化利率：</em><em class="red fwb ft14"><?php echo number_format($info['year_rate']/10,2); ?>% </em>
+                      <em class="grayB5 pl10">期限：</em><em>
+                      <strong>{$info.time_limit}<?php if($info['time_limit_unit'] == 'month'): ?>个<?php endif; ?>{$info.time_limit_unit_name}</strong>
+                    </em>
+                    </p>
+                    <p class="textSy"><em class="grayB5">还款方式：</em><em class="fwb">{$info.repay_way_name}</em></p>
+                    <p class="textSy ptop_20">
+                      <em class="grayB5">投资金额：</em><em class="blue_52 fwb" id="pop_bidMoney">0.00元</em>
+                      <em class="grayB5 pl10">预估收益：</em><em class="fwb" id="pop_income">0.00元</em>
+                    </p>
+                    <?php if($activity && ($activity['reward_money_rate']>0)): ?>
+                    <p class="textSy">
+                      <em class="grayB5">额外奖励：</em>
+                      <em class="orange">
+                        <img src="/public/image/jiang.png" class="alM" style="margin:0 5px 0;" alt="">
+                        奖红包<?php echo $reward_money_rate; ?>%
+                        <a class="icon_unknown" hovercard="div@pop_ct1" hovercard-options='{"direction":"down"}'></a>
+                      </em>
+                    </p>
+                    <div class="dn" hovercard-id="pop_ct1">
+                      <p class="hoverPinfo">年化红包<?php echo $reward_money_rate ;?>%：本金*<?php echo $reward_money_rate ;?>%/年*投资期限（按项目持有期限进行计算，<br/>红包不可转让），投资到期后，红包于一个工作日内打入用户账户内</p>
+                    </div>
+                    <?php endif;?>
+                  </div>
+                </div>
+                <!--//投资确认弹出框-->
+              </div>
+              <div class="list_item">
+                <input type="checkbox" id="agree" checked name="agree">
+                <label for="agree">我同意并接受<a colorbox="1" href="{:U('Index/Protocol/view',array('id'=>$protocolInfo['id'], 'prj_id'=>$prj_id))}" class="blue">《{$protocolInfo['name']}》</a></label>
+              </div>
+              <div class="list_item tc pr">
+                <?php if(!$mustDisable): ?>
+                <?php if($client_permission){?>
+                <div class="button-common-orange button-orange-w200"><input type="button" id="submit_Financing_Invest_buy" name="" value="投 资" class="btns"></div>
+                <?php }else{?><!--非专享客户端，按钮灰色，文字改变，不可点击、鼠标移上tips-->
+
+                <div class="btn_big_gray w128" id="zhuanXBtn">
+                  <input type="button"  value="<?php echo $client_type_config[$client_type];?>专享" class="btns">
+                </div>
+                <?php if($client_type==2) $client_type_config[2].='WAP' //一会微信 一会微信WAP?>
+                <cite class="only_sxb_cite" id="clientInvestTips" style="display:none;right:108px;"><i class="only_sxb_cite_Q"></i>仅针对使用<?php echo $client_type_config[$client_type];?>投资的用户哦~<i class="only_sxb_cite_H"><em></em></i></cite>
+                <?php }?>
+                <?php else: ?>
+                    <span class="btn_big_gray w128" id="firstInvestBtn">
+                             <input type="button"  value="<?php echo $client_type_config[$client_type];?>专享" class="btns">
+                            <!--<input type="button" name="" value="投 资" class="btns">-->
+                        </span>
+                      <div id="firstInvestTips" class="only_sxb_cite dn"><i class="only_sxb_cite_Q"></i>仅针对首次投资和在<?php echo $client_type_config[$client_type];?>投资的用户哦<i class="only_sxb_cite_H"><em></em></i>
+                      </div>
+                <?php endif;?>
+              </div>
+              <div class="list_item tc">
+                <?php if($info['huodong']==1):?>
+                <p class="text tl red shrink">投资到期，红包于1个工作日内打入用户账户</p>
+                <?php endif;?>
+                <?php if($activity &&( $activity['reward_money_rate'] || $activity['reward_money_value'])):?>
+                <p class="text tl red shrink">投资到期，红包于1个工作日内打入用户账户</p>
+                <?php endif;?>
+                <?php if($activity &&( $activity['reward_free_money_rate'] || $activity['reward_free_money'])):?>
+                <p class="text tl red shrink">项目待还款，免费提现额度于1个工作日内打入用户账户内</p>
+                <?php endif;?>
+                <?php if($activity && $activity['reward_cashout_times']):?>
+                <p class="text tl red shrink">项目待还款，提现次数于1个工作日内打入用户账户内</p>
+                <?php endif;?>
+              </div>
+            <?php } ?>
+          </form>
+        </div>
+          <php>endif;</php>
+        <?php endif; ?>
+        <?php else:?>
+          <div class="tc blank">
+            <div class="button-common-gray button-gray-w200
+">
+              <input type="button"  value="<?php echo $info['status'] == PrjModel::STATUS_WATING ? '待审核':'审核不通过'; ?>" class="btns">
+            </div>
+          </div>
+        <?php endif; ?>
+      </if>
+    </div>
+  </div>
+</div>
+  <input type="hidden" name="prjid" id="prjid" value="{$info.id}" >
+  <!-- tab -->
+  <include file="view_project_info" />
+</div>
+
+<!-- 投标成功 -->
+<div class="tender_status"  id="div_bid_success" style="display:none; width: 464px;" >
+  <div id="titlebar"></div>
+  <div id="jqueryContent">
+  <h1 class="h1tit tc">恭喜您投标成功！</h1>
+  <div id="free_money"></div>
+  <p class="tac"><a href="javascript:location.assign(location);" class="btn_bor_blue"><span class="btns">继续投标</span></a>
+  <a href="{:U('Financing/Invest/plist')}" class="btn_bor_blue ml20"><span class="btns">返回理财频道</span></a></p>
+  <p class="tender_comment">
+    温馨提示：
+    <br>1. 您投资的标的详情信息可在<a href="{:U('Account/Financing/index')}">理财记录</a>中查看;
+    <br>2. 系统赠送的资金服务抵用券总额不超过当前投资额度，具体可点击<a href="http://bbs.xinhehui.com/thread-35-1-1.html" target="_blank">了解详情</a>
+  </p>
+  </div>
+</div>
+<!-- 投标不成功 -->
+<div class="tender_status"  id="div_bid_error" style="display:none;">
+ <div id="titlebar"></div>
+  <div id="jqueryContent">
+  <h1 class="h1tit red tc">很遗憾您投标未成功！</h1>
+  <dl class="reason">
+    <dt>可能原因：</dt>
+    <dd id="bid_error_msg"></dd>
+  </dl>
+  <p class="tender_comment">说明：投标失败后账户资金不会变化</p>
+</div>
+</div>
+
+<!-- 投标成功 -->
+<div class="tender_status"  id="div_yixiang_success" style="display:none;" >
+<div id="titlebar"></div>
+  <div id="jqueryContent">
+  <h1 class="h1tit tc">操作成功~</h1>
+  <p class="tac">已有<span id="yixiang_success_msg"></span>位投资者达成认购意向</p>
+  <p class="red mt20 tc">*意向提交成功后会在项目开标前5分钟发送短信通知提醒~</p>
+</div>
+</div>
+<!-- 投标不成功 -->
+<div class="tender_status"  id="div_yixiang_error" style="display:none;">
+<div id="titlebar"></div>
+  <div id="jqueryContent">
+  <h1 class="h1tit red tc">操作失败！</h1>
+  <dl class="reason">
+    <dt>可能原因：</dt>
+    <dd id="yixiang_error_msg"></dd>
+  </dl>
+</div>
+</div>
+</block>

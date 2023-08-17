@@ -1,0 +1,118 @@
+<extend name="./app/Tpl/Public/base_hfhg.html"/>
+<block name="title">填写结构信息</block>
+<block name="keywords">机构理财信息填写,鑫合汇</block>
+<block name="description">机构理财信息填写,鑫合汇</block>
+<block name="body">
+  <div class="institutionInfo fixed">
+  	<!-- proposer 不存在则为: 法人 -->
+  	<if condition="$getorginfo['proposer'] == 1">
+	  	<div class="institutionStepL">
+	  		<div class="institutionStepR"></div>
+	  	</div>
+	  	<div class="institutionStepLb">
+	  		<div class="institutionStepRb fl"></div>
+	  	</div>
+	  	<ul class="institutionSfont font18">
+	  		<li class="li01 fl current">填写机构信息</li>
+	  		<li class="li02 fl">填写法定代表人信息</li>
+	  		<li class="li03 fl">确认填写信息</li>
+	  		<li class="li04 fl">等待审核</li>
+	  	</ul>
+	  <elseif  condition="$getorginfo['proposer'] == 2" />
+  	<!-- proposer == 1 为代理人 -->
+	  	<div class="institutionStepL institutionStepLd">
+	  	</div>
+	  	<div class="institutionStepLb institutionStepLbd">
+	  		<div class="institutionStepRb institutionStepRbd fl"></div>
+	  	</div>
+	  	<ul class="institutionSfont font18">
+	  		<li class="li01 li01d fl current">填写机构信息</li>
+	  		<li class="li02 fl">填写法定代表人信息</li>
+	  		<li class="li02 li01d fl">填写代理人信息</li>
+	  		<li class="li03 fl li02d">确认填写信息</li>
+	  		<li class="li04 fl">等待审核</li>
+	  	</ul>
+	  </if>
+	  <form action="{:U('Account/User/doInfoStep1')}" method="post" id="form_infoStep">
+		  <ul class="formList institForm fl">
+				<li>
+					<label for="" class="li-label-name">机构名全称</label>
+					<span class="li-span-con">
+						<input type="text" valid="required" value="{$getorginfo['org_name']}" name="org_name" class="inputCommon mr10">
+					</span>
+				</li>
+				<li>
+					<label for="" class="li-label-name">营业执照注册号</label>
+					<span class="li-span-con">
+						<input type="text" valid="required" name="busin_license_No" class="inputCommon mr10" value="{$getorginfo['busin_license_No']|substr=2}">
+					</span>
+				</li>
+				<li>
+					<label for="" class="li-label-name">营业期限</label>
+					<span class="li-span-con">
+						<input valid-msg-options='{"offset": -350}' type="text" valid='required' datepicker style="width:190px" readonly class="inputCommon mr10" name="business_term_date" value="<?php if($getorginfo['business_term_date']) { ?>{$getorginfo['business_term_date']|date='Y-m-d',###} <?php } ?>" />
+						<label class="longTime vam">
+						<input valid='required' value="长期" name="business_term" type="checkbox" class="little vam" <?php if($getorginfo['business_term']) { ?> checked=true <?php } ?>> 长期
+						</label>
+					</span>
+				</li>
+				<li class="fixed frompop yelOrg"><i class="icon-note-heart"></i> 若证件有效期为长期，请选择长期</li>
+				<li style="overflow:visible" class="clearfix join-address">
+					<label valid="id@city_id" class="li-label-name" valid-msg-options='{"gravity": "w", "offset": 200}'>办公所在地</label>
+					<span class="li-span-con">
+					  <input type="text" name="cityName" class="inputCommon" style="width:120px" area="1" area-options='{"fieldName":{"province_id": "province_id","city_id":"city_id"}, "defaultVal":{"province": "<?php if($getorginfo['province_id']){ echo $getorginfo['province_id']; }else{ echo 1013; } ?>", "city": "<?php echo $getorginfo['city_id']; ?>"}, "paramStr": {},"maxSwitchAreaType":3}'> 
+					</span>
+				</li>
+				<li>
+					<label for="" class="li-label-name">&emsp;</label>
+					<span class="li-span-con">
+						<input type="text" valid="required" class="inputCommon mr10" value='{$getorginfo["mailing_addr"]}' name="mailing_addr" />
+					</span>
+				</li>
+				<li class="join-phone">
+					<label for="" class="li-label-name">公司电话</label>
+					<span class="li-span-con">
+						<input valid-msg-options='{"offset": -210}' valid='required,number' type="text" class="inputCommon inputMhdy mr8 inputPart"><em class="dline">—</em>
+						<input valid='required,number' type="text" class="inputCommon inputPhone mr8 inputPart">
+						<input class="inputTarget" type="hidden" value="{$getorginfo['phone']}" name="phone" />
+					</span>
+				</li>
+				<li>
+					<label valid="id@stamp_license_copy" valid-msg-options='{"offset":180}' class="li-label-name">加盖公章的营业执照副本</label>
+					<span class="li-span-con addprelative">
+						<a href="javascript:;" id="uploadifyBusiness" class="upBtns font14 tac inline-block j-uploadify uploadEvidence">点击上传</a>
+						<p class="requirePop font12">证件要求：<br/>1.必须为清晰彩色原件扫描件或数码照，图片大小不超过<span class="yelOrg">2M</span><br/>2.必须在有效期内且年检章齐全<span class="yelOrg">（当年成立的公司可无年检章）</span><br/>3.必须为中国大陆工商局颁发
+						</p>
+						<input valid="required" value="{$getorginfo['stamp_license_copy']}" name="stamp_license_copy" type="hidden" />
+					</span>
+				</li>
+				<li>
+					<label for="" class="li-label-name">组织机构代码证代码</label>
+					<span class="li-span-con">
+						<input type="text" valid="required" name="org_code" class="inputCommon mr10" value="{$getorginfo['org_code']}" >
+					</span>
+				</li>
+				<li>
+					<label valid="id@stamp_organization_code_copy" valid-msg-options='{"offset":180}' class="li-label-name">加盖公章的组织机构代码证副本</label>
+					<span class="li-span-con addprelative">
+						<a href="javascript:;" id="uploadifyCode" class="upBtns font14 tac inline-block j-uploadify">点击上传</a>
+						<p class="requirePop font12">证件要求：<br/>1.必须为清晰彩色原件扫描件或数码照，图片大小不超过<span class="yelOrg">2M</span><br/>2.必须在有效期内且年检章齐全<span class="yelOrg">（当年成立的公司可无年检章）</span>
+						</p>
+						<input value="{$getorginfo['stamp_organization_code_copy']}" valid="required" name="stamp_organization_code_copy" type="hidden" />
+					</span>
+				</li>
+				<label class="button-common-blue button-blue-w200 fr"><button type="submit" id="formSubmit" class="btns">下一步</button></label>
+			</ul>
+		</form>
+		<div class="institFormR fr">
+			<div class="UpimageSh">
+				<img src="/public/images/institutionDemo/institutionDemoB04_03.png" alt="">
+				<div class="font14"><em class="classBg"></em><p class="tac">企业法人营业执照副本样本</p></div>
+			</div>
+			<div class="UpimageSh UpimageSh2">
+				<img src="/public/images/institutionDemo/institutionDemoB03_03.png" alt="">
+				<div class="font14"><em class="classBg"></em><p class="tac">企业法人营业执照副本样本</p></div>
+			</div>
+		</div>
+  </div>
+</block>

@@ -1,0 +1,47 @@
+
+<div class="myBonusTips">
+  <em class="icon-note-heart"></em><span><i>温馨提示：</i>这里显示新版红包上线前（<?php echo $history_bonus_day;?>前）红包资金流水记录。 </span>
+</div>
+<!-- 第二份 -->
+<table class="ui-record-table" style="margin-top: 12px;">
+  <thead>
+  <tr>
+    <th width="22%" style="padding:0 0 0 50px;">名称</th>
+    <th width="25%">金额（元）</th>
+    <th width="25%">有效期</th>
+    <th width="25%">备注</th>
+  </tr>
+  </thead>
+  <tbody>
+<?php if(!empty($list)){ foreach ($list as $key => $vo) { ?>
+  <?php if($vo['type']==1 && $vo['status']==2 ){  //过期 ?>
+   <tr>
+      <td style="padding:0 0 0 50px;"><p>{$vo.date}</p><p>{$vo.time}</p></td>
+      <td><p class="red">-{$vo.amount}</p></td>
+      <td>----</td>
+      <td>{$vo.memo}</td>
+    </tr>
+  <?php }else if($vo['type'] == 2){ // 支出 ?>
+  <tr>
+      <td style="padding:0 0 0 50px;"><p>{$vo.date}</p><p>{$vo.time}</p></td>
+      <td><p class="red">-{$vo.amount}</p></td>
+      <td>----</td>
+      <td>投资项目 {$vo.ext.prj_name}</td>
+    </tr>
+  <?php } else if($vo['type'] == 1) {  // 收入 ?>
+  <tr>
+      <td style="padding:0 0 0 50px;"><p>{$vo.date}</p><p>{$vo.time}</p></td>
+      <td><p class="green">+{$vo.amount}</p></td>
+      <td>{$vo.fetch_time}</td>
+      <td>{$vo.memo}</td>
+    </tr>
+  <?php } ?>
+<?php }}else{ ?>
+    <tr><td colspan="100%"><?php echo $msg;?></td></tr>
+  <?php }?>
+  </tbody>    
+</table>
+
+<?php $pageNavCallback = "ajaxAfter_Account_MyBonus_ajaxGetMyBonusList"; ?>
+   <include file="./app/Tpl/Public/pageAjax.html" />
+  <input type="hidden" name="p" value="1"/>

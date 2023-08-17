@@ -1,0 +1,116 @@
+<table data-splidList="0" class="ui-record-table">
+    <thead>
+    <tr>
+        <th width="10%">借款标题</th>
+        <th width="12%">项目名称</th>
+        <th width="12%">是否存管</th>
+        <th width="10%">借款规模</th>
+        <th width="10%">期限</th>
+        <th width="10%">预期年化利率</th>
+        <th width="10%">还款方式</th>
+        <th width="10%">还款时项目服务费(元)</th>
+        <th width="8%">状态</th>
+        <th width="8%" class="tac">操作</th>
+    </tr>
+    <tr class="line"><th colspan="100%"></th></tr>
+    </thead>
+    <tbody>
+    <?php if(!empty($list)){ ?>
+    <foreach name="list" item="item">
+        <tr prj_id="{$item.prj_id}" is_have_children0="{$item.have_children}" parent_id="{$item.spid}">
+            <?php
+    if($item['spid']) continue;
+     ?>
+            <td textlength="10">{$item.finance_name}</td>
+            <td>{$item.prj_name}</td>
+            <td><?php if($item[is_deposit]=="1"){?>
+                存管
+                <?php }else{
+                ?>
+                非存管
+                <?php }?>
+            </td>
+            <td class="value_fixed">{$item.finance_amount_view}</td>
+            <td>
+                {$item.time_limit_all_view}
+                <?php 
+                    if (isset($item['extend_time_show'])) {
+                        echo ' + '.$item['extend_time_show'];
+                    }
+                ?>
+            </td>
+            <td>{$item.year_rate_view}</td>
+            <td>{$item.repay_way_view}</td>
+            <td   class="tac"> <?php echo $title; ?>
+                <?php if($item['act_prj_ext'] && $item['act_prj_ext']['repay_fee_status']){
+            $prj_ext = $item['act_prj_ext'];
+                if($prj_ext['repay_guarant_fee']){
+                    $guarant_fee = $prj_ext['repay_guarant_fee'];
+                } else if($prj_ext['repay_guarant_rate']) {
+                    $guarant_rate = $prj_ext['repay_guarant_rate'] / 1000;
+                    $guarant_fee = bcmul($item['act_demand_amount'], $guarant_rate, 0);
+                }
+
+                if($prj_ext['repay_deposit_fee']){
+                    $deposit_fee = $prj_ext['repay_deposit_fee'];
+                } else if($prj_ext['repay_deposit_rate']) {
+                    $deposit_rate = $prj_ext['repay_deposit_rate'] / 1000;
+                    $deposit_fee = bcmul($item['act_demand_amount'], $deposit_rate, 0);
+                }
+                if($item['act_prj_ext']['repay_fee_status'] == 2){
+                    if($guarant_fee) echo "机构服务费:".($guarant_fee/100)."元(已收)";
+                    if($deposit_fee) echo "<br>平台服务费:".($deposit_fee/100)."元(已收)";
+                } else if($item['act_prj_ext']['repay_fee_status'] == 1){
+                if($guarant_fee) echo "机构服务费:".($guarant_fee/100)."元";
+                if($deposit_fee) echo "<br>平台服务费:".($deposit_fee/100)."元";
+                }
+                }?>
+            </td>
+            <td>{$item.status_view}</td>
+            <td>
+                <div class="action_box" style>
+                    <a href="javascript:" class="btn_edit" hovercard="div@ctl{$item.id}" hovercard-options='{"minWidth":"auto","maxWidth":"auto","minHeight":"auto","noArrow":"false","speed":100}'></a>
+                    <div class="dn" hovercard-id="ctl{$item.id}" style="max-width:110px;padding-bottom:5px">
+                        <ul class="action_item">
+                            <?php if($item['earlyRepayShow']['is_show'] == 1){ ?>
+                            <if condition="(($item.bid_status eq $BSTATUS_REPAYING) OR ($item.bid_status eq $BSTATUS_REPAY_IN))">
+                                <li><a href="{:U('Account/FinancingManage/applyEarlyRepay', array('prj_id'=>$item['prj_id']))}" colorbox="1">提前还款申请</a></li>
+                            </if>
+                            <?php } ?>
+
+                            <?php if($item['earlyRepay']['status']==1){ ?>
+                            <if condition="($item.bid_status eq $BSTATUS_REPAYING) OR ($item.bid_status eq $BSTATUS_REPAY_IN)">
+                                <li><a href="{:U('Account/FinancingManage/getEarlyRepay', array('prj_id'=>$item['prj_id']))}" colorbox="1">查看提前还款申请</a></li>
+                            </if>
+                            <?php } ?>
+
+
+                            <if condition="($item.is_early_repay_pass eq TRUE) AND (($item.bid_status eq $BSTATUS_REPAYING) OR ($item.bid_status eq $BSTATUS_REPAY_IN))">
+                                <li><a target="_blank" href="<?php echo U('Account/FinancingManage/view',array('id'=>$item['prj_id']));?>" >还款</a></li>
+                            </if>
+
+                            <if condition="($item.status eq $STATUS_WATING) OR ($item.bid_status eq $BSTATUS_END) OR ($item.bid_status eq $BSTATUS_REPAYING) OR ($item.bid_status eq $BSTATUS_REPAY_IN)">
+                                <li><a href="{:U('Account/FinancingManage/ajaxPay',array('prj_id'=>$item['prj_id'], 'status'=>$item['status'], 'bid_status'=>$item['bid_status']))}" colorbox="1">缴费</a></li>
+                            </if>
+
+                            <li><a href="{:U('Account/FinancingManage/projectView',array('apply_id'=>$item['apply_id']))}">查看</a>
+
+                                <if condition="($item.bid_status eq $BSTATUS_FULL) OR ($item.bid_status eq $BSTATUS_END) OR ($item.bid_status eq $BSTATUS_REPAYING) OR ($item.bid_status eq $BSTATUS_REPAY_IN)">
+                                    <li><a href="{:U('Index/Protocol/viewConfirmProtocol',array('id'=>$item['prj_id'], 'status'=>$item['status']))}" colorbox="1">出借人确认书</a></li>
+                                </if>
+                        </ul>
+                    </div>
+                </div>
+            </td>
+        </tr>
+    </foreach>
+    <?php } else { ?>
+    <tr>
+        <td colspan="100%" class="tac">没有相关数据</td>
+    </tr>
+    <?php } ?>
+    </tbody>
+</table>
+
+<?php $pageNavCallback = "ajaxAfter_manage_plist"; ?>
+<include file="./app/Tpl/Public/pageAjax.html" />

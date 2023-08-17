@@ -1,0 +1,69 @@
+<table class="ui-record-table repay_table">
+  <thead>
+    <tr>
+      <th width="20%">投资人</th>
+      <th width="20%" class="tar">应还本金(元)</th>
+      <th width="20%" class="tar">应还收益(元)</th>
+      <th width="15%" class="tac">还款时间</th>
+      <th width="25%"><a class="btn_light" href="{:U('Account/FinancingManage/export',array('id'=>$prjId))}">导出明细</a></th>
+    </tr>
+  </thead>
+  <tbody>
+    <?php if(!empty($result)){ foreach ($result['list'] as $key => $vo) { ?>
+    <tr>
+      <td>{$vo.uname}</td>
+      <td class="tar">{$vo.rest_money_view}</td>
+      <td class="tar">{$vo.income_view}</td>
+      <td class="tac">{$vo.repayment_date}</td>
+      <td></td>
+    </tr>
+    <?php }} else { ?>
+    <tr><td colspan="100%">没有相关数据</td></tr>
+    <?php } ?>
+  </tbody>
+</table>
+<?php $pageNavCallback = "ajaxAfter_Application_ProjectRepayment_repaymentList"; ?>
+<include file="./app/Tpl/Public/pageAjax.html" />
+
+<div class="formula">
+  <dl>
+    <dt>
+      <span class="principal">应还本金(元)</span>
+      <span class="plus">+</span>
+      <span class="lixi">应还收益(元)</span>
+      <span class="sum">= 需还款(元)</span>
+    </dt>
+    <dd>
+      <span class="amount">共计</span>
+      <span class="principal">{$result.total.total_money_view}</span>
+      <span class="plus"></span>
+      <span class="lixi">{$result.total.total_income_view}</span>
+      <span class="sum">{$result.total.total_view}</span>
+    </dd>
+  </dl>
+
+  <?php if($toDeal): ?>
+    <div class="tar">
+      <label class="button-common-orange">
+        <span class="btns" url="{:U('Account/FinancingManage/doRepayment')}" id="repayBtn">ddd{$btnValue}</span>
+      </label>
+    </div>
+  <?php else: ?>
+    <?php if(!$is_repayed && $early_repay_id): ?>
+      <input id="earlyrepayId" type="hidden" value="{$prjId}"/>
+      <label class="button-common-orange">
+        <span class="btns" url="{:U('Account/FinancingManage/earlyRepayPlan', array('prj_id'=>$prjId))}" id="early_repay" url2="{:U('Account/FinancingManage/getRepayPlanProgress', array('prj_id'=>$prjId))}">提前还款</span>
+      </label>
+    <?php elseif($is_show_extend): ?>
+      <label class="button-common-orange">
+        <span class="btns" url="{:U('Account/FinancingManage/extendRepayPlan', array('prj_id'=>$prjId))}" id="extend_repay" url2="{:U('Account/FinancingManage/getRepayPlanProgress', array('prj_id'=>$prjId))}">展期还款</span>
+      </label>
+    <?php elseif($btnValue): ?>
+      <div class="tar">
+        <label class="button-common-gray">
+          <input type="button" id="" name="" value="{$btnValue}" class="btns">
+       </label>
+      </div>
+    <?php endif; ?>
+  <?php endif; ?>
+</div>

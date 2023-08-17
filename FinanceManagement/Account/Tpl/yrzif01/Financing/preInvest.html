@@ -1,0 +1,71 @@
+<extend name="./app/Tpl/Public/base_hfhg.html"/>
+<block name="title">理财记录</block>
+<block name="body">
+<div class="container-inner mt20">
+  <include file="./app/Tpl/Account/account_sider.html" />
+  <div class="main_area body-frame">
+    <form ajax="1" ajax-before="ajaxBefore_Account_Financing_index" ajax-after="ajaxAfter_Account_Financing_index" method="post" id="formId_Account_Financing_index" ajax-datatype="html">
+      <input type="hidden" name="status" value="1">
+      <input type="hidden" name="prj_id" value="<?php echo HS($_REQUEST['prj_id']); ?>">
+      <div class="class_box">
+        <div class="category">
+          <a href="{:U('Account/Financing/index')}">我的投资</a>
+          <?php if(C('FUND_ON')){ ?><a href="{:U('Account/Financing/fundIndex')}">我的理财</a><?php } ?>
+          <a href="{:U('Account/Fastcash/listIndex')}">投资变现</a>
+          <a  class="cur" href="javascript:;">预售投资</a>
+        </div>
+        <div class="statusMenus" id="product_type">
+        <a class="cur" href="javascript:;" url="{:U('Account/Financing/ajaxPreList',array('ptype'=>0))}" type="4">所有系列</a>
+        <a href="javascript:;" url="{:U('Account/Financing/ajaxPreList',array('ptype'=>1))}" type="1">日益升</a>
+        <a  href="javascript:;"  url="{:U('Account/Financing/ajaxPreList',array('ptype'=>2))}"  type="2">月益升</a>
+        <a href="javascript:;"  url="{:U('Account/Financing/ajaxPreList',array('ptype'=>3))}"  type="3">年益升</a>
+            <if condition ="C('PIAOJU_SHOW') == 1">
+            <a href="javascript:;"  url="{:U('Account/Financing/ajaxPreList',array('ptype'=>5))}"  type="5">鑫银票</a>
+            </if>
+        <a href="javascript:;" url="{:U('Account/Financing/ajaxPreList',array('ptype'=>4))}" type="4">速兑通</a>
+        </div>
+        <div class="statusMenusLast" id="product_status">
+        <a class="cur" href="javascript:;"  status='0'>全部(<span id="total">0</span>)</a>
+        <a href="javascript:;"  status='1'>预售投资中(<span id="pre_num">0</span>)</a>
+        <a  href="javascript:;" status='2'>投资成功(<span id="suc_num">0</span>)</a>
+        <a  href="javascript:;" status='3'>投资失败(<span id="fail_num">0</span>)</a>
+        </div>
+        <div class="simple_search" id="search">
+        关键字：<input type="text" name="prjname" class="ipt_search inputCommon" style="width:140px;"  ghosttext="项目名称" value="">
+        <select name="timeType"  multipleOne="1" multiselect-options='{"minWidth": "120"}'>
+              <option value="1">成交日期</option>
+              <option value="2" <?php if($_GET['repayDate']){ ?>selected<?php } ?>>还款日期</option>
+        </select>
+        <span class="date_pannel ml10">
+        <input  type="text" name="startDate" id="startDate" class="ipt_search" style="width: 100px"  datepicker='{"endId": "endDate"}' value="<?php echo HS($_GET['repayDate']); ?>">
+        <i class="icon_time"></i>
+        </span>
+        <span class="mr10">—</span><span class="date_pannel">
+        <input type="text" name="endDate" id="endDate" class="ipt_search" style="width: 100px" datepicker='{"startId": "startDate"}' value="<?php echo HS($_GET['repayDate']); ?>">
+        <i class="icon_time"></i>
+        </span>
+        <label for="" class="button-small-orange finRecsou_but"><input type="submit" name="submit" class="btns noOutline" value="搜索"></label>
+        </div>
+      </div>
+      <div class="verify_bd minHeight" id="ajaxContent_Account_Financing_index"></div>
+    </form>
+
+  <!-- 债权转让申请成功 -->
+  <div data-flag="zqzrPop" style="display:none;">
+    <!-- 申请债权转让成功 star -->
+    <div id="titlebar">债权转让申请</div>
+    <div id="jqueryContent" class="w520">
+      <p class="tac"><em class="imgNoteBig_Green"></em></p>
+      <p class="bond-suc-pop">债权转让申请成功！</p>
+      <p class="tac bond-num">共计：<em class="orange_dark" data-flag="zrAmount">-</em>元</p>
+      <p class="eduFriendTip-h org"><em class="icon-note-heart"></em>温馨提示：</p>
+        <dl class="eduFriendTipC fixed">
+          <dd>申请成功后请尽快配合完成线下的债权转让合同签署及相关资料收集，我们在收到您签署的合同和所需资料确认无误后，将于项目到期后完成支付，您将收到投资本金及相应的利息！（请尽量提早将资料寄出，以便能如期获得本息）</dd>
+        </dl>
+     <p class="mt20 tar"><a href="javascript:;" data-flag="downloadContract" url="{:U('Index/Protocol/downloadContract')}" colorbox="1" class="blue">合同下载及签署规范</a></p>
+    </div>
+    <!-- 申请债权转让成功 end -->
+  </div>
+  </div>
+</div>
+</block>

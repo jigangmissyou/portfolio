@@ -1,0 +1,20 @@
+<table class="ui-record-table" style="margin-top:0;">
+	<tbody>
+    <?php 
+      $charArr = range('A', 'Z');
+      if(!empty($Sign)){ foreach ($Sign as $key => $vo) { // echo "<pre>"; print_r($vo);
+      ?>
+		<tr>
+			<td width="10%"><i class="icon-red-map"><?php echo $charArr[$key]; ?></i></td>
+			<td width="15%">{$vo.useinfo.real_name}</td>
+			<td width="20%">{$vo.ctime|date='Y-m-d H:i:s',###} 签到</td>
+			<td width="20%">企业：{$vo.corp_name}</td>
+			<td width="35%" textlength="18">地址：{$vo.useinfo.location}</td>
+		</tr>
+    <?php }} else { ?>
+    <tr>
+      <td colspan="5">无数据</td>
+    </tr>
+    <?php } ?>
+	</tbody>
+</table>

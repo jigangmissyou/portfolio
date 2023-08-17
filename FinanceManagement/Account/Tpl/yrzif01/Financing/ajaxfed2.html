@@ -1,0 +1,66 @@
+<!-- 富二代 已还款结束 -->
+<table class="ui-record-table">
+      <thead>
+		    <tr>
+          <th width="9%" order_field="order21" <eq name="order_field" value="order21"> order_type="{$order_type}"</eq>>还款日期</th>
+          <th width="12%">项目名称/编号</th>
+          <th width="10%" class="tar" order_field="order24" <eq name="order_field" value="order24"> order_type="{$order_type}"</eq>>购买份额</th>
+          <th width="11%" class="tar" order_field="order25" <eq name="order_field" value="order25"> order_type="{$order_type}"</eq>>份额价值</th>
+          <th width="10%" class="tar">已收金额</th>
+          <th width="11%" class="tar" order_field="order28" <eq name="order_field" value="order28"> order_type="{$order_type}"</eq>>购买价格</th>
+          <th width="10%" class="tar" >收益</th>
+          <th width="10%" order_field="order26" <eq name="order_field" value="order26"> order_type="{$order_type}"</eq>>成交时间</th>
+          <th width="8%" class="tac">合同</th>
+           <th width="8%" class="tac">分享</th>
+		    </tr>
+        <tr class="line"><th colspan="100%"></th></tr>
+	  </thead>
+      <tbody>
+      <if condition="$list">
+      <foreach name="list" item="v">
+        <tr>
+          <td>{$v['repay_time_view']}</td>
+          <td>
+            <p class="pro_name"><a href="{:U('Financing/Invest/view',array('id'=>$v['id_view']))}">{$v['prj_name']}</a></p>
+            <p class="icoarea">
+              <if condition="$v['safeguards'] eq 1">
+              <a class="icon_vouch" href="{:U('Help/Help/viewHelpIndex',array('tpl'=>'AboutUs-partners'))}" title="100%担保本金和利息">保</a>
+              <else />
+              <a class="icon_vouch" href="{:U('Help/Help/viewHelpIndex',array('tpl'=>'AboutUs-partners'))}" title="100%担保本金">本</a>
+              </if>
+                <span class="icon_transferred"  title="他人转让项目">转</span>
+                <span class="icon_transfer" title="持有60天后可转让"></span>
+            </p>
+          <!-- <p class="blue">{$v['prj_no']}</p> -->
+          </td>
+          <td class="tar"><span class="mr12">{$v['transfer_property_view']}</span></td>
+          <td class="tar"><span class="mr12">{$v['income_view']}</span></td>
+          <td class="tar">{$v['total_money_view']}</td>
+          <td class="tar"><span class="mr12">{$v['transfer_money_view']}</span>
+              <?php if($v['order_ext_totle'] > 0): ?>
+          		<br><span class="mr12">(
+          		<?php echo "使用红包:".humanMoney($v['order_ext_totle'],2,false)."元";?>)
+          		</span>
+          	<?php endif; ?>
+          </td>
+          <td class="tar">{$v['will_income_view']}</td>
+          <td>{$v['order_create_time_view']}</td>
+          <td class="tac">
+           <label for="" class="button-small-info"><a href="javascript:;" colorbox=1 url="{:U('/Index/Protocol/validateView',array('id'=>$v['id']))}" class="button-small-info">查看</a></label>
+          </td>
+          <td class="tac">
+            <a href="<?php echo service('Index/Weibo')->getWeiboShareUrl($v['prjid'],3) ?>" target="_blank" class="button-small-info"><span class="btns">分享</span></a>
+          </td>
+        </tr>
+		</foreach>	
+		  	<else />
+				<tr>
+					<td colspan="100%" class="tac">没有相关数据</td>
+				</tr>
+			</if>
+      </tbody>
+    </table>
+    <?php $pageNavCallback = "ajaxAfter_Account_Financing_index"; ?>
+    <include file="./app/Tpl/Public/pageAjax.html" />
+    <input type="hidden" name="totalRepaying" value="{$totalFed}">
+    <input type="hidden" name="totalRepaySuccess" value="{$totalFedRepayment}">

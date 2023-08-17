@@ -1,0 +1,21 @@
+<div class="detailSurTab surTabUl mt30 mb20">
+    <ul>
+        <li <?php if(MODULE_NAME=='ProjectPay' && ACTION_NAME!='payRecharge'):?>class="current"<?php endif; ?>><span class="roundTopborGy"><a href="{:U('Application/ProjectPay/pay')}">项目支付</a></span><a class="hrwrite"></a></li>
+        <li <?php if(MODULE_NAME=='PayAccount' && ACTION_NAME=='getXianxiaIndex'):?>class="current"<?php endif; ?>><span class="roundTopborGy"><a href="{:U('Payment/PayAccount/getXianxiaIndex')}">充值管理</a></span><a class="hrwrite"></a></li>
+        <li <?php if(MODULE_NAME=='PayAccount' && ACTION_NAME=='toGetCashoutList'):?>class="current"<?php endif; ?>><span class="roundTopborGy"><a href="{:U('Payment/PayAccount/toGetCashoutList')}">提现管理</a></span><a class="hrwrite"></a></li>
+        <li <?php if(MODULE_NAME=='PayAccount' && ACTION_NAME=='toGetUserAccountList'):?>class="current"<?php endif; ?>><span class="roundTopborGy"><a
+            href="{:U('Payment/PayAccount/toGetUserAccountList')}">资金管理</a></span><a class="hrwrite"></a></li>
+        <li <?php if(MODULE_NAME=='ProjectPay' && ACTION_NAME=='payRecharge'):?>class="current"<?php endif; ?>><span class="roundTopborGy"><a
+            href="{:U('Application/ProjectPay/payRecharge')}">奖励管理</a></span><a class="hrwrite"></a></li>
+        <li <?php if(MODULE_NAME=='StatisticalManage'):?>class="current"<?php endif; ?>><span class="roundTopborGy"><a
+            href="{:U('Application/StatisticalManage/index')}">统计管理</a></span><a class="hrwrite"></a></li>
+        <li <?php if(MODULE_NAME=='BalanceAccountManage'):?>class="current"<?php endif; ?>><span class="roundTopborGy"><a
+            href="{:U('Application/BalanceAccountManage/balanceAccountList')}">对账管理</a></span><a class="hrwrite"></a></li>
+        <li <?php if(MODULE_NAME=='CarderDeal'):?>class="current"<?php endif; ?>><span class="roundTopborGy"><a
+            href="{:U('Application/CarderDeal/index')}">盗卡退款提现</a><a class="hrwrite"></a></span></li>
+        <li <?php if(MODULE_NAME=='TransferRepay'):?>class="current"<?php endif; ?>><span class="roundTopborGy"><a
+            href="{:U('Application/TransferRepay/index')}">处理转让还款</a><a class="hrwrite"></a></span></li>
+        <li <?php if(MODULE_NAME=='StealCard'):?>class="current"<?php endif; ?>><span class="roundTopborGy"><a
+            href="{:U('Application/StealCard/cash')}">盗卡变现</a></span><a class="hrwrite"></a></li>
+    </ul>
+</div>

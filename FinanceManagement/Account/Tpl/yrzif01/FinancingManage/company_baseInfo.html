@@ -1,0 +1,105 @@
+<input id="companyId" type="hidden" name="id" value="{$corpinfo.id}"/>
+<ul class="formList">
+  <?php if(!$corpinfo){ ?>
+  <li>
+    <label class="li-label-name"><em class="red">*</em>用户类型</label>
+    <span class="li-span-con">
+    <label><input event-click="selectBorrowType" type="radio" name="borrowerType" value="2" <if condition="$borrowerType eq 2">checked</if> />个人用户</label>
+    &nbsp;&nbsp;
+    <label><input event-click="selectBorrowType" type="radio" name="borrowerType" value="1" <if condition="$borrowerType eq 1">checked</if> />企业用户</label>
+    </span>
+  </li>
+  <?php }else{ ?>
+  <li class="dn"><input type="hidden" name="borrowerType" value="{$borrowerType}"/></li>
+  <?php } ?>
+  <li>
+    <label class="li-label-name"><em class="red">*</em>所在城市</label>
+    <span class="li-span-con">
+    <input type="text" name="cityName" class="inputCommon" area="1" area-options='{"fieldName":{"province_id": "area_province_id","city_id":"area_city_id","dict_area_id":"area_dict_area_id"}, "defaultVal":{"province": "<?php if($corpinfo['province_id']){ echo $corpinfo['province_id']; }else{ echo 1013; } ?>", "city": "<?php echo $corpinfo['city_id']; ?>", "area": "<?php echo $corpinfo['area_id']; ?>"}, "paramStr": {"isZhr": 1}}'>
+    <!--<span class="other red">目前支持北京、河北、山东和浙江地区的城市</span>-->
+  </li>
+  <li>
+    <label class="li-label-name"><em class="red">*</em>机构名称</label>
+    <span class="li-span-con">
+    <input type="text" name="corp_name" valid="required" class="inputCommon" value="{$corpinfo.corp_name}">
+  </span>
+  </li>
+  <li>
+    <label class="li-label-name"><em class="red">*</em>机构类型</label>
+    <span class="li-span-con">
+    <select name="corp_type" multipleone="1" multiselect-options='{"minWidth": "280"}' id="corpType" valid="required" class="zirong_qiye_select">
+      <?php foreach($codeType as $item){ ?>
+      <option value="<?php echo $item; ?>" <?php if($corpinfo && $corpinfo['corp_type'] == $item){ ?>selected<?php } ?>><?php echo $item; ?></option>
+      <?php } ?>
+    </select>
+  </span>
+  </li>
+  <li>
+    <label class="li-label-name"><em class="red">*</em>注册年限</label>
+    <span class="li-span-con">
+    <select name="register_year" multipleone="1" id="registerYear" valid="required" class="zirong_qiye_select">
+      <?php for($i = 1; $i < 31; $i++){ ?>
+      <option value="<?php echo $i; ?>" <?php if($corpinfo && $corpinfo['register_year'] == $i){ ?>selected<?php } ?>><?php echo $i; ?></option>
+      <?php } ?>
+    </select> 年
+  </span>
+  </li>
+  <li>
+    <label class="li-label-name"><em class="red">*</em>注册资金</label>
+    <span class="li-span-con">
+    <input type="text" id="register_capital" valid="required"  name="register_capital" class="inputCommon" value="{$corpinfo.register_capital}">
+    <select class="zirong_qiye_select" multipleone="1" name="register_year_unit" multiselect-options='{"minWidth": "100"}'>
+      <option value="万">万</option>
+    </select>
+    <select class="zirong_qiye_select" multipleone="1" name="register_year_currency" multiselect-options='{"minWidth": "100"}'>
+      <option value="人民币">人民币</option>
+    </select>
+    </span>
+  </li>
+  <li>
+    <label class="li-label-name"><em class="red">*</em>证件类型</label>
+    <span class="li-span-con">
+    <select name="license_type_b" multipleone="1" multiselect-options='{"minWidth": "280"}' valid="required" class="zirong_qiye_select">
+      <option value="营业执照">营业执照</option>
+    </select>
+  </span>
+  </li>
+  <li>
+    <label class="li-label-name"><em class="red">*</em>证件号码</label>
+     <span class="li-span-con">
+      <input type="text" name="license_no_b" valid="required" class="inputCommon pro_form_item" value="{$corpinfo.license_no_b}">
+    </span>
+  </li>
+  <li>
+    <label class="li-label-name"><em class="red">*</em>所属行业</label>
+    <span class="li-span-con">
+    <input type="text" name="trade_name" valid="required" class="inputCommon pro_form_item" value="{$corpinfo.trade_name}">
+    <div class="ui_select_box ui_select_short ui_time_limit_unit"></div>
+    <input type="hidden" name="trade_id" value="0"/>
+  </span>
+  </li>
+  <li>
+    <label class="li-label-name"><em class="red">*</em>主营业务</label>
+    <span class="li-span-con">
+    <textarea name="main_business" cols="60" rows="5" valid="required" class="ui_textarea"><?php if($corpinfo){ echo $corpinfo['main_business']; } ?></textarea>
+    </span>
+  </li>
+  <!-- <li>
+    <label class="li-label-name"><em class="red">*</em>经营情况</label>
+    <textarea name="opt_overview" cols="60" rows="5" valid="required" class="zhirong_qiye_textarea" style="width: 600px">
+<?php if($corpinfo){ echo $corpinfo['opt_overview']; } ?>
+    </textarea>
+  </li> -->
+  <!-- <li>
+    <div class="list_item">
+      <input type="checkbox" name="agree" checked id="agree" hidefocus="hidefocus"/>
+      <label for="agree">我同意并接受《<a class="blue cboxElement" href="/index.php/Index/Protocol/view?id=12" colorbox="1"
+                                   hidefocus="hidefocus">平台服务协议</a>》</label>
+    </div>
+  </li> -->
+  <li class="lastBtns"><label for="" class="li-label-name">&nbsp;</label><span class="li-span-con">
+     <span class="blueBigBtn_100">
+      <input type="button" class="btns w250" value="保存并继续" event-click="companyInfo.save"/>
+    </span>
+  </span></li>
+</ul>

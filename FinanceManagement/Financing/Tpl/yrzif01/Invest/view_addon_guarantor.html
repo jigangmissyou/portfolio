@@ -1,0 +1,3 @@
+<?php if($info['guarantor']['title']){ ?>
+<?php if($info['guarantor']['desr_url']){?><a target="_blank" href="<?php echo $info['guarantor']['desr_url'];?>" class="blue"><?php echo $info['guarantor']['title'];?></a><?php }else{?> <span class="blue"><?php echo $info['guarantor']['title'];?></span><?php }?><span class="red">（<?php echo $info['guarantor']['corp_type'];?>）</span>
+<?php } ?>

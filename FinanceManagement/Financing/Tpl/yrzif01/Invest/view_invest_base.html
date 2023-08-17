@@ -1,0 +1,72 @@
+<dt>
+  <!-- <i class="icon_greywallet"></i>&emsp; -->
+  <?php
+    $is_pre = ($info['act_prj_ext']['is_pre_sale']==1 && $info['bid_status'] == PrjModel::BSTATUS_WATING);
+    if($is_pre) {
+      echo '剩余可预投金额';
+    }else{
+      echo '剩余可投金额';
+    }
+  ?>
+  <!--是否预售-->
+  <?php if($is_pre){ ?>
+     <!-- begin -->
+     <div class="ProgressBar_div">
+      <div class="ProgressBarOrg progressBarGay_yushou dn"><span class="ProgressBarGry progressBarBlue_yushou" data-flag="prjProgress" style="width:<?php echo $info['pre_schedule']; ?>%"><em class="bar_rt" style="<?php if ($info['pre_schedule']*0.99 <= 0) { ?>  display:none <?php } ?>"></em></span></div>
+    </div>
+    <em class="blue_light"><span class="moneytotle" data-flag="remainAmout">{$info.pre_remaind_amount}</span>元</em>
+   <!-- end -->
+  <?php }else{ ?>
+  
+    <div class="ProgressBar_div">
+      <div class="ProgressBarOrg dn">
+        <span class="ProgressBarGry" data-flag="prjProgress" style="width:<?php echo $info['schedule']; ?>%"><em class="bar_rt" style="<?php if ($info['schedule']*0.99 <= 0) { ?>  display:none <?php } ?>"></em>
+        </span>
+      </div>
+    </div>
+    <em class="org_color"><span class="moneytotle" data-flag="remainAmout">{$info.remaining_amount_name2}</span>元</em>
+    
+  <?php } ?>
+
+</dt>
+<!-- <dt>
+  剩余时间：
+  <span data-flag="format_start_bid_time_view" data-inner="0" class="countDown org_color">
+    <em data-day>00</em>:<em data-hour>00</em>:<em data-min>00</em>:<em data-sec>00</em>
+  </span>
+</dt> -->
+<?php
+  if($info['bid_status'] == PrjModel::BSTATUS_BIDING){
+?>
+  <dd>剩余时间：
+    <em class="org6e_color" data-flag="surplus_bid_time_view" data-inner="0">
+      <em data-sec>秒</em>
+      <em data-min>分</em>
+      <em data-hour>时</em>
+      <em data-day>天</em>
+    </em>
+  </dd>
+<?php }?>
+<dd>起投金额：<em>{$info.min_bid_amount_name}</em></dd>
+<dd>递增金额：<em>{$info.step_bid_amount_name}</em></dd>
+<dd>最高限额：<em><?php echo $info['max_bid_amount_name'] ? $info['max_bid_amount_name'] : '不限'; ?> </em></dd>
+</dl>
+
+<?php if($is_login && !$money_notEnough){ ?>
+  <dl class="standDl investLoginBtn">
+    <dd><if condition="$info['act_prj_ext']['is_deposit'] eq 1">存管<else/>普通</if>账户余额：
+      <em class="green_color" data-flag="userAccountFund">数据加载中...</em>
+      <span style="display:none;" data-flag="awardAmount">数据加载中...</span>
+    </dd>
+    <dd class="investMnum">
+      <label class="monNum" {$limitStr} data-step>
+      投资金额：
+      <input data-input type="text" {$limitStr} event-focus="focusMoney" event-blur="calcJdMoney" autocomplete="off" name="money" valid="required" value="<?php echo $max_invest_money_view; ?>">
+      <!-- <em data-add class="addNum {$limitAdd}"></em>
+      <em data-del class="delNum {$limitDel}"></em> -->
+      </label>元
+    </dd>
+<?php }else{ ?>
+    <dl class="standDl investLoginBtn">
+<?php } ?>
+

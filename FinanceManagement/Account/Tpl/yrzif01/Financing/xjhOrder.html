@@ -1,0 +1,21 @@
+<extend name="./app/Tpl/Public/base_user.html"/>
+<block name="title">理财记录</block>
+<block name="body">
+    <div class="container-inner mt20">
+        <div class="xinjihua">
+            <form ajax="1" ajax-before="ajaxBefore_Account_Financing_index" ajax-after="ajaxAfter_Account_Financing_index" method="post" id="formId_Account_Financing_index" ajax-datatype="html" action="/Account/Financing/ajaxXjhOrderList">
+                <input type="hidden" name="xoid" value="">
+                <div class="xjh-header">
+                    <!--【{$xprj_name}】   理财投资明细-->
+                    理财计划明细
+                    <div class="xjh-btn">
+                        <a href="javascript:;" id="serviceProtocolBtn" class="xjhbtn" colorbox="1">服务协议</a>
+                    </div>
+                </div>
+
+                <div class="minHeight" id="ajaxContent_Account_Financing_index"></div>
+            </form>
+            <!-- 插入表格的地方 -->
+        </div>
+    </div>
+</block>

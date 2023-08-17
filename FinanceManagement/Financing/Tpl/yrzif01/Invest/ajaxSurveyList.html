@@ -1,0 +1,34 @@
+<?php if(!empty($list)){ ?>
+<p class="investCensus fixed">
+  贷后调查周期：
+  <em class="blue">
+    <?php if($list['trace_frequence']){ ?>
+      <strong>{$list['trace_frequence']}月</strong>/次
+    <?php } else { ?>
+      无
+    <?php } ?>
+  </em>&emsp;&emsp;
+  贷后调查时间：
+  <em class="blue"><?php if(!empty($list['survey_time'])){ echo $list['survey_time']; } else {echo "无";} ?></em>
+</p>
+<table class="globaltable investCensusTable loanInvestTable">
+  <tr>
+    <th width="8%">序号</th>
+    <th width="72%">调查内容</th>
+    <th width="11%">调查结果</th>
+  </tr>
+  <?php if(!empty($list['loaned_survey_list'])){ foreach ($list['loaned_survey_list'] as $key => $vo) { ?>
+  <tr <?php if($key%2 == 0){echo 'class="GreyBgcolor"';} ?>>
+    <td class="tac"><?php echo $key + 1; ?></td>
+    <td class="tac">{$vo.survey_range}</td>
+    <td class="tac">正常</td>
+  </tr>
+  <?php }} else { ?>
+  <tr class="GreyBgcolor">
+    <td colspan="100%">无数据</td>
+  </tr>
+  <?php } ?>
+</table>
+<?php } else { ?>
+<p class="investCensus fixed">无数据</p>
+<?php } ?>

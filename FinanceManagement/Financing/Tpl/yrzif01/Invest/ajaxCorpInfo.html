@@ -1,0 +1,16 @@
+<!-- 企业基本信息 -->
+<include file="view_corp_base_info" />
+
+<!-- 产品服务 -->
+<include file="view_corp_product_service" />
+
+<!-- 运营状况 -->
+<include file="view_corp_operation" />
+
+<!-- 财务数据 -->
+<include file="view_corp_caiwu" />
+
+<?php if(!empty($bankLoan['data'])){ ?>
+<!-- 重大事项 -->
+<include file="view_corp_great_event" />
+<?php } ?>

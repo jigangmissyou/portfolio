@@ -1,0 +1,34 @@
+<extend name="./app/Tpl/Public/base_user.html"/>
+<block name="title">自动投标-鑫合汇</block>
+<block name="keywords">自动投标，鑫合汇</block>
+<block name="description">自动投标，鑫合汇</block>
+
+<block name="body">
+<div class="container-inner mt20">
+  <include file="./app/Tpl/Account/account_sider.html" />
+  <input type="hidden" name="is_paypwd_edit" value="<?php echo $is_paypwd_edit;?>">
+  <div class="main_area body-frame">
+    <?php //print_r($appointRecord); ?>
+    <!-- 标的详情 -->
+    <div id="standardInfo" class="plr20">
+      <h3 class="appoint-title-bar prel">
+        <span class="name">预约自动投标</span>
+        <?php if($appointRecord){ ?>
+        <span class="button-small-opp green ml5"><em class="btns">已预约</em></span>
+        <?php } else { ?>
+        <span class="button-small-opp red ml5"><em class="btns">未预约</em></span>
+        <?php } ?>
+          <?php if(isset($last_appoint)){ ?>
+          <p class="standarNote green">（您于{$last_appoint.time}提交的预约申请，系统已成功为您投标项目：{$last_appoint.prj_name}）</p>
+          <?php } else { ?>
+          <p class="standarNote blue">（预约成功后，请注意查看短信提醒，关注投标进展。）</p>
+          <?php } ?>
+      </h3>
+      <div class="appoint-standard">
+        <include file="appoint_info"/>
+        <include file="appoint_invest"/>
+      </div>
+    </div>
+  </div>
+</div>
+</block>

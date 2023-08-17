@@ -1,0 +1,46 @@
+<div id="titlebar">投标确认</div>
+<div id="jqueryContent" style="width:550px;height:280px;">
+  <form method="post" action="__URL__/buy" ajax="1" id="formId_Financing_Invest_ajaxview" ajax-after="ajaxAfter_Financing_Invest_ajaxview" autocomplete='off'>
+    <div class="ui_tit">
+      <h2>{$info['prj_type_name']}-<?php if($info['huodong']): ?><span class="orange">{$info.prj_name}</span><?php else:?>{$info.prj_name}<?php endif;?></h2>
+      <span class="sub">项目编号：{$info.prj_no}</span>
+			   	   			 <?php 
+			   echo service("Financing/Financing")->getIco($info);
+			 ?>
+    </div>
+    <div class="confirm_info fixed">
+      <div class="item item_01">
+        <h5>投资金额</h5>
+        <p>{$moneyView}</p>
+      </div>
+      <div class="item item_02">
+        <h5>预期年化利率</h5>
+          <?php
+$title = service("Financing/Financing")->getTitle($info);
+         ?>
+        <p class="blue">
+            <a href="javascript:;" <?php echo $title; ?> class="blue">
+<?php echo number_format($info['year_rate']/10,2); ?>%
+            </a>
+        </p>
+
+      </div>
+      <div class="item item_03">  
+        <h5>期限</h5>
+        <p>{$info.time_limit}<?php if($info['time_limit_unit'] == 'month'): ?>个<?php endif; ?>{$info.time_limit_unit_name}</p>
+      </div>
+    </div>
+    <div class="list_item mt20">
+      支付密码：
+      <input type="password" valid="required" valid-msg-options='{"gravity":"w", "offset":75}' autocomplete='off' name="paypwd" id="paypwd" value="" class="inputCommon"></div>
+    <div class="tc mt20">
+      <span class="button-common-orange button-orange-w200 mt10">
+        <input type="hidden" name="money" value="{$money}">
+        <input type="hidden" name="prjid" value="{$id}">
+        <input type="hidden" name="award" value="{$award}">
+        <input type="hidden" name="authCode" value="{$authCode}">
+        <input type="button" id="submit_Financing_Invest_ajaxview" name="" value="投 标" class="btns">
+      </span>
+    </div>
+  </form>
+</div>

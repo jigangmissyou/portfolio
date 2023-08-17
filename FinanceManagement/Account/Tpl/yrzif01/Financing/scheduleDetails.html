@@ -1,0 +1,44 @@
+<extend name="./app/Tpl/Public/base_user.html"/>
+<block name="title">理财记录</block>
+<block name="body">
+<style type="text/css">
+  .ui-record-table ul li{
+    float: left;
+  }
+</style>
+<div class="container-inner mt20">
+   <include file="./app/Tpl/Account/account_sider.html" />
+</div>
+<div class="scheduleDetails">
+<p class="orange schedule-tips">鑫合汇专业风控人员全程现场监控</p>
+<ul class="clearfix" style="border-top:3px solid #00a1e9;background:#f5f5f5;line-height:40px;font-size:14px;margin-bottom:10px;">
+  <li style="width:4%" class="tac fl">&nbsp;&nbsp;&nbsp;&nbsp;</li>
+  <li style="width:15%" class="tac fl">项目阶段</li>
+  <li style="width:25%" class="tac fl">处理时间</li>
+  <li style="width:45%" class="tac fl">项目进度</li>
+  <li style="width:10%" class="tac fl">处理状态</li>
+</ul>
+
+<ul class="clearfix" style="line-height:24px;font-size:14px;">
+<!-- 第一行 -->
+  <li style="width:4%" class="tac fl"><img src="/public/images/yuan.png" alt="" style="float: left;margin-left: 31px;" /></li>
+  <li style="width:15%" class="tac fl borderLeft">项目准备</li>
+  <li style="width:25%" class="tac fl">2016-4-3 15:20</li>
+  <li style="width:45%" class="tac fl">浙商证券划款至借款人中国银行xxx支行账户已完成</li>
+  <li style="width:10%" class="tac fl"><img src="/public/images/dui.png" alt="" /></li>
+<!-- 第二行 -->
+  <li style="width:4%" class="tac fl">&nbsp;&nbsp;&nbsp;&nbsp;</li>
+  <li style="width:15%" class="tac fl borderLeft">&nbsp;</li>
+  <li style="width:25%" class="tac fl">2016-4-3 15:20</li>
+  <li style="width:45%" class="tac fl">浙商证券划款至借款人中国银行xxx支行账户已完成</li>
+  <li style="width:10%" class="tac fl"><img src="/public/images/dui.png" alt="" /></li>
+<!-- 第四行 -->
+  <li style="width:4%" class="tac fl"><img src="/public/images/yuan.png" alt="" style="float: left;margin-left: 31px;margin-top: 9px;" /></li>
+  <li style="width:15%" class="tac fl borderLeft">项目准备</li>
+  <li style="width:25%" class="tac fl">2016-4-3 15:20</li>
+  <li style="width:45%" class="tac fl">浙商证券划款至借款人中国银行xxx支行账户已完成</li>
+  <li style="width:10%" class="tac fl"><img src="/public/images/dui.png" alt="" /></li>
+</ul>
+<p class="orange schedule-tips tac">备注：因实际业务操作中，存在债权转让事项发生，将可能导致部分项目资金动态时间先于项目募集时间。</p>
+</div>
+</block>

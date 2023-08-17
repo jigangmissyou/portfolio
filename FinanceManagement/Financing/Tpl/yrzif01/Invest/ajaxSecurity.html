@@ -1,0 +1,74 @@
+<?php if($is_xlb){ ?>
+<h4><!-- <i class="icon_Greyinfo"></i> -->中新力合担保公司担保</h4>
+<div class="view-risk-audit">
+</div>
+<h4><!-- <i class="icon_Greyinfo"></i> -->鑫盾风控系统</h4>
+<div class="view-risk-audit">
+    <foreach name="xlb_risk_audit" item="item">
+        <p>{$item}</p>
+    </foreach>
+</div>
+<h4><!-- <i class="icon_Greyinfo"></i> -->{$xlb_diya_msg}</h4>
+<div class="view-risk-audit">
+</div>
+<?php } else {?>
+    <?php if($is_jjs){ ?>
+    <p style="padding-left:5px;border-bottom: #ebebeb 1px solid;">以下措施为基础资产的安全保障</p>
+    <?php } ?>
+<h4><!-- <i class="icon_Greyinfo"></i> -->风险审核</h4>
+<div>
+    <ul class="view-risk-audit">
+        <foreach name="risk_audit" item="item">
+            <li>{$item}</li>
+        </foreach>
+    </ul>
+</div>
+<if condition="!empty($quota_control)">
+    <h4><!-- <i class="icon_Greyinfo"></i> -->额度控制</h4>
+    <div class="view-risk-audit">
+        <foreach name="quota_control" item="item">
+            <p>{$item}</p>
+        </foreach>
+    </div>
+</if>
+<h4><!-- <i class="icon_Greyinfo"></i> -->资金控制</h4>
+<div class="view-risk-audit">
+    <if condition="!empty($capital_control)">
+        <foreach name="capital_control" item="item">
+            <p>{$item}</p>
+        </foreach>
+    </if>
+    专人监控资金流转全过程，确保借款资金专款专用
+    <if condition="!empty($prj_manager_no)"><br/><span data-msg="{$prj_manager_no}">跟单业务人员编号 —— {$prj_manager_no}</span></if>
+</div>
+<h4 id="protectbox"><!-- <i class="icon_Greyinfo"></i> -->保障措施</h4>
+<dl class="buy-back">
+    <foreach name="guarantee_measure" item="item">
+        <dt style="display:block;float:none;">{$item}</dt>
+    </foreach>
+    <if condition="!empty($guarantor['title'])">
+        <?php if ($guarantor['desr_url']) { ?>
+            <?php if ($prj_info['prj_business_type']=="H") { ?>
+            <?php } else { ?>
+                <dt><if condition="!$is_jjs"><a href="<?php echo $guarantor['desr_url']; ?>" target="_blank"
+                       class="blue"><?php echo $guarantor['title']; ?></a>提供担保服务【<a
+                        href="<?php echo $guarantor['desr_url']; ?>" target="_blank" class="blue">查看介绍</a>】</if>
+                </dt>
+            <?php } ?>
+        <?php } elseif($guarantor['is_no_guarantee']==1) { ?>
+                <dt><?php echo $guarantor['title']; ?>【<a
+                        href="{:U('Activity/Show/trust')}" target="_blank" class="blue">查看介绍</a>】
+                </dt>
+        <?php } else { ?>
+            <dt><?php echo $guarantor['title']; ?>提供本息保障</dt>
+        <?php } ?>
+    </if>
+</dl>
+<?php } ?>
+<script type="text/javascript">
+    $(document).ready(function(){
+        if($(".buy-back").text().trim()==""){
+            $("#protectbox").hide();
+        }
+    })
+</script>

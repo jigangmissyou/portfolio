@@ -1,0 +1,7 @@
+<div class="detailSurTab surTabUl mt30 mb20">
+  <ul>
+<php>if($has_tenant_id && in_array(IdentityConst::PROD_PUBLISH_NO,$loginUser['identity_no']) ){</php>
+    <li<?php if(MODULE_NAME=='Product' && (ACTION_NAME=='add' || ACTION_NAME=='edit')) {?> class="current"<?php }?>><span class="roundTopborGy"><a href="{:U('Financing/Product/add')}"><?php if(ACTION_NAME=='add'){echo "发布需求";}else{echo "修改需求";} ?></a></span><a class="hrwrite"></a></li>
+<php>}</php>
+  </ul>
+</div>

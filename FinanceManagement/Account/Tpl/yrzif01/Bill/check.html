@@ -1,0 +1,211 @@
+<extend name="./app/Tpl/Public/base_hfhg.html"/>
+<block name="title">月度理财单</block>
+<block name="keywords"></block>
+<block name="description"></block>
+<block name="style">
+<link rel="stylesheet" type="text/css" href="/public/css/sasscss/act/check/pc.css" />
+<style type="text/css">
+#container{
+    width:auto;
+}
+</style>
+<script src="/public/componentjs/highcharts/js/highcharts2016.js"></script>
+</block>
+<block name="body">
+<div class="banner">
+    <div class="banner1"></div>
+</div>
+<div class="black">
+    <select name="selectMonth" id="selectMonth" style="height: 40px;vertical-align: top;font-size: 20px;width: 120px;margin-left: -30px;">    
+    </select>
+    <div class="data">
+        <span id="reg_time_y">2013</span>年<span id="reg_time_m">12</span>月到<span id="search_y">2016</span>年<span id="search_m">2</span>月，您在鑫合汇累计投资<em class="orange" id="ttl_inv_amt">200,000,000</em>元，共赚取收益<em class="orange" id="ttl_profit">200,000</em>元<br />
+        截止本月底账户净资产为<em class="orange" id="net_asset">500,000.00</em>元&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;本月已赚收益<span class="q" hovercard="div@yzsy" hovercard-options='{"direction":"up"}'></span><div hovercard-id="yzsy" class="dn">“已赚收益”为本月项目还款实际到账的收益。</div><em class="orange" id="monthend_profit">4,000.00</em>元<br />
+        推荐好友获得的奖励为<em class="orange" id="recomm_reward">1,250.00</em>元
+    </div>
+</div>
+<div id="registertime" class="dn">{$reg_time}</div>
+<!-- 新增需求 -->
+<div class="tac nullBox dn">
+    <p><em class="blue2">暂无数据<br /></em>您本月没有发生投资、充值、提现、回款等行为<br />记得多来鑫合汇转转哦~</p>
+</div>
+
+<div class="container">
+<ul id="revenueDiv">
+<div class="tittle1"><img src="/public/images/act/check/pc/source.png" alt="" /></div>
+<li id="interestArea" class="border1">
+<p class="mid fz18">利息收益<em class="orange" id="monthend_yield">100,000.00</em>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;综合年化收益率为<em class="orange" id="monthend_roi">9.55%</em></p>
+
+<div class="pieBox">
+    <div class="pie" id="income-pie"></div>
+    <div class="detail">
+        <div class="box1">
+            <div class="rys"></div>
+            <em class="fz14 fl mt10">￥<em class="blue1" id="rys_yield">3000.00</em></em>
+        </div>
+        <div class="box1">
+            <div class="yys"></div>
+            <em class="fz14 fl mt10">￥<em class="green" id="yys_yield">3000.00</em></em>
+        </div>
+        <div class="box1">
+
+            <div class="nys"></div>
+            <em class="fz14 fl mt10">￥<em class="yellow" id="nys_yield">3000.00</em></em>
+        </div>
+        <div class="box1">
+            <div class="sdt"></div>
+            <em class="fz14 fl mt10">￥<em class="red" id="sdt_yield">3000.00</em></em>
+        </div>
+    </div>
+</div>
+</li>
+<li id="fastArea" class="border1">
+<p class="mid fz18">变现收益<span class="q" hovercard="div@bxsy" hovercard-options='{"direction":"up"}'></span><em class="orange" id="fastcash_profit">4,000.00</em>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;变现金额<em class="orange" id="fastcash_money">10,000.00</em><div hovercard-id="bxsy" class="dn">变现收益=变现金额-投资金额-平台服务费</div></p>
+<div class="listBox">
+    <p class="fz14">本月成功变现项目</p>
+    <table class="" id="table_fc">
+        <tr>
+            <th width="40%">项目名称</th>
+            <th width="20%">变现金额（元）</th>
+            <th width="20%">平台服务费</th>
+            <th width="20%">变现收益（元）</th>
+        </tr>
+        <tr>
+            <td>月益升-经营贷yys2016012802</td>
+            <td>5000.00</td>
+            <td>5000.00</td>
+            <td>5000.00</td>
+        </tr>
+    </table>
+</div>
+</li>
+<li id="rewardArea" class="border1">
+<p class="mid fz18">奖券收益<em class="orange" id="reward">10,000.00</em></p>
+<div class="mid fz16">
+    <div class="icon-reward1"></div>
+    <div class="redward">红包<br /><em class="orange fz12" id="bonus_reward">10,000.00</em></div>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <div class="icon-full-cut1"></div>
+    <div class="redward">满减券<br /><em class="orange fz12" id="ticket_reward">10,000.00</em></div>
+</div>
+</li>
+</ul>
+
+<div id="investDiv">
+<div class="tittle1"><img src="/public/images/act/check/pc/invest.png" alt="" /></div>
+ 
+<p class="mid fz18">
+充值：<span id="monthend_recharge">500</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;提现：<span id="monthend_cashout">500</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;新增投资金额<em class="orange" id="monthend_inv_amt"> 10,000.00</em></p>
+<div id="investArea">
+<div class="pieBox" style="border-bottom:0;">
+    <div class="pie" id="invest-pie"></div>
+    <div class="detail">
+        <div class="box1">
+            <div class="rys"></div>
+            <em class="fz14 fl mt10">￥<em class="blue1" id="rys_inv_amt">3000.00</em></em>
+        </div>
+        <div class="box1">
+            <div class="yys"></div>
+            <em class="fz14 fl mt10">￥<em class="green" id="yys_inv_amt">3000.00</em></em>
+        </div>
+        <div class="box1">
+
+            <div class="nys"></div>
+            <em class="fz14 fl mt10">￥<em class="yellow" id="nys_inv_amt">3000.00</em></em>
+        </div>
+        <div class="box1">
+            <div class="sdt"></div>
+            <em class="fz14 fl mt10">￥<em class="red" id="sdt_inv_amt">3000.00</em></em>
+        </div>
+    </div>
+</div>
+<div class="listBox" style="border-bottom:0;">
+    <table class="" id="table_inv">
+        <tr>
+            <th width="25%">项目名称</th>
+            <th width="25%">投资金额（元）</th>
+            <th width="15%">利率</th>
+            <th width="15%">期限</th>
+            <th width="20%">预期收益（元）</th>
+        </tr>
+        <tr>
+            <td>月益升-经营贷yys2016012802</td>
+            <td>7000</td>
+            <td>5.00% </td>
+            <td>30天</td>
+            <td>5000.00</td>
+        </tr>
+    </table>
+</div>
+</div>
+</div>
+
+<div id="awardDiv">
+<div class="tittle1"><img src="/public/images/act/check/pc/award.png" alt="" /></div>
+<div class="awardBox clearfix">
+    <div class="awardLeft fl">
+        <div class="mid fz18">推荐奖励 <em class="orange" id="recomm_reward1">1250.00</em></div>
+        <ul>
+            <li class="fz14 fl">现金红包<em class="q vam"  hovercard="div@xjhb" hovercard-options='{"direction":"up"}'></em><br /><em class="orange fz18" id="recomm_cash_reward">100</em></li>
+            <div hovercard-id="xjhb" class="dn">每成功邀请一位首次投资≥5000元的新用户，可以获得50元现金。</div>
+            <li class="fz14 fl pad100">佣金收入<em class="q vam"  hovercard="div@yjsr" hovercard-options='{"direction":"up"}'></em><br /><em class="orange fz18" id="recomm_commission">100</em></li>
+            <div hovercard-id="yjsr" class="dn">您成功邀请的好友及其成功邀请的好友在鑫合汇在贷金额<br />
+乘以一定比例的佣金系数，作为您的佣金收入。</div>
+            <li class="fz14 fl">推荐好友数<em class="q vam"  hovercard="div@tjhy" hovercard-options='{"direction":"up"}'></em><br /><em class="orange fz18" id="recomm_ucnt">100</em>人</li>
+            <div hovercard-id="tjhy" class="dn">截止本月底，您成功邀请注册的好友数及<br />其成功邀请注册的好友数之和。</div>
+        </ul>
+    <table class="awardTable">
+        <tr>
+            <td>一级好友：<em class="orange fz18" id="recomm_lvl1_ucnt">5</em>人</td>
+            <td rowspan="2" class="fz18 pad20"><em class="man"></em>x<span id="recomm_lvl1_ucnt1">5</span></td>
+        </tr>
+        <tr>
+            <td>佣金收入：<em class="orange fz18" id="recomm_lvl1_comm">500.00</em></td>
+        </tr>
+        <tr>
+            <td>二级好友：<em class="orange fz18" id="recomm_lvl2_ucnt">5</em>人</td>
+            <td rowspan="2" class="fz18 pad20"><em class="man"></em>x<span id="recomm_lvl2_ucnt1">10</span></td>
+        </tr>
+        <tr>
+            <td>佣金收入：<em class="orange fz18" id="recomm_lvl2_comm">500.00</em></td>
+        </tr>
+    </table>
+    </div>
+    <div class="awardright fl">
+        <div class="mid fz18">活动奖励</div>
+        <div class="tac">本月您参与平台活动<span id="activity_list">”阵营挑战齐力迎新“、”鑫手福利“</span></div>
+        <div class="tal">获得</div>
+        <div class="mid fz16 tal pd30">
+            <div class="icon-reward1"></div>
+            <div class="redward redward-fl">红包<br /><em class="orange fz12" id="gained_bonus">10,000.00</em></div>
+            <div class="icon-full-cut1"></div>
+            <div class="redward redward-fl">满减券<br /><em class="orange fz12" id="gained_ticket">10,000.00</em></div>
+            <div class="cash"></div>
+            <div class="redward redward-fl">现金奖励<br /><em class="orange fz12" id="gained_cash_reward">10,000.00</em></div>
+        </div>
+        <div class="tal">投资使用</div>
+        <div class="mid fz16 tal pd30">
+            <div class="icon-reward1"></div>
+            <div class="redward redward-fl">红包<br /><em class="orange fz12" id="invest_bonus">10,000.00</em></div>
+            <div class="icon-full-cut1"></div>
+            <div class="redward redward-fl">满减券<br /><em class="orange fz12" id="invest_ticket">10,000.00</em></div>
+        </div>
+    </div>
+</div>
+</div>
+</div>
+<div class="footer fz14 white1 lh24">
+    <p class="fwb tac fz16 lh24">如您有任何疑问，请联系我</p>
+    <div class="tac lh24">
+        <p class="tal width100 yellow1">
+            <em class="name"></em>姓名：<span id="mgr_real_name">沈佳</span><br /> 
+            <em class="phone"></em>手机：<span id="mgr_mobile">1350248920</span><br /> 
+            <em class="qq"></em>Q Q：<span id="mgr_qq">3113505898</span><br /> 
+            <em class="email"></em>邮箱：<span id="mgr_email">shenjia@upg.cn</span><br /> 
+        </p>
+    </div>
+    <p class="fwb tac fz16">感谢您的一路支持<br />祝商祺！</p>
+    <p class="tac">您的鑫合汇客户经理：<span id="mgr_real_name1">沈佳</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id="generated_date">2016年3月1日</span></p>
+</div>
+</block>

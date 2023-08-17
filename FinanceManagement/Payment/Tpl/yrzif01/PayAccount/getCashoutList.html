@@ -1,0 +1,256 @@
+<style>
+  .total-statistics{float: right;}
+</style>
+<table class="ui-record-table">
+  <thead>
+    <tr>
+      <if condition="$status neq 2">
+        <th width="4%" class="tac">选择</th>
+      </if>
+      <th width="8%">提现时间</th>
+      <th width="8%">提现id</th>
+      <th width="8%">流水号</th>
+      <?php if($status == 2 || $status == 3){ ?>
+      <th width="8%">处理方式</th>
+      <?php } ?>
+      <th width="6%">站点</th>
+      <th width="7%">提现用户</th>
+
+      <?php if($status != 2 && $status != 3){ ?>
+      <th width="7%">真实姓名</th>
+      <?php } ?>
+
+      <th width="10%" class="tar">申请提现金额</th>
+      <?php if($status != 2 && $status != 3){ ?>
+      <!-- <th width="10%" class="tar">使用免费提现额度</th> -->
+      <?php } ?>
+      <th width="8%" class="tar">提现转账费用</th>
+      <th width="8%" class="tar">手续费</th>
+      <th width="8%" class="tar">需支付金额</th>
+      <th width="18%" class="tac">提现银行卡</th>
+      <?php if($status == 1 || $status == 5 || $status == 99){?>
+      <th width="6%" class="tac">操作</th>
+      <?php } ?>
+      <?php if($status == 2 || $status == 3){ ?>
+      <th width="10%" order_field="mtime" <eq name="order_field" value="mtime"> order_type="{$order_type}"</eq>>处理时间</th>
+      <?php } ?>
+      <?php if($status == 3){ ?>
+      <th width="10%">备注</th>
+      <?php } ?>
+    </tr>
+  </thead>
+  <tbody>
+    <?php if(!empty($list['data'])){ foreach ($list['data'] as $key => $vo) {
+    ?>
+    <tr>
+      <if condition="$status neq 2">
+        <td class="tac">
+          <input type="checkbox" name="cashoutId" data-flag="checkBtn" value="{$vo.id}"/>
+        </td>
+      </if>
+      <td>
+        <span class="time"><?php echo  date("Y-m-d H:i", $vo['ctime']); ?></span>
+      </td>
+      <td>
+        <span class="time"><?php echo $vo['id']; ?></span>
+      </td>
+
+      <td>
+        <span class="time"><?php echo $vo['cashout_process_no']; ?></span>
+      </td>
+
+
+      <?php if($status == 2 || $status == 3){ ?>
+      <if condition="$status eq 2">
+        <td hovercard="ajax@{:U('Payment/PayAccount/getChannelInfo', 'cashoutId='.$vo[id])}">
+      <else />
+        <td>
+      </if>      
+        <?php if($vo['automatic'] == '1'){ echo '自动提现'; }else{ echo '人工审核'; } ?>
+      </td>
+      <?php } ?>
+      <td>
+        <span class="mi_name"><?php echo $mi_list[$vo['mi_no']]['mi_name']; ?></span>
+      </td>
+      <?php if($status != 2 && $status != 3){ ?>
+      <td>
+        <span class="show_userinfo">
+          <?php
+            if($status == 1 && $vo['hasRemark']){
+              echo "<p style='color:#FFB90F'>".$vo['user']['uname']."</p>";
+            }else{
+                echo $vo['user']['uname'];
+            }
+          ?>
+        </span>
+      </td>
+      <?php } ?>
+
+      <td>
+        <?php
+          if($status != 2 && $status != 3){
+            if($vo['company_id'] == 1){ // UPG
+              echo "<p>".$vo['user']['real_name']."<br><span style='background: #FF741E; color:#fff; dispaly: block; padding:2px 5px;'> UPG</span></p>";
+            } else {
+              echo $vo['user']['real_name'];
+            }
+          } else {
+        ?>
+        <?php
+          if($vo['company_id'] == 1){ // UPG
+         ?>
+          用户名：{$vo.user.uname}<br>
+          姓名：{$vo.user.real_name}<br><span style='background: #FF741E; color:#fff; dispaly: block; padding:2px 5px;'> UPG</span>
+          <?php } else { ?>
+          用户名：{$vo.user.uname}<br>
+          姓名：{$vo.user.real_name}
+        <?php }} ?>
+      </td>
+
+      <td class="tar"><?php $tixian_money = $vo['money'] + $vo['fee']; echo number_format($tixian_money/100, 2)."元";?></td>
+      <?php if($status != 2 && $status != 3){ ?>
+      <!-- <td class="tar"><?php echo number_format($vo['free_money']/100, 2)."元"; ?></td> -->
+      <?php }?>
+      <td class="tar"><?php echo number_format($vo['fuwu_fee']/100, 2)."元"; ?></td>
+      <td class="tar"><?php echo number_format($vo['tixian_fee']/100, 2)."元"; ?></td>
+      <td class="tar"><?php $pay_money = $vo['money']; echo number_format($pay_money/100, 2)."元";?></td>
+      <td>
+        <p>卡号：{$vo.fund_account.account_no}</p>
+        <p>开户行：{$vo.fund_account.bank_name}{$vo.fund_account.sub_bank}</p>
+      </td>
+      <?php if($status == 1 || $status == 5 || $status == 99){ ?>
+      <td class="tac">
+        <?php if($vo['status'] == 1){ ?>
+        <div class="action_box">
+          <a href="javascript:void(0);" class="btn_edit" hovercard="div@ctl{$vo.id}" hovercard-options='{"minWidth":"auto","maxWidth":"auto","minHeight":"auto","noArrow":"false","speed":100}'></a>
+          <div class="dn" hovercard-id="ctl{$vo.id}">
+            <ul class="action_item">
+              <li>
+                <a href="javascript:" did="{$vo.id}" id="confirmChangeStatus{$vo.id}">确定</a>
+              </li>
+              <li>
+                <a href="javascript:" did="{$vo.id}" id="customFollow{$vo.id}">客服跟踪</a>
+              </li>
+              <li>
+                <a href="javascript:" did="{$vo.id}" id="viewBak{$vo.id}">查看备注</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <?php } elseif ($status == 5) { ?>
+        <select name="statusSelect" multipleone="1" id="{$vo.id}">
+          <option value="1">待审核</option>
+          <option value="5" selected="selected">提现中</option>
+          <option value="99">提现处理中</option>
+        </select>
+
+        <?php } elseif ($status == 99) { ?>
+        <select name="statusSelect" multipleone="1" id="{$vo.id}">
+          <option value="5">提现中</option>
+            <option value="99" selected="selected">提现处理中</option>
+          <option value="2">提现成功</option>
+          <option value="3">提现失败</option>
+        </select>
+        <br/>
+        <a class="backFailed" id="{$vo.id}" href="">退回</a>
+        <?php } ?>
+      </td>
+      <?php } ?>
+
+      <?php if($status == 2 || $status == 3){ ?>
+      <td><span class="time"><?php echo  date("Y-m-d H:i", $vo['mtime']); ?></span></td>
+      <?php } ?>
+      
+      <?php if($status == 3){ ?>
+      <td textlength="20"><p class="oh">{$vo.deal_reason}</p></td>
+      <?php } ?>
+
+    </tr>
+    <?php }} else { ?>
+    <tr><td colspan="100%" class="tac">没有相关数据</td></tr>
+    <?php } ?>
+  </tbody>
+</table>
+
+<p style="margin-top: 10px;">
+  <if condition="$status neq 2">
+    <label style="margin-left: 13px;">
+      <input type="checkbox" name="selectAllBtn" id="selectAllBtn" data-flag="checkAllBtn"/> 全选
+    </label>
+  </if>
+  <?php if($status == 1){ // 待审核 ?>
+  <input style="margin-left: 15px;"  status="5" type="button" value="批量确定" url="{:U('Payment/PayAccount/batchDealCashout')}" data-flag="batchDealCashoutBtn"/>
+  <?php } else if($status == 5) { ?>
+  <input style="margin-left: 15px;" type="button" status="1" value="批量待审核" url="{:U('Payment/PayAccount/batchDealCashout')}" data-flag="batchDealCashoutBtn"/>
+  <input style="margin-left: 15px;" type="button" status="99" value="批量提现处理中" url="{:U('Payment/PayAccount/batchDealCashout')}" data-flag="batchDealCashoutBtn"/>
+  <?php }else if($status == 99) { ?>
+  <input style="margin-left: 15px;" type="button" status="5" value="批量提现中" url="{:U('Payment/PayAccount/batchDealCashout')}" data-flag="batchDealCashoutBtn"/>
+  <input style="margin-left: 15px;" type="button" status="2" value="批量提现成功" url="{:U('Payment/PayAccount/batchDealCashout')}" data-flag="batchDealCashoutBtn"/>
+  <input style="margin-left: 15px;" type="button" status="3" value="批量提现失败" url="{:U('Payment/PayAccount/batchDealCashout')}" data-flag="batchDealCashoutBtn"/>
+  <?php } ?>
+</p>
+
+  <?php
+    $this_total = 0;
+    $this_total_sum = 0;
+
+    if($status == 1){
+      $this_total = $totalTodo1;
+      $this_total_sum = $totalTodo_sum;
+    }else if($status == 5){
+      $this_total = $totalDoing1;
+      $this_total_sum = $totalDoing_sum;
+    }else if($status == 2){
+      $this_total = $totalSuccess1;
+      $this_total_sum = $totalSuccess_sum;
+    }else if($status == 3){
+      $this_total = $totalFailed1;
+      $this_total_sum = $totalFailed_sum;
+    }else if($status == 6){
+      $this_total = $totalMacTodo1;
+      $this_total_sum = $totalMacTodo_sum;
+    }else if($status == 7){
+      $this_total = $totalMacDoing1;
+      $this_total_sum = $totalMacDoing_sum;
+    }else if($status == 8){
+      $this_total = $totalMacCustom1;
+      $this_total_sum = $totalMacCustom_sum;
+    }else if($status == 99){
+      $this_total = $totalBeing1;
+      $this_total_sum = $totalBeing_sum;
+    }
+
+  ?>
+
+  <div class="total-statistics">
+    共计{$this_total}条数据/{$this_total_sum}元
+  </div>
+
+<?php $pageNavCallback = "ajaxAfter_Payment_PayAccount_getCashoutList"; ?>
+<include file="./app/Tpl/Public/pageAjax.html" />
+<input type="hidden" id="totalTodo" value="{$totalTodo}">
+<input type="hidden" id="totalDoing" value="{$totalDoing}">
+<input type="hidden" id="totalBeing" value="{$totalBeing}">
+<input type="hidden" id="totalSuccess" value="{$totalSuccess}">
+<input type="hidden" id="totalFailed" value="{$totalFailed}">
+<input type="hidden" id="totalMacTodo" value="{$totalMacTodo}">
+<input type="hidden" id="totalMacDoing" value="{$totalMacDoing}">
+<input type="hidden" id="totalMacCustom" value="{$totalMacCustom}">
+
+
+<div style="display: none">
+  <div id="dealBakBox">
+    <div id="titlebar">财务备注</div>
+    <div id="jqueryContent" class="w520">
+      <input type="hidden" id="dealId" value=""/>
+      <ul class="formList formList_pop">
+        <li><label class="li-label-name"><em class="red">*</em>备注：</label>
+          <span class="li-span-con">
+          <textarea class="ui_textarea" name="reason" style="height: 100px; line-height: 22px;"></textarea></span></li>
+          <li class="lastBtns"><label for="" class="li-label-name">&nbsp;</label><span class="li-span-con">
+            <span class="button-common-blue button-blue-pop"><input type="button" id="submitDealBak" class="btns" value="确定"></span>
+          </span></li>
+      </ul>
+    </div>
+  </div>
+</div>

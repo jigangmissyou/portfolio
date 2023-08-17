@@ -1,0 +1,184 @@
+<extend name="./app/Tpl/Public/base_user.html"/>
+<block name="title">理财记录</block>
+<block name="body">
+<div class="container-inner mt20">
+  <div class="xinjihua">
+    <div class="xjh-header">
+      【{$xprj_name}】   理财投资明细
+      <div class="xjh-btn">
+        <a href="javascript:;" id="serviceProtocolBtn" class="xjhbtn" colorbox="1">服务协议</a>
+      </div>
+    </div>
+    <table class="ui-record-table percentTable" style="width:980px;">
+      <thead>
+      <tr>
+        <th width="15%"  style="padding-left:2%;" order_field="order11"><a href="javascript:;" class="updown_sort">【时间】<i class="sort_normal"></i></a></th>
+        <th width="25%">明细</th>
+        <th width="15%" class="">状态</th>
+        <th width="15%" class="">合同</th>
+        <th width="25%" class="">详情</th>
+      </tr>
+      </thead>
+      <tbody>
+      <if condition="$xjh_result">
+          <tr>
+              <td>
+                  <p class="pro_name additive">【{$xjh_result.finish_date}】<br />{$xjh_result.finish_time}</p>
+              </td>
+              <td>
+                  <p class="name-color">
+                      总计回款到账 ：本息收益 {$xjh_result.total_money}元
+                      <?php if ($xjh_result['income_addon']) { ?>
+                      (含{$xjh_result.income_addon}元加息奖励)
+                      <?php } ?>
+                  </p>
+              </td>
+              <td class="">
+                  <span></span>
+              </td>
+              <td class="">
+                  <span></span>
+              </td>
+              <td class="">
+                  <span>总计回款到账 = 还款
+                      <?php if (isset($xjh_result['add_yield'])) { ?>
+                      (+红包奖励)
+                      <?php } ?>
+                      <?php if (isset($xjh_result['minus_yield'])) { ?>
+                      -扣除
+                      <?php } ?>
+                      +平台奖励+投资加成
+                  </span>
+              </td>
+          </tr>
+          <tr>
+              <td>
+                  <p class="pro_name additive">【{$xjh_result.finish_date}】<br />{$xjh_result.finish_time}</p>
+              </td>
+              <td>
+                  <p class="name-color">
+                      还款 ： 本息收益 {$xjh_result.actual_benxi} 元
+                      <?php if ($xjh_result['add_yield']>0) {?>
+                      <br/>
+                      红包奖励 ：<?php echo $xjh_result['add_yield'] ?> 元
+                      <?php } ?>
+                      <?php if ($xjh_result['minus_yield']>0) {?>
+                      <br/>
+                      扣除 ：平台服务费 <?php echo $xjh_result['minus_yield'] ?> 元
+                      <?php } ?>
+                      <?php if ($xjh_result['income_activity']>0) {?>
+                      <br/>
+                      平台奖励：<?php echo $xjh_result['income_activity'] ?> 元
+                      <?php } ?>
+                      <?php if ($xjh_result['income_addon']>0) {?>
+                      <br/>
+                      投资加成：<?php echo $xjh_result['income_addon'] ?> 元
+                      <?php } ?>
+                  </p>
+              </td>
+              <td class="">
+                  <span></span>
+              </td>
+              <td class="">
+                  <span></span>
+              </td>
+              <td class="">
+                    <span>
+                    </span>
+              </td>
+          </tr>
+      </if>
+          <if condition="$list">
+          <foreach name="list" item="v">
+          <tr>
+          <td>
+            <p class="pro_name additive">【{$v.ctime_date}】<br />{$v.ctime_time}</p>
+          </td>
+          <td>
+            <p class="name-color">
+                <a href="/Financing/Invest/view?id={$v.prj_id_view}" target="_blank" hidefocus="hidefocus">投资{$v.num} ：{$v.prj_type_view} {$v.prj_name}</a>
+            </p>
+            <span class="classIcons">
+              <a class="baoSIcn" href="/Help/Help/viewHelpIndex?tpl=AboutUs-partners" title="100%本息保障" hidefocus="hidefocus"><em class="icn_s"></em></a>
+            </span>
+          </td>
+          <td class="">
+            <span>{$v.status}</span>
+          </td>
+          <td class="">
+            <span>
+                <?php if ($v['have_transfer_protocol']) { ?>
+                    <a href="javascript:;" hovercard="ajax@{:U('Account/Financing/getTransferList',array('oid'=>$v['id']))}" hovercard-options='{ "direction":"down" }'>债权转让</a>
+                    <br />
+                <?php } ?>
+                <?php if ($v['have_loan_protocol']) { ?>
+                    <a href="javascript:;" hovercard="ajax@{:U('Index/Protocol/validateview',array('id'=>$v['id']))}" hovercard-options='{ "direction":"down" }'>借款</a>
+                <?php } ?>
+            </span>
+          </td>
+          <td class="">投资金额：{$v.money}<br />预期年化收益率：{$v.total_rate}</td>
+        </tr>
+        </foreach>
+        </if>
+        <if condition="$xjh_begin">
+            <tr>
+                <td>
+                    <p class="pro_name additive">【{$xjh_begin.value_day_date}】<br />{$xjh_begin.value_day_time}</p>
+                </td>
+                <td>
+                    <p class="name-color">
+                        开始计算利息
+                    </p>
+                </td>
+                <td class="">
+                    <span></span>
+                </td>
+                <td class="">
+                    <span></span>
+                </td>
+                <td class="">
+                    <span></span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p class="pro_name additive">【{$xjh_begin.ctime_date}】<br />{$xjh_begin.ctime_time}</p>
+                </td>
+                <td>
+                    <p class="name-color">
+                        加入司马小鑫
+                    </p>
+                </td>
+                <td class="">
+                    <span></span>
+                </td>
+                <td class="">
+                    <span></span>
+                </td>
+                <td class="">
+                    <span>
+                        加入总金额：{$xjh_begin.money}
+                        <br/>
+                        预期年化收益率：{$xjh_begin.year_rate}
+                        <?php if ($xjh_begin.addon_rate) { ?>
+                         + {$xjh_begin.addon_rate}
+                        <?php } ?>
+
+                        <br/>
+                        投资期限：{$xjh_begin.time_limit_day}天
+                        <br/>
+                        预期理财收益：{$xjh_begin.total_yield}
+                        <?php if ($xjh_begin.total_yield) { ?>
+                        (含 {$xjh_begin.income_addon} 元 加息)
+                        <?php } ?>
+                    </span>
+                </td>
+            </tr>
+        </if>
+      </tbody>
+    </table>
+    <?php $pageNavCallback = "ajaxAfter_Account_Financing_index"; ?>
+    <include file="./app/Tpl/Public/pageAjax.html" />
+  </div>
+</div>
+</block>

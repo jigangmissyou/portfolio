@@ -1,0 +1,42 @@
+<extend name="./app/Tpl/Public/base_hfhg.html"/>
+<block name="title">我的账户-账户设置-账户信息</block>
+<block name="keywords">融资管理</block>
+<block name="description">融资管理</block>
+<block name="body">
+  <include file="fund_nav" />
+  <div class="col2-wrap" id="accountInfoWrap">
+    <input type="hidden" name="user_id" value="{$corpinfo.id}"/>
+    <div class="left-col">
+      <dl>
+        <dt><if condition = "$is_person">个人<else />企业</if>资料</dt>
+        <dd>
+          <a event-click="showContent" data-args="uploadSource" href="javascript:">证件资料</a>
+        </dd>
+        <dt>账户信息</dt>
+        <dd>
+          <a event-click="showContent" data-args="passwordBox" href="javascript:">账号安全</a>
+          <a event-click="showContent" data-args="bankCardBar" href="javascript:">资金账户绑定</a>
+          <a event-click="showContent" data-args="eCert" href="javascript:">数字证书(天威)</a>
+          <a event-click="showContent" data-args="FaDaDaeCert" href="javascript:">数字证书(法大大)</a>
+        </dd>
+      </dl>
+    </div>
+    <div class="right-col">
+      <div data-tabPanel id="uploadSource">
+        <include file="uploadSource" />
+      </div>
+      <div data-tabPanel id="passwordBox" style="display: none">
+        <include file="fund_password" />
+      </div>
+      <div data-tabPanel id="bankCardBar" class="ovh" style="display: none; ">
+        <include file="bankCard" />
+      </div>
+      <div data-tabPanel id="eCert" class="ovh" style="display: none; ">
+          <include file="./app/Tpl/Signature/eCert.html" />
+      </div>
+      <div data-tabPanel id="FaDaDaeCert" class="ovh" style="display: none; ">
+        <include file="./app/Tpl/Signature/FaDaDaeCert.html" />
+      </div>
+    </div>
+  </div>
+</block>

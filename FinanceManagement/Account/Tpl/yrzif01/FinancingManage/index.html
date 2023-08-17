@@ -1,0 +1,28 @@
+<extend name="./app/Tpl/Public/base_hfhg.html"/>
+<block name="title">我的账户-融资管理</block>
+<block name="keywords">我的借款</block>
+<block name="description">我的借款</block>
+<block name="style"></block>
+<block name="body">
+  <include file="fund_nav" />
+  <script>
+  var URL_ZHR_FINANCEAPPLY_DELETEAPPLY = "{:U('Zhr/FinanceApply/deleteApply')}"
+  </script>
+    <div class="main_area">
+      <div id="manage_type" style="<?php if(!$checkCorpInfo){ ?>display: none;<?php } ?>" class="category">
+        <!--<a event-click="init" data-args="baseInfo" href="javascript:" hidefocus="hidefocus">融资概况</a>-->
+        <!--<a event-click="init" data-args="applyFor" href="javascript:" hidefocus="hidefocus">融资申请</a>-->
+        <!--<a event-click="init" data-args="records" href="javascript:" hidefocus="hidefocus">资金记录</a>-->
+        <!--<a event-click="init" data-args="authSource" href="javascript:" hidefocus="hidefocus">认证资料</a>-->
+        <if condition="$user_reg_client neq 9">
+          <span id="toApplyLink">
+            <label for="" class="button-small-info"><input type="button" event-click="toApply" url="{:U('Zhr/FinanceApply/toApply')}" class="btns step_prev noOutline" value="申请融资"></label>
+          </span>
+        </if>
+      </div>
+   
+      <form action="#" ajax="1" ajax-after="ajaxAfter_switch_action" method="post" id="formId_manage" ajax-datatype="html">
+        <div id="ajaxContent"></div>
+      </form>
+     </div>
+</block>

@@ -1,0 +1,236 @@
+<li>
+  <span class="standardDi1">
+    <?php if($bill){echo '承兑银行:'.$bank_name;}else{?>保障措施：<?php if($car_loan){echo '承诺回购';}else{ echo $info['addcredit']['way'];}}?>
+    <?php if(!empty($danbaohan)){ ?>
+    <a href="javascript:;" event-click="viewDanbaoImg" data-imgUrl="{$danbaohan}" class="bluecolor marLf10px">查看同意担保函</a>
+    <div id="danbaoImg" data-flag="danbaoImg" style="display:none;">
+      <?php foreach (explode(',', $danbaohan) as $key => $url) {  // 遍历出来 方便js取值 ?>
+      <img src="{$url}" alt="担保函">
+      <?php } ?>
+    </div>
+    <?php } ?>
+  </span>
+  <span class="standardDi2">保障性质：{$info.safeguards_name2}</span>
+</li>
+
+<li>
+  <span class="standardDi1">
+    <em class="green6b">一级</em>保障：
+    <?php if($car_loan){ ?>
+    风险保证金<i class="icon_greyMark" hovercard-options='{"direction":"up"}' hovercard="div@riskMoney"></i>
+    <?php
+    }elseif($bill){
+    ?>
+      <span class="dbcomp_name" event-mouseover="overCorpType" event-mouseout="outCorpType">
+          <em textlength="10"><?php echo $bank_name;?></em><i class="icon_greyMark" hovercard="id@onehowHover"></i>
+          <div class="dn" hovercard-id="onehowHover">
+                    <p class="hoverPinfo">
+                        承兑银行到期无条件兑付
+                    </p>
+                </div>
+      <div class="BlueTipBox dn">
+          <span class="BlueTipBox_Rc"><?php echo $bank_name;?></span>
+          <em class="BlueTipBox_ArrR"></em>
+      </div>
+      </span>
+      <?php
+    }else{ ?>
+    <span class="dbcomp_name" event-mouseover="overCorpType" event-mouseout="outCorpType">
+      <?php if(!empty($info['guarantor']['desr_url'])){ // 有链接 则加链接 ?>
+        <a href="{$info.guarantor.desr_url}" class="blue" textlength="10">{$info.guarantor.title}</a>
+      <?php } else {  // 没链接就直接显示文字 但如果文字也没有则显示- ?>
+        <em textlength="10">
+          <?php if(!empty($info['guarantor']['title'])){ echo $info['guarantor']['title'];} else {echo "-";} ?>
+        </em>
+      <?php } ?>
+
+      <?php if(!empty($info['guarantor']['title'])){ // 有数据才展示 ?>
+      <div class="BlueTipBox dn">
+        <span class="BlueTipBox_Rc">{$info.guarantor.title}</span>
+        <em class="BlueTipBox_ArrR"></em>
+      </div>
+      <?php } ?>
+    </span>
+    
+    <?php if(!empty($info['guarantor']['corp_type']) && $info['guarantor']['corp_type'] != '其他'){  // 有国资、省资的话就展示 ?>
+      <i class="icon_stateBacked" event-mouseover="overCorpType" event-mouseout="outCorpType" title="{$corp_type2}">
+        {$info.guarantor.corp_type}
+        <div class="BlueTipBox dn">
+          <span class="BlueTipBox_Rc">{$info.guarantor.corp_type}</span>
+          <em class="BlueTipBox_Arr"></em>
+        </div>
+      </i>
+    <?php } ?>
+    
+    <?php if(!empty($info['guarantor']['corp_level'])){ // 评级 ?>
+    <i class="icon_A" title="<?php echo getCodeName('E045', $info['guarantor']['corp_level']); ?>"><?php echo getCodeName('E045', $info['guarantor']['corp_level']); ?></i>
+    <?php } ?>
+    <?php } ?>
+  </span>
+
+  <span class="standardDi2">
+    <em class="green6b">二级</em>保障：
+     <?php if($car_loan){ ?>
+     <?php if(!empty($info['guarantor2']['title_short'])){echo $info['guarantor2']['title_short'].'承诺回购';}else{echo '--';} }else{ ?>
+    <span class="dbcomp_name" event-mouseover="overCorpType" event-mouseout="outCorpType">
+      <?php if(!empty($info['guarantor2']['desr_url'])){ // 有链接 则加链接 ?>
+        <a href="{$info.guarantor2.desr_url}" class="blue" textlength="10">{$info.guarantor2.title}</a>
+      <?php }elseif($bill)
+      {
+        if(!empty($info['guarantor']['title'])){
+                                                    echo $info['guarantor']['title'];
+                                                }else {
+                                                    echo "-";
+                                                }
+        if(!empty($info['guarantor']['title'])){ ?>
+        <i class="icon_greyMark" hovercard="id@twoshowHover"></i>
+        <div class="dn" hovercard-id="twoshowHover">
+                    <p class="hoverPinfo">
+                        承诺到期本息代尝
+                    </p>
+                </div>
+        <div class="BlueTipBox dn">
+            <span class="BlueTipBox_Rc">{$info.guarantor.title}</span>
+            <em class="BlueTipBox_ArrR"></em>
+        </div>
+        <?php
+        }
+      } else {  // 没链接就直接显示文字 但如果文字也没有则显示- ?>
+        <em textlength="10">
+          <?php if(!empty($info['guarantor2']['title'])){ echo $info['guarantor2']['title'];} else {echo "-";} ?>
+        </em>
+      <?php if(!empty($info['guarantor2']['title'])){ // 有数据才展示 ?>
+      <div class="BlueTipBox dn">
+        <span class="BlueTipBox_Rc">{$info.guarantor2.title}</span>
+        <em class="BlueTipBox_ArrR"></em>
+      </div>
+      <?php } } ?>
+    </span>
+
+    <?php if(!empty($info['guarantor2']['corp_type']) && $info['guarantor2']['corp_type'] != '其他'){  // 有国资、省资的话就展示 ?>
+      <i class="icon_stateBacked" event-mouseover="overCorpType" event-mouseout="outCorpType" title="{$corp_type2}">
+        {$info.guarantor2.corp_type}
+        <div class="BlueTipBox dn">
+          <span class="BlueTipBox_Rc">{$info.guarantor2.corp_type}</span>
+          <em class="BlueTipBox_Arr"></em>
+        </div>
+      </i>
+    <?php } ?>
+    
+    <?php if(!empty($info['guarantor2']['corp_level'])){ // 评级 ?>
+    <i class="icon_A" title="<?php echo getCodeName('E045', $info['guarantor2']['corp_level']); ?>"><?php echo getCodeName('E045', $info['guarantor2']['corp_level']); ?></i>
+    <?php } ?>
+    <?php } ?>
+  </span>
+</li>
+<li>
+  <span class="standardDi1">
+    <em class="green6b">三级</em>保障：
+    <?php if($car_loan){ ?>
+     --
+     <?php }else{ ?>
+    <span class="dbcomp_name" event-mouseover="overCorpType" event-mouseout="outCorpType">
+      <?php if(!empty($info['guarantor3']['desr_url'])){ // 有链接 则加链接 ?>
+        <a href="{$info.guarantor3.desr_url}" class="blue" textlength="10">{$info.guarantor3.title}</a>
+      <?php } else {  // 没链接就直接显示文字 但如果文字也没有则显示- ?>
+        <em textlength="10">
+          <?php if(!empty($info['guarantor3']['title'])){ echo $info['guarantor3']['title'];} else {echo "-";} ?>
+        </em>
+      <?php } ?>
+
+      <?php if(!empty($info['guarantor3']['title'])){ // 有数据才展示 ?>
+      <div class="BlueTipBox dn">
+        <span class="BlueTipBox_Rc">{$info.guarantor3.title}</span>
+        <em class="BlueTipBox_ArrR"></em>
+      </div>
+      <?php } ?>
+    </span>
+
+    <?php if(!empty($info['guarantor3']['corp_type']) && $info['guarantor3']['corp_type'] != '其他'){  // 有国资、省资的话就展示 ?>
+      <i class="icon_stateBacked" event-mouseover="overCorpType" event-mouseout="outCorpType" title="{$corp_type2}">
+        {$info.guarantor3.corp_type}
+        <div class="BlueTipBox dn">
+          <span class="BlueTipBox_Rc">{$info.guarantor3.corp_type}</span>
+          <em class="BlueTipBox_Arr"></em>
+        </div>
+      </i>
+    <?php } ?>
+    
+    <?php if(!empty($info['guarantor3']['corp_level'])){ // 评级 ?>
+    <i class="icon_A" title="<?php echo getCodeName('E045', $info['guarantor3']['corp_level']); ?>"><?php echo getCodeName('E045', $info['guarantor3']['corp_level']); ?></i>
+    <?php } ?>
+    <?php } ?>
+  </span>
+  <span class="standardDi2">起息日：T（成交日）+ {$info.value_date_shadow} 天<i class="icon_greyMark" hovercard-options='{"direction":"up"}' hovercard="div@startDateTip"></i></span>
+  <div class="dn" hovercard-id="startDateTip">
+    <p class="hoverPinfo">
+      <?php if($info['value_date_shadow'] == 0){  // 当日 ?>
+      成交日当日计息，项目到期后次日13:00前回款
+      <?php } else {  // 次日 ?>
+      成交日次日计息，项目到期后当日24:00前回款
+      <?php } ?>
+    </p>
+  </div>
+
+  <div class="dn" hovercard-id="riskMoney">
+    <p class="hoverPinfo">
+     <?php echo json_decode($bzj_tips)->message;?>
+    </p>
+  </div>
+</li>
+
+<li>
+        <span class="standardDi1">融资规模：<em class="bluecolor">{$info.demand_amount_name}</em></span>
+        <span class="standardDi2">剩余时间：
+          <?php if($info['bid_status'] != 2){ // 不在投标中 ?>
+          <em class="org6e_color" >--:--:--</em>
+          <?php } else {  // 投标中 ?>
+          <em class="org6e_color" data-flag="surplus_bid_time_view" data-inner="0">
+            <em data-day>天</em><em data-hour>时</em><em data-min>分</em><em data-sec>秒</em>
+          </em>
+          <?php } ?>
+        </span>
+      </li>
+      <li>
+        <span class="standardDi1">
+          还款日期：{$info.last_repay_date_view}
+          <?php if($info['value_date_shadow']==0){  // 当日 ?>
+          (预计13:00之前到账)
+          <?php } else {  // 次日 ?>
+          (预计16:00-24:00到账)
+          <?php } ?>
+        </span>
+        <span class="standardDi2">
+           是否允许提前还款：
+          <?php if($info['act_prj_ext']['early_repay_days'] > 0){ ?>
+           是，允许提前{$info['act_prj_ext']['early_repay_days']}天还款<i class="icon_greyMark" hovercard="div@earlyRepayTip" hovercard-options='{"direction":"up"}'></i>
+            <div class="dn" hovercard-id="earlyRepayTip">
+              <p class="hoverPinfo">
+                该项目可能提前{$info['act_prj_ext']['early_repay_days']}天还款
+              </p>
+            </div>
+          <?php } else { ?>
+          否
+          <?php } ?>
+        </span>
+      </li>
+      <!-- standardDi3 withauto -->
+      <li>
+        <span class="standardDi1">可提前结束募集：<?php echo $info['act_prj_ext']['is_early_close'] ? '是' : '否'; ?></span>
+        <span class="standardDi2">是否允许展期：
+          <?php if($info['act_prj_ext']['is_extend']){ ?>
+          是，最长展期{$info['time_limit_extend']['time_limit_extend']}{$info['time_limit_extend']['time_limit_extend_unit']}<i class="icon_greyMark" hovercard="div@timeExtendTip" hovercard-options='{"direction":"up"}'></i>
+            <div class="dn" hovercard-id="timeExtendTip">
+              <p class="hoverPinfo">
+                本项目可能展期的最大期限为{$info['time_limit_extend']['time_limit_extend']}{$info['time_limit_extend']['time_limit_extend_unit']}，展期期间的借款利率不变。
+              </p>
+            </div>
+          <?php } else { ?>
+          否
+          <?php } ?>
+        </span>
+      </li>
+
+      <li class="noborderBot">
+        <span class="standardDi1">支持变现：<?php echo $info['ext']['is_transfer'] ? '是' : '否'; ?> </span>
+      </li>

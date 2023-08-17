@@ -1,0 +1,58 @@
+<extend name="./app/Tpl/Public/base_hfhg.html"/>
+<block name="title">撤销本次认证申请</block>
+<block name="keywords">机构理财信息填写,鑫合汇</block>
+<block name="description">机构理财信息填写,鑫合汇</block>
+<block name="body">
+  <div class="institutionInfo fixed">
+  	<span class="canvelApplyInstion inline_block fixed">撤销本次认证申请&emsp;</span>
+    <form ajax-after="after_form_cancelApply" ajax='1' id="form_cancelApply" action="{:U('Account/User/doCancelApply')}" method="post">   
+      <ul class="formList institForm center">
+        <li>
+          <label for="" class="li-label-name">已认证手机号码</label>
+          <span class="li-span-con">
+            {$mobileView}
+          </span>
+        </li>
+        <li>
+          <label for="" class="li-label-name">校验手机号码</label>
+          <span class="li-span-con">
+            <input type="text" name="mobile" valid="required,number" class="inputCommon mr10" hidefocus="hidefocus">
+          </span>
+        </li>
+        <li style="margin-top: 10px">
+           <label class="li-label-name"><!-- <em class="red">*</em> -->验证码</label>
+           <span class="li-span-con">
+              <input type="text" tabindex="2" maxlength="4" name="authCode" valid="required" valid-msg-options="{&quot;offset&quot;:95}" style="width:170px;" class="inputCommon" hidefocus="hidefocus">
+              <a href="javascript:;" hidefocus="hidefocus">
+                  <img src="/Index/Index/verify?version=5527635ff218c" class="VerifyCodeImg" width="90" height="34">
+              </a>
+           </span>
+        </li>
+        <li>
+            <label class="li-label-name"><!-- <em class="red">*</em> -->手机动态码</label>
+            <span class="li-span-con">
+            <input type="text" class="inputCommon" valid-extend-data="mobile" valid="required" valid-msg-options="{&quot;gravity&quot;:&quot;w&quot;, &quot;offset&quot;:95}" style="width: 170px;" name="code" hidefocus="hidefocus">
+            <a class="button-code-no show_send_btn addCanvelApplyBtn" href="javascript:;" hidefocus="hidefocus">免费获取</a>
+            <a class="button-code-on time_send" href="javascript:;" style="display:none;" hidefocus="hidefocus">120秒后失效</a>
+            <span class="fillNote dn codeTipsArea"><i class="org alM mr10"></i><em class="text">收不到手机动态码，请致电<i class="org ft14 fwb"> 400-821-8616</i></em></span></span>
+        </li>
+        <li class="fixed btnSelects tac">
+          <a href="" ajax-submit class="canceApplySubmit inline-block font18 fl tac">提交</a>
+          <a href="{:U('Account/User/index')}" class="canceApplyDel inline-block font18 fl tac">取消</a>
+        </li>
+      </ul>
+    </form>
+    <!-- 撤销成功弹窗 -->
+    <!-- 提示有关闭按钮 -->
+    <div id="jquerySuccess" class="dn">
+      <div id="jqueryContent" style="background:#fff;padding: 40px 0;">
+        <div class="pop-cashBox">
+        <h3 class="cancelApplyTt tac"><em class="imgNoteBig_Green fixed center"></em>成功撤销认证申请</h3>
+        <p class="tac font16 cancelApplyPp">您已成功撤销本次认证申请，可在“我的账户-<br/>账户概况”页面重新填写认证信息！</p>
+        <p class="tac font16 cancelApplyPp cancelApplyPp2"><span class="cancalYelcolor" id="ajaxTime">3</span> 秒后跳转到账户概况页面</p>
+        </div>
+      </div>
+    </div>
+    <!-- 撤销成功弹窗 end -->
+  </div>
+</block>

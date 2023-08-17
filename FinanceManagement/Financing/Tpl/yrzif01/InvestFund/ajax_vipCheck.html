@@ -1,0 +1,43 @@
+<div id="titlebar">会员资格认证（轻松两部即完成）/合格投资者测试问卷</div>
+<div id="jqueryContentImg" class="vipContentBOX">
+  <input id="view_prj_id" type="hidden" value="{$prj_id}"/>
+  <?php if($userInfo['is_id_auth']){ ?>
+  <div class="vipBox">
+    <div class="vipSteps prel">
+      <em id="step1" class="numb numb1 current">1</em><em id="step2" class="numb numb2">2</em>
+    </div>
+    <p class="vipStepName font14"><span class="fl">高级会员认证</span><span class="fr">合格投资者认证</span></p>
+  </div>
+  <!-- vip 会员资格认证 star -->
+  <div id="vipBox1" style="display:block">
+    <p class="vipIconBox"><em class="vipBigIcn"></em></p>
+    <p class="vipTexts">您已完成以下高级会员认证，确认认证即可获得高级会员资格！</p>
+    <ul class="vipUserMess">
+      <li class="firstLi"><p class="userMess">实名信息：{$userInfo.real_name}</p><p class="userMess">手机号码：{$userInfo.mobile}</p></li>
+      <li><label class="Red37px_btn"><a event-click="toVipBox" href="javascript:" class="Red37px_btna tac">立即认证成为高级会员</a></label></li>
+    </ul>
+  </div>
+  <!-- vip 会员资格认证 end -->
+  <!-- vip 会员资格认证 star -->
+  <div id="vipBox2" style="display:none">
+    <p class="vipTexts vipTextsLeft font14 pt34">请您确认以下两个简单问题，满足合格投资人资格后，即可加入鑫湖理财计划 :</p>
+    <p class="vipTexts vipTextsLeft font14 mt28">（1）可投资于单只私募基金的金额不低于100万元；</p>
+    <p class="vipTexts vipTextsLeft font14 mt28">（2）个人金融资产不低于300万元或者最近三年个人年均收入不低于50万元。<br/><em class="gray96">（金融资产包括银行存款、股票、债券、基金份额、资产管理计划、银行理财产品、信托计划、保险产品、期货权益等。）</em></p>
+    <p class="vipTexts pt34"><label class="mr5 alm"><input id="agreePro" type="checkbox"></label>我同意并接受<a href="{:U('Index/Protocol/view', array('id' => $protocol_id))}" class="blue" id="protocol" hidefocus="hidefocus">《{$protocol_name}》</a></p>
+    <ul class="vipUserMess">
+      <li class="pt10">
+        <label class="button-common-blue button-blue-pop"><a event-click="applyVip" href="javascript:" class="btns">我已符合合格投资者要求</a></label>
+        <label class="grayBigBtn_37 ml20"><a href="javascript:;$.colorbox.close()" class="btns">我不符合合格投资者要求</a></label>
+      </li>
+    </ul>
+  </div>
+  <!-- vip 会员资格认证 end -->
+  <?php }else{ ?>
+  <div style="display:block">
+    <p class="vipTexts">您尚未实名认证，请先实名认证！</p>
+    <ul class="vipUserMess">
+      <li><label class="Red37px_btn"><a href="{:U('Account/User/account')}" class="Red37px_btna tac">立即实名认证</a></label></li>
+    </ul>
+  </div>
+  <?php } ?>
+</div>

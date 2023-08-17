@@ -1,0 +1,35 @@
+<!-- 用户名修改 -->
+<div id="editUserNameWrap">
+  <form action="{:U('Account/User/editUserName')}" id="formId_Account_User_editUserName" ajax-after="ajaxAfter_Account_User_editUserName" ajax="1">
+    <input type="hidden" name="isAjax" value="1">
+    <div id="titlebar">用户名修改</div>
+    <div id="jqueryContent" >
+      <div class="w520">
+        <ul class="formList formList_pop">
+          <li>
+            <label class="li-label-name">当前用户名：</label><span class="li-span-con"> <strong>{$username}</strong>
+          </span>
+        </li>
+          <li>
+            <label class="li-label-name"> <em class="red">*</em>
+              新用户名：
+            </label><span class="li-span-con">
+            <input type="text" name="username" value="" valid="required" class="inputCommon" >
+          </span>
+        </li>
+          <li>
+            <label class="li-label-name"> <em class="red">*</em> 验证码：</label><span class="li-span-con">
+            <input type="text" name="authCode" value="" valid="required,ajax@{:U('Index/Index/checkAuthCode')}" valid-msg-options='{"offset":85}' class="inputCommon" style="width:194px">
+            <a href="javascript:;" hidefocus="hidefocus">
+              <img src="/Index/Index/verify" id="VerifyCodeImg" width="80">
+            </a>
+            <a class="ml10 blue" href="javascript:;" id="refreshVerifyCode">刷新验证码</a>
+          </span>
+        </li>
+        <li class="lastBtns"><label class="li-label-name">&nbsp;</label><span class="li-span-con"><span class="button-common-blue button-blue-pop"><input type="submit" name="" value="保存" class="btns w250"></span>
+    </span></li>
+        </ul>
+      </div>
+    </div>
+  </form>
+</div>

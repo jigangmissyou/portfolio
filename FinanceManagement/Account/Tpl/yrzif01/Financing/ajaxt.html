@@ -1,0 +1,93 @@
+<table class="ui-record-table">
+<thead>
+  <tr>
+      <?php if($status_transfer == 2): ?>
+      <th width="10%">成交日期</th>
+      <?php else:?>
+      <th width="10%">下一还款日期</th>
+      <?php endif;?>
+    <th width="10%">项目名称</th>
+    <th width="10%">预期年化利率</th>
+    <th width="8%">期限</th>
+    <th width="10%">还款方式</th>
+    <th width="10%" class="tac">到期本息</th>
+    <th width="8%">剩余期限</th>
+    <th width="10%" class="tac">转让价格</th>
+    <?php if($status_transfer == 2): ?>
+    <th class="tac" width="12%">收益</th>
+    <th width="12%" class="tac">合同</th>
+    <?php else:?>
+    <th width="12%" class="tac">操作</th>
+    <?php endif;?>
+  </tr>
+  <tr class="line"><th colspan="100%"></th></tr>
+</thead>
+<tbody>
+  <?php if(!empty($list)){ ?>
+  <foreach name="list" item="item">
+	<?php
+	$title = service("Financing/Financing")->getTitle($item['project'],$item['o_from_order_id']);
+	?>
+  <tr>
+      <?php if($status_transfer == 2): ?>
+      <td   <?php echo $title; ?>>
+      <?php echo date('Y-m-d',$item['buy_time']); ?>
+      </td>
+      <?php else: ?>
+    <td   <?php echo $title; ?>>{$item.project.next_repay_date_view}</td>
+      <?php endif;?>
+    <td>
+      <p class="pro_name"   <?php echo $title; ?>>{$item.prj_name}</p>
+      <p class="icoarea"   <?php echo $title; ?>>
+	   			 <?php 
+			   echo service("Financing/Financing")->getIco($item['project'],$item['o_from_order_id']);
+			 ?>
+      </p>
+      <!-- <p class="blue">{$item.prj_no}</p> -->
+    </td>
+    <td><p class="blue"   <?php echo $title; ?>>
+        <?php echo service("Financing/Financing")->getRateShow($item['project'],$item['o_from_order_id']);?>
+	</p></td>
+    <td   <?php echo $title; ?>>{$item.project.time_limit}<if condition="$item.project.time_limit_unit == 'month'">个</if>{$item.project.time_limit_unit_view}</td>
+    <td>{$item.repay_way|getCodeName='E004',###}</td>
+    <td   <?php echo $title; ?> class="tac">
+    {$item['all_income_money_view']} <br>
+    <?php if(!$item['is_end']): ?>
+    <a  class="underline" href="javascript:" 
+    hovercard="ajax@{:U('Account/Financing/ajaxShowRepay?id=')}{$item['from_order_id']}"
+    hovercard-options='{"direction":"down","theme":"light"}'>{$item.repay_count}/{$item.total_count}</a><?php endif; ?>
+    </td>
+    <td class="tac">
+           <?php echo $item['expire_time_limit'][2];?>
+    </td>
+    <td class="tac"   <?php echo $title; ?>><?php if($item['money_view'] !='-'): ?>{$item.money_view}元<?php else: ?>-<?php endif;?></td>
+    <?php if($status_transfer == 2): ?>
+    <td class="tac" <?php echo $title; ?>><div class="prel envelopes_parent">{$item['pri_interest_view']}</div></td>
+    <?php endif;?>
+    <td class="tac">
+          <?php if($item['status'] == 1): ?>
+          <label for="" class="button-small-info"><a href="javascript:" data-href="{:U('Account/FinancingRecord/cancel_transfer?transfer_id=' . $item["id"])}" class="btns">取消</a></label>
+          <?php endif; ?>
+          <?php if($item['status'] == 3): ?>
+          <label for="" class="button-small-info"><a href="{:U('/Index/Protocol/validateView?id=' . $item["to_order_id"])}" class="btns" colorbox="1" >查看</a></label>
+          <?php endif; ?>
+          <?php if($item['status'] == 2): ?>
+          <label for="" class="button-small-info"><a href="javascript:" data-href="{:U('Account/FinancingRecord/del_transfer?transfer_id=' . $item["id"])}"
+      class="btns">删除</a></label>
+          <?php endif; ?>
+    </td>
+  </tr>
+  </foreach>
+  <?php } else { ?>
+  <tr>
+    <td colspan="100%" class="tac">没有相关数据</td>
+  </tr>
+  <?php } ?>
+</tbody>
+</table>
+{$paging}
+<input type="hidden" value="{$status_transfer}" name="status_transfer">
+<input type="hidden" value="{$total}" name="total">
+<input type="hidden" value="{$countInfo[1]}" name="transfer_count_1">
+<input type="hidden" value="{$countInfo[3]}" name="transfer_count_2">
+<input type="hidden" value="{$countInfo[2]}" name="transfer_count_3">

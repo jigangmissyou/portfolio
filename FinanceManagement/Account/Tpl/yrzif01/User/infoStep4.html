@@ -1,0 +1,164 @@
+<extend name="./app/Tpl/Public/base_hfhg.html"/>
+<block name="title">确认填写信息</block>
+<block name="keywords">机构理财信息填写,鑫合汇</block>
+<block name="description">机构理财信息填写,鑫合汇</block>
+<block name="body">
+  <div class="institutionInfo fixed">
+  	<!-- proposer 不存在则为: 法人 -->
+  	<if condition="$getorginfo['proposer'] == 1">
+	  	<div class="institutionStepL">
+	  		<div class="institutionStepR"></div>
+	  		<div class="bigGreenR bigGreenR1"></div>
+	  	</div>
+	  	<div class="institutionStepLb">
+	  		<div class="institutionStepRb institutionStepRb3 fl"></div>
+	  	</div>
+	  	<ul class="institutionSfont font18">
+	  		<li class="li01 fl current">填写机构信息</li>
+	  		<li class="li02 fl current">填写法定代表人信息</li>
+	  		<li class="li03 fl current">确认填写信息</li>
+	  		<li class="li04 fl">等待审核</li>
+	  	</ul>
+  	<!-- proposer == 1 为代理人 -->
+		<elseif  condition="$getorginfo['proposer'] == 2" />
+	  	<div class="institutionStepL institutionStepLd">
+	  		<div class="bigGreenR bigGreenR1"></div>
+	  	</div>
+	  	<div class="institutionStepLb institutionStepLbd">
+	  		<div class="institutionStepRb institutionStepRbd institutionStepRbd4 fl"></div>
+	  	</div>
+	  	<ul class="institutionSfont font18">
+	  		<li class="li01 li01d fl current">填写机构信息</li>
+	  		<li class="li02 fl current">填写法定代表人信息</li>
+	  		<li class="li02 li01d fl current">填写代理人信息</li>
+	  		<li class="li03 fl li02d current">确认填写信息</li>
+	  		<li class="li04 fl">等待审核</li>
+	  	</ul>
+  	</if>
+	  <form action="{:U('Account/User/doInfoStep4')}" method="post" id="form_infoStep">
+	  	<ul class="formList institForm institForm4">
+		  	<li><h4 class="font16"><i class="icon_Greyinfo"></i> 机构信息确认</h4></li>
+				<li>
+					<label for="" class="li-label-name">机构名全称：</label>
+					<span class="li-span-con">
+						{$getorginfo['org_name']}
+					</span>
+				</li>
+				<li>
+					<label for="" class="li-label-name">营业执照注册号：</label>
+					<span class="li-span-con">
+						{$getorginfo['busin_license_No']|substr=2}
+					</span>
+				</li>
+				<li>
+					<label for="" class="li-label-name">营业期限：</label>
+					<span class="li-span-con">
+						<?php if($getorginfo['business_term_date']) { ?>
+							{$getorginfo['business_term_date']|date='Y-m-d',###}
+						<?php } else { ?>
+							{$getorginfo['business_term']}
+						<?php } ?>
+					</span>
+				</li>
+				<li>
+					<label for="" class="li-label-name">办公所在地：</label>
+					<span class="li-span-con">
+						{$getorginfo['area_province']} {$getorginfo['area_city']} {$getorginfo['mailing_addr']}
+					</span>
+				</li>
+				<li>
+					<label for="" class="li-label-name">公司电话：</label>
+					<span class="li-span-con">
+						{$getorginfo['phone']}
+					</span>
+				</li>
+				<li>
+					<label for="" class="li-label-name">加盖公章的营业执照副本：</label>
+					<span class="li-span-con">
+						<span class="status">已上传</span><a href="{:U($getorginfo['stamp_license_copy'])}" class="blue jView">查看</a>
+					</span>
+				</li>
+				<li>
+					<label for="" class="li-label-name">组织机构代码证代码：</label>
+					<span class="li-span-con">
+						{$getorginfo['org_code']}
+					</span>
+				</li>
+				<li>
+					<label for="" class="li-label-name">加盖公章的组织机构代码证副本：</label>
+					<span class="li-span-con">
+						<span class="status">已上传</span><a href="{:U($getorginfo['stamp_organization_code_copy'])}" class="blue jView">查看</a>
+					</span>
+				</li>
+				<li><h4 class="font16"><i class="icon_Greyinfo"></i> 法定代表人信息确认</h4></li>
+				<li>
+					<label for="" class="li-label-name">法定代表人归属地：</label>
+					<span class="li-span-con">
+						{$getorginfo['legal_representative_land']}
+					</span>
+				</li>
+				<li>
+					<label for="" class="li-label-name">法定代表人真实姓名：</label>
+					<span class="li-span-con">
+						{$getorginfo['legal_name']}
+					</span>
+				</li>
+				<li>
+					<label for="" class="li-label-name">身份证号码：</label>
+					<span class="li-span-con">
+						{$getorginfo['legal_person_id']}
+					</span>
+				</li>
+				<li>
+					<label for="" class="li-label-name">加盖公章的身份证图片正面：</label>
+					<span class="li-span-con">
+						<span class="status">已上传</span><a href="{:U($getorginfo['stamp_personcode_front_legal'])}" class="blue jView">查看</a>
+					</span>
+				</li>
+				<li>
+					<label for="" class="li-label-name">加盖公章的身份证图片反面：</label>
+					<span class="li-span-con">
+						<span class="status">已上传</span><a href="{:U($getorginfo['stamp_personcode_back_legal'])}" class="blue jView">查看</a>
+					</span>
+				</li>
+				<if  condition="$getorginfo['proposer'] == 2" >
+					<li><h4 class="font16"><i class="icon_Greyinfo"></i> 代理人信息确认</h4></li>
+					<li>
+						<label for="" class="li-label-name">代理人归属地：</label>
+						<span class="li-span-con">
+							{$getorginfo['agent_representative_land']}
+						</span>
+					</li>
+					<li>
+						<label for="" class="li-label-name">代理人真实姓名：</label>
+						<span class="li-span-con">
+							{$getorginfo['agent_representative_realname']}
+						</span>
+					</li>
+					<li>
+						<label for="" class="li-label-name">身份证号码：</label>
+						<span class="li-span-con">
+							{$getorginfo['agent_representative_personcode']}
+						</span>
+					</li>
+					<li>
+						<label for="" class="li-label-name">加盖公章的身份证图片正面：</label>
+						<span class="li-span-con">
+							<span class="status">已上传</span><a href="{:U($getorginfo['stamp_personcode_front_agent'])}" class="blue jView">查看</a>
+						</span>
+					</li>
+					<li>
+						<label for="" class="li-label-name">加盖公章的身份证图片反面：</label>
+						<span class="li-span-con">
+							<span class="status">已上传</span><a href="{:U($getorginfo['stamp_personcode_back_agent'])}" class="blue jView">查看</a>
+						</span>
+					</li>
+				</if>
+				<li class="fixed btnSelects tac">
+					<label for="" class="button-common-blue button-bluew200"><button type="submit" class="btns">确 认</button></label>
+					<a href='{:U("Account/User/infoStep1")}' class="backStep inline-block tac blue">返回修改</a>
+				</li>
+			</ul>
+		</form>
+  </div>
+</block>

@@ -1,0 +1,59 @@
+<?php // p($list); ?>
+<?php if($c == 1 && !$show_page){ ?>
+    <if condition="$list">
+        <div class="pro-list-see-more">精品推荐
+          <if condition="$list['r']">
+            <a href="{:U('Financing/Invest/plist',array('c'=>'2','rand'=>$rand))}">查看更多日益升></a>
+          </if>
+        </div>
+        <if condition="$list['r']">
+        <div class="pro-content-box">
+        <foreach name="list.r" item="prj">
+            <include file="./app/Tpl/Public/prj_ListItem.html"/>
+        </foreach>
+        </div>
+        </if>
+
+        <if condition="$list['y']">
+        <div class="pro-list-see-more"><a href="{:U('Financing/Invest/plist',array('c'=>'3','rand'=>$rand))}">查看更多月益升>
+        </a></div>
+        <div class="pro-content-box">
+        <foreach name="list.y" item="prj">
+            <include file="./app/Tpl/Public/prj_ListItem.html"/>
+        </foreach>
+        </div>
+        </if>
+
+        <!-- <if condition="$list['n']">
+        <div class="pro-list-see-more"><a href="{:U('Financing/Invest/plist',array('c'=>'4','rand'=>$rand))}">查看更多年益升>
+        </a></div>
+        <div class="pro-content-box">
+        <foreach name="list.n" item="prj">
+            <include file="./app/Tpl/Public/prj_ListItem.html"/>
+        </foreach>
+        </div>
+        </if> -->
+
+        <if condition="$list['s']">
+        <div class="pro-list-see-more"><a href="{:U('Financing/Invest/plist',array('c'=>'6','rand'=>$rand))}">查看更多速兑通>
+        </a></div>
+        <div class="pro-content-box">
+        <foreach name="list.s" item="prj">
+            <include file="./app/Tpl/Public/prj_ListItem.html"/>
+        </foreach>
+        </div>
+        </if>
+    </if>
+<?php }else{ ?>
+    <if condition="$list">
+        <div class="pro-content-box">
+        <foreach name="list" item="prj">
+            <include file="./app/Tpl/Public/prj_ListItem.html"/>
+        </foreach>
+        </div>
+        <?php $pageNavCallback = "ajaxAfter_Financing_Invest_plist"; ?>
+        <include file="./app/Tpl/Public/pageAjax.html" />
+    <else/>
+        <div class="no-data">没有相关数据</div>
+    </if>
+<?php } ?>

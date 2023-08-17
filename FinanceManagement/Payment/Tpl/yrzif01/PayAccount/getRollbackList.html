@@ -1,0 +1,80 @@
+<style>
+  .div-btn{
+    margin: 10px 0;
+  }
+  .hover-table td{
+    white-space: normal;
+  }
+</style>
+<div id="titlebar">退回记录</div>
+<div id="jqueryContent">
+  <div class="w520">
+  <div class="hd">
+    <table class="hover-table">
+      <thead>
+      <tr>
+        <th width="25%" class="tac">退回时间</th>
+        <th width="25%" class="tac">支付时间</th>
+        <th width="30%" class="tac">退回原因</th>
+        <th width="20%" class="tac">操作</th>
+      </tr>
+      </thead>
+    </table>
+  </div>
+  <div class="bd">
+    <table class="hover-table">
+      <tbody>
+      <?php if(!empty($list)){
+        foreach($list as $k=>$item){
+      ?>
+      <tr>
+        <td width="25%" class="tac">
+          <?php
+            if(!empty($item['rollback_time'])){
+              $item['rollback_time'] = date('Y-m-d H:i',$item['rollback_time']);
+            }else{
+              $item['rollback_time'] = '';
+            }
+            echo $item['rollback_time'];
+          ?>
+        </td>
+        <td width="25%" class="tac">
+          <?php
+            if(!empty($item['redo_time'])){
+              $item['redo_time'] = date('Y-m-d H:i',$item['redo_time']);
+            }else{
+              $item['redo_time'] = '';
+            }
+            echo $item['redo_time'];
+          ?>
+        </td>
+        <td width="30%" class="tac"><?php echo $item['backreason']; ?></td>
+        <td width="20%" class="tac">
+          <a class="editRollback" href="{:U('Payment/PayAccount/modifyRollback',array('id'=>$item['id']))}">
+            修改
+          </a>
+        </td>
+      </tr>
+      <?php }}else{ ?>
+      <tr>
+        <td colspan="100%">无记录</td>
+      </tr>
+      <?php } ?>
+
+      </tbody>
+    </table>
+  </div>
+
+    <div class="div-btn">
+      <span class="button-common-blue button-blue-pop">
+        <button class="btns addRollback" hidefocus="hidefocus" data-cash="{$cashoutId}">新增</button>
+      </span>
+    </div>
+  </div>
+</div>
+
+<script>
+  $(function(){
+    $(".hover-table tbody tr:odd").css('color','#0081E6');
+  })
+</script>

@@ -1,0 +1,69 @@
+<extend name="./app/Tpl/Public/base2.html"/>
+<block name="title">我的账户-账户概况-充值</block>
+<block name="keywords">充值</block>
+<block name="description">充值</block>
+
+<block name="style">
+<link href="/public/css/banklogo.css" rel="stylesheet" />
+    <style>
+        .formList li{list-style: none;}
+    </style>
+</block>
+<!--todo-->
+<block name="body">
+<?php if(empty($loginUser['role'])){ ?>
+<include file="nav" />
+<?php } else { ?>
+<div class="detailSurTab surTabUl mt30 mb20">
+  <ul>
+    <?php 
+      if($role==2 || $role==6){        
+    ?>
+     <li><span class="roundTopborGy"><a href="{:U('Application/ProjectManage/index')}">项目管理</a></span><a class="hrwrite"></a></li>   
+      <li class="current"><span class="roundTopborGy"><a href="{:U('Application/ProjectRepayment/index')}">还款计划</a></span><a class="hrwrite"></a></li>
+      <li><span class="roundTopborGy"><a href="{:U('Application/ProjectManage/getMyMoneyList')}">资金记录</a></span><a class="hrwrite"></a></li>
+      <li><span class="roundTopborGy"><a href="{:U('Application/ProjectManage/accountInfo')}">我的账户</a></span><a class="hrwrite"></a></li>
+    <?php }else{ ?>
+      <li><span class="roundTopborGy"><a href="{:U('Application/ProjectManage/index')}">项目管理</a></span><a class="hrwrite"></a></li>
+      <li><span class="roundTopborGy"><a href="{:U('Application/ProjectManage/fundaccount')}">资金账户管理</a></span><a class="hrwrite"></a></li>
+      <li class="current"><span class="roundTopborGy"><a href="{:U('Application/ProjectRepayment/index')}">还款管理</a></span><a class="hrwrite"></a></li>
+      <?php if($role!=3){ ?><li><span class="roundTopborGy"><a href="{:U('Application/ProjectManage/repayList')}">还款计划</a></span><a class="hrwrite"></a></li><?php } ?>
+      <li><span class="roundTopborGy"><a href="{:U('Application/ProjectManage/getMyMoneyList')}">资金记录</a></span><a class="hrwrite"></a></li>
+    <?php } ?>
+  </ul>
+</div>
+<?php } ?>
+<div class="main_area">
+  <h2 class="h2tit"><span>充值</span></h2>
+  <ul class="formList mt20">
+  	<form method="POST" id="submit_form" action="{:U('Payment/PayAccount/repaysubmit')}" target="_blank">
+  	<li>
+  	  <label class="li-label-name">充值金额：</label>
+      <span class="li-span-con"><input type="text" class="inputCommon" id="amount" valid="number,required"  name="amount" value="{$amount}"><span class="fillNote">元</span>
+      </span>
+  	</li>
+  	<li>
+  	  <label class="li-label-name">充值方式：</label>
+      <span class="li-span-con">
+  	  <ul class="recharge_mode">
+  	  	<li>
+  	  		<input id="m_transfer" name="recharge_mode" type="radio" value="xianxia" checked>
+  	  		<label for="transfer">转账支付</label>
+  	  	</li>
+  	  </ul>
+    </span>
+  	</li>
+  	<input type="hidden" id="payType" name="payType" value="shenfut"/>
+  	<input type="hidden" id="bankCode" name="bankCode" value=""/>
+  	<li class="lastBtns"><label for="" class="li-label-name">&nbsp;</label><span class="li-span-con">
+     <div class="button-common-orange"><input type="button" id="brecharge" name="recharge" value="下一步" class="btns w250"></div> 
+    </span></li>
+  	</form>
+  </ul>
+  <input type="hidden" id="xx_url" value="{:U('Payment/PayAccount/repayxianxia')}">
+  <input type="hidden" id="pay_url" value="{:U('Payment/PayAccount/repaysubmit')}">
+  <input type="hidden" id="record_url" value="{:U('Application/ProjectRepayment/index')}">
+  <input type="hidden" id="minMoney" value="{$minMoney}">
+</div>
+</block>
+

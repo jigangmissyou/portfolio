@@ -1,0 +1,22 @@
+<extend name="./app/Tpl/Public/base_hfhg.html"/>
+<block name="title">我的账户-账户设置-企业资料</block>
+<block name="keywords">融资管理</block>
+<block name="description">融资管理</block>
+<block name="style"></block>
+<block name="body">
+  <include file="fund_nav" />
+  <style type="text/css">
+    .col2-wrap{padding-left: 200px; overflow: hidden;}
+    .left-col{float: left; width: 170px; margin-left: -200px;}
+    .right-col{float: left; width: 100%; padding-bottom: 50px;}
+    .left-col-subMenu a{display: block}
+  </style>
+  <div class="col2-wrap">
+    <div class="left-col">
+      <include file="fund_nav_1" />
+    </div>
+    <div class="right-col" id="uploadSourceBar">
+      <include file="uploadSource" />
+    </div>
+  </div>
+</block>

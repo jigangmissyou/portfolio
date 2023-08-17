@@ -1,0 +1,540 @@
+<?php 
+  $sort_data = $corpOperAnalyse['sort_data'];
+  $financialData = $corpDataAnalyse['sort_data'];
+  $fuzhai_lv_list = $sort_data['zcfzl'];
+  $liudong_lv_list = $sort_data['ldb'];
+  $sudong_lv_list = $sort_data['sdb'];
+  
+  function isEmptyCol($fdata,$datakey){
+	$isEmpty = true;
+	foreach ($fdata as $key => $vo) {
+        if(!empty($vo[$datakey])){
+            $isEmpty = false;
+        }
+    }
+    return $isEmpty;
+  }
+ ?>
+
+<?php if($fuzhai_lv_list || $liudong_lv_list || $sudong_lv_list || $financialData){ ?>
+
+<dl>
+  <h4><!-- <i class="icon_Greyinfo"></i> -->财务数据</h4>
+  <?php if(!isEmptyCol($fuzhai_lv_list,'data') || !isEmptyCol($liudong_lv_list,'data') || !isEmptyCol($sudong_lv_list,'data')){ ?>
+  <dt>运营状况分析</dt>
+  <div id="OperatAnalysis" class="fixed ml36px mb28px">
+    <ul>
+      <li class="fl" data-flag="fuzhai_lv_Column" id="fuzhai_lv_Column">
+        图表加载中...
+      </li>
+      <li class="fl" data-flag="liudong_lv_Column" id="liudong_lv_Column">
+        图表加载中...
+      </li>
+      <li class="fl nomarginR" data-flag="sudong_lv_Column" id="sudong_lv_Column">
+        图表加载中...
+      </li>
+    </ul>
+    <?php if(!empty($fuzhai_lv_list)){  // 资产负债率 ?>
+      <table id="datatable_fuzhai_lv" class="dn">
+        <thead>
+          <tr>
+            <td></td>
+            <td>资产负债率(%)</td>
+          </tr>
+        </thead>
+        <tbody>
+          <?php foreach ($fuzhai_lv_list as $key => $vo) { ?>
+          <tr>
+            <td>{$vo.key}</td>
+            <td>{$vo.data|floatParse}</td>
+          </tr>
+          <?php } ?>
+        </tbody>
+      </table>
+      <script type="text/javascript">
+      // 资产负债率
+      $('#fuzhai_lv_Column').highcharts({
+          data: {
+              table: document.getElementById('datatable_fuzhai_lv')
+          },
+          chart: {
+              type: 'column'
+          },
+          title: {
+              text: ''
+          },
+          yAxis: {
+              allowDecimals: false,
+              title: {
+                  text: ''
+              }
+          },
+          tooltip: {
+              formatter: function() {
+                  return '<b>'+ this.series.name +'</b><br/>'+
+                      this.y;
+              }
+          }
+      });
+      </script>
+    <?php } else { ?>
+      <script type="text/javascript">
+      (function(){
+        $('#fuzhai_lv_Column').html('无数据，无法生成图表！');
+      })();
+      </script>
+    <?php } ?>
+
+    <?php if(!empty($liudong_lv_list)){ // 流动比 ?>
+      <table id="datatable_liudong_lv" class="dn">
+        <thead>
+          <tr>
+            <th></th>
+            <th>流动比(%)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <?php foreach ($liudong_lv_list as $key => $vo) { ?>
+          <tr>
+            <th>{$vo.key}</th>
+            <td>{$vo.data|floatParse}</td>
+          </tr>
+          <?php } ?>
+        </tbody>
+      </table>
+      <script type="text/javascript">
+      // 流动比
+      $('#liudong_lv_Column').highcharts({
+          data: {
+              table: document.getElementById('datatable_liudong_lv')
+          },
+          chart: {
+              type: 'column'
+          },
+          title: {
+              text: ''
+          },
+          yAxis: {
+              allowDecimals: false,
+              title: {
+                  text: ''
+              }
+          },
+          tooltip: {
+              formatter: function() {
+                  return '<b>'+ this.series.name +'</b><br/>'+
+                      this.y;
+              }
+          }
+      });
+      </script>
+    <?php } else { ?>
+      <script type="text/javascript">
+      (function(){
+        $('#liudong_lv_Column').html('无数据，无法生成图表！');
+      })();
+      </script>
+    <?php } ?>
+
+    <?php if(!empty($sudong_lv_list)){  // 速动比 ?>
+      <table id="datatable_sudong_lv" class="dn">
+        <thead>
+          <tr>
+            <th></th>
+            <th>速动比(%)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <?php foreach ($sudong_lv_list as $key => $vo) { ?>
+          <tr>
+            <th>{$vo.key}</th>
+            <td>{$vo.data|floatParse}</td>
+          </tr>
+          <?php } ?>
+        </tbody>
+      </table>
+      <script type="text/javascript">
+      // 速动比
+      $('#sudong_lv_Column').highcharts({
+          data: {
+              table: document.getElementById('datatable_sudong_lv')
+          },
+          chart: {
+              type: 'column'
+          },
+          title: {
+              text: ''
+          },
+          yAxis: {
+              allowDecimals: false,
+              title: {
+                  text: ''
+              }
+          },
+          tooltip: {
+              formatter: function() {
+                  return '<b>'+ this.series.name +'</b><br/>'+
+                      this.y;
+              }
+          }
+      });
+      </script>
+    <?php } else { ?>
+      <script type="text/javascript">
+      (function(){
+        $('#sudong_lv_Column').html('无数据，无法生成图表！');
+      })();
+      </script>
+    <?php } ?>
+  </div>
+  <table class="globaltable width966px tacTable">
+    <tr class="GreyBgcolor">
+      <th width="16%" align="center">日期</th>
+      <th width="14%">资产负债率</th>
+      <th width="10%">流动比</th>
+      <th width="10%">速动比</th>
+      <th width="18%">应收账款周转天数</th>
+      <th width="16%">存货周转天数</th>
+      <th width="16%">总资产周转率</th>
+    </tr>
+    <?php $acfzCount = 0; foreach ($sort_data['zcfzl'] as $key => $vo) { $acfzCount++ ?>
+      <?php if(!empty($sort_data['zcfzl'][$key]['data']) || !empty($sort_data['ldb'][$key]['data']) || !empty($sort_data['sdb'][$key]['data']) || !empty($sort_data['yingshou_kuan_zhouqi'][$key]['data'])  || !empty($sort_data['cunhuo_zhouqi'][$key]['data'])  || !empty($sort_data['zong_zichan_zhouzhuan_lv'][$key]['data'])){ ?>
+      <tr class="borderBottom <?php if($acfzCount % 2 == 0){echo 'GreyBgcolor';} ?>">
+        <td align="center">{$vo.key}</td>
+        <td align="center"><?php echo floatParse($sort_data['zcfzl'][$key]['data'], '%'); ?></td>
+        <td align="center"><?php echo floatParse($sort_data['ldb'][$key]['data'], '%'); ?></td>
+        <td align="center"><?php echo floatParse($sort_data['sdb'][$key]['data'], '%'); ?></td>
+        <td align="center"><?php echo floatParse($sort_data['yingshou_kuan_zhouqi'][$key]['data'], '天'); ?></td>
+        <td align="center"><?php echo floatParse($sort_data['cunhuo_zhouqi'][$key]['data'], '天'); ?></td>
+        <td align="center"><?php echo floatParse($sort_data['zong_zichan_zhouzhuan_lv'][$key]['data'], '%'); ?></td>
+      </tr>
+      <?php } ?>
+    <?php } ?>
+  </table>
+  <?php } ?>
+
+  <?php if(!empty($financialData)){ ?>
+  <!--财务数据分析  -->
+  <dt>财务数据分析</dt>
+  <div class="finanAnalysis">
+    <div class="finanAnalyChar ml36px mb28px mt30" data-flag="corp_zhuyao_caiwu_spline">
+      图表加载中...
+    </div>
+  </div>
+  <div class="ml36px mb28px mt30" id="finanAnalyChar2" data-flag="corp_zhuying_yewu_spline">
+    图表加载中...
+  </div>
+  <table class="globaltable width966px talTable">
+    <tr class="GreyBgcolor">
+      <th class="padLeft30" width="10%">科目</th>
+      <?php foreach ($financialData as $key => $vo) { ?>
+      <th width="10%" class="tal">{$vo.year_month}</th>
+      <?php } ?>
+    </tr>
+    <?php if(!isEmptyCol($financialData,'zong_zican')){ ?>
+    <tr>
+      <td>总资产(万元)</td>
+      <?php foreach ($financialData as $key => $vo) { ?>
+      <td>{$vo.zong_zican}</td>
+      <?php } ?>
+    </tr>
+    <?php } ?>
+     <?php if(!isEmptyCol($financialData,'zong_fuzhai')){ ?>
+    <tr class="GreyBgcolor">
+      <td>总负债(万元)</td>
+      <?php foreach ($financialData as $key => $vo) { ?>
+      <td>{$vo.zong_fuzhai}</td>
+      <?php } ?>
+    </tr>
+    <?php } ?>
+     <?php if(!isEmptyCol($financialData,'liudong_zichan')){ ?>
+    <tr>
+      <td>流动资产(万元)</td>
+      <?php foreach ($financialData as $key => $vo) { ?>
+      <td>{$vo.liudong_zichan}</td>
+      <?php } ?>
+    </tr>
+    <?php } ?>
+     <?php if(!isEmptyCol($financialData,'liudong_fuzhai')){ ?>
+    <tr class="GreyBgcolor">
+      <td>流动负债(万元)</td>
+      <?php foreach ($financialData as $key => $vo) { ?>
+      <td>{$vo.liudong_fuzhai}</td>
+      <?php } ?>
+    </tr>
+    <?php } ?>
+     <?php if(!isEmptyCol($financialData,'cunhuo')){ ?>
+    <tr>
+      <td>存货(万元)</td>
+      <?php foreach ($financialData as $key => $vo) { ?>
+      <td>{$vo.cunhuo}</td>
+      <?php } ?>
+    </tr>
+    <?php } ?>
+     <?php if(!isEmptyCol($financialData,'yingfu_kuan')){ ?>
+    <tr class="GreyBgcolor">
+      <td>应付款(万元)</td>
+      <?php foreach ($financialData as $key => $vo) { ?>
+      <td>{$vo.yingfu_kuan}</td>
+      <?php } ?>
+    </tr>
+    <?php } ?>
+     <?php if(!isEmptyCol($financialData,'guding_zichan')){ ?>
+    <tr>
+      <td>固定资产(万元)</td>
+      <?php foreach ($financialData as $key => $vo) { ?>
+      <td>{$vo.guding_zichan}</td>
+      <?php } ?>
+    </tr>
+    <?php } ?>
+     <?php if(!isEmptyCol($financialData,'qita_yingfu_kuan')){ ?>
+    <tr class="GreyBgcolor">
+      <td>其他应付款(万元)</td>
+      <?php foreach ($financialData as $key => $vo) { ?>
+      <td>{$vo.qita_yingfu_kuan}</td>
+      <?php } ?>
+    </tr>
+    <?php } ?>
+     <?php if(!isEmptyCol($financialData,'duanqi_jiekuan')){ ?>
+    <tr>
+      <td>短期贷款(万元)</td>
+      <?php foreach ($financialData as $key => $vo) { ?>
+      <td>{$vo.duanqi_jiekuan}</td>
+      <?php } ?>
+    </tr>
+    <?php } ?>
+     <?php if(!isEmptyCol($financialData,'suoyouzhe_quanyi')){ ?>
+    <tr class="GreyBgcolor">
+      <td>所有者权益(万元)</td>
+      <?php foreach ($financialData as $key => $vo) { ?>
+      <td>{$vo.suoyouzhe_quanyi}</td>
+      <?php } ?>
+    </tr>
+    <?php } ?>
+     <?php if(!isEmptyCol($financialData,'zhuying_shouru')){ ?>
+    <tr>
+      <td>主营业务收入(万元)</td>
+      <?php foreach ($financialData as $key => $vo) { ?>
+      <td>{$vo.zhuying_shouru}</td>
+      <?php } ?>
+    </tr>
+    <?php } ?>
+     <?php if(!isEmptyCol($financialData,'zhuying_chengben')){ ?>
+    <tr class="GreyBgcolor">
+      <td>主营业务成本(万元)</td>
+      <?php foreach ($financialData as $key => $vo) { ?>
+      <td>{$vo.zhuying_chengben}</td>
+      <?php } ?>
+    </tr>
+    <?php } ?>
+     <?php if(!isEmptyCol($financialData,'xiaoshou_feiyong')){ ?>
+    <tr>
+      <td>销售费用(万元)</td>
+      <?php foreach ($financialData as $key => $vo) { ?>
+      <td>{$vo.xiaoshou_feiyong}</td>
+      <?php } ?>
+    </tr>
+    <?php } ?>
+     <?php if(!isEmptyCol($financialData,'guanli_feiyong')){ ?>
+    <tr class="GreyBgcolor">
+      <td>管理费用(万元)</td>
+      <?php foreach ($financialData as $key => $vo) { ?>
+      <td>{$vo.guanli_feiyong}</td>
+      <?php } ?>
+    </tr>
+    <?php } ?>
+     <?php if(!isEmptyCol($financialData,'caiwu_feiyong')){ ?>
+    <tr>
+      <td>财务费用(万元)</td>
+      <?php foreach ($financialData as $key => $vo) { ?>
+      <td>{$vo.caiwu_feiyong}</td>
+      <?php } ?>
+    </tr>
+    <?php } ?>
+     <?php if(!isEmptyCol($financialData,'jing_lirui')){ ?>
+    <tr class="GreyBgcolor">
+      <td>净利润(万元)</td>
+      <?php foreach ($financialData as $key => $vo) { ?>
+      <td>{$vo.jing_lirui}</td>
+      <?php } ?>
+    </tr>
+    <?php } ?>
+     <?php if(!isEmptyCol($financialData,'xiaoshou_maolv')){ ?>
+    <tr>
+      <td>销售毛利率(%)</td>
+      <?php foreach ($financialData as $key => $vo) { ?>
+      <td>{$vo.xiaoshou_maolv|floatParse='%'}</td>
+      <?php } ?>
+    </tr>
+    <?php } ?>
+     <?php if(!isEmptyCol($financialData,'xiaoshou_jinglv')){ ?>
+    <tr class="GreyBgcolor">
+      <td>销售净利率(%)</td>
+      <?php foreach ($financialData as $key => $vo) { ?>
+      <td>{$vo.xiaoshou_jinglv|floatParse='%'}</td>
+      <?php } ?>
+    </tr>
+    <?php } ?>
+     <?php if(!isEmptyCol($financialData,'chengben_feiyong_lirunlv')){ ?>
+    <tr>
+      <td>成本费用利润率(%)</td>
+      <?php foreach ($financialData as $key => $vo) { ?>
+      <td>{$vo.chengben_feiyong_lirunlv|floatParse='%'}</td>
+      <?php } ?>
+    </tr>
+    <?php } ?>
+     <?php if(!isEmptyCol($financialData,'cunhuo_zhouqilv')){ ?>
+    <tr class="GreyBgcolor">
+      <td>存货周转天率(%)</td>
+      <?php foreach ($financialData as $key => $vo) { ?>
+      <td>{$vo.cunhuo_zhouqilv|floatParse='%'}</td>
+      <?php } ?>
+    </tr>
+    <?php } ?>
+     <?php if(!isEmptyCol($financialData,'yingshou_kuan_zhouqilv')){ ?>
+    <tr>
+      <td>应收账款周转率(%)</td>
+      <?php foreach ($financialData as $key => $vo) { ?>
+      <td>{$vo.yingshou_kuan_zhouqilv|floatParse='%'}</td>
+      <?php } ?>
+    </tr>
+    <?php } ?>
+     <?php if(!isEmptyCol($financialData,'jingying_xianjin_liu')){ ?>
+    <tr class="GreyBgcolor">
+      <td>经营活动产生的现金流量(万元)</td>
+      <?php foreach ($financialData as $key => $vo) { ?>
+      <td>{$vo.jingying_xianjin_liu}</td>
+      <?php } ?>
+    </tr>
+    <?php } ?>
+     <?php if(!isEmptyCol($financialData,'touzi_xianjin_liu')){ ?>
+    <tr>
+      <td>投资活动产生的现金流量(万元)</td>
+      <?php foreach ($financialData as $key => $vo) { ?>
+      <td>{$vo.touzi_xianjin_liu}</td>
+      <?php } ?>
+    </tr>
+    <?php } ?>
+     <?php if(!isEmptyCol($financialData,'chouzi_xianjin_liu')){ ?>
+    <tr class="GreyBgcolor">
+      <td>筹资活动产生的现金流量(万元)</td>
+      <?php foreach ($financialData as $key => $vo) { ?>
+      <td>{$vo.chouzi_xianjin_liu}</td>
+      <?php } ?>
+    </tr>
+    <?php } ?>
+  </table>
+  <?php } ?>
+</dl>
+
+<?php 
+  $corpDataAnalyseChart = json_encode($corpDataAnalyse['charts']);
+  $corpDataAnalyseJsonDate = json_encode($corpDataAnalyse['json_date']);
+ ?>
+<script>
+  ;(function(){
+    var $corp_zhuyao_caiwu_spline = $('[data-flag="corp_zhuyao_caiwu_spline"]');
+    var $corp_zhuying_yewu_spline = $('[data-flag="corp_zhuying_yewu_spline"]');
+    var dataObj = <?php if(!empty($corpDataAnalyseChart)){echo $corpDataAnalyseChart;} else {echo "0";} ?>; // 两个图标的数据都在这里
+      if(!dataObj || dataObj && !dataObj.length){
+        $corp_zhuyao_caiwu_spline.html('无数据，无法生成图表！');
+        return false;
+      }
+      // 加单位
+      $.each(dataObj, function(){
+        var obj = this;
+        obj["name"] = obj["name"] + "(万元)";
+      });
+
+      var caiwuData = dataObj.slice(0, 4);  // 流动资产、总负债、流动负债、总资产
+      var zhuyingData = dataObj.slice(4); // 主营业务收入、主营业务成本、净利润
+
+      // 处理日期对象成一个数组
+      var json_date = <?php if(!empty($corpDataAnalyseJsonDate)){echo $corpDataAnalyseJsonDate;} else {echo "0";} ?>;
+      if(!json_date || json_date && !json_date.length){
+        $corp_zhuyao_caiwu_spline.html('无数据，无法生成图表！');
+        return false;
+      }
+      // 流动资产、总负债、流动负债、总资产
+      $corp_zhuyao_caiwu_spline.highcharts({
+        colors:[
+                '#4bb3d2',
+                '#eba538',
+                '#88ac67',
+                '#d1c0a5'
+                ],
+        chart: {
+            type: 'line'
+        },
+        title: {
+            text: ''
+        },
+        xAxis: {
+            categories: json_date
+        },
+        yAxis: {
+            title: {
+                text: ''
+            },
+            labels: {
+                formatter: function() {
+                    return this.value +'万元'
+                }
+            }
+        },
+        tooltip: {
+            crosshairs: true,
+            shared: true
+        },
+        plotOptions: {
+            spline: {
+                marker: {
+                    radius: 3,
+                    lineColor: '#666666',
+                    lineWidth: 1
+                }
+            }
+        },
+        series: caiwuData
+      });
+
+      // 主营业务收入、主营业务成本、净利润
+      $corp_zhuying_yewu_spline.highcharts({
+        chart: {
+            type: 'line'
+        },
+        title: {
+            text: ''
+        },
+        xAxis: {
+            categories: json_date
+        },
+        yAxis: {
+            title: {
+                text: ''
+            },
+            labels: {
+                formatter: function() {
+                    return this.value +'万元'
+                }
+            }
+        },
+        tooltip: {
+            crosshairs: true,
+            shared: true
+        },
+        plotOptions: {
+            spline: {
+                marker: {
+                    radius: 4,
+                    lineColor: '#666666',
+                    lineWidth: 1
+                }
+            }
+        },
+        series: zhuyingData
+      });
+  }());
+</script>
+
+<?php } ?>

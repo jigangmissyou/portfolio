@@ -1,0 +1,287 @@
+<form action="{:U('Financing/InvestFund/addFundPrj')}" method="post" id="ajaxForm_fundAdd" ajax="1" ajax-after="ajaxAfter_fundAdd_step1">
+  <div class="step step1">
+    <ul class="formList">
+       <input type="hidden" name="prj_id" value="{$prj_id}"/>
+      <li>
+        <label class="li-label-name"><em class="red">*</em>基金管理人：</label>
+        <span class="li-span-con">
+        <input type="text" name="fund_manager" class="inputCommon" valid="required" value="{$fund_prj_data.fund_manager}">
+       </span>
+      </li>
+      <li>
+        <label class="li-label-name"><em class="red">*</em>基金名称：</label>
+        <span class="li-span-con">
+        <div class="ui_select_box">
+          <select id="jjmc" name="fund_manager_id" valid="required">
+            <option value="">请选择</option>
+            <foreach name="fund_name_list" item="vo">
+              <option value="{$vo.id}" <?php if($fund_prj_data["fund_manager_id"] == $vo["id"]){ ?>selected<?php } ?>>{$vo.fund_name}</option>
+            </foreach>
+          </select>
+        </div>
+        <span class="fillNote"><a href="javascript:" class="blue" event-click="step1.addJjmc">添加</a></span>
+        <span id="addNewJjmcPop" style="display: none">
+          <input type="text" class="inputCommon" style="width:102px" id="newJjmcIpt" placeholder="请输入基金名称"/>
+          <span class="btn_bor_orange"><input type="button" class="btn_text step_next" value="确定" event-click="step1.applyAddJjmc"></span>
+        </span>
+      </span>
+      </li>
+      <li>
+        <label class="li-label-name"><em class="red">*</em>基金经理：</label>
+        <span class="li-span-con">
+          <input type="text" name="fund_ceo" class="inputCommon" valid="required" value="{$fund_prj_data.fund_ceo}">
+        </span>
+      </li>
+      <li>
+        <label class="li-label-name"><em class="red">*</em>基金托管人：</label>
+        <span class="li-span-con">
+          <input type="text" name="fund_custodian" class="inputCommon" valid="required" value="{$fund_prj_data.fund_custodian}">
+        </span>
+      </li>
+      <li>
+        <label class="li-label-name"><em class="red">*</em>产品备案：</label>
+        <span class="li-span-con">
+        <input type="text" name="fund_filing" class="inputCommon" valid="required" value="{$fund_prj_data.fund_filing}">
+      </span>
+      </li>
+      <li>
+        <label class="li-label-name"><em class="red">*</em>产品发起：</label>
+        <span class="li-span-con">
+        <input type="text" name="fund_launch" class="inputCommon" valid="required" value="{$fund_prj_data.fund_launch}">
+      </span>
+      </li>
+      <li>
+        <label class="li-label-name"><em class="red">*</em>产品名称：</label>
+        <span class="li-span-con">
+        <input type="text" name="prj_name" class="inputCommon" valid="required" value="{$fund_prj_data.prj_name}">
+      </span>
+      </li>
+      <li>
+        <label class="li-label-name"><em class="red">*</em>募集规模：</label>
+        <span class="li-span-con">
+        <input type="text" name="demand_amount" class="inputCommon" valid="required" value="<?php echo $fund_prj_data['demand_amount'] / 1000000; ?>">
+        <span class="fillNote">万元</span>
+      </span>
+      </li>
+      <li>
+        <label class="li-label-name"><em class="red">*</em>募集期限：</label>
+        <span class="li-span-con">
+        <input type="text" name="raise_dateline" class="inputCommon" valid="required,integer" value="{$fund_prj_data.raise_dateline}" style="width: 60px" maxlength="4">
+        <span class="fillNote">个月以内（以实际募集天数为准，输入正整数）</span>
+      </span>
+      </li>
+      <li>
+        <label class="li-label-name"><em class="red">*</em>存续期：</label>
+        <span class="li-span-con">
+        <input type="text" name="duration" class="inputCommon" valid="required,number" value="{$fund_prj_data.duration}" style="width: 60px" maxlength="4">
+        <span class="fillNote">个月</span>
+      </span>
+      </li>
+      <li>
+        <label class="li-label-name">基金评级：</label>
+        <span class="li-span-con">
+          <input class="inputCommon" name="fund_level" id="" cols="30" rows="10" value="{$fund_prj_data.fund_level}">
+        </span>
+      </li>
+      <li>
+        <label class="li-label-name"><em class="red">*</em>预期年化收益：</label>
+        <span class="li-span-con">
+          <p class="txtsLi">
+            <span class="fillNote">期限</span>
+            <input type="text" name="" id="expectRateLimit" class="inputCommon" value="" style="width: 60px" maxlength="4">
+              <select multipleone="1" multiselect-options='{"minWidth" : "162"}' id="expectRateType">
+                <option value="month">月</option>
+                <option value="year">年</option>
+              </select>
+          </p>
+          <p class="txtsLi">
+            <span class="fillNote">利率</span>
+            <input type="text" name="" id="expectRateValue" class="inputCommon" value="" style="width: 60px" maxlength="4">
+            <span class="fillNote">% 年化利率</span>
+          </p>
+          <p class="txtsLi">
+            <span class="fillNote"><label>浮动收益 <input id="isFd" type="checkbox" /></label></span>
+          </p>
+          <p class="txtsLi"><span class="btn_bor_orange"><input style="outline: none" type="button" class="btn_text step_next" value="添加" event-click="step1.addExpectRateItem"></span></p>
+      </span>
+      </li>
+      <li id="expectRateList" style="padding-left: 200px;">
+        <?php if($is_edit){  ?>
+        <foreach name="fund_prj_data.rate.rate_list" item="vo">
+          <div class="rate_items">
+            {$vo.time_limit}{$vo._time_limit_unit}&nbsp;&nbsp;{$vo._year_rate}<if condition="$vo.extra_income eq 1">&nbsp;&nbsp;<span>浮动收益&nbsp;&nbsp;</span></if>
+            <input type="hidden" value="{$vo.time_limit}" name="expect_rate[{$key}][time_limit]">
+            <input type="hidden" value="{$vo.time_limit_unit}" name="expect_rate[{$key}][time_limit_unit]">
+            <input type="hidden" value="<?php echo $vo['year_rate'] / 10; ?>" name="expect_rate[{$key}][year_rate]">
+            <input type="hidden" value="{$vo.extra_income}" name="expect_rate[{$key}][extra_income]">
+            <a event-click="step1.delExpectRateItem" href="javascript:" class="blue">删除</a>
+          </div>
+        </foreach>
+        <?php } ?>
+      </span>
+      </li>
+      <li>
+        <label class="li-label-name"><em class="red">*</em>回款方式：</label>
+        <span class="li-span-con">
+          <select multipleone="1" multiselect-options='{"minWidth" : "270"}' name="payment_way">
+            <foreach name="payment_way" item="vo">
+              <option value="{$vo.code_no}">{$vo.code_name}</option>
+            </foreach>
+          </select>
+      </span>
+      </li>
+    </ul>
+  </div>
+  <ul class="formList">
+    <li>
+      <label class="li-label-name"><em class="red">*</em>起投额度：</label>
+      <span class="li-span-con">
+      <input type="text" name="min_bid_amount" class="inputCommon" valid="required" value="<?php echo $fund_prj_data['min_bid_amount'] / 100; ?>">
+    </span>
+    </li>
+    <li>
+      <label class="li-label-name"><em class="red">*</em>最高额度：</label>
+      <span class="li-span-con">
+      <input type="text" name="max_bid_amount" class="inputCommon" valid="required" value="<?php echo $fund_prj_data['max_bid_amount'] / 100; ?>">
+    </span>
+    </li>
+    <li>
+      <label class="li-label-name"><em class="red">*</em>递增额度：</label>
+      <span class="li-span-con">
+      <input type="text" name="step_bid_amount" class="inputCommon" valid="required" value="<?php echo $fund_prj_data['step_bid_amount'] / 100; ?>">>
+    </span>
+    </li>
+    <li>
+      <label class="li-label-name"><em class="red">*</em>最高投资人数：</label>
+      <span class="li-span-con">
+      <input type="text" name="invest_max_user" class="inputCommon" valid="required"
+             value="<?php if(!$fund_prj_data){ echo 200; }else{ echo $fund_prj_data['invest_max_user']; } ?>">
+    </span>
+    </li>
+  </ul>
+  <ul class="formList">
+    <li>
+      <label class="li-label-name"><em class="red">*</em>托管账户：</label>
+      <span class="li-span-con">
+        <select multipleone="1"multiselect-options='{"minWidth" : "270"}' name="loanbank_account_id">
+          <foreach name="bank_list" item="vo">
+            <option value="{$vo.id}">{$vo.acount_name}</option>
+          </foreach>
+        </select>&nbsp;&nbsp;
+        <span class="fillNote"><a class="blue" href="{:U('Application/ProjectManage/fundaccount')}">添加资金账户</a></span>
+      </span>
+    </li>
+    <li>
+      <label class="li-label-name"><em class="red">*</em>基金的类别：</label>
+        <span class="li-span-con">
+          <select multipleone="1"multiselect-options='{"minWidth" : "270"}' name="fund_class">
+            <foreach name="fund_class" item="vo">
+              <option value="{$vo.code_no}">{$vo.code_name}</option>
+            </foreach>
+          </select>
+      </span>
+    </li>
+  </ul>
+  <div class="info_area" style="padding:0 20px">
+    <div class="info_tit show">
+      <h3>基金份额结构</h3>
+    </div>
+    <div class="content">
+      <ul class="formList">
+      <li>
+        <label class="li-label-name"><em class="red">*</em>投资人类别：</label>
+        <span class="li-span-con">
+          <select multipleone="1" multiselect-options='{"minWidth" : "270"}' name="investor_class">
+            <foreach name="investor_class" item="vo">
+              <option value="{$vo.code_no}">{$vo.code_name}</option>
+            </foreach>
+          </select>
+      </span>
+      </li>
+      <li>
+        <label class="li-label-name">收益分配方式：</label>
+        <span class="li-span-con">
+        <textarea name="earning_assign_mode" class="ui_textarea">{$fund_prj_data.earning_assign_mode}</textarea>
+      </span>
+      </li>
+      <li>
+        <label class="li-label-name"><em class="red">*</em>运作方式：</label>
+        <span class="li-span-con">
+          <select multipleone="1" multiselect-options='{"minWidth" : "270"}' name="operate_mode">
+            <foreach name="operate_mode" item="vo">
+              <option value="{$vo.code_no}">{$vo.code_name}</option>
+            </foreach>
+          </select>
+      </span>
+      </li>
+      <li>
+        <label class="li-label-name"><em class="red">*</em>基金投向：</label>
+        <span class="li-span-con">
+        <textarea name="fund_direction" class="ui_textarea" valid="required">{$fund_prj_data.fund_direction}</textarea>
+      </span>
+      </li>
+      <li>
+        <label class="li-label-name">基金支付费用及方式：</label>
+        <span class="li-span-con">
+        <textarea name="fund_payee_mode" class="ui_textarea">{$fund_prj_data.fund_payee_mode}</textarea>
+      </span>
+      </li>
+      <li>
+        <label class="li-label-name"><em class="red">*</em>项目介绍：</label>
+        <span class="li-span-con">
+        <textarea name="project_introduce" class="ui_textarea" valid="required">{$fund_prj_data.project_introduce}</textarea>
+      </span>
+      </li>
+      <li>
+        <label class="li-label-name">风险提示：</label>
+        <span class="li-span-con">
+        <textarea name="risk_tip" class="ui_textarea">{$fund_prj_data.risk_tip}</textarea>
+      </span>
+    </li>
+     </ul>
+    </div>
+  </div>
+  <div class="info_area" style="padding:0 20px">
+    <div class="info_tit show">
+      <h3>项目材料</h3>
+    </div>
+    <div class="content">
+      <div class="red tar pr12">注意：请上传jpg, jpeg, png, gif格式的图片文件</div>
+      <!--上传材料开始-->
+      <div class="project_materials pro_item_list bor_t" style="padding-right: 50px">
+        <?php if($fund_prj_material){ //修改?>
+          <?php foreach ($fund_prj_material as $vo) { ?>
+          <div class="content" data-imgType="{$vo.id}">
+            <div class="info mainWrapBox" style="width: auto">
+              <input type="text" class="file_ipt" style="background:none; width: 280px" value="{$vo.code_name}" oldval="{$vo.name}" readonly>
+              <?php foreach ($vo['child'] as $imgs) { ?>
+              <div event-click="viewThumbImg" class="thumbnail thumbnailWrap" style="cursor: pointer;" url="{$imgs.thumbs.big}"><img width="50" height="50" src="{$imgs.thumbs.tiny}"><i event-click="delThumbImg" mid="{$imgs.id}" class="close delMateriaBtn" title="删除材料">×</i></div>
+              <?php } ?>
+            </div>
+            <div class="tool">
+              <a href="javascript:void(0)" id="uploadEvidence_{$vo.code_no}" class="uploadEvidence">上传</a>
+            </div>
+            <div class="uploading"><span>资料上传中...</span></div>
+          </div>
+          <?php } ?>
+        <?php }else{ //新增?>
+          <?php foreach ($upload_items as $vo) { ?>
+          <div class="content" data-imgType="{$vo.id}">
+            <div class="info mainWrapBox" style="width: auto">
+              <input type="text" class="file_ipt" style="background:none;  width: 280px" value="{$vo.code_name}" oldval="{$vo.name}" readonly>
+            </div>
+            <div class="tool">
+              <a href="javascript:void(0)" id="uploadEvidence_{$vo.code_no}" class="uploadEvidence">上传</a>
+            </div>
+            <div class="uploading"><span>资料上传中...</span></div>
+          </div>
+          <?php } ?>
+        <?php } ?>
+      </div>
+      <!--上传材料结束-->
+    </div>
+  </div>
+    <ul class="formList submit_area mb20">
+      <li><label for="" class="li-label-name">&nbsp;</label><span class="li-span-con"><span class="button-common-blue button-blue-w200 w250"><input type="button" class="btns step_next" value="提交" event-click="step1.submitForm"></span></span></li>
+    </ul>
+</form>

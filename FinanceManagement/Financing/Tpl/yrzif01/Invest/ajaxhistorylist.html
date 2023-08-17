@@ -1,0 +1,42 @@
+<!--投资 历史融资记录 -->
+<div class="statistics">
+  <span class="item">历史总额：<strong class="orange"><?php echo number_format($result['total_sum'],2) . "元"; ?></strong></span>
+  <span class="item">在保融资金额：<strong class="orange"><?php echo number_format($result['loan_sum'],2)."元"; ?></strong></span>
+  <span class="item">已投资共计：<strong class="orange"><?php echo $totalRow; ?>笔</strong></span>    
+  <span class="item">历史出险融资金额：<strong class="orange"><?php echo number_format($result['risk_sum'],2) . "元"; ?></strong></span>
+</div>
+<table class="ui-record-table">
+  <thead>
+    <tr>
+      <th width="8%" class="tac">序号</th>   
+      <th>融资用途</th>
+      <th width="12%" class="tar">融资金额（元）</th>
+      <th width="20%" class="tac">融资渠道</th>
+      <th width="15%">融资时间</th>
+      <th width="18%">目前情况</th>
+    </tr>
+    <tr class="line"><th colspan="100%"></th></tr>
+  </thead>
+  <tbody>
+<?php  if($list):?>
+<?php  foreach($list as $k=>$v):
+								$pageStart++;
+?>
+    <tr>
+      <td class="tac"><?php echo $pageStart; ?></td>
+      <td><?php echo $v['FUNDS_USE']; ?></td>
+      <td class="tar"><?php echo number_format($v['AMOUNT'],2); ?></td>
+      <td class="tac"><?php echo $v['CHANNEL']; ?></td>
+      <td><span class="time"><?php echo $v['FINANCING_TIME']; ?></span></td>
+      <td><?php echo $v['STATUS']; ?></td>
+    </tr>
+<?php endforeach;?>
+<?php else:?>
+		 <tr>
+      <td colspan='7' class="tac">没有数据</td>
+    </tr>
+<?php endif;?>
+  </tbody>
+</table>
+<?php $pageNavCallback = "ajaxAfter_Financing_Invest_viewProjectInfo"; ?>
+<include file="./app/Tpl/Public/pageAjax.html" />

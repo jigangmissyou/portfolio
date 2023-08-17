@@ -1,0 +1,21 @@
+<dl>
+  <h4><!-- <i class="icon_Greyinfo"></i> -->贷款信息</h4>
+  <table class="globaltable">
+    <tr class="GreyBgcolor">
+      <td class="padLeft30" width="30%">借款用途</td>
+      <td>{$carInfo.money_using}</td>
+    </tr>
+    <tr>
+      <td class="padLeft30">推送门店</td>
+      <td>{$carInfo.push_shop}</td>
+    </tr>
+    <tr class="GreyBgcolor">
+      <td class="padLeft30">评估价</td>
+      <td><?php echo humanMoney($carInfo['assess_price'],2,false);?></td>
+    </tr>
+    <tr>
+      <td class="padLeft30">贷款金额</td>
+      <td><?php echo humanMoney($prjInfo['demand_amount'],2,false);?></td>
+    </tr>
+  </table>
+</dl>

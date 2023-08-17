@@ -1,0 +1,64 @@
+<!--已登陆 start-->
+<?php if($is_login){ ?>
+
+  <?php if($info['bid_status'] >= PrjModel::BSTATUS_FULL){  // 已满标 ?>
+  <!-- 已满标以上状态 开始 -->
+  <dl class="standDl">
+    <!-- <dt>
+      <i class="icon_greywallet"></i>&emsp;剩余可投金额
+    <div class="ProgressBar_div">
+      <div class="ProgressBarOrg"><span class="ProgressBarGry" style="width:100%"><em class="bar_rt"></em></span></div>
+    </div>
+    </dt> -->
+    <div id="view_bid_over" class="prel">
+      <div class="progressListBar" >
+        <!-- 进度长背景 -->
+            <span class="progressBigBar progressBOver">
+              <em class="pregress-tip-w"></em> <!-- 外右圆角 -->
+              <em class="propress-data">{$prj['schedule']}%</em> <!-- 进度数据 -->
+            </span>
+      </div>
+    </div>
+    <!-- <div class="progressBigBar progressBBar100  progressBigBar2" id="view_bid_over"></div> -->
+    <dd class="next_bid_time tac">
+      <?php if($info['bid_status'] == PrjModel::BSTATUS_FULL || $info['bid_status'] == PrjModel::BSTATUS_REPAYING || $info['bid_status'] == PrjModel::BSTATUS_END || $info['bid_status'] == PrjModel::BSTATUS_REPAY_IN){  // 已满标、待还款、截止投标、还款中 ?>
+      预计<?php if(!$isEndate): ?>下次<?php endif; ?>还款日{$info.next_repay_date_view}
+      <?php } else if($info['bid_status'] == PrjModel::BSTATUS_REPAID){ // 已还款结束 ?>
+      已于{$info.actual_repay_time_view}还款完成
+      <?php } ?>
+    </dd>
+    <dd>
+      <div class="immInvest_but"><label class="button-common-green grayBigBtn"><a href="javascript:;" class="btns font22">{$info['bid_status_view']}</a></label></div>
+    </dd>
+  </dl>
+  <!-- 已满标以上状态 结束 -->
+  <?php }else{ ?>
+  <dl class="standDl">
+    <include file="view_invest_base"/>
+    <dd>递增金额：<em>{$info.step_bid_amount_name}</em></dd>
+    <dd>最高限额：<em><?php if(!empty($info['max_bid_amount_name'])){echo $info['max_bid_amount_name'];} else {echo "不限";} ?></em></dd>
+    <dd style="padding:80px 0 0;" class="prel">
+      <!-- 提示框 -->
+      <div class="OrangeTipBox" style="top:44px" data-flag="eventclientBtn" class="fixed" style="display:none;">
+        <span class="OrangeTipBox_Rc tac"><i class="SmilingFace"></i>仅针对专享项目投资的用户哦~</span>
+        <em class="OrangeTipBox_Arr"></em>
+      </div>
+      <!-- 专享按钮 -->
+      <div class="immInvest_but" event-mouseover="overClientBtn" event-mouseout="outClientBtn">
+        <label class="button-common-orange button-plist-btn">
+          <a href="javascript:;" class="btns">特定专享标</a>
+        </label>
+      </div>
+    </dd>
+  </dl>
+  <?php } ?>
+
+  <!--已登陆结束-->
+
+  <!--未登陆开始-->
+<?php }else{ ?>
+
+<include file="_nologin"/>
+
+<?php } ?>
+

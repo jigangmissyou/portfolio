@@ -1,0 +1,69 @@
+<div class="statistics">
+    <?php if(!$isFed):?>
+    <span class="item">(以下数据根据"投资金额{$demand_amount_name}元,期限{$prjInfo['time_limit']}{$prjInfo['time_limit_unit_view']}"计算,您的收益以实际收益为准，预计还款日当天16:00~24:00到账{$notice_addon})</span>
+    <?php else:?>
+    <span class="item">(以下数据根据"投资金额{$demand_amount_name}元,期限<?php echo $timeLimit[1]; ?>"计算,您的收益以实际收益为准，预计还款日当天16:00~24:00到账)</span>
+    <?php endif;?>
+</div>
+<div>
+<table class="ui-record-table thin">
+  <thead>
+    <tr>
+      <th>期次</th>
+      <th width="15%" class="tac">还款日</th>
+        <th width="16%" class="tar">应收本息（元）</th>
+      <th width="15%" class="tar">应收利息（元）</th>
+        <th width="15%" class="tar">应收本金（元）</th>
+      <th width="25%" class="tar"><span style="margin-right:80px">剩余本金（元）</span></th>
+     </tr>
+    <tr class="line"><th colspan="100%"></th></tr>
+  </thead>
+    <tbody>
+    <?php if(!$isFed):?>
+      <tr>
+        <td>募集期资金占用费<a class="icon_unknown" hovercard="div@ct4" hovercard-options='{"direction":"down"}'></a>
+          <div class="dn" hovercard-id="ct4">
+            <p class="hoverPinfo">募集期资金占用费=募集期间每天的募集期资金占用费之和<br/>（每天的募集期资金占用费=当日投资总金额×年化利率/365）</p></div>
+        </td>
+        <td width="15%" class="tac">{$bidInfo['repayDate']}</td>
+       <td width="15%" class="tar"><?php if($isEnd || $isFull):?>{$bidInfo['totalAmountView']}<?php else: ?><p>实际金额以融资<br/>截止日显示为准</p><?php endif;?></td>
+        <td width="15%" class="tar">
+            <?php if($isEnd || $isFull):?>
+            {$bidInfo['incomeView']}
+            <?php else: ?>
+            <p>实际金额以融资<br/>截止日显示为准</p>
+            <?php endif;?>
+        </td>
+          <td width="15%" class="tar">
+              -
+          </td>
+        <td width="25%" class="tar"><span style="margin-right:80px">{$bidInfo['amountView']}</span></td>
+      </tr>
+    <?php endif;?>
+   	<?php if($tableResult):?>
+   	<?php foreach($tableResult as $v):?>
+      <tr>
+        <td><?php echo $v['no']; ?></td>
+        <td width="15%" class="tac"><?php echo $v['repay_date']; ?></td>
+        <td width="15%" class="tar"><?php echo $v['repay_money_view']; ?></td>
+        <td width="15%" class="tar"><?php echo $v['profit_view']; ?></td>
+        <td width="15%" class="tar"><?php echo $v['capital_view']; ?></td>
+        <td width="25%" class="tar"><span style="margin-right:80px"><?php echo $v['last_capital_view']; ?></span></td>
+      </tr>
+      <?php endforeach;?>
+     <?php endif; ?>
+         <tr class="lastrow ftC01">
+        <td colspan="2" class="tac" style="padding-left:150px">合计</td>
+        <td class="tar">{$totalMoney}</td>
+           <td class="tar">{$totalProfit}</td>
+           <td class="tar">{$total_principal}</td>
+        <td class="tar" colspan="1"></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<script>
+seajs.use(['hovercard/hovercard'], function(hovercard){
+  hovercard.init();
+});
+</script>

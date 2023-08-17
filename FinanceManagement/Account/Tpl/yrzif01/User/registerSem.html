@@ -1,0 +1,230 @@
+<extend name="./app/Tpl/Public/base_hfhg.html"/>
+<block name="title">新用户注册</block>
+<block name="style">
+	<link href="/public/css/sasscss/act/drainlogin/drain_login.css"  rel="stylesheet"/>
+	<style>
+	#container{width:auto;}
+.listCom li .drain_input.textMess_bd{border:#f96e10 solid 1px;}
+#header,#drain_banner,#footer_box,.bodyBd{min-width: 1022px;}
+.drain_wraper{width:1022px; margin:auto;}
+	</style>
+</block>
+<block name="body">
+	<div id="drain_banner" class="ovh">
+		<!-- banner js 轮播 star-->
+	  	 <div class="pics_switch">
+			<div class="pb">
+			   <div class="pic_box"><a class="pic_banner_007" href="javascript:;"></a></div>
+			   <?php if($hmsr != "newchannel1"){ ?>
+				<div class="pic_box"><a class="pic_banner_008" href="{:U('Financing/Invest/plist',array('c'=>9))}" target="_blank"></a></div>
+				<?php } ?>
+				<!-- div class="pic_box"><a class="pic_banner_004" target="_blank" href="http://www.xinhehui.com/Index/Act/custom"></a></div>  -->
+			</div>
+	</div>
+	<!-- <div class="viewArrows prev">上一张</div>
+		<div class="viewArrows next">下一张</div> -->
+		 <!-- icon focus Button star-->
+		<div class="pics_switch_clients">
+			<ul>
+				<li><span class="current">1</span></li>
+				<?php if($hmsr != "newchannel1"){ ?>
+				<li><span>2</span></li>
+				<?php } ?>
+			</ul>
+		</div>
+		<!-- icon focus Button end-->
+	    <!-- banner js 轮播  end-->
+	    <div class="login_content">
+	    <div class="login_wrap">
+	    	<form ajax="1" ajax-after="after_Account_User_Register" action="{:U('Account/User/doregister')}" method="post" id="formId_Account_User_Register">
+		    	<div class="login_box">
+		    		<h4 class="topbar">注册享100元红包</h4>
+		    		<ul class="listCom">
+		    			<li>
+		    				<input type="text" value=""  validurl="{:U('Account/User/checkMobile')}" name="mobile" ghosttext="请输入您的手机号" class="drain_input"/>
+		    				<span class="drain_error drain_foucs" id="mobile_err_tips"></span>
+		    			</li>
+		    			<li class="prel" id="pwdWrap">
+		    				<i id="togglePwd" class="icon-eye-pwd"></i>
+		    				<input id="password" type="password" value=""  validurl="" name="pwd" ghosttext="请输入您的密码" class="drain_input"/>
+		    				<span class="drain_error drain_foucs" id="pwd_err_tips"></span>
+		    			</li>
+		    			<li>
+		    				<input type="text"  value="" ghosttext="验证码" name="authCode" validurl="{:U('Index/Index/checkAuthCode')}" class="drain_input drain_sw"/>
+		    				<img class="yanImg" src="{:U('Index/Index/verify',array('version'=>uniqid()))}"  id="VerifyCodeImg"  alt=""/>
+		    				<p class="VerifyCodeText"><a href="javascript:;" id="refreshVerifyCode">看不清，请换一张</a></p>
+		            <span class="drain_error drain_foucs" id="authCode_err_tips">验证码错误，请重新输入</span>
+		    			</li>
+		    			<li>
+		    				<input type="text" value="" ghosttext="请输您的手机验证码" validurl="{:U('Account/User/checkRegisterCode')}"  class="drain_input drain_sw"  name="code"/>
+		    				<input type="button" value="点击获取" id="show_send_btn" class="drain_clickBtn"/>
+		    				<a class="drain_noClickBtn" id="time_send" href="javascript:;" style="display:none">120秒后失效</a>
+		    				<span class="drain_error" id="code_err_tips"></span>
+		    				<span class="drain_errors" id="code_err_tips_notes">如2次收不到验证码请致电<i class="org ft14 fwb"> 400-821-8616</i></span>
+		    			</li>
+		    			<li class="lipd"><input type="button" id="submit_Account_User_Register" class="barin_subBtn" value="提交注册" ajax-submit /></li>
+		    			<li class="lipd-b"><label for="" class="fl" style="display:none;" ><input type="checkbox" name="degree" checked="checked"/></label><span>点击“提交注册”意味着同意《<a colorbox="1" href="{:U('Index/Protocol/view',array('id'=>1))}">鑫合汇注册协议</a>》</span>
+		    			</li>
+		    			<!-- <li class="New_biao_registerSem"><a class="paul17px" href="javascript:;" title="第三方担保公司全额本息担保" hidefocus="hidefocus">保</a> 第三方担保公司全额本息担保</li>
+		    			<li class="New_biao_registerSem"><a class="safety17px mr10" hidefocus="hidefocus" title="账户资金由人保财险保险承保" href="javascript:;"></a>账户资金由人保财险保险承保</li> -->
+		    		</ul>
+		    		<span class="bottomBar"></span>
+		    	</div>
+          </form>
+	    </div>
+	    </div>
+	</div>
+	<!-- body内容区 star-->
+	<div class="drain-gray-box">
+    <?php $href = $userInfo ? '/' : '#drain_banner'; ?>
+	  <div class="brain_step"><a href="{$href}" class="r-registerBtn">马上注册</a></div>
+	</div>
+	<div class="brain-account-data">
+		<div class="drain_wraper">
+			<ul class="data-ul">
+				<li>
+					<em class="em_icn_item1"></em>
+					<p class="txt-red">{$userCount}位</p>
+					<p>注册用户数</p>
+				</li>
+				<li>
+					<em class="em_icn_item2"></em>
+					<p class="txt-red">{$investCount}万</p>
+					<p>累计成交额</p>
+				</li>
+				<li>
+					<em class="em_icn_item3"></em>
+					<p class="txt-red">{$weekCount}万</p>
+					<p>近7天成交额</p>
+				</li>
+				<li>
+					<em class="em_icn_item4"></em>
+					<p class="txt-red">{$profitall}元</p>
+					<p>为投资者赚取收益</p>
+				</li>
+			</ul>
+		</div>
+	</div>
+	<div class="bigfont_title border">“明鑫”产品--日益升</div>
+	<div class="drain_wraper">
+		<div class="" style="padding-bottom:42px; padding-top:42px;">
+			<div class="ovh">
+				<div class="fl semleft-tab">
+					<table class="semTable">
+						<thead>
+							<tr>
+								<th width="36%">名称</th>
+								<th width="16%">预期年化收益</th>
+								<th width="15%">项目期限</th>
+								<th width="15%" align="left">起投金额</th>
+								<th width="18%"></th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td class="pl20">日益升-RYS201506(新客专享)</td>
+								<td align="center" class="semRed"><?php if($hmsr == "newchannel1"){ ?>14.08%<?php }else{ ?>15.08%<?php } ?></td>
+								<td align="center" class="semBlue">2<em>天</em></td>
+								<td align="left">￥100.00</td>
+                				<?php $href = $userInfo ? U('Financing/Invest/plist',array('c'=>5)) : '#drain_banner'; ?>
+								<td align="center"><a href="{$href}" class="semBuyBtn">马上投资</a></td>
+							</tr>
+							<tr>
+								<td class="pl20">日益升-RYS201506(鑫整点)</td>
+								<td align="center" class="semRed"><?php if($hmsr == "newchannel1"){ ?>14.08%<?php }else{ ?>15.08%<?php } ?></td>
+								<td align="center" class="semBlue">1<em>天</em></td>
+								<td align="left">￥1000.00</td>
+								<?php $href = $userInfo ? U('Financing/Invest/plist',array('c'=>9)) : '#drain_banner'; ?>
+								<td align="center"><a href="{$href}" class="semBuyBtn">马上投资</a></td>
+							</tr>
+							<tr>
+								<td class="pl20">日益升-RYS201506</td>
+								<td align="center" class="semRed">13.08%</td>
+								<td align="center" class="semBlue">5<em>天</em></td>
+								<td align="left">￥1000.00</td>
+								<?php $href = $userInfo ? U('Financing/Invest/plist',array('c'=>2)) : '#drain_banner'; ?>
+								<td align="center"><a href="{$href}" class="semBuyBtn">马上投资</a></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<div class="fr semRight-pro">
+					<h4 class="semProTitle">日益升&nbsp;&nbsp;特色</h4>
+					<a href="{:U('Financing/Invest/plist',array('c'=>2))}" class="semSeeMore">查看更多</a>
+					<ul class="semTeList">
+						<li>短期灵活 到账快</li>
+						<li>回款即可复投</li>
+						<li>全天覆盖 资金不站岗</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="bigfont_title"><!-- <i class="icon-zhu">|</i> -->关于我们</div>
+	<div class="drain-gray-box pd_bottom">
+		<div class="semAboutBox">
+			<div class="pl22">
+				
+				<p class="semTxt">
+					鑫合汇<a href="https://www.xinhehui.com/" class="blue">（www.xinhehui.com）</a>是以P2B（个人到企业或机构）为模式的新型互联网投融平台，为各类个人、机构及企业投资者提供安全、便捷、高收益的投资及理财产品，为企业及个人提供直接融资服务，为金融机构或类金融机构提供各类基于收益权转让和直接融资撮合服务。</p>
+				<ul class="semTxtList">
+					<li>全牌照承销机构资质;</li>
+					<li>银行级系统安全防范措施;</li>
+					<li>实力雄厚的国内一流专业担保公司担保;</li>
+					<li>与中国人民财产股份有限公司杭州分公司签署《账户安全责任保险协议》。</li>
+					
+				</ul>
+				<div class="drain_about_con">
+					<div class="drain_about_item1">
+						<div class="txt_1">鑫合汇与中国人民财产股份有限公司杭州分公司正式签署《账户安全责任保险协议》，充值更有安全感</div>
+					</div>
+					<div class="drain_about_item2"><div class="txt_2">鑫合汇全面采用可靠的电子签名技术，鑫合汇与天威诚信达成战略合作协议，共同为投资人的利益保驾护航。</div><a href="https://www.xinhehui.com/Security" target="_blank" class="drain_see_more">更多介绍</a></div>
+				</div>
+				<!-- <div class="sem-textBox prel">
+					<p class="semText1">{$userCount}<em>位</em></p>
+					<p class="semText2">{$investCount}<em>元</em></p>
+				</div> -->
+			</div>
+		</div>
+	</div>
+	<div class="bigfont_title border"><!-- <i class="icon-zhu">|</i> -->用户怎么说</div>
+	<div class="drain_wraper ">
+		<ul class="drain_user">
+			<li>
+				<em class="user-icn user-icn_item1"></em>
+				<p class="user-name">王先生-IT宅男</p>
+				<p class="talk-info">我发现鑫合汇网站全站是用HTTPS加密做的，还有app，应该比较厉害，不像那种模板网站搭的小平台，在我投的几家网贷平台中是比较少见了，还考察了一下公司的资质，注册资本，团队，基本还OK的，投了一次感觉还行吧，慢慢考察吧！</p>
+			</li>
+			<li class="li-middle">
+				<em class="user-icn user-icn_item2"></em>
+				<p class="user-name">张小姐-全职太太</p>
+				<p class="talk-info">第一次投资鑫合汇，还是朋友推荐的，利率还不错，回款是第二天的，客服小姐的服务很到位！继续关注中…</p>
+			</li>
+			<li>
+				<em class="user-icn user-icn_item3"></em>
+				<p class="user-name">周先生-某私企老板</p>
+				<p class="talk-info">投资最重要的是安全，我是看中鑫合汇的集团资质才投的，中新力合是个9年的老牌子，很大，很有名气，一直做的很好，而且中新力合也是一直从事线下金融服务的工作，看好它，潜力股！</p>
+			</li>
+		</ul>
+	</div>
+	<!-- <div class="bigfont_title">移动便捷理财  最新资讯随时掌握</div> -->
+	<div class="clearfix"></div>
+	<div class="drain_wraper ">
+		<!-- <div class="drain_weixin-box"><span class="wei_span span_1">
+		        <img src="/public/images/drain_login/weixin.jpg" alt="">
+				<p>官方微信</p>
+			</span><span class="wei_span span_2">
+			<img src="/public/images/drain_login/app.jpg" alt="">
+				<p>手机app</p>
+			</span></div> -->
+			<div class="drain_ready">您准备好了吗？</div>
+			<p class="tac drain_redbig"><label for="" class="redBigBtn"><a href="#drain_banner" class="btns">立即注册</a></label></p>
+	</div>
+
+  <!-- body内容区 end-->
+
+	
+</block>
+<block name="footer">
+	<include file="./app/Tpl/Public/footer_hfhg.html"/>
+</block>

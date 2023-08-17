@@ -1,0 +1,153 @@
+<?php
+  $default_bank = array();
+
+  if(empty($recharge_bank)){
+    $recharge_bank = array();
+  }
+
+  foreach($bankList as $k=>$v){
+    if($v['bank']==$recharge_bank['code'] || $v['bank']==$recharge_bank['myCode']){
+      $default_bank = $v;
+      break;
+    }
+  }
+
+?>
+<div class="bank_list" style="display:inline-block;">
+  <?php
+    if(empty($default_bank)){
+      foreach($bankList as $k=>$v){
+  ?>
+  <label id="label_bank_{$k}" class="bank_logo_box" for="bank_{$k}">
+    <input type="radio" id="bank_{$k}" value="{$v.bank}" name="bank_option" abbr="{$v.abbr}">
+    <span class="bank_logo {$v.logo}" title="{$v.bank_name}">{$v.bank_name}</span><p>(*3303)</p>
+  </label>
+  <?php if(count($bankList) >=2 && $k == 0){ ?>
+<!--     <span id="button_bank" class="bank_logo_box other" style="display: none;">
+    <a class="blue">选择其他银行<i class="iar"></i></a>
+    </span> -->
+
+  <?php }?>
+  <?php
+      }
+    }else{
+  ?>
+    <label id="label_bank_100" class="bank_logo_box selected" for="bank_100" style="position:relative;">
+    <input type="radio" id="bank_100" value="{$default_bank.bank}" name="bank_option" abbr="{$default_bank.abbr}">
+    <span class="bank_logo {$default_bank.logo}" title="{$default_bank.bank_name}">{$default_bank.bank_name}</span>
+    <span style="position:absolute;top:30px;left:60px;">(*3303)</span>
+    </label>
+
+<!--     <span id="button_bank" class="bank_logo_box other">
+    <a class="blue">选择其他银行<i class="iar"></i></a>
+    </span> -->
+
+    <?php
+      foreach($bankList as $k=>$v){
+        if($v['bank']!=$default_bank['bank']){
+    ?>
+      <label id="label_bank_{$k}" class="bank_logo_box" style="display: none;" for="bank_{$k}">
+        <input type="radio" id="bank_{$k}" value="{$v.bank}" name="bank_option" abbr="{$v.abbr}">
+        <span class="bank_logo {$v.logo}" title="{$v.bank_name}">{$v.bank_name}231231</span>
+        
+      </label>
+    <?php
+        }}
+    ?>
+  <?php }?>
+  <!--<label id="label_bank_01" class="bank_logo_box" for="bank_01">-->
+    <!--<input type="radio" id="bank_01" value="ICBC_D_B2C" name="bank_option" abbr="yibatong">-->
+    <!--<span class="bank_logo bank_icbc" title="工商银行">工商银行</span>-->
+  <!--</label>-->
+						  <!---->
+   <!--<span id="button_bank" class="bank_logo_box other">-->
+    <!--<a class="blue">选择其他银行<i class="iar"></i></a>-->
+   <!--</span>-->
+  <!--<label id="label_bank_02" class="bank_logo_box" for="bank_02" style="display:none">-->
+    <!--<input type="radio" id="bank_02" value="ABC" name="bank_option" abbr="shenfut">-->
+    <!--<span class="bank_logo bank_abc" title="农业银行">农业银行</span></label>-->
+  <!--<label id="label_bank_03" class="bank_logo_box" for="bank_03" style="display:none">-->
+    <!--<input type="radio" id="bank_03" value="CMB" name="bank_option" abbr="shenfut">-->
+    <!--<span class="bank_logo bank_cmb" title="招商银行">招商银行</span></label>-->
+  <!--<label id="label_bank_04" class="bank_logo_box" for="bank_04" style="display:none">-->
+    <!--<input type="radio" id="bank_04" value="CCB_D_B2C" name="bank_option" abbr="yibatong">-->
+    <!--<span class="bank_logo bank_ccb" title="建设银行">建设银行</span></label>-->
+  <!--<label id="label_bank_05" class="bank_logo_box" for="bank_05" style="display:none">-->
+    <!--<input type="radio" id="bank_05" value="BOC" name="bank_option" abbr="shenfut">-->
+    <!--<span class="bank_logo bank_boc" title="中国银行">中国银行</span></label>-->
+  <!--<label id="label_bank_06" class="bank_logo_box" for="bank_06" style="display:none">-->
+    <!--<input type="radio" id="bank_06" value="SPDB" name="bank_option" abbr="shenfut">-->
+    <!--<span class="bank_logo bank_spdb" title="浦发银行">浦发银行</span></label>-->
+  <!--<label id="label_bank_07" class="bank_logo_box" for="bank_07" style="display:none">-->
+    <!--<input type="radio" id="bank_07" value="COMM_D_B2C" name="bank_option" abbr="yibatong">-->
+    <!--<span class="bank_logo bank_boco" title="交通银行">交通银行</span></label>-->
+  <!--<label id="label_bank_08" class="bank_logo_box" for="bank_08" style="display:none">-->
+    <!--<input type="radio" id="bank_08" value="GDB" name="bank_option" abbr="shenfut">-->
+    <!--<span class="bank_logo bank_gdb" title="广发银行">广发银行</span></label>-->
+  <!--<label id="label_bank_09" class="bank_logo_box" for="bank_09" style="display:none">-->
+    <!--<input type="radio" id="bank_09" value="CMBC" name="bank_option" abbr="shenfut">-->
+    <!--<span class="bank_logo bank_cmbc" title="民生银行">民生银行</span></label>-->
+  <!--<label id="label_bank_10" class="bank_logo_box" for="bank_10" style="display:none">-->
+    <!--<input type="radio" id="bank_10" value="SZPAB" name="bank_option" abbr="shenfut">-->
+    <!--<span class="bank_logo bank_pingan" title="平安银行">平安银行</span></label>-->
+  <!--<label id="label_bank_11" class="bank_logo_box" for="bank_11" style="display:none">-->
+    <!--<input type="radio" id="bank_11" value="CEB" name="bank_option" abbr="shenfut">-->
+    <!--<span class="bank_logo bank_cebb" title="光大银行">光大银行</span></label>-->
+  <!--<label id="label_bank_13" class="bank_logo_box" for="bank_13" style="display:none">-->
+    <!--<input type="radio" id="bank_13" value="CITIC" name="bank_option" abbr="shenfut">-->
+    <!--<span class="bank_logo bank_ecitic" title="中信银行">中信银行</span></label>-->
+  <!--<label id="label_bank_14" class="bank_logo_box" for="bank_14" style="display:none">-->
+    <!--<input type="radio" id="bank_14" value="HXB" name="bank_option" abbr="shenfut">-->
+    <!--<span class="bank_logo bank_hxb" title="华夏银行">华夏银行</span></label>-->
+
+  <!--<label id="label_bank_31" class="bank_logo_box" for="bank_31" style="display:none">-->
+    <!--<input type="radio" id="bank_31" value="HZCB_D_B2C" name="bank_option" abbr="yibatong">-->
+    <!--<span class="bank_logo bank_hzb" title="杭州银行">杭州银行</span></label>-->
+  <!--<label id="label_bank_32" class="bank_logo_box" for="bank_32" style="display:none">-->
+    <!--<input type="radio" id="bank_32" value="POSTGC_D_B2C" name="bank_option" abbr="yibatong">-->
+    <!--<span class="bank_logo bank_post" title="邮政储蓄银行">邮政储蓄银行</span></label>-->
+  <!--<label id="label_bank_33" class="bank_logo_box" for="bank_33" style="display:none">-->
+    <!--<input type="radio" id="bank_33" value="CIB_D_B2C" name="bank_option" abbr="yibatong">-->
+    <!--<span class="bank_logo bank_cib" title="兴业银行">兴业银行</span></label>-->
+  <!--<label id="label_bank_15" class="bank_logo_box" for="bank_15" style="display:none">-->
+    <!--<input type="radio" id="bank_15" value="NBCB" name="bank_option" abbr="shenfut">-->
+    <!--<span class="bank_logo bank_nbcb" title="宁波银行">宁波银行</span></label>-->
+  <!--<label id="label_bank_16" class="bank_logo_box" for="bank_16" style="display:none">-->
+    <!--<input type="radio" id="bank_16" value=BOB_D_B2C name="bank_option" abbr="yibatong">-->
+    <!--<span class="bank_logo bank_bob" title="北京银行">北京银行</span></label>-->
+  <!--<label id="label_bank_17" class="bank_logo_box" for="bank_17" style="display:none">-->
+    <!--<input type="radio" id="bank_17" value="HKBEA" name="bank_option" abbr="shenfut">-->
+    <!--<span class="bank_logo bank_hkbea" title="东亚银行">东亚银行</span></label>-->
+  <!--<label id="label_bank_18" class="bank_logo_box" for="bank_18" style="display:none">-->
+    <!--<input type="radio" id="bank_18" value="BOS" name="bank_option" abbr="shenfut">-->
+    <!--<span class="bank_logo bank_bosh" title="上海银行">上海银行</span></label>-->
+  <!--<label id="label_bank_20" class="bank_logo_box" for="bank_20" style="display:none">-->
+    <!--<input type="radio" id="bank_20" value="NJCB" name="bank_option" abbr="shenfut">-->
+    <!--<span class="bank_logo bank_njcb" title="南京银行">南京银行</span></label>-->
+  <!--<label id="label_bank_21" class="bank_logo_box" for="bank_21" style="display:none">-->
+    <!--<input type="radio" id="bank_21" value="CBHB" name="bank_option" abbr="shenfut">-->
+    <!--<span class="bank_logo bank_cbhb" title="渤海银行">渤海银行</span></label>-->
+  <!--<label id="label_bank_22" class="bank_logo_box" for="bank_22" style="display:none">-->
+    <!--<input type="radio" id="bank_22" value="BOCD" name="bank_option" abbr="shenfut">-->
+    <!--<span class="bank_logo bank_bocd" title="成都银行">成都银行</span></label>-->
+  <!--<label id="label_bank_24" class="bank_logo_box" for="bank_24" style="display:none">-->
+    <!--<input type="radio" id="bank_24" value="SRCB_D_B2C" name="bank_option" abbr="yibatong">-->
+    <!--<span class="bank_logo bank_srcb" title="上海农村商业银行">上海农村商业银行</span></label>-->
+</div>
+
+
+<table class="" style="display:inline-block;text-align:center;border:1px solid #ccc;margin: 10px 40px 10px 0;"  cellspacing="1" bordercolor="#DCDCDC" cellpadding="1" >
+    <tr>
+        <td style="width:120px;background:#f8f8f8;border-bottom:1px solid #dcdcdc;border-right:1px solid #dcdcdc;">单笔限额（元）</td>
+        <td style="width:120px;background:#f8f8f8;border-bottom:1px solid #dcdcdc;">每日限额（元）</td>
+    </tr>
+    <tr>
+        <td style="width:120px;border-right:1px solid #dcdcdc;">20万</td>
+        <td style="width:120px;">50万</td>
+    </tr>
+</table>
+<!-- 银行限额  增删银行时别忘记增删限额提示
+<div class="bank_limits">
+  <include file="bankLimits" />
+</div>
+-->

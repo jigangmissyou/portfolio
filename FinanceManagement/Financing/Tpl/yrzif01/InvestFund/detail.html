@@ -1,0 +1,198 @@
+<extend name="./app/Tpl/Public/base2.html"/>
+<block name="title">应用-平台管理-产品审核</block>
+<block name="keywords">鑫合汇投融</block>
+<block name="description">鑫合汇投融</block>
+
+<block name="style">
+<style>
+  .bank_drift{display: none;}
+  .reason{display: none;}
+  .shDl{padding: 10px 30px 30px; overflow: hidden;}
+  .shDl dt{font-size: 16px; padding: 20px 0; clear: both;}
+  .shDl dd{padding-bottom: 12px; width: 50%; float: left;}
+  .shDl .nofloat{clear: both; float: none; width: 100%;}
+</style>
+</block>
+
+<block name="body">
+<!-- <div class="nav">
+  <ul class="navlist">
+    <li<?php if(ACTION_NAME=='index' || ACTION_NAME=='detail') {?> class="current"<?php }?>>
+    <span class="roundTopborGy"><a href="{:U('Application/Platform/index')}">产品审核</a></span><a class="hrwrite"></a></li>
+    <li<?php if(ACTION_NAME=='investreg' || ACTION_NAME=='investreglist') {?> class="current"<?php }?>> <span class="roundTopborGy"><a href="{:U('Application/Platform/investreg')}">线下投资登记</a></span> <span class="roundTopborGy"><a class="hrwrite"></a></li>
+    <li<?php if(ACTION_NAME=='product' || ACTION_NAME=='view') {?> class="current"<?php }?>> <span class="roundTopborGy"><a href="{:U('Application/Platform/product')}">产品管理</a></span> <span class="roundTopborGy"><a class="hrwrite"></a></li>
+    <li<?php if(ACTION_NAME=='recharge') {?> class="current"<?php }?>> <span class="roundTopborGy"><a href="{:U('Application/Platform/recharge')}">充值申请</a></span> <span class="roundTopborGy"><a class="hrwrite"></a></li>
+    <li<?php if(ACTION_NAME=='repayList') {?> class="current"<?php }?>> <span class="roundTopborGy"><a href="{:U('Application/Platform/repayList')}">还款计划</a></span><a class="hrwrite"></a></li>
+  </ul>
+</div> -->
+
+<div class="main_area">
+    <dl class="shDl">
+      <input type="hidden" id="prj_id_pit" value="{$detail_info.prj_id}"/>
+        <dt><strong>项目信息</strong></dt>
+        <dd>基金管理人：{$detail_info.fund_manager}</dd>
+        <dd>基金名称：{$detail_info.fund_name}</dd>
+        <dd>基金经理：{$detail_info.fund_ceo}</dd>
+        <dd>基金托管人：{$detail_info.fund_custodian}</dd>
+        <dd>产品备案：{$detail_info.fund_filing}</dd>
+        <dd>产品发起：{$detail_info.fund_launch}</dd>
+        <dd>产品名称：{$detail_info.prj_name}</dd>
+        <dd>募集规模：{$detail_info._demand_amount}</dd>
+        <dd>募集期限：{$detail_info.raise_dateline}个月以内（以实际募集天数为准）</dd>
+        <dd>存续期：{$detail_info.duration}个月</dd>
+        <dd>基金评级：{$detail_info.fund_level}</dd>
+        <dd class="nofloat">
+            <span>预期年化收益率:</span>
+            <ul style="padding-left: 20px;">
+              <foreach name="detail_info.rate.rate_list" item="vo">
+                <li>{$vo._time_limit} {$vo._year_rate}<if condition="$vo.extra_income eq 1">　浮动收益</if></li>
+              </foreach>
+            </ul>
+        </dd>
+
+        <dd>回款方式：{$detail_info.payment_way}</dd>
+        <dd>起投额度：{$detail_info._min_bid_amount}</dd>
+        <dd>最高额度：{$detail_info._max_bid_amount}</dd>
+        <dd>递增额度：{$detail_info._step_bid_amount}</dd>
+        <dd>最高投资人数：{$detail_info.invest_max_user}</dd>
+        <dd>托管账户户名：{$detail_info.loanbank.acount_name}</dd>
+        <dd>托管账户开户行：{$detail_info.loanbank.bank_name}</dd>
+        <dd>托管账户：{$detail_info.loanbank.account_no}</dd>
+        
+        <dd>基金类别：{$detail_info.fund_class}</dd>
+        <dd>投资人类别：{$detail_info.investor_class}</dd>
+        <dd>收益分配方式：{$detail_info.earning_assign_mode}</dd>
+        <dd>运作方式：{$detail_info.operate_mode}</dd>
+        <dd>基金投向：{$detail_info.fund_direction}</dd>
+        <dd>基金支付费用及方式：{$detail_info.fund_payee_mode}</dd>
+        <dd>项目介绍：{$detail_info.project_introduce}</dd>
+        <dd>风险提示：{$detail_info.risk_tip}</dd>
+        
+        <dd class="nofloat">
+            <span>投放站点：</span>
+            <if condition="$detail_info.status eq 1">
+                <select name="mi_no" id="mi_no">
+                    <foreach name="mi_no" item="vo">
+                        <option value="{$vo.mi_no}">{$vo.mi_name}</option>
+                    </foreach>
+                </select>
+            <else/>
+                <span>{$detail_info.mi_name}</span>
+            </if>
+        </dd>
+        <dd class="nofloat">
+            <span>投放平台：</span>
+            <if condition="$detail_info.status eq 1">
+                <select name="client_type" id="client_type">
+                    <foreach name="client_type_config" item="vo">
+                        <option value="{$key}">{$vo}</option>
+                    </foreach>
+                </select>
+            <else/>
+                <span><?php echo $client_type_config[$detail_info['client_type']];?></span>
+            </if>
+        </dd>
+        <dd>
+            <span>是否新客标项目：</span>
+            <if condition = "$detail_info.status eq 1">
+	            <input type="radio" name="is_new" id="is_new_a" value="1"><label for="is_new_a">是</label>
+	            <input type="radio" name="is_new" id="is_new_b" value="0" checked><label for="is_new_b">否</label>
+            <else/>
+                <span>
+                    <if condition = "$detail_info.is_new eq 1">是<else/>否</if>
+                </span>
+            </if>
+        </dd>
+        <dd>
+            <span>是否允许多次投标：</span>
+            <if condition = "$detail_info.status eq 1">
+                <input type="radio" name="is_multi_buy" id="is_multi_buy_a" value="1"><label for="is_multi_buy_a">是</label>
+                <input type="radio" name="is_multi_buy" id="is_multi_buy_b" value="0" checked><label for="is_multi_buy_b">否</label>
+            <else/>
+                <span>
+                    <if condition = "$detail_info.is_multi_buy eq 1">是<else/>否</if>
+                </span>
+            </if>
+        </dd>
+        <dd class="nofloat">
+            <span>关联活动：</span>
+            <if condition="$detail_info.status eq 1">
+                <select name="acivitySelect" id="acivitySelect">
+                    <option value="">选择关联活动</option>
+                    <foreach name="activities" item="vo">
+                        <option value="{$vo.id}">{$vo.name}</option>
+                    </foreach>
+                </select>
+            <else/>
+                <span><?php echo $client_type_config[$detail_info['client_type']];?></span>
+            </if>
+        </dd>
+
+        <dt>
+          <strong>项目材料</strong>
+            <a style="font-size: 13px; margin-left: 30px" href="{:U('Financing/InvestFund/packFinanceApplyMaterial', array('prj_id' => $detail_info['prj_id']))}" class="blue">下载原项目材料</a>
+        </dt>
+        <dd class="nofloat">
+        <?php if(!empty($material)){ ?>
+          <div class="project_materials bor_t" id="evidenceListBox">
+            <div class="title"><span class="fl">材料名称<if condition="$product.status eq '1'"><a href="javascript:void(0)" id="addMateriaBtn" class="ml20 blue">新增</a></if></span><span class="fr">内容</span></div>
+            <div id="ajaxColtent_audit_data" prjid="{$prj_id}">
+              <?php foreach ($material as $key => $vo) { ?>
+              <div class="content" data-imgType="{$vo.id}" style="position: relative">
+                <div class="info mainWrapBox" style="float: left">
+                  <input type="text" class="file_ipt" style="background:none; width: 280px" value="{$vo.code_name}" oldval="{$vo.name}" readonly>
+                  <?php foreach ($vo['child'] as $imgs) { ?>
+                  <div event-click="viewThumbImg" class="thumbnail thumbnailWrap" style="cursor: pointer;" url="{$imgs.thumbs.big}"><img width="50" height="50" src="{$imgs.thumbs.tiny}"><i event-click="delThumbImg" mid="{$imgs.id}" class="close delMateriaBtn" title="删除材料">×</i></div>
+                  <?php } ?>
+                </div>
+                <if condition = "$detail_info.status eq 1">
+                  <div class="tool">
+                    <a href="javascript:void(0)" id="uploadEvidence_{$vo.code_no}" class="uploadEvidence">上传</a>
+                  </div>
+                </if>
+                <div class="uploading"><span>资料上传中...</span></div>
+              </div>
+              <?php } ?>
+            </div>
+          </div>
+        <?php } else { ?>
+          <div class="content">
+            <div class="info">
+              无材料<i class="i_edit"></i> <i class="i_del"></i>
+            </div>
+          </div>
+        <?php } ?>
+        </dd>
+
+        <dt><strong>项目发布信息</strong></dt>
+        <if condition="$detail_info.status eq 1">
+          <dd class="nofloat">
+            <label>融资开标时间：</label>
+            <input datepicker='{"dateFmt": "yyyy-MM-dd HH:mm:00", "endId": "end_bid_time"}' type="text" name="start_bid_time" id="start_bid_time">
+          </dd>
+          <dd class="nofloat">
+            <label>融资截止时间：</label>
+            <input datepicker='{"dateFmt": "yyyy-MM-dd HH:mm:00", "startId": "start_bid_time"}' type="text" name="end_bid_time" id="end_bid_time">
+          </dd>
+          <dd class="nofloat">
+            <div class="tac">
+              <a event-click="doVerify" class="do_verify btn_orange" data-args="/index.php/Application/Platform/verify?status=1&prj_id={$detail_info['prj_id']},success"><span class="btns">通过</span></a>
+              <a class="do_reason btn_orange ml20" href="javascript:" event-click="showReasonBox"><span class="btns">不通过</span></a>
+            </div>
+            <div class="reason" id="verify_reason" style="padding: 30px 0;">
+              <div class="list_item">
+                <label class="li-label-name">不通过原因：</label><textarea name="verify_desc" class="ui_textarea"></textarea>
+              </div>
+              <div class="list_item tc">
+                <a event-click="doVerify" class="do_verify btn_orange" data-args="/index.php/Application/Platform/verify?status=0&prj_id={$detail_info['prj_id']},faild"><span class="btns">确定</span></a>
+              </div>
+            </div>
+          </dd>
+        <else/>
+          <dd class="nofloat">融资开标时间：{$detail_info['_start_bid_time']}</dd>
+          <dd class="nofloat">融资截止时间：{$detail_info['_end_bid_time']}</dd>
+        </if>
+    </dl>
+</div>
+  
+</block>

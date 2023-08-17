@@ -1,0 +1,97 @@
+<extend name="./app/Tpl/Public/base_hfhg.html"/>
+<block name="title">我要理财-项目详情</block>
+<block name="keywords">我要理财</block>
+<block name="description">我要理财</block>
+
+<block name="style">
+  <style>
+  .nowInvest-but{display:none;}
+  .half-col{
+    width: 49%;
+    margin-right: 1%;
+    float: left;
+  }
+  .standardH3 .calculatorBtn {
+      left: 0;
+      top: 58px;
+  }
+  </style>  
+</block>
+<block name="script">
+  <script>
+  var URL_FINANCING_INVEST_BUY = "{:U('Financing/Invest/buy')}";  // 投资服务
+  var URL_FINANCING_INVEST_BUYSUCCESS = "{:U('Financing/Invest/buySuccess11')}";  // 投资服务
+  var calculatorOptions = {
+      t: '{$info.repay_way}',  //还款类型
+      money: '{$max_invest_money_view}',  //投资金额
+      rate: '{$info.total_year_rate_view}', //利率
+      time_limit_unit: '{$info.time_limit_unit}', //期限单位
+      time_limit: '{$info.time_limit}', //投资期限
+      rate_type: '', //期限类型
+      date: '' //日期
+  };
+  if(calculatorOptions.t == 'E'){
+    calculatorOptions.t = 1;
+  }
+  if(calculatorOptions.t == 'permonth'){
+      calculatorOptions.t = 2;
+  }
+  if(calculatorOptions.t == 'D'){
+      calculatorOptions.t = 3;
+  }
+  </script>
+</block>
+
+<block name="body">
+<include file="./app/Tpl/Public/invest-subnav.html" />
+
+
+  <!-- 蒙版 -->
+  <div class="mask-detail dn"></div>
+  <div class="mask-detail-high dn"></div>
+  <div class="invest-container">
+    <!-- 标题 开始 -->
+    <include file="view_top" />
+    <!-- 标题 结束 -->
+
+    <!-- 标的详情 开始 -->
+    <div id="standardInfo">
+      <!-- <h3 class="standardH3">
+        <div class="standardNa"><i class="icon_itemSigh"></i>项目编号：{$info.prj_no}</div>
+        <div class="standardTi">开标时间 : <em>{$info.start_bid_time_view}</em></div>
+        <a data-callcalculator="call" href="javascript:" class="blue calculatorBtn" hidefocus="hidefocus">
+            收益计算器<i class="icon_calculator"></i>
+        </a>
+      </h3> -->
+      <div class="standardDf">
+        <!-- 项目信息 左侧 -->
+        <if condition="$bill">
+          <include file="view_bill_info" />
+          <else /><include file="view_info" />
+        </if>
+        <!-- 投资部分 右侧 -->
+        <?php if($info['act_prj_ext']['is_pre_sale'] == 1 && $info['bid_status'] == PrjModel::BSTATUS_WATING) { ?>
+        <include file="view_invest_pre" />
+        <?php } else { ?>
+        <include file="view_invest11" />
+        <?php } ?>
+      </div>
+      <!-- 投资公告 先隐藏掉 10.18号先-->
+      <div id="InvestAnnounce" class="mt20 fixed" style="display:none;">
+        <span class="standardDi3 fl"><i class="icon_blueHorn"></i>今日投资 <em class="org_color">1万元</em>，可额外获得募集期利息 <em class="org_color">5.12元</em><i class="icon_orangeMark"></i>（募集期利率：年化10%）</span>
+        <span class="fr date">2014-07-31</span>
+      </div>
+
+    </div>
+    <!-- 标的详情 结束 -->
+
+  </div>
+<!-- 项目概况 页签 开始 -->
+<include file="view_project_info11" />
+<!-- 项目概况 页签 结束 -->
+
+<input type="hidden" name="is_paypwd_edit" value="<?php echo $is_paypwd_edit;?>">
+
+</block>
+
+<block name="footer"><include file="./app/Tpl/Public/footer_user.html" /></block>

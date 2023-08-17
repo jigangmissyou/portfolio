@@ -1,0 +1,56 @@
+<extend name="./app/Tpl/Public/base2.html"/>
+<block name="title">我要融资-转让产品</block>
+<block name="keywords">我要融资</block>
+<block name="description">我要融资</block>
+
+<block name="style">
+</block>
+
+<block name="body">
+<script>
+var URL_AJAX_GAIN = "{:U('Account/Financing/ajax_gain')}",
+    URL_AJAX_CHECK = "{:U('Account/Financing/ajax_check_transfer')}",
+    URL_AJAX_DO_TRANSFER = "{:U('Account/Financing/do_transfer')}",
+    URL_AJAX_SEND_MCODE_TRANSFER = "{:U('Account/Financing/send_mcode_transfer')}";
+</script>
+<include file="nav" />
+<div class="main_area">
+ <!--  <div class="summary">
+    <h2 class="h2tit">份额转让<a class="sub blue" href="#transfer_steps">（点击查看具体步骤）</a></h2>
+    <p>说明：份额转让旨在帮助您在需要时通过出售已认购或已持有的份额迅速回笼资金。您出售的份额为50000元的整数倍，将会进入份额转让列表等待别的投资人购买。您的份额可以在购买的理财产品（如基金）成立后任意时间出售。到达转让截止日期后，转让的产品将自动过期下架，您未转让的份额价值将会自动返还。</p>
+  </div>
+  <div class="category pro_tran"><a class="cur" href="javascript:void(0);">可转让列表</a></div> -->
+
+  <div class="ajax_datalist mt20"><include file="tlist_ajax" /></div>
+
+
+  <div class="ui_tit_bg"><h3>转让说明</h3></div> 
+  <div class="tran_step">
+    <!-- <h3>如何转让份额</h3> -->
+    <ol class="tran_step_list clearfix">
+      <li class="step_list_1">
+        <i class="icon"></i>
+      <p>持有项目</p>
+       </li>
+        <li class="separator"></li>
+        <li class="step_list_2">
+          <i class="icon"></i>
+      <p>转让挂牌</p>
+        </li>
+        <li class="separator"></li>
+        <li class="step_list_3">
+          <i class="icon"></i>
+      <p>转让成功</p>
+        </li>
+        <li class="separator"></li>
+        <li class="step_list_4">
+          <i class="icon"></i>
+      <p>即刻结算</p>
+        </li>
+    </ol>
+    <p>1、可转让的项目指项目持有的期限>60天且距项目到期日还有30天以上；<br/>2、所持有的项目必须一次性全部转让；<br/> 3、转让后的项目可再次转让；<br/>4、转让信息发布成功后，所持有的项目将显示在“我要理财-富二代”列表中；如果交易成功您所持有的份额将被投资人买入并且按转让价格将资金从投资人账户转到您的账户中，您的账户余额会有所增加并且交易产生的记录会记录在“我的账户-资金记录”中；
+
+  </p>
+  </div>
+</div>
+</block>

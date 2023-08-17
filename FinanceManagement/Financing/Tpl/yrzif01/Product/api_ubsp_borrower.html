@@ -1,0 +1,99 @@
+<style>
+.page{text-align: center!important;}
+.empty_data{text-align: center;margin: 30px 0 0 0;}
+</style>
+<if condition="$borrower_type eq 1">
+<!-- 借款人查找弹窗 借款人为企业时 	-->
+	<if condition="$Think.post.ajax neq 1">
+	  <div id="titlebar">选择项目借款人</div>
+	  <div id="jqueryContent" class="ajax_borrower_list" style="width:650px;">
+	</if>
+
+			<div class="search">
+			  <form action="{:U('Financing/Product/api_ubsp_borrower')}" method="GET">
+			    <input type="hidden" name="type" value="{$btype}">
+			    <input type="text" name="keyword" class="inputCommon ipt_h" value="{$keyword}" placeholder="输入借款企业/人名称关键字查询">
+			    <span class="btn_bor_blue ml10"><input class="btns" type="submit" value="查询"></span>
+			  </form>
+			  <div class="borrowers">
+			    <dl>
+			      <dt>
+			        <span class="fl">借款企业</span>
+			        <span class="fl">借款项目</span>
+			        <span class="num">项目编号</span>
+			      </dt>
+			      
+			      <?php if(!empty($list)){ ?>
+			      
+			      <foreach name="list" item="item">
+			        <dd>
+			            <span class="fl"><input type="radio" name="jie" id="jie_{$key}" json='{$item.json}'><label for="jie_{$key}">{$item.CUST_NAME}</label></span>
+			            <span class="fl">{$item.PROJECT_NAME}</span>
+			            <span class="num">{$item.PROJECT_NO}</span>
+			        </dd>
+			      </foreach>
+			      
+			      <?php } else { ?>
+			          <div class="empty_data">没有搜索到您要的内容，请重新搜索</div>
+			      <?php } ?>
+			    </dl>
+			    {$paging}
+			  </div>
+			</div>
+     <if condition="$Think.post.ajax neq 1"></div></if>
+
+<else/>
+
+<!-- 借款人查找弹窗 借款人为自然人时-->
+
+
+      <if condition="$Think.post.ajax neq 1">
+          <div id="titlebar">选择项目借款人</div>
+          <div id="jqueryContent" class="ajax_borrower_list" style="width:450px;">
+      </if>
+ 
+			<div class="search">
+			  <form action="{:U('Financing/Product/api_ubsp_borrower')}" method="GET">
+			    <input type="hidden" name="type" value="{$btype}">
+			    <input type="text" name="keyword" class="inputCommon ipt_h" value="{$keyword}" placeholder="输入借款企业/人名称关键字查询">
+			    <span class="btn_orange ml10"><input class="btns" type="submit" value="查询"></span>
+			  </form>
+			  <div class="citizen">
+			    <dl>
+			      <dt>
+			         <span class="fl">借款人</span>
+			         <span class="cid">身份证号码</span>
+			         <span class="num">项目编号</span>
+			      </dt>
+			      <?php if(!empty($list)){ ?>
+			      <foreach name="list" item="item">
+			         <dd>
+			             <span class="fl"><input type="radio" name="jie" id="jie_{$key}" json='{$item.json}'><label for="jie_{$key}">{$item.CUST_NAME}</label></span>
+			        	 <span class="cid">{$item.ID_NO}</span>
+			        	 <span class="num">{$item.PROJECT_NO}</span>
+			         </dd>
+			      </foreach>
+			      <?php } else { ?>
+			      	<div class="empty_data">没有搜索到您要的内容，请重新搜索</div>
+			      <?php } ?>
+			    </dl>
+			    {$paging}
+			  </div>
+			</div>
+
+	 <if condition="$Think.post.ajax neq 1"></div></if>
+
+</if>
+
+<script>
+(function(){
+  if(typeof jQuery == 'undefined') return;
+  var kw = $('[name=keyword]').val();
+  if(!kw) return;
+
+  var re = new RegExp('('+kw+')', 'g');
+  $('dd label, dd span.fr').each(function(){
+    $(this).html($(this).text().replace(re, '<span class="red">$1</span>'));
+  });
+})();
+</script>

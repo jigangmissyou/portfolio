@@ -1,0 +1,26 @@
+<form action="{:U('Payment/PayAccount/cashoutRollback')}" ajax="1" ajax-after="ajaxAfter_Payment_PayAccount_cashoutRollback" method="post">
+	<input type="hidden" name="cashoutId" value="{$cashoutId}">
+	<!-- RollbackTime / RedoTime -->
+	<div id="cashoutFailBox">
+		<div id="jqueryContent">
+		  <div class="w520">
+		    <ul class="formList">
+		      <li><label class="li-label-name">退回时间：</label><span class="li-span-con"><input datepicker name="RollbackTime" type="text"></span></li>
+		      <li><label class="li-label-name">重新支付时间：</label><span class="li-span-con"><input datepicker name="RedoTime" type="text"></span></li>
+          <li>
+            <label class="li-label-name">退回原因：</label>
+            <span class="li-span-con">
+              <textarea name="backreason" cols="30" rows="3"></textarea>
+            </span>
+          </li>
+          <li>
+		      	<label for="" class="li-label-name">&nbsp;</label>
+		      	<span class="li-span-con">
+		      		<span class="button-common-blue button-blue-pop"><input type="submit" class="btns rollback-save" value="确定"></span>
+		      	</span>
+		      </li>
+		    </ul>
+		  </div>
+		</div>
+	</div>
+</form>

@@ -1,0 +1,11 @@
+<form method="post" action="{:U('Account/FinancingManage/getLoanBank')}" ajax="1" ajax-after="ajaxAfter_getBankCardList" method="post" id="formId_bankCardList" ajax-datatype="html">
+  <div class="mb20">
+    <strong class="title-label">绑定银行账户</strong>
+  </div>
+  <div id="bankCardListWrap" class="bankBoxBang">
+    正在载入银行账户数据...
+  </div>
+  <div class="grid_blank grid_blank_bang">
+    <div class="add_bank"><a colorbox="1" href="{:U('Account/FinancingManage/bindCard')}" class="bigfont" hidefocus="hidefocus"><em>+</em>添加银行帐户</a></div>
+  </div>
+</form>

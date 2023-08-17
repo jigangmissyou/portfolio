@@ -1,0 +1,30 @@
+<extend name="./app/Tpl/Public/base_user.html"/>
+<block name="title">设置安全保护问题</block>
+<block name="keywords"></block>
+<block name="description"></block>
+<block name="body">
+<div class="container-inner mt20">
+  <include file="./app/Tpl/Account/userMyBonusSider.html" />
+  <div class="main_area body-frame">
+   <div class="p20">
+    <h2 class="h2tit">设置安全保护问题</h2>
+    <!-- <div class="remind"><h3><strong class="user">{$user['uname']}</strong>你好！</h3></div> -->
+    <h1 class="font_big tac orange blank_tb mt20">安全问题设置成功！</h1>
+    <p class="tac"><span id="second" style="font-size: 16px; color: #FF8500">5</span> 秒后自动跳转 <a id="goto" style="color: dodgerblue" href="{$jump_url}">立即跳转</a></p>
+    <script>
+      $(function(){
+        var i = 5, timer;
+        timer = setInterval(function(){
+          $('#second').text(i);
+          i--;
+          if(i < 0){
+            window.top.location = "{$jump_url}";
+            clearInterval(timer);
+          }
+        }, 1000);
+      });
+    </script>
+  </div>
+</div>
+</div>
+</block>

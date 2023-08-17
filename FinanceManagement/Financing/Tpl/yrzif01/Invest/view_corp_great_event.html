@@ -1,0 +1,93 @@
+<dl>
+  <h4><!-- <i class="icon_Greyinfo"></i> -->重大事项</h4>
+  <dt>融资及对外担保情况</dt>
+  <div id="MajorMattersCn" class="fixed" data-tab>
+    <div id="MajorMattersTab">
+      <ul class="fixed tab-menu">
+        <li class="fl tac current">银行借款明细</li>
+        <li class="fl tac">其他融资明细</li>
+        <li class="fl tac">对外担保明细</li>
+      </ul>
+    </div>
+    <div id="MajorMattersAlt">
+      <table class="globaltable width966px" data-tabPanel>
+        <tr>
+          <th width="11%" class="padLeft30">贷款主体</th>
+          <th width="14%">贷款金融机构名称</th>
+          <th width="10%">金额（万元）</th>
+          <th width="10%">品种</th>
+          <th width="11%">融资成本(%)</th>
+          <th width="10%">起始时间</th>
+          <th width="11%">终止时间</th>
+          <th width="10%">担保方式</th>
+          <th width="13%">取得贷款银行归属地</th>
+        </tr>
+        <?php if(!empty($bankLoan['data'])){ foreach ($bankLoan['data'] as $key => $vo) { ?>
+        <tr <?php if($key % 2 == 0){echo ' class="GreyBgcolor"';} ?>>
+          <td width="11%" textlength="7" class="padLeft30"><?php $corpName = preg_split("//u", $vo['loan_corp'], -1, PREG_SPLIT_NO_EMPTY);
+            array_splice ($corpName, 2, -4, '******');
+            echo $corpName = implode('', $corpName);?></td>
+          <td width="14%" textlength="8">{$vo.loan_bank}</td>
+          <td width="10%">{$vo.amount|floatParse}</td>
+          <td width="10%" textlength="6">{$vo.loan_kind}</td>
+          <td width="11%">{$vo.finance_cost|floatParse}</td>
+          <td width="10%" >{$vo.start_date}</td>
+          <td width="11%">{$vo.end_date}</td>
+          <td width="10%" textlength="6">{$vo.danbao_fangshi}</td>
+          <td width="13%" textlength="8">{$vo.bank_area}</td>
+        </tr>
+        <?php }} else { ?>
+        <tr>
+          <td colspan="9" class="noData">无数据</td>
+        </tr>
+        <?php } ?>
+     </table>
+     <table class="globaltable width966px" data-tabPanel>
+        <tr>
+          <th width="23%" align="center">性质</th>
+          <th width="22%" align="center">品种</th>
+          <th width="27%" align="center">融资来源</th>
+          <th width="28%" align="center">详情描述</th>
+        </tr>
+        <?php if(!empty($qitaRongzi['data'])){ foreach ($qitaRongzi['data'] as $key => $vo) { ?>
+        <tr <?php if($key % 2 == 0){echo ' class="GreyBgcolor"';} ?>>
+          <td textlength="13" class="padLeft30">{$vo.rongzi_property}</td>
+          <td textlength="13">{$vo.rongzi_pinzhong}</td>
+          <td textlength="13">{$vo.rongzi_laiyuan}</td>
+          <td textlength="13">{$vo.desc_info}</td>
+        </tr>
+        <?php }} else { ?>
+        <tr>
+          <td colspan="4" class="noData">无数据</td>
+        </tr>
+        <?php } ?>
+     </table>
+     <table class="globaltable width966px" data-tabPanel>
+        <tr>
+          <th width="19%" align="center">贷款金融机构名称</th>
+          <th width="14%" align="center">金额（万元）</th>
+          <th width="16%" align="center">被担保人名称</th>
+          <th width="15%" align="center">起始时间</th>
+          <th width="15%" align="center">终止时间</th>
+          <th width="21%" align="center">详情描述</th>
+        </tr>
+        <?php if(!empty($duiwaiDanbao['data'])){ foreach ($duiwaiDanbao['data'] as $key => $vo) { ?>
+        <tr <?php if($key % 2 == 0){echo ' class="GreyBgcolor"';} ?>>
+          <td textlength="12" class="padLeft30"><?php $corpName = preg_split("//u", $vo['loan_branch'], -1, PREG_SPLIT_NO_EMPTY);
+            array_splice ($corpName, 2, -4, '******');
+            echo $corpName = implode('', $corpName);?></td>
+          <td>{$vo.amount|floatParse}</td>
+          <td textlength="10">{$vo.bei_danbao_ren||marskName}</td>
+          <td>{$vo.start_date}</td>
+          <td>{$vo.end_date}</td>
+          <td textlength="12">{$vo.desc_info}</td>
+        </tr>
+        <?php }} else { ?>
+        <tr>
+          <td colspan="6" class="noData">无数据</td>
+        </tr>
+        <?php } ?>
+     </table>
+    </div>
+  </div>
+</dl>

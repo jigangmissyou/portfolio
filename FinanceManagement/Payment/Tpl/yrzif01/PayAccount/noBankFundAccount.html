@@ -1,0 +1,62 @@
+<extend name="./app/Tpl/Public/base2.html"/>
+<block name="title">{$title}</block>
+<block name="keywords">{$keys}</block>
+<block name="description">{$keys}</block>
+
+<block name="body">
+<include file="nav" />
+<div class="main_area">
+  <h2 class="h2tit">提现</h2>
+  <div class="remind">
+    <h3><em class="icon-note-heart"></em>温馨提示：</h3>
+    <ol>
+      <li class="red">1. 为了保护您的资金安全，请您在申请提现前绑定您本人的银行卡</li>
+      <li>2. 收到您的提现请求后，鑫合汇将在3个工作日（双休日和法定节假日除外）之内，将资金转入您绑定的银行卡</li>
+      <li>3. 在双休日和法定节假日期间，您可以申请提现，但鑫合汇将暂时不能处理，需要等恢复正常上班后才可以进行处理。 不便之处，请您谅解</li>
+    </ol>
+  </div>
+  <div class="withdraw_form">
+  <form method="POST" id="fundAccount_form" ajax="1" ajax-after="ajaxAfter_Payment_PayAccount_saveFundAccount" action="{:U('Payment/PayAccount/saveFundAccount')}">
+    <ul class="formList">
+  	<li>
+  	  <label class="li-label-name">持卡人姓名：</label><span class="li-span-con">{$real_name}</span>
+  	</li>
+    <li>
+      <label class="li-label-name">银行：</label>
+      <span class="li-span-con">
+      	<select id="bankList" name="bank"  multipleOne="1" valid="required">
+      		<option value="">--请选择--</option>
+      		<if condition="!empty($bankList)">
+				<volist name="bankList" id="vo">
+					<option value="{$vo.code}" abbr="{$vo.url}">{$vo.name}</option>
+				</volist>
+			</if>
+        </select>
+        </span>
+    </li>
+    <li>
+      <label class="li-label-name">银行卡卡号：</label>
+      <span class="li-span-con">
+      <input type="text" valid="required" name="account_no" class="inputCommon">
+      </span>
+    </li>
+    <li>
+      <label class="li-label-name">开户行：</label>
+      <span class="li-span-con">
+      <input type="text" valid="required" name="sub_bank" class="inputCommon">
+    </span>
+    </li>
+    <li class="lastBtns">
+      <label class="li-label-name">&nbsp;</label><span class="li-span-con">
+    	<a id="btn_orange" class="button-common-blue button-blue-w200"><span class="btns w250">立即绑定</span></a>
+    </span>
+    </li>
+  </ul>
+    </form>
+    
+    <if condition="!empty($url)">
+    	<input type="hidden" id="url" value="{$url}">
+    </if>
+  </div>
+</div>
+</block>

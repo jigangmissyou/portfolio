@@ -1,0 +1,129 @@
+<?php
+// echo "<pre>"; print_r($activity); ?>
+<div class="standardDl">
+    <div class="standardDt">
+        <ul>
+            <li class="annualRev">
+              <span class="title">
+                预期年化收益率
+                <?php if($info['huodong'] == 1 || ($activity && ($activity['reward_money_rate'] > 0))){ ?><i class="icon_greyMark" hovercard="id@rateshowHover"></i><?php } ?>
+              </span>
+              <span class="details">
+                {$info.rateShow}
+              </span>
+                <div class="dn" hovercard-id="rateshowHover">
+                    <p class="hoverPinfo">
+                        <?php if($info['huodong'] == 1){  // 活动标 ?>
+                        年化红包2%：本金*2%/年*投资期限，首次投资并按项<br/>目持有期限进行计算。投资到期后，红包于一个工作日内打入用户账户内
+                        <?php } elseif ($activity){ ?>
+                        <?php if($activity['tips_show']){ ?>
+                        <?php echo $activity['tips_show']; ?>
+                        <?php }elseif($activity['reward_money_rate'] > 0){ ?>
+                        年化红包<?php echo $reward_money_rate ;?>%：本金*<?php echo $reward_money_rate ;?>%/年*投资期限（按项目持有期限进行计算，<br/>红包不可转让），投资到期后，红包于一个工作日内打入用户账户内
+                        <?php } ?>
+                        <?php } ?>
+                    </p>
+                </div>
+            </li>
+            <li class="invesPeriod">
+                <span class="title">投资期限</span>
+        <span class="details">
+          <em class="gred_num">{$info.time_limit}</em>
+            <?php if($info['time_limit_unit'] == 'month'){echo "个";} ?>
+            {$info.time_limit_unit_name}
+        </span>
+            </li>
+            <li class="methodRepay">
+                <span class="title">还款方式<i class="icon_greyMark" hovercard="div@repay_way_name" hovercard-options='{"direction":"up"}'></i></span>
+                <span class="details"><em class="gred_hz">{$info.repay_way_name}</em></span>
+                <div class="dn" hovercard-id="repay_way_name">
+                    <?php if($info['repay_way'] == 'permonth' || $info['repay_way'] == 'PermonthFixN'){ // 每月等额本息还款 ?>
+                    <p class="hoverPinfo">将借款本金和利息总额之和等月拆分，借款人<br />每月偿还相同数额的本息部分（<a class="blue" href="
+         /Help/Help/helpCenter?tpl=HelpCenter-helpQuestionList&data-type=4&qid=44">了解详情</a>）</p>
+                    <?php } elseif($info['repay_way'] == 'D'){  // 按月付息，到期还本 ?>
+                    <p class="hoverPinfo">借款人在贷款到期日一次性归还贷款本金，利息按<br />月归还（<a class="blue" href="
+          /Help/Help/helpCenter?tpl=HelpCenter-helpQuestionList&data-type=4&qid=43">了解详情</a>）</p>
+                    <?php } elseif($info['repay_way'] == 'halfyear'){  // 半年付息 ?>
+                    <p class="hoverPinfo">每隔半年支付一次利息，到期之日全额清偿本金及最后一期利息。（<a class="blue" href="
+          /Help/Help/helpCenter?tpl=HelpCenter-helpQuestionList&data-type=4&qid=200">了解详情</a>）</p>
+                    <?php } else {  // 到期还本付息 ?>
+                    <p class="hoverPinfo">借款人在贷款到期日一次性归还借款本金及利息（<a class="blue" href="
+          /Help/Help/helpCenter?tpl=HelpCenter-helpQuestionList&data-type=4&qid=42">了解详情</a>）</p>
+                    <?php } ?>
+                </div>
+            </li>
+        </ul>
+    </div>
+    <?php // echo "<pre>"; print_r($danbaohan); ?>
+    <div class="standardDi modddpadpx">
+        <ul>
+            <li>
+        <span class="standardDi1">
+            承兑银行：{$bank_name}
+            <?php if(!empty($danbaohan)){ ?>
+            <a href="javascript:;" event-click="viewDanbaoImg" data-imgUrl="{$danbaohan}" class="bluecolor marLf10px">查看同意担保函</a>
+          <div id="danbaoImg" data-flag="danbaoImg" style="display:none;">
+              <?php foreach (explode(',', $danbaohan) as $key => $url) {  // 遍历出来 方便js取值 ?>
+              <img src="{$url}" alt="担保函">
+              <?php } ?>
+          </div>
+            <?php } ?>
+        </span>
+                <span class="standardDi2">保障性质：{$info.safeguards_name2}</span>
+            </li>
+
+            <include file="view_guarantor_rate" />
+
+            <li>
+                <span class="standardDi1">融资规模：<em class="bluecolor">{$info.demand_amount_name}</em></span>
+        <span class="standardDi2">剩余时间：
+            <?php if($info['bid_status'] != 2){ // 不在投标中 ?>
+            <em class="org6e_color" >--:--:--</em>
+            <?php } else {  // 投标中 ?>
+            <em class="org6e_color" data-flag="surplus_bid_time_view" data-inner="{$info.surplus_bid_time_view}">
+                <em data-day>天</em><em data-hour>时</em><em data-min>分</em><em data-sec>秒</em>
+            </em>
+            <?php } ?>
+        </span>
+            </li>
+            <li>
+        <span class="standardDi1">
+        项目到期日：{$end_time}
+        </span>
+        <span class="standardDi2">
+            最迟还款日：{$dead_time}<i class="icon_greyMark" hovercard="id@timeshowHover"></i>
+            <div class="dn" hovercard-id="timeshowHover">
+                <p class="hoverPinfo">
+                    项目到期后，3个工作日内本金和收益返还到投资者鑫合汇账户
+                </p>
+            </div>
+        </span>
+            </li>
+            <li>
+        <span class="standardDi1">
+           可提前还款： <?php echo $info['act_prj_ext']['is_early_repay'] ? '是' : '否'; ?>
+                </span>
+        <span class="standardDi2">
+            可提前结束募集：<?php echo $info['act_prj_ext']['is_early_close'] ? '是' : '否'; ?>
+        </span>
+           </li>
+            <!-- standardDi3 withauto -->
+            <li>
+                <span class="standardDi1">支持变现：<?php echo $info['ext']['is_transfer'] ? '是' : '否'; ?> </span>
+              <span class="standardDi1">是否允许展期：<?php echo $info['act_prj_ext']['is_extend'] ? '是' : '否'; ?></span>
+            </li>
+          <li class="noborderBot">
+            <span class="standardDi2">最长展期天数：
+              <?php
+            $extend_time_show = $info['time_show']['time_limit_extend']+$info['time_show']['time_limit_extend_unit'];
+            if(empty($extend_time_show)){
+              echo '--';
+            }else{
+              echo $extend_time_show;
+            }
+          ?>
+        </span>
+          </li>
+        </ul>
+    </div>
+</div>

@@ -1,0 +1,284 @@
+<extend name="./app/Tpl/Public/base_user.html"/>
+<block name="title">我的账户-账户概况-充值</block>
+<block name="keywords">充值</block>
+<block name="description">充值</block>
+
+<block name="style">
+<link href="/public/css/banklogo.css" rel="stylesheet" />
+<link rel="stylesheet" href="/public/css/sasscss/act/zskh/index.css">
+</block>
+
+<block name="body">
+<div class="main_area recharge_area ">
+  <!--普通账户与存管账户Tab-->
+  <div class="selectRechargeWay">
+      <ul class="">
+          <a href="{:U('Payment/PayAccount/rechargePage')}"><li>普通账户充值</li></a>
+          <li class="rightBorder"></li>
+          <a href="javascript:;"><li class="cur">存管账户充值</li></a>
+      </ul>
+  </div>
+
+  <!-- 存管 -->
+  <!-- 未开通账户时显示 -->
+  <div class="tac <if condition='$userStatus.zs_status eq 1'>dn</if>">
+    <div class="tac mt20">
+      <p class="fz20" style="color:#404040;margin-top:54px;">鑫合汇-浙商银行存管系统已上线</p>
+      <img src="/public/images/zskh/logo.png" alt="" class="mt20 mb20" />
+      <p class="tal introduceTxt">· 存管户资金由浙商银行存管;<br />
+      · 存管户资金可用于投资浙商银行存管项目</p>
+      <a href="{:U('Account/User/openAccount')}" class="openZS openAccountBtn mt40">
+          开通浙商银行存管账户
+      </a>
+    </div>
+  </div>
+
+  <!-- 已开通存管账户时显示 -->
+  <div class="recharge_form  <if condition='$userStatus.zs_status eq 0'>dn</if>">
+    <!-- 显示账户余额 -->
+<!--     <div class="insurance assume-title">
+      <i class="insure"></i>
+      <span>账户资金由人保财险保险承保</span>
+    </div> -->
+    <div class="recharge-amount">账户余额：<span>{$remain_money}</span>元 </div>
+
+    <!-- 在线支付与转账充值Tab -->
+    <?php if ($is_xia_recharge == 1) { ?> 
+    <ul class="payWay clearfix">
+      <li class="border-blue" id="onlinepay">在线支付<span>◆</span></li>
+      <li class="border-gray" id="offlinepay">转账充值<span>◆</span></li>
+    </ul>
+    <?php } ?>
+
+    <!-- 在线支付 -->
+    <form action="{:U('Payment/PayAccount/submit')}" method="POST" id="online_submit_form" target="_blank"  ajax="1" ajax-before="ajaxBefore_submit1" ajax-after="ajaxAfter_submit1">
+      <ul class="formList form-area">
+        <li class="topup-way">
+          <span>浙商银行暂时仅支持一张银行卡</span>
+          <label class="li-label-name">充值方式：</label>
+          <span class="li-span-con"></span>
+          <label id="label_bank_0" class="bank_logo_box zscurrent" for="bank_0">
+            <input disabled="disabled" type="radio" id="bank_0" value="ICBC" name="bank_option" abbr="zheshang" hidefocus="hidefocus">
+            <span class="bank_logo {$bank_channel['logo']}" title="{$bank_channel['bank_name']}">{$bank_channel['bank_name']}</span>
+            <p style="margin:-35px 0 0 50px;">*({$bank_last4})</p>
+          </label>
+          <ul class="recharge_mode">
+            <li>
+              <table class="" style="display:inline-block;text-align:center;border:1px solid #ccc;margin: 10px 40px 10px 0;"  cellspacing="1" bordercolor="#DCDCDC" cellpadding="1" >
+                  <tr>
+                      <td style="width:120px;background:#f8f8f8;border-bottom:1px solid #dcdcdc;border-right:1px solid #dcdcdc;">单笔限额（元）</td>
+                      <td style="width:120px;background:#f8f8f8;border-bottom:1px solid #dcdcdc;">每日限额（元）</td>
+                  </tr>
+                  <tr>
+                      <td style="width:120px;border-right:1px solid #dcdcdc;">{$bank_channel.single_limit}</td>
+                      <td style="width:120px;">{$bank_channel.day_limit}</td>
+                  </tr>
+              </table>
+            </li>
+          </ul>
+        </li>
+      <li class="pr topup-amount">
+        <label class="li-label-name">充值金额：</label>
+        <span class="li-span-con" style="position:relative;">
+          <?php if($bank_channel['single_limit'] > $user_limit) { ?>
+          <input type="text" class="inputCommon" placeholder="至少充值{$min_money}元" id="amount1" valid="number,required,notLargerThan@user_limit,notLessThan@{$min_money},maxNumAfterPoint@2,noLeadingZero|输入正确的充值金额,,不能大于今日剩余可用额度,至少充值{$min_money}元,输入正确的充值金额,输入正确的充值金额" name="amount" valid-msg-options="{&quot;offset&quot;:260}">
+          <?php } else { ?>
+          <input type="text" class="inputCommon" placeholder="至少充值{$min_money}元" id="amount1" valid="number,required,notLargerThan@single_limit,notLessThan@{$min_money},maxNumAfterPoint@2,noLeadingZero|输入正确的充值金额,,单笔充值金额不能超过#0#元,至少充值{$min_money}元,输入正确的充值金额,输入正确的充值金额" name="amount" valid-msg-options="{&quot;offset&quot;:260}">
+          <?php } ?>
+          <span class="inputholder dn"></span>
+          <style>.inputholder{position:absolute; left:9px; top:3px; color:#8e8e8e;}</style>
+          <span class="fillNote">元
+            <span class="grayB5">(今日剩余可用额度<span class="orange">{$user_limit}</span>元)</span>
+          </span>
+          <input type="hidden" name="single_limit" value="{$bank_channel['single_limit']}"/>
+          <input type="hidden" name="user_limit" value="{$user_limit}"/>
+        </span>
+      </li>
+      <li class="pr topup-amount">
+        <label class="li-label-name">短信验证码：</label>
+        <span class="li-span-con">
+          <input valid-msg-options="{&quot;offset&quot;:260}" type="text" class="inputCommon" style="float:left;" name="smsCode" valid="required,qq,lengthRange@4~6|,此项为数字格式" hidefocus="hidefocus">
+          <span class="" id="btnCashoutMobilecode">
+            <a href="javascript:void(0);" class="new-code-get-btn" hidefocus="hidefocus">免费获取</a>
+            <span class="time_send count-down dn" hidefocus="hidefocus">120秒后失效</span>
+          </span>
+          <span class="sucpop dn">已发送至{$mobile}</span>
+        </span>
+      </li>
+      <li class="pr topup-amount"></li>
+
+      <li class="lastBtns">
+        <label class="li-label-name">&nbsp;</label>
+        <span class="li-span-con">
+          <div class="button-common-blue button-small-blue">
+            <input type="submit" id="rechargeConfirm1" name="recharge" value="确定充值" class="btns online-bank">
+          </div>
+        </span>
+      </li>
+      <li>
+        <label class="li-label-name">&nbsp;</label>
+        <span class="li-span-con">
+          <ol class="noteTipText">
+            <li><em class="icon-warm-hints"></em><h3>温馨提示:</h3></li>
+            <li>1.充值不收取手续费，但充值未投资的金额，提现时将收取0.2%的提现服务费（由浙商银行收取），公测阶段暂不收取该费用。<a href="{:U('Help/Help/viewHelpIndex?tpl=AboutUs-tariff');}" class="blue">资费说明</a></li>
+            <li>2.银行卡尚未开通银联在线支付，请先<a href="https://www.95516.com/portal/open/init.do?entry=open" class="blue">登录中国银联</a>开通。</li>
+            <li>3.充值短信验证码发送至您开通浙商存管户时绑定的手机号，若手机号已停用，请及时去银行柜面修改手机号并通过鑫合汇账户设置变更手机号。</li>
+            <li>4.如您交易后已扣款，但支付未成功，浙商银行会确保您的资金安全，资金将于次日12：00前汇入您的浙商存管户。</li>
+            <p class="button-common-blue button-small-blue more mt10"><a class="btns" href="{:U('Help/Help/viewHelpIndex', array('tpl'=>'AboutUs-faq','type'=>'1'))}">更多帮助</a></p>
+          </ol>
+        </span>
+      </li>
+      </ul>
+      <input type="hidden" id="payType" name="payType" value="zheshang"/>
+      <input type="hidden" id="bankCode" name="bankCode" value="{$bank_channel.myCode}"/>
+      <input type="hidden" id="bankname" name="bankname" value="{$bank_channel.bank_name}"/>
+    </form>
+
+    <!-- 转账充值 -->
+    <?php if ($is_xia_recharge == 1) { ?>  
+    <form action="{:U('Payment/PayAccount/zsZhuanZhangSubmit')}" method="POST" id="offline_submit_form" target="_blank"  ajax="1" ajax-before="ajaxBefore_submit2" ajax-after="ajaxAfter_submit2" class="dn">
+      <ul class="formList form-area">
+        <ul class="accountUl clearfix">
+          <li class="cgTxt blue mt20 fz16">步骤一：转账到存管户</li><br />
+          <li class="cgTxt mb20">请使用你开通存管户时绑定的银行卡（见下图打款账户）,通过<a href="{$zhuanzhang_url}" target="_blank"> <span class="BankBtn">登录网上银行</span></a>、手机银行转账到你的浙商银行存管账户（见下图收款账户）。</li><br />
+          <li class="firstLi">打款账户：</li>
+          <li class="secondLi">
+            <span class="CallAccount">
+              <em>{$xian_xia[bank_name]}&nbsp;（{$xian_xia[account_no]}）</em>
+              <p class="dash-line"></p>
+              <em>汇款人：{$xian_xia[real_name]}</em>
+            </span>
+          </li>
+          <br />
+          <li class="firstLi">收款账户：</li>
+          <li class="secondLi">
+            <span class="CallAccount">
+              <em>浙商银行&nbsp;（{$xian_xia[zs_account]}）</em>
+              <p class="dash-line"></p>
+              <em>汇款人：{$xian_xia[real_name]}</em>
+            </span>
+          </li>
+          <br />
+          <li class="cgTxt blue mt20 fz16">步骤二：提交转账金额</li><br />
+          <li class="cgTxt mb20">资金到账后(以浙商银行短信为准)，请输入你本次的充值金额，充值成功后这笔资金才可投资鑫合汇存管项目。</li><br />
+          <li class="firstLi">充值金额：</li>
+          <li class="secondLi">
+            <input type="text" class="inputBox" id="amount2" name="amount" valid="required,number,maxNumAfterPoint@2,noLeadingZero,nonZeroLimit@tongyongyue,notLargerThan@tongyongyue|,输入正确的充值金额,输入正确的充值金额,输入正确的充值金额,可充值金额为0，请先完成转账," style="width:138px;margin-bottom: 5px;" valid-msg-options="{&quot;offset&quot;:20}"  /><span style="padding-left:5px;">元</span>
+            <input id="tongyongyue" type="hidden" />
+          </li>
+          <br />
+          <li class="firstLi"></li>
+          <li class="lastBtns">
+            <span class="li-span-con">
+              <div class="button-common-blue button-small-orange" style="background:#ffa644;font-size:16px;border-radius: 3px;">
+                <input type="submit" id="rechargeConfirm2" name="recharge" value="确定充值" class="btns online-bank" style="width:148px;border-radius:3px;">
+              </div>
+            </span>
+          </li>
+          <li style="margin-left:40px;width: 100%;">
+              <ol class="noteTipText">
+                <li><em class="icon-warm-hints"></em><h3>温馨提示:</h3></li><br />
+                <li>
+                  1. 请务必使用上文提示的汇款账户对收款账户转账。从你的银行卡向你的存管户转账，资金安全有保障。<br />
+                  2. 资金到账以浙商银行短信通知为准，跨行转账1个工作日内到账，遇节假日顺延。<br />
+                  3. 若网上银行转账产生手续费，按银行规定由银行收取。
+                </li>
+              </ol>
+          </li>
+        </ul>
+      </ul>
+    </form>
+    <?php } ?>
+  </div>
+
+  <input type="hidden" id="zs_status" value="{$userStatus['zs_status']}" />
+  <input type="hidden" name="inWhiteList" value="<?php echo $userStatus['if_white_name'];?>">
+
+  <div class="mask dn"></div>
+  <!--申请加入白名单-->
+  <div class="khcg applyWL openSuccess dn">
+    <div class="fr close-btn">
+        <a href="javascript:;"><img src="/public/images/zskh/close.png" alt="" /></a>
+    </div>
+    <div class="clearfix"></div>
+    <div class="tac khcg-txt">
+        <p class="mt20"></p>
+        <p class="tac introduceTxt mt20" style="width:100%;font-size:18px;color:#575757;">存管账户正在分批激活，请您耐心等待通知。</p>
+        <a href="<?php echo C('payment.public_apply_url'); ?>" class="openAccountBtn " style="width:140px;font-size:16px;margin-top:40px;">
+            了解存管
+        </a>
+    </div>
+  </div>
+  <!-- 充值中弹窗 -->
+  <div class="khcg zscz-load tac dn">
+    <img src="/public/images/zskh/loading.gif" alt="" />
+    <span class="recharging">充值中，请稍后</span>
+  </div>
+  <!-- 1.2小额充值操作过于频繁弹窗 -->
+  <div class="khcg xecz openSuccess dn">
+    <div class="clearfix"></div>
+    <div class="tac khcg-txt">
+        <img src="/public/images/zskh/sick.png" alt="" />
+        <p class="mt20"></p>
+        <p class="tac introduceTxt mt20" style="width:100%;">你今日小额充值操作过于频繁，请提高单次充值金额再试。</p>
+        <a href="javascript:;" class="openAccountBtn mt20 close" style="width:140px;">
+            关闭
+        </a>
+    </div>
+  </div>
+  <!-- 1.2充值金额超出存管项目资金弹窗 -->
+  <div class="success-validation-popup zsrecharge_exceed khcg khcglm dn">
+    <h2 id="titlebar">温馨提示</h2><a id="colorboxClose" href="javascript:;" class="del" style="z-index:503;" hidefocus="hidefocus"></a>
+    <div class="pay-txt" style="border-bottom:none;">
+        <h3 class="tal">存管系统公测期间，存管项目可能不足，请合理安排你的资金，以免资金站岗。</h3>
+        <p class="borderBottom blue">存管项目数据参考</p>
+        <table class="tipTable">
+            <tr>
+                <td class="tac" width="33%">前三天日均开标金额(元)</td>
+                <td class="tac" width="33%">当前可投金额(元)</td>
+                <td class="tac" width="33%">即将开标金额(元)</td>
+            </tr>
+            <tr>
+                <td class="org tac pass3day_invest_money">1.00</td>
+                <td class="org tac can_invest_money">1.00</td>
+                <td class="org tac will_invest_money">1.00</td>
+            </tr>
+        </table>
+        <div style="width:481px;" class="tac mt30">
+        <a href="javascript:;" style="padding:0;" class="openAccountBtn tipBtn mt20 close-btn offline_exceed_tip">
+            我知道了
+        </a>
+        <div class="tipBtns online_exceed_tip dn">
+            <a href="javascript:;" class="hidetip openAccountBtn tipBtn mt20" style="background:#c2c2c2;">
+                返回
+            </a>
+            &nbsp;&nbsp;&nbsp;&nbsp;
+            <a href="javascript:;" class="goonrecharge openAccountBtn tipBtn mt20">
+                继续充值
+            </a>
+        </div>
+        </div>
+    </div>
+  </div>
+
+<!-- 转账充值 -->
+<div class="offline_recharge_fail khcg openSuccess dn">
+    <div class="clearfix"></div>
+    <div class="tac khcg-txt">
+        <img src="/public/images/zskh/czsb.png" alt="" />充值失败
+        <br />
+        <br />
+        失败原因：<span class="fail_text">转账余额不足</span>
+    </div>
+    <p class="khcg-content" style="width:322px;margin:13px auto;">
+        请按照页面提示转账，转账完毕后再发起充值申请。<br />也可能资金还未到账，请稍后再试。
+    </p>
+    <a class="hidebtn" href="javascript:;">
+        <div class="rechargeBtn closeBtn" style="background:#fb822b;">
+            重新充值
+        </div>
+    </a>
+</div>
+
+</div>
+</block>

@@ -1,0 +1,56 @@
+<extend name="./app/Tpl/Public/base_hfhg.html"/>
+<block name="title">资金记录</block>
+
+<block name="body">
+  <include file="fund_nav" />
+<div class="main_area">
+<form ajax="1" ajax-before="ajaxBefore_Payment_PayAccount_getMyMoneyList" ajax-after="ajaxAfter_Payment_PayAccount_getMyMoneyList" method="post" id="formId_Payment_PayAccount_getMyMoneyList" ajax-datatype="html">
+  <input type="hidden" name="status" value="1">
+  <input type="hidden" id="typeAId" value="<?php echo $showP ?>">
+  <div class="class_box">
+    <div class="category" id="application_type">
+        <a <?php if($showP == "getMyRecordList"){ ?> class="cur" <?php } ?> id="getMyRecordList_type" href="javascript:;" url="{:U('Payment/PayAccount/getMyRecordList')}" type="1">收支记录</a>
+        <a <?php if($showP == "getMyXianxiaList"){ ?> class="cur" <?php } ?> id="getMyXianxiaList_type" href="javascript:;"  url="{:U('Payment/PayAccount/getMyXianxiaList')}" type="2">充值申请管理</a>
+        <a <?php if($showP == "getMyCashoutList"){ ?> class="cur" <?php } ?> id="getMyCashoutList_type"  href="javascript:;"  url="{:U('Payment/PayAccount/getMyCashoutList')}" type="3">提现申请管理</a>
+    </div>
+  </div>
+  <div class="class_box">
+    <div class="statusMenusLast" id="getMyRecordList_status" <?php if($showP != "getMyRecordList"){ ?> style="display:none;"<?php } ?>>
+      <a class="cur" href="javascript:;" status='0'>全部（ <span id="totalRecordList_span">0</span> ）</a>
+      <a href="javascript:;" status='1'>充值（ <span id="totalRecharge_span">0</span> ）</a>
+      <a href="javascript:;" status='2'>投资（ <span id="totalTouzhi_span">0</span> ）</a>
+      <a href="javascript:;" status='4'>提现（ <span id="totalTixian_span">0</span> ）</a>
+    </div>
+    <div class="statusMenusLast" id="getMyXianxiaList_status" <?php if($showP != "getMyXianxiaList"){ ?> style="display:none;"<?php } ?>>
+      <a class="cur" href="javascript:;" status='1'>待处理（ <span id="totalXTodo_span">0</span> ）</a>
+      <a href="javascript:;" status='4'>跟踪处理中（ <span id="totalXTrack_span">0</span> ）</a>
+      <a href="javascript:;" status='2'>成功（ <span id="totalXSuccess_span">0</span> ）</a>
+      <a href="javascript:;" status='3'>失败（ <span id="totalXFailed_span">0</span> ）</a>
+    </div>
+    <div class="statusMenusLast" id="getMyCashoutList_status" <?php if($showP != "getMyCashoutList"){ ?> style="display:none;"<?php } ?>>
+      <a class="cur" href="javascript:;" status='1'>待处理（ <span id="totalCTodo_span">0</span> ）</a>
+      <a href="javascript:;" status='2'>成功（ <span id="totalCSuccess_span">0</span> ）</a>
+      <a href="javascript:;" status='3'>失败（ <span id="totalCFailed_span">0</span> ）</a>
+      <a href="javascript:;" status='4'>取消（ <span id="totalCCanel_span">0</span> ）</a>
+    </div>
+    <div class="simple_search" id="search">
+      <select id="a_time_type" name="time_type" multipleone="1">
+        <option value="">请选择</option>
+        <option value="week">最近一周</option>
+        <option value="month">最近一个月</option>
+        <option value="6month">最近六个月</option>
+      </select>
+      <span class="date_pannel ml10">
+        <input type="text" id="start_time" name="start_time" style="" class="ipt_search" datepicker='{"endId": "end_time"}'> <i class="icon_time"></i>
+      </span>
+      <span class="mr10">—</span>
+      <span class="date_pannel">
+        <input type="text" id="end_time"  name="end_time" class="ipt_search" style=""datepicker='{"startId": "start_time"}'> <i class="icon_time"></i>
+      </span>
+     <label for="" class="button-small-info"><input type="submit" name="submit" class="btns" value="搜索"></label>
+    </div>
+  </div>
+  <div class="verify_bd" id="ajaxContent_Payment_PayAccount_getMyMoneyList"></div>
+</form>
+</div>
+</block>

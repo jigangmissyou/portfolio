@@ -1,0 +1,12 @@
+<div class="nav">
+  <ul class="navlist">
+      <?php
+       $rand = time();
+       ?>
+    <li  <if condition="$c == 1" >class="current"</if> ><a href="{:U('Financing/Invest/plist',array('rand'=>$rand))}">所有系列</a></li>
+    <li  <if condition="$c == 2" >class="current"</if> ><a href="{:U('Financing/Invest/plist',array('c'=>'2','rand'=>$rand))}">日益升</a></li>
+    <li  <if condition="$c == 3" >class="current"</if> ><a href="{:U('Financing/Invest/plist',array('c'=>'3','rand'=>$rand))}">月益升</a></li>
+    <li  <if condition="$c == 4" >class="current"</if> ><a href="{:U('Financing/Invest/plist',array('c'=>'4','rand'=>$rand))}">年益升</a></li>
+    <li  <if condition="$c == 5" >class="current"</if> ><a class="pr" href="{:U('Financing/Invest/plist',array('c'=>'5','rand'=>$rand))}"><i class="icon ico-hot"></i>新客专区</a></li>
+  </ul>
+</div>

@@ -1,0 +1,58 @@
+<div id="titlebar">&nbsp;</div>
+<form action="{:U('Payment/PayAccount/dealXianxia')}" ajax="1" ajax-after="ajaxAfter_Payment_PayAccount_dealXianxia" method="post" id="formId_Payment_PayAccount_dealXianxia">
+	<input type="hidden" name="id" value="{$id}">
+	<?php if($status == 1){ ?>
+		<input type="hidden" name="status" value="2">
+	<!-- 通过弹窗 -->
+	<div id="jqueryContent">
+	  <div class="w520">
+	    <ul class="formList formList_newW formList_pop">
+	      <li><label class="li-label-name"><em class="red">*</em>实际到账金额</label>
+	      	<span class="li-span-con"><input type="text" valid="required" id="real_amount" name="real_amount" value="{$data.apply_amount}" class="inputCommon"> 元 <div id="r_real" style="color:red;"> </div></span></li>
+	      <li>
+	      <li>
+	      <label class="li-label-name"><em class="red">*</em>支付流水号</label>
+	      <span class="li-span-con"><input type="text" valid="required" name="no" value="{$data.no}" class="inputCommon">
+	      	<p class="red">如果有多笔流水号，请按照格式 "流水号1:金额1,流水号2:金额2,..." 例如"xxxx:20,xx:30" 流水号xxx,金额20分</p>
+	      </span></li>
+	      <li><label class="li-label-name">说明</label><span class="li-span-con"><textarea name="explain" class="ui_textarea">{$data.explain}</textarea></span></li>
+	      <li class="lastBtns"><label for="" class="li-label-name">&nbsp;</label><span class="li-span-con">
+	      	<span class="button-common-blue button-blue-pop"><input type="submit" class="btns" value="确定"></span>
+	      </span></li>
+	    </ul>
+	  </div>
+	</div>
+	<?php } else { ?>
+	
+	<!-- 不通过弹窗 -->
+	<div id="jqueryContent">
+	  <div class="w520">
+	    <ul class="formList">
+	      <li><label class="li-label-name"><em class="red">*</em>
+	      	<?php if($status == 4):?>
+	      	<input type="hidden" name="status" value="4">
+	      	待跟踪说明
+	      	<?php else:?>
+	      	<input type="hidden" name="status" value="3">
+	      	审核说明
+	  		<?php endif; ?>
+	      	</label>
+	      	<span class="li-span-con"><textarea name="explain" valid="required" class="ui_textarea"><?php if($status == 2){echo $data["explain"];} ?></textarea></span></li>
+	      	<li class="lastBtns"><label for="" class="li-label-name">&nbsp;</label><span class="li-span-con">
+	      		<span class="button-common-blue button-blue-pop"><input type="submit" class="btns" value="确定"></span>
+	      	</span></li>
+	    </ul>
+	  </div>
+	</div>
+	<?php } ?>
+</form>
+<input type="hidden" id="apply_amount" value="{$data.apply_amount}">
+<script>
+$("#real_amount").change(function(){
+	if(Number($(this).val()) > Number($("#apply_amount").val())){
+		$("#r_real").html("注意实际充值金额已经大于申请充值金额");
+	} else {
+		$("#r_real").html("");
+	}
+});
+</script>

@@ -1,0 +1,341 @@
+<extend name="./app/Tpl/Public/base_hfhg.html"/>
+<block name="title">我要理财-投资成功</block>
+<block name="keywords">我要理财</block>
+<block name="description">我要理财</block>
+
+<block name="style">
+</block>
+
+<block name="body">
+<?php // echo "<pre>"; print_r($prjInfo); ?>
+<div class="naviga_bar">
+  <a href="{:U('Financing/Invest/plist')}" title="投资项目">投资项目</a><em>&gt;</em>
+  <if condition="$is_pre_sale eq 1">
+    预约成功
+    <else/>
+    投资成功
+  </if>
+
+</div>
+<div class="invest-success-container">
+  <div class="invest-success-content">
+      <h1 class="invest-success-name-pop">{$prjTypeName}: <span class="basenumber">{$prjNo}</span></h1>
+      <div class="invest-success-path">
+        <div class="invest-success-state">
+          <em class="invest-success-icn-yes fl">
+          </em>
+          <dl class="invest-success-msg fr">
+            <dt>您已成功<if condition="$is_pre_sale eq 1">预售<else/>投资</if> {$money} 元</dt>
+            <dd><if condition="$is_pre_sale eq 1"> <else/>您的款项已投资成功。</if></dd>
+          </dl>
+        </div>
+        <if condition="$is_pre_sale eq 1">
+          <!-- <div class="invest-success-state tal">
+            <em class="invest-success-icn-yes invest-success-icn-yestart">
+            </em>
+            <dl class="invest-success-statew">
+              <dt>等待开标</dt>
+              <dd>正在等待项目开标。</dd>
+            </dl>
+          </div> -->
+        </if>
+        <div class="clearfix"></div>
+        <div class="invest-success-btn-box invest-success-btn-other tac">
+           <label class="button-common-orange button-orange-w200 mr-value">
+            <a class="btns" href="{:U('Financing/Invest/plist')}">继续投资</a>
+          </label>
+          <label class="button-common-blue button-blue-w200 mr-value">
+            <a class="btns" href="{:U('Account/User/index')}">查看账户</a>
+          </label>
+          <?php  if($is_view_auto_icon == 1) { ?>
+          <label class="button-common-green button-green-w200">
+            <a class="btns" href="{:U('Financing/Appoint/appoint')}">自动续投</a>
+          </label>
+          <?php }?>
+        </div>
+      </div>
+  </div>
+
+  <if condition="$is_pre_sale neq 1">
+
+    <div class="invest-fundcoupon-tu">
+      <div class="invest-fundcoupon-tu-c">
+
+        <?php if(!empty($bonus_money) && $bonus_money > 0){ // 首投红包 ?>
+        <div class="invest-fundcoupon-list icn-fund-bg-06 fwb tal">
+            <div class="invest-fund-content"><p class="basenumber">¥{$bonus_money}</p><p>红包</p><span class="useRule">使用规则</span></div>
+            <!--首投红包使用规则 start-->
+            <div id="firstBuyTip" class="OrangeTipBox-Red dn" data-flag="rateFloatTip">
+              <em class="OrangeTipBox_Arr1"><em class="OrangeTipBox_Arr2"></em></em>
+              <p>使用规则:</p>
+              <p>1.[注册红包]可投资平台上任意项目，每次投资可使用的红包金额为投资金额的<em class="orange">1%</em>，单个项目多次投资可多次使用，无使用上限；</p>
+              <p>2.[注册红包]可与其它红包同时使用；</p>
+              <p>3.红包有效期至<span class="yelcolor">2015年11月30日</span>；</p>
+              <p>4.最终解释权归鑫合汇所有。</p>
+            </div>
+            <!--首投红包使用规则 end-->
+        </div>
+        <?php } ?>
+        <?php if(!empty($free_money)){ $freeText = "免费提现额度"; // 赠送免费提现额度 ?>
+        <!-- <div class="invest-fundcoupon-list icn-fund-bg-04 ta1">
+             <div class="invest-fund-content">
+               <p class="invest-fund-txt1">¥<em class="em">{$free_money}</em>元</p>
+               <p class="invest-fund-txt2">赠送{$freeText}</p>
+             </div>
+        </div> -->
+        <?php } ?>
+        <?php if(!empty($tixian)){ $freeText = "提现次数"; // 赠送免费提现次数 ?>
+         <div class="invest-fundcoupon-list icn-fund-bg-07 tal">
+          <div class="invest-fund-content invest-fund-free">
+           <p class="invest-fund-txt1">获得<em class="em">{$tixian}</em>次</p>
+           <p class="invest-fund-txt2">次免费提现次数</p>
+          </div>
+        </div>
+        <?php } ?>
+        <?php if(!empty($rewardMoneyRate)){ $freeText = "年化利率"; // 赠送年化红包 ?>
+        <div class="invest-fundcoupon-list icn-fund-bg-07 tal">
+          <div class="invest-fund-content invest-fund-free">
+            <p class="invest-fund-txt1"><em class="em">{$rewardMoneyRate}%</em></p>
+            <p class="invest-fund-txt2">赠送年化利率</p>
+          </div>
+        </div>
+        <?php } ?>
+        <?php if($tstatus){ ?>
+          <div class="invest-fundcoupon-list icn-fund-bg-05 n-mr tal">
+              <div class="invest-fund-content invest-fund-te"><em class="licai-wang-icn"></em>特权<br/>邀请好友注册<br>获得1000元专享理财金</div>
+          </div>
+          <?php } ?>
+
+      </div>
+    </div>
+    <?php if(!empty($freeText)){ // 年化红包 ?>
+    <div class="fixed tac">
+      <span class="bgcolorfa inline-block"><i class="icon_OrangeSigh"></i>{$freeText}将于项目到期后1个工作日内打入用户账户&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+    </div>
+    <?php } ?>
+    <div class="tac"><i class="icon-note-heart"></i>参与活动获得专享理财金，具体说明见<a href="{:U('Account/TyjBonus/index')}#lcj-rule" class="orange">《活动规则》</a></div>
+  </if>
+</div>
+
+ <style>
+/*双十一*/
+.ssy-cpm-getPrice1{
+    width:550px;
+    top:200px;
+    left:50%;
+    color:#000;
+    z-index:99;
+    margin-left: -275px;
+    padding-top: 30px;
+    background: #ededed;
+    float: left;
+    position: fixed;
+    font-size: 14px;
+    padding-bottom: 20px;
+}
+.ssy-p-tac{
+    line-height: 36px;
+    margin-bottom: 20px;
+    font-size: 30px;
+    text-align: center;
+}
+ .ssy-box{
+  padding:0 45px;
+  border-bottom:1px solid #a5a5a5;
+}
+.ssy-box-span{
+    font-size: 16px;;
+    margin-top: 20px;
+}
+.ssy-box p{
+}
+.ssy-box p em{
+  margin-left: 20px;
+}
+.syy-close-btn{
+    width:20px;
+    height:20px;
+    @extend %absolute;
+    top: 15px;
+    right: 12px;
+    @extend %fontSize20;
+    color:#525252;
+}
+.syy-close-btn:hover{
+    color:#525252;
+}
+.orange{
+    color:#ff5a19;
+}
+.ssy-cpm-btn{
+    width:113px;
+    height:35px;
+    background: #793afe;
+    bottom:20px;
+    left:50%;
+    color:#fff;
+    height:30px;
+    border-radius:2px;
+    margin-left: -56px;
+    position: absolute;
+    font-size: 16px;
+    text-align: center;
+    line-height: 30px;
+}
+.ssy-cpm-btn:hover{
+    color:#fff;
+}
+.syy-close-btn{
+    width:20px;
+    height:20px;
+    top: 15px;
+    right: 12px;
+    font-size: 20px;
+    color:#525252;
+    position: absolute;
+}
+.syy-close-btn:hover{
+      color:#525252;
+  }
+  .ssy-p1{
+    margin-bottom: 15px;
+    margin-top: 15px;
+  }
+  .ssy-p2{
+    margin-bottom: 20px;
+  }
+  .ssy-p2 em{
+    cursor: pointer;
+  }
+  .ssy-box1{
+    width:190px;
+    text-align: left;
+    float: left;
+    padding-top: 7px;
+  }
+  .ssy-erweima1{
+    width:108px;
+    height:108px;
+    background: #fff;
+    float: left;
+  }
+  .ssy-cpm-getPrice{
+    width:550px;
+    background: #ededed;
+    position: fixed;
+    top:200px;
+    left:50%;
+    margin-left: -275px;
+    padding-top: 30px;
+    color:#000;
+    z-index:99;
+    font-size: 16px;
+    padding-bottom: 70px;
+}
+.ssy-cpm-getPrice p{
+  font-size: 36px;
+  text-align: center;
+  line-height: 36px;
+  margin-bottom: 20px;
+  margin-top: 20px;
+}
+.ssy-ul1{
+    font-size: 16px;
+    text-align: left;
+    padding-left: 40px;
+}
+.ssy-ul1 li{
+    margin-top: 20px;
+}
+.ssy-ul1 em{
+    float: left;
+}
+.ssy-ul1 input{
+    float: left;
+    width:300px;
+}
+.ssy-em{
+    width:80px;
+    @include textAlign(left);
+    margin-right: 0px;
+    @extend %fl;
+}
+.ssy-share{
+  padding-left: 105px;
+  padding-top: 25px;
+}
+.ssy-cpm-btn4{
+    width:129px;
+    height:35px;
+    background: #9353ed;
+    bottom:40px;
+    color:#fff;
+    height:30px;
+    border-radius:2px;
+    font-size: 16px;
+    text-align: center;
+    line-height: 30px;
+    margin-left: 22px;
+    margin-top: 15px;
+    float: left;
+}
+.ssy-cpm-btn4:hover{
+  color:#fff;
+}
+.ssy-li4{
+  font-size: 14px;
+  margin-left: -20px;
+}
+ </style>
+
+
+
+<?php //p($gift);
+//$gift['is_virture']
+?>
+
+<div id="shadow" class="mask"></div>
+
+
+<!-- 填写地址获得阿玛尼 -->
+<div class="ssy-cpm-getPrice zero-box <?php if(!empty($default_receiver['name'])){echo 'dn';}?>" id="add-address-box">
+    <p>成功获得<em class="orange">{$gift.full_name}</em></p>
+    <ul class="ssy-ul1">
+        <span>收货人信息</span>
+        <li><em class="ssy-em">姓名</em><input type="text" name="name" class="inputCommon" value="{$default_receiver.name}"/><!-- <span>吴越彦</span> --></li>
+        <div class="clearfix"></div>
+        <li><em class="ssy-em">手机号码</em><input type="text" name="mobile" class="inputCommon" value="{$default_receiver.mobile}"/><!-- <span>13250909850</span> --></li>
+        <div class="clearfix"></div>
+        <li><em class="ssy-em">详细地址</em><span><textarea class="inputCommon" placeholder="请如实填写详细寄送地址，例如省份，城市，区，街道名称，门牌号码，楼层和房间号等信息" style="width:380px; border:#ddd solid 1px; height: 50px; line-height:25px; resize:none;" name="address">{$default_receiver.address}</textarea></span></li>
+        <input type="hidden" name="rid" value="{$rid}"/>
+        <li class="ssy-li4"><i class="red">*</i>后续如需修改收货地址，请联系客服热线400-821-8616。
+</li>
+    </ul>
+  <div class="box-error " style="color:red;text-align: center;"></div>
+
+  <a href="javascript:;" class="ssy-cpm-btn ssy-cpm-btn3" id="submit-address">确定</a>
+    <a href="javascript:;" class="syy-close-btn close-zero-box">X</a>
+</div>
+<!-- 成功获得阿玛尼 -->
+<div class="ssy-cpm-getPrice1 zero-box <?php if(empty($default_receiver['name'])){echo 'dn';}?>" id="bid-success">
+    <p class="ssy-p-tac">成功获得<em class="orange">{$gift.full_name}</em></p>
+    <div class="ssy-box">
+        <span class="ssy-box-span">收货人信息</span>
+        <p class="ssy-p1"><span id="r-name">{$default_receiver.name}</span><em id="r-mobile">{$default_receiver.mobile}</em></p>
+        <p class="ssy-p2"><span id="r-address">{$default_receiver.address}</span><em class="red" id="modify-address" style="cursor: pointer;">修改</em></p>
+    </div>
+    <div class="ssy-share">
+      <div class="ssy-box1">
+        <p>好事怎能独享？<br />快分享给好友嘚瑟一下吧</p>
+        <a href="javascript:;" class="ssy-cpm-btn4" id="copy-link" data-url="{$share_url}">复制分享链接</a>
+      </div>
+      <div class="ssy-erweima1"><img src="/Activity/NovEleventh/getWXShareCode_index?size=108"/></div>
+    </div>
+    <a href="javascript:;" class="syy-close-btn close-zero-box">X</a>
+</div>
+
+</block>
+
+</div>
+
+</block>

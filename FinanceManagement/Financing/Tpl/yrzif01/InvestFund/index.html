@@ -1,0 +1,96 @@
+<extend name="./app/Tpl/Public/base_hfhg.html"/>
+<block name="title">
+<?php
+  switch ($prj_type){
+    case 'G':
+      $title = '理财产品-高收益理财产品-鑫合汇';
+      $keyword = '理财产品,鑫合汇';
+      $description = '鑫合汇由中新力合全资打造,100%本息保障。致力于为您构建一个高效、快捷、安全的投资理财平台。';
+    break;
+    default:
+      $title = '理财产品,高收益理财产品,专享理财产品-鑫合汇';
+      $keyword = '理财产品,鑫合汇';
+      $description = '鑫合汇,为投资者提供安全、透明、灵活、高收益的理财产品,如超短期理财产品日益升、中长期理财产品月益升和年益升。互联网最好的理财产品首选之一。';
+  }
+?>
+  {$title}
+</block>
+<block name="keywords">{$keyword}</block>
+<block name="description">{$description}</block>
+
+<block name="body">
+  <div class="bannerBox">
+    <div class="bannerLeft">
+      <div id="imgPlay">
+        <ul class="imgs" id="actor" style="position: relative">
+          <?php if(!empty($banners)){ foreach($banners as $v){ ?>
+            <?php if(!empty($v['img'])){ ?>
+            <li style="height:280px;width:707px;"><img style="position: absolute; top: 0;" src="{$v['img']['attach']['url_s100']}" width="707" height="279"/><a  <if condition="empty($v['href'])"> style="position: absolute; top: 0; left: 0; width:707px;height:280px; background: url({$v['img']['attach']['url']}) no-repeat center; cursor:default" href="##"<else/>href="{$v['href']}" style="position: absolute; top: 0; left: 0; width:707px;height:280px; background: url({$v['img']['attach']['url']}) no-repeat center; " </if>></a>
+            </li>
+            <?php } ?>
+          <?php }} ?>
+        </ul>
+        <div class="num" id="numInner"></div>
+      </div>
+    </div>
+    <div class="bannerRight bannerRight_licai">
+      <!-- 登陆前的区域的内容 star -->
+      <ul>
+        <li class="firstNames"> <em class="namesIcons"></em>
+          高级会员专享
+        </li>
+        <li class="liButtons">
+          <label for="" class="button-common-orange">
+            <if condition="!$is_login">
+              <a href="{:U('Account/User/login')}" class="btns font18">立即认证</a>
+            <elseif condition="!$is_vip" />
+              <a colorbox="1" href="{:U('Financing/InvestFund/getFundUserInfo')}" class="btns font18">立即认证</a>
+            </if>
+          </label>
+        </li>
+        <li class="priceButtons">
+          <label for="" class="grayRediusBtn">
+            <a class="btns font30">{$finish_raise_amount}<em>元</em></a>
+          </label>
+        </li>
+        <li class="liCaiLast">本期已完成募集金额</li>
+      </ul>
+      <!-- 登陆前的区域的内容 end -->
+    </div>
+  </div>
+  <!-- banner end -->
+  <div class="fincHomeBox">
+    <div class="infoTxtBox info_1">
+      <p class="titleTxt">安全保障</p>
+      <p class="infoTxt">
+        国有银行进行资金托管
+        <br/>
+        募集完成由专业机构备案
+      </p>
+    </div>
+    <div class="infoTxtBox info_2">
+      <p class="titleTxt">高收益</p>
+      <p class="infoTxt">
+        过往年化收益率情况
+        <br/>
+        7% - 12%
+      </p>
+    </div>
+    <div class="infoTxtBox info_3">
+      <p class="titleTxt">期限灵活</p>
+      <p class="infoTxt">
+        产品可选择期限
+        <br/>
+        3个月 - 4年
+      </p>
+    </div>
+    <div class="infoTxtBox info_4">
+      <p class="titleTxt">专享产品</p>
+      <p class="infoTxt">
+        适合专业投资者
+        <br/>
+        100万元起
+      </p>
+    </div>
+  </div>
+</block>

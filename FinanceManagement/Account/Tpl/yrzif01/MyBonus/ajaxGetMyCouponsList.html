@@ -1,0 +1,74 @@
+<style type="text/css">
+  .record-txt table td{
+    padding: 5px 10px 0 0px;
+  }
+</style>
+<!-- 满减券 -->
+<?php //dump($data);?>
+<div class="full-cut-coupons">
+  <?php if(!empty($data)){ ?>
+  <ul>
+    <?php foreach ($data as $key => $vo) { ?>
+      <li <?php if($vo['userCouponStatus'] == 1){ ?>class="unused"<?php }?>>
+        <div class="coupon-left">
+          <span>￥</span>{$vo.amount}
+          <?php if($vo['prjObjType'] == 0){ ?>
+          <p>{$vo.actEvent}</p>
+          <?php }else{ ?>
+          <p class="xingu-tag">
+            <?php if($vo['prjObjType'] == 1){
+              echo '央企融专享'; 
+            }else if($vo['prjObjType'] == 2){
+              echo '创客融专享'; 
+            }else if($vo['prjObjType'] == 3){
+              echo '鑫股一号专享'; 
+            }else if($vo['prjObjType'] == 4){
+              echo '鑫银一号专享'; 
+            }?>
+          </p>
+          <?php }?>
+        </div>
+        <div class="coupon-right">
+          <!-- <p>{$vo.source}</p> -->
+          <p title="{$vo.useTip}"><span>使用条件：</span><span><em>{$vo.useTip}</em></span></p>
+          <!-- <p><span>来源：</span>{$vo.actEvent}</p> -->
+
+          <?php if($vo['userCouponStatus'] == 2 || $vo['userCouponStatus'] == 4){ ?>
+            <p class="effect"><span style="color:#c2c2c2;">{$vo.startTime} - {$vo.endTime}</span><a href="javascript:;" hovercard-options="{&quot;direction&quot;:&quot;down&quot;}" hovercard="ajax@{:U('Account/MyBonus/getMyRewardUsedRecord?type=2&userRewardId=')}{$vo['couponId']}">使用记录 ></a></p>
+          <?php }else if($vo['userCouponStatus'] == 1){ ?>
+            <p class="effect"><span style="color:#c2c2c2;">{$vo.startTime} - {$vo.endTime}</span><a href="{:U('Financing/Invest/plist')}">马上使用 ></a></p>
+          <?php }?>
+        </div>
+      </li>
+    <?php }?>
+  </ul>
+  <?php }else{ ?>
+    <if condition="$status == 1">
+      <!--未使用 无数据的表现-->
+      <div class="no-red">
+      <div class="face"><img src="/public/images/invest/fail-face.png"></div>
+      <h3>您暂时没有可用满减券</h3>
+      </div>
+    <else/>
+      <div class="no-data">暂无数据</div>
+    </if>
+  <?php }?>
+
+</div>
+<?php $pageNavCallback = "ajaxAfter_Account_MyBonus_ajaxGetMyCouponsList"; ?>
+<include file="./app/Tpl/Public/pageAjax.html" />
+<input type="hidden" name="p" value="1"/>
+
+<div class="howget clearfix">
+  <h1>如何获取满减券？</h1>
+  <div class="join">
+    <ul>
+      <li><i class="icon-join"></i><span class="activity">参与平台活动</span><br /><span>参与平台活动，有机会获得满减券哦。</span></li>
+      <li><div class="button-common-blue button-blue-w120"><a class="btns gosee-width" href="{:U('Activity/Zone/index')}">去看看</a></div></li>
+      <li><i class="icon-reward"></i><span class="activity">做任务拿满减券</span><br /><span>做任务有机会获得满减券哦。</span></li>
+      <li><div class="button-common-blue button-blue-w120"><a class="btns gosee-width" href="javascript:;">去看看<em>产品经理正在努力憋，敬请期待~~</em></a></div>
+        
+      </li>
+    </ul>
+  </div>
+</div>

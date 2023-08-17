@@ -1,0 +1,65 @@
+{/*转让中*/}
+<style>.qiyeName .info{z-index:65536;}</style>
+<table class="ui-record-table">
+  <thead>
+    <tr>
+      <th>融资企业</th>
+      <th width="12%" order_field="1" <eq name="order_field" value="1"> order_type="{$order_type}"</eq>>融资申请日期</th>
+      <th width="10%" class="tar" order_field="2" <eq name="order_field" value="2"> order_type="{$order_type}"</eq>>融资金额</th>
+      <th width="10%" class="tac">融资期限</th>
+      <th width="10%">期望放款天数</th>
+      <th width="12%">融资用途</th>
+      <th width="12%">状态</th>
+      <th width="10%" class="tac">操作</th>
+    </tr>
+    <tr class="line"><th colspan="100%"></th></tr>
+  </thead>
+  <tbody>
+    <?php if(!empty($list)){ ?>
+    <foreach name="list" item="item">
+    <tr>
+      <td>
+        <div class="qiyeName pr">
+          <h4 class="blue">{$item.corp_name}</h4>
+          <div class="info indent_list gaplist">
+            <div class="ui_poptip_arrow">
+              <em>◆</em>
+              <span>◆</span>
+            </div>
+            <ul>
+              <li><label class="li-label-name"><em class="red">*</em>企业名称：</label><span textlength="10">{$item.corp_name}</span></li>
+              <li><label class="li-label-name"><em class="red">*</em>联系人姓名：</label>{$item.contact_name}</li>
+              <li><label class="li-label-name">联系人手机：</label>{$item.contact_mobile}</li>
+              <li><label class="li-label-name">联系人座机：</label>{$item.contact_phone}</li>
+              <li><label class="li-label-name"><em class="red">*</em>所在城市：</label>{$item.city_display}</li>
+              <li><label class="li-label-name"><em class="red">*</em>经营地址：</label><span textlength="10">{$item.corp_address}</span></li>
+              <li><label class="li-label-name"><em class="red">*</em>主营行业：</label><span textlength="10">{$item.trade_name}</span></li>
+              <li><label class="li-label-name">企业介绍：</label><span textlength="10">{$item.corp_desc}</span></li>
+            </ul>
+          </div>
+        </div>
+      </td>
+      <td>{$item.ctime|date='Y-m-d',###}</td>
+      <td class="tar"><span class="mr12">{$item.finance_amount|humanMoney}</span></td>
+      <td class="tac">{$item.period_item|getCodeName='A121',###}</td>
+      <td>{$item.lend_days|getCodeName='A087',###}</td>
+      <td>{$item.finance_use|getCodeName='A081',###}</td>
+      <td>{$item.status_display}</td>
+      <td class="tac">
+        <if condition="$item.check_statue eq 3">
+          <a href="{:U('Financing/CorpFinancing/edit',array('id'=>$item['id']))}" class="button-small-info" popbox="1"><span class="btns">重新提交</span></a>
+          <else/>
+          --
+        </if>
+      </td>
+    </tr>
+    </foreach>
+    <?php } else { ?>
+    <tr>
+      <td colspan="8" class="tac">没有相关数据</td>
+    </tr>
+    <?php } ?>
+  </tbody>
+</table>
+<?php $pageNavCallback = "ajaxAfter_Account_Financing_plist"; ?>
+<include file="./app/Tpl/Public/pageAjax.html" />

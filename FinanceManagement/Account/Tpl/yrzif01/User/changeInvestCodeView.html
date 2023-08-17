@@ -1,0 +1,61 @@
+<extend name="./app/Tpl/Public/base_user.html"/>
+<block name="title">重新绑定手机</block>
+<block name="keywords"></block>
+<block name="description"></block>
+
+<block name="style">
+  <link href="/public/css/banklogo.css" rel="stylesheet" />
+  <link rel="stylesheet" href="/public/css/sasscss/act/zskh/index.css">
+</block>
+<block name="body">
+<div class="container-inner mt20">
+  <include file="./app/Tpl/Account/userMyBonusSider.html" />
+  <div class="main_area body-frame">
+    <div class="p20">
+      <h2 class="h2tit">关闭投资短信验证码</h2>
+      <ul class="formText ">
+        <li>1.短信验证码是浙商银行的安全机制,确保每笔交易都由用户发起。</li>
+        <li>2.如您觉得影响投资体验,可以将其关闭，关闭后可通过账户设置重新开启。</li>
+      </ul>
+      <form method='post'  action="<?php echo U('Account/User/editEmailView2');?>">
+        <ul class="formList account-edit-form">
+          <li style="padding-bottom:10px;">
+            <label class="li-label-name">短信验证码</label><span class="li-span-con">
+              <input type="text" valid="required" class="inputCommon" style="width:200px;height:46px;" name="code"  value="" autocomplete="off">
+              <a href="javascript:void(0);" style="height:46px;" class="new-code-get-btn">免费获取</a>
+              <span class="email-btn_sgray button-small-info" id="sms_cutdown_time" style="display:none"><a class="btns" style="line-height:30px;height:30px;background-color:#BDBDBD;" href="javascript:void(0)">120</a></span>
+            </span>
+          </li>
+          <p class="sendTips">已发送至186****8629</p>
+          <li class="lastBtns">
+            <label for="" class="li-label-name">&nbsp;</label>
+            <span class="li-span-con">
+              <span class="button-common-blue button-blue-w120">
+                <input type="submit" name="" value="确定" class="btns">
+              </span>
+              <span class="button-common-gray button-gray-w120 ml20">
+                <input type="reset" name="" value="取 消" class="btns">
+              </span>
+            </span>
+          </li>
+        </ul>
+      </form>
+      <!-- 弹窗 -->
+      <div class="mask dn"></div>
+      <div class="khcg dn">
+        <div class="fr close-btn">
+            <a href="javascript:;"><img src="/public/images/zskh/close.png" alt="" /></a>
+        </div>
+        <div class="clearfix"></div>
+        <div class="tac khcg-txt">
+            <img src="/public/images/zskh/dui.png" alt="" />关闭成功
+        </div>
+        <p class="khcg-content tac" style="margin-top:20px;font-size:18px;color:#999999;">您可通过账户设置重新开启</p>
+        <p class="khcg-content tac" style="margin-top:20px;">（<span class="orange">3s</span>后跳转至账户设置） <a href="javascript:;" class="blue">自动跳转</a></p>
+      </div>
+    </div>
+  </div>
+</div>
+</block>
+
+

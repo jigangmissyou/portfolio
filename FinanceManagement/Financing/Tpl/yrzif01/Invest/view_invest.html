@@ -1,0 +1,36 @@
+<div class="standardMs fixed standardMs-zj">
+  <?php //dump($reward_info['selected']);?>
+  <form method="POST" id="formId_Financing_Invest_buy">
+    <input type="hidden" value="{$id}" id="bidId"/>
+    <input type="hidden" value="{$hashId}" id="bidHashId"/>
+    <input type="hidden" value="{$xprjIdAccess}" id="xprjIdAccess"/>
+    <input type="hidden" name="prjid" id="prjid" value="{$info.id}" >
+    <input type="hidden" name="step" value="<?php echo $info['step_bid_amount']/100; ?>">
+    <input type="hidden" name="minVal" value="<?php echo $info['min_bid_amount']/100; ?>">
+    <input type="hidden" name="maxVal" value="<?php echo $info['max_bid_amount']/100; ?>">
+    <input type="hidden" name="max_invest_money_view" value="{$max_invest_money_view}">
+    <input type="hidden" name="reward_type" value="<?php echo $reward_info['selected']['rewardType']; ?>">
+    <input type="hidden" name="reward_id" value="<?php echo $reward_info['selected']['id']; ?>">
+    <input type="hidden" name="reward_amount" value="0">
+    <input type="hidden" name="reward_rate" value="<?php echo $reward_info['selected']['rate']; ?>">
+
+    <input type="hidden" name="prj_typ" value="{$prj_type}">
+    <input type="hidden" name="uid" value="{$user['uid']}">
+  <?php $isChannel = $info['mi_no'] != $user['mi_no']; // 其他渠道 ?>
+
+    <?php if($isChannel && $info['mi_no'] != '1234567889'){ // 其他渠道并且不等于全部 ?>
+      <include file="_channelInvest"/>
+    <?php }else{ ?>
+      <include file="_normalInvest"/>
+    <?php } ?>
+
+    <!-- 投资确认明细（点击输入支付密码后弹出的浮层） 开始 -->
+    <include file="_investConfirm"/>
+    <!-- 投资确认明细 结束 -->
+    
+    <!-- 预约投资金额确认（预约投资金额取消弹出的浮层） 开始 -->
+    <include file="_investConfirmPre"/>
+    <!-- 预约投资金额确认 结束 -->
+
+  </form>
+</div>

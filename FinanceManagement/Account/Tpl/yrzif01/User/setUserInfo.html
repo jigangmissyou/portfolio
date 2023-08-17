@@ -1,0 +1,48 @@
+<!-- 用户基本信息设置 -->
+<div id="setUserinfo">
+  <div id="titlebar">用户基本信息设置</div>
+  <div id="jqueryContent" class="w520">
+  <form method="post" action="{:U('Account/User/updateUserInfo')}" ajax="1" ajax-after="ajaxAfter_Account_User_updateUserInfo" id="formId_updateUserInfo">
+    <ul class="formList formList_pop">
+    <li>
+      <label class="li-label-name"><em class="red">*</em>用户名：</label>
+      <span class="li-span-con"><input type="text" ghosttext="输入字母、数字或中文" valid="required,realname,notAllNum,ajax@{:U('Account/User/checkUname')}" id="reg_username" name="username" valid-name="username" class="inputCommon"  valid-msg-options='{"width":"130px"}' />
+      <span class="fillNote"><i class="caution"></i><em class="text">用户名不可更改</em></span>
+    </span>
+    </li>
+    <li>
+      <label class="li-label-name"><em class="red">*</em>密码：</label>
+      <span class="li-span-con"><input type="password" name="pwd1" valid-name="pwd1" ghosttext="输入6-16位字符" valid="required,lengthRange@6~16,ajax@{:U('Account/User/checkPwd')}" id="passwordToRate" class="inputCommon"  />
+      <!--<span class="red ml10">6-16位字符，至少包含数字、字母（区分大小写）、特殊符号中的2种</span>-->
+    </span>
+    </li>
+    <li>
+      <label class="li-label-name"><em class="red">*</em>确认密码：</label>
+      <span class="li-span-con">
+        <input type="password" valid="match@pwd1|密码不匹配" name="pwd2" id="comfirmPassword" value="" class="inputCommon" />
+         <div class="goBar" style="border-bottom: none; margin:0; padding:0; width:282px">
+            <dl class="dl">
+              <dd id="strength_L">弱</dd>
+              <dd id="strength_M">中</dd>
+              <dd id="strength_H">强</dd>
+            </dl>
+         </div>
+    </span>
+    </li>
+    <li>
+      <label class="li-label-name">常用邮箱：</label>
+      <span class="li-span-con"><input type="text" name="email" valid="email" value="" class="inputCommon"   valid-msg-options='{"width":"130px"}' /><span class="grayB5 block">用于接收账户资金变动的通知信息</span>
+    </span>
+    </li>
+    <li class="lastBtns">
+      <label class="li-label-name">&nbsp;</label>
+      <span class="li-span-con">
+      <label id="setUserInfoSubmit" class="button-common-blue button-blue-pop"><span class="btns">提交</span></label>
+    </span>
+    </li>
+    <li><label class="li-label-name">&nbsp;</label>
+      <span class="li-span-con org"><em class="icon-note-heart"></em>温馨提示：确保您的账户安全，必须完成用户基本信息设置！</span></li>
+    </ul>
+    </form>
+  </div>
+</div>

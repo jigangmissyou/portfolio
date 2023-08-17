@@ -1,0 +1,440 @@
+<extend name="./app/Tpl/Public/base_user.html"/>
+<block name="title"><?php if($addbank>0){echo "编辑银行卡";}else{echo "绑卡实名认证";}?></block>
+<block name="keywords"></block>
+<block name="description"></block>
+<block name="style">
+  <link href="/public/css/banklogo.css" rel="stylesheet" />
+</block>
+<block name="body">
+<style>
+  .button-code-on {
+    height: 36px;
+    line-height: 36px;
+    padding: 0 10px;
+    top: 2px;
+    display: inline-block;
+  }
+</style>
+  <?php
+  //选择银行
+    $select_bank = isset($_GET['bank'])?$_GET['bank']:'nerverwill';
+  ?>
+  <div class="container-inner mt20">
+    <include file="./app/Tpl/Account/userMyBonusSider.html" />
+<!--个人 易宝 实名认证-->
+    <?php
+      if(empty($user['real_name']) || ($user['zs_status'] == '1' && !$user['is_id_auth'])){
+        $is_id_auth=0;
+        $addbank = 0;
+      }else{
+        $is_id_auth=1;
+        if($addbank == 0){
+          $addbank = 1;
+        }
+      }
+    ?>
+   <div class="main_area body-frame">
+     <div class="p20">
+       <if condition="$addbank eq 0">
+         <h2 class="h2tit">用户资料 > 实名认证</h2>
+         <else/>
+         <h2 class="h2tit">添加银行卡</h2>
+       </if>
+      <if condition="$addbank eq 0">
+        <form method="post" action="{:U('Account/IdAuth/verifyId')}" ajax="1" ajax-after="ajaxAfter_Account_IdAuth_verifyId" id="formId_Account_IdAuth_verifyId">
+          
+          <ul class="formList form-list-user mt40">
+            <li class="pasm"><label class="li-label-name">用户姓名：</label><span class="li-span-con"><input type="text" name="name" class="inputCommon"  valid="required,chinese" /></span></li>
+            <li class="pasm"><label class="li-label-name">身份证号：</label><span class="li-span-con"><input type="text" name="personId" class="inputCommon"  valid="required,idcard" /></span></li>
+            <!-- <li class="error"></li> -->
+            <li class="certified">
+                  <label for="" class="li-label-name">&nbsp;</label><span class="li-span-con">
+                    <span class="button-common-blue button-blue-pop">
+                    <?php if($user['uid_type'] == 2){?>
+                    <input type="submit" class="btns" value="认证">
+                    <?php }else{?>
+                    <a href="javascript:void(0);" class="btns" id="verifyId" event-click="go2BindCard">下一步</a>
+                    <?php }?>
+                  </span>
+              <a href="{:U('Account/User/userAuthGangaotai')}" class="blue ml20" title="">港澳台认证</a>
+                  </span>
+            </li>
+            <li><p class="red text">*实名认证的姓名必须与绑定大陆银行卡的开户名一致，否则无法提现</p></li>
+          </ul>
+          <input type="hidden" name="isAjax" value="1" />
+        </form>
+      </if>
+
+      <form action="{:U('Account/Bank/confirmBindBankCard')}" ajax="1" ajax-after="ajaxAfter_Account_Bank_confirmBindBankCard" method="post" id="formId_Account_Bank_confirmBindBankCard" <if condition="$addbank eq 0">class="dn"</if>
+        <input type="hidden" name="id" value="{$data.recharge_bank_id}">
+        <input type="hidden" name="requestid" value=""/>
+        <input type="hidden" name="addbank" value="{$addbank}"/>
+        <input type="hidden" name="is_id_auth" id="is_id_auth" value="{$is_id_auth}"/>
+          <ul class="formList form-list-user mt40">
+            <li>
+              <label class="li-label-name">用户姓名</label>
+              <span class="li-span-con">
+                <input type="text" class="inputCommon <?php if($addbank>0){echo "input-disable";}?>" name="real_name" id="real_name_pop" <?php if($addbank==0){?>event-blur="bankCard.blurCheck" event-change="syncName" data-valid="required,chinese"<?php }?> value="{$real_name}"<?php if($addbank>0){echo "disabled";}?> >
+                <em data-elem="tips" class="red dn ml5"></em>
+                <?php if($addbank>0){ ?>
+                <input type="hidden" name="hidden_real_name" value="{$user.real_name}"/>
+                <?php }?>
+              </span>
+            </li>
+            <li>
+              <label for="" class="li-label-name">身份证号</label>
+              <span class="li-span-con">
+                <input type="text" class="inputCommon <?php if($addbank>0){echo "input-disable";}?>" name="person_id" isIdentify id="identify_pop" <?php if($addbank==0){?>event-blur="bankCard.blurCheck" event-change="syncIdentify" data-valid="required,idcard"<?php }?> value="{$person_id}" <?php if($addbank>0){echo "disabled";}?> ><br />
+                <em data-elem="tips" class="red dn ml5"></em>
+                <?php if($addbank>0){ ?>
+                <input type="hidden" name="hidden_identify" value="{$user.person_id}"/>
+                <?php }?>
+              </span>
+            </li>
+            <li>
+              <label class="li-label-name">银行名称</label>
+              <span class="li-span-con">
+                <input type="hidden" name="bank_code" id="bankList" value="<?php echo $data['bank'];?>"/>
+                <input event-focus="bankCard.selectBank" type="text" name="bank_name" class="inputCommon <?php if($addbank>1){echo 'input-disable';}?>" value="<?php echo $data['bank_name'];?>" <?php if($addbank>1){echo "disabled";}?>>
+                <em data-elem="tips" class="red dn ml5">请选择银行</em>
+                <input type="hidden" name="bank_name" id="hidden-bank-name" value="{$data['bank_name']}"/>
+            </span>
+            </li>
+            <li>
+              <label class="li-label-name">银行卡号</label>
+              <span id="bankPlaceholder" class="li-span-con placeholder">
+                <?php if($addbank>1){?>
+                  <input type="hidden" name="card_no" value="<?php echo $data['account_no'];?>"/>
+                <?php }?>
+                <input  event-focus="bankCard.hideCardTip" event-blur="bankCard.bankCardCheck" type="text" name="<?php if($addbank>1){echo 'card_no_disabled';}else{echo 'card_no';}?>" class="inputCommon <?php if($addbank>1){echo 'input-disable';}?>" data-valid="required,number,lengthRange@16~20" value="{$data['account_no']}"  <?php if($addbank>1){echo "disabled";}?>>
+                <?php if(!$data['account_no']){ ?>
+                <!--<span id="cardNoTip" class="text" event-click="bankCard.hideCardTip">必须是<em class="orange"></em>的银行卡卡号</span>-->
+                <?php } ?></br>
+                <span data-elem="tips" class="red dn"></span>
+             </span>
+            </li>
+            <if condition="$addbank gt 0"></if>
+            <?php if($addbank>0){?>
+              <li style="overflow:visible; height:46px;">
+                <label class="li-label-name ">城市</label>
+                <span class="li-span-con" style="position:relative; z-index: 5;">
+                  <input id="pop_city" event-focus="bankCard.getOpenCity" type="text" name="open_city" class="inputCommon" value="<?php echo $data['province_name'].$data['city_name'];?>">
+                  <span data-elem="tips" class="red dn">请选择开户城市</span>
+                  <input type="hidden" name="bank_province" <?php if(!empty($data['bank_province'])){ ?> value="<?php echo $data['bank_province'];?>"<?php }?> />
+                  <input type="hidden" name="bank_city" <?php if(!empty($data['bank_city'])){ ?> value="<?php echo $data['bank_city'];?>"<?php }?> />
+                  <div id="openCityWrap" class="bankaddPop dn" style="position:absolute;top:36px;left:20px;">
+                    <span class="i_close" event-click="bankCard.closeOpenCity">×</span>
+                    <div class="citylist" id="openCityList"></div>
+                  </div>
+                </span>
+              </li>
+              <li style="overflow:visible; height:37px; ">
+              <label class="li-label-name">分支行</label>
+              <div class="li-span-con" style="position:relative; z-index:2 ">
+                <input id="pop_sub_bank" event-focus="bankCard.searchOpenBank" type="text" name="sub_bank" class="inputCommon" value="{$data['sub_bank']}">
+                <span data-elem="tips" class="red dn">请选择开户行</span>
+                <input type="hidden" name="sub_bank_id" <?php if(!empty($data['sub_bank_id'])){ ?> value="<?php echo $data['sub_bank_id'];?>"<?php }?> />
+                <!--<input type="button" class="btn_search_blue" value="查找">-->
+                <div id="openBankListWrap" class="bankaddPop pr dn" style="position:absolute;top:36px;left:20px;">
+                  <span class="i_close" event-click="bankCard.closeOpenBankList">×</span>
+                  <div class="p10">
+                    输入关键字<input type="text" id="bankKeyWord" style="width:200px;" class="inputCommon" value="">
+                    <a event-click="bankCard.getOpenBankList" class="button-small-orange ml10" href="javascript:;">
+                      <span class="btns">查找</span>
+                    </a>
+                  </div>
+                  <div class="scrollwrap bor_t_dot">
+                    <ul class="content" style="overflow: auto" id="openBankList">
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </li>
+            <?php }?>
+            <li>
+              <label for="" class="li-label-name">预留手机号</label>
+              <span class="li-span-con">
+                <input type="text" class="inputCommon" name="mobile" value="{$data.mobile}" event-blur="bankCard.blurCheck" data-valid="required,mobile">
+                <em data-elem="tips" class="red dn ml5"></em>
+              </span>
+            </li>
+            <li>
+              <label for="" class="li-label-name">动态码</label>
+              <span class="li-span-con">
+                <input type="text" class="inputCommon" name="validate_code" style="width:186px;" event-blur="bankCard.blurCheck" data-valid="required,number,fixedLength@6" valid-msg-options='{"offset": 133}'>
+                <a href="javascript:;" class="button-code-no show_send_btn button-code-user-set ml10 ml10" event-click="bankCard.getCode">免费获取</a>
+                <a class="button-code-on time_send button-code-user-set ml10" href="javascript:;" style="display: none;">120</a>
+                <em data-elem="tips" class="red dn ml5"></em>
+              </span>
+            </li>
+            <li>
+              <label class="li-label-name">&nbsp;</label>
+              <span class="li-span-con">
+                <?php if($is_org) { ?>
+                <em class="extra_tips inline-block addLineheight" style="display:block;margin-left:0;"><i class="caution"></i>如果找不到所在支行，可以选择上一级支行</em>
+                <?php } else { ?>
+                <input name="is_default" type="checkbox" class="mr5 alm" <if condition="$data['is_default'] == 1 || empty($data)">checked="checked"</if>>默认提现至该卡
+                <?php } ?>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input name="agreement" type="checkbox" class="mr5 alm" checked="checked" disabled><a href="javascript:;" event-click="go2agreement">服务协议</a>
+                </span>
+            </li>
+            <li>
+              <label for="" class="li-label-name">&nbsp;</label>
+              <span class="li-span-con">
+                <label class="button-common-blue button-blue-pop">
+                  <input type="submit" event-click="bankCard.yiBaoSubmit" class="btns" value="确定">
+                </label>
+                <span class="button-common-gray button-gray-pop ml20">
+                  <input type="reset" value="取消" class="btns">
+              </span>
+            </li>
+            <li class="li-note-tip-txt"><label for="" class="li-label-name">&nbsp;</label><span class="li-span-con">
+              <h3 class="note-Tip-Name">温馨提示</h3>
+              <p class="gray_c2">1、以上信息仅用于身份证实名认证，我们将保证您的信息不被泄露；</br>
+                <!--2、资金安全由人民保财险承保，极速全额赔付；</br>-->
+                2、采用银行卡国际安全标准支付。
+              </p>
+            </span></li>
+          </ul>
+      </form>
+    </div>
+    </div>
+  </div>
+
+
+<!--易宝成功-->
+<div  style="display: none">
+  <div id="yibao-success">
+    <div class="pop-name-auth">
+      <div id="titlebar">绑卡实名认证</div>
+      <div id="jqueryContent">
+        <p class="tac green font26 mt20 mb10"><img src="/public/images/pop/sprite_global_01.png" class="mr10" alt="">已经通过合作渠道实名认证</p>
+        <p class="pop-auto-txt tac">很高兴认识您，您可以通过鑫合汇平台进行更稳定和安全的投资</p>
+        <ul class="pop-suc-txt">
+          <li>您可以<a href="javascript:;" class="blue show-bank-list">关联认证其他银行</a></li>
+          <li>您也可以立刻去<a href="/Payment/PayAccount/rechargePage" class="blue">充值</a>，并进行<a href="/Financing/Invest/plist" class="blue">投资</a>，或先去<a  class="blue perfect_sub" href="javascript:;" class="blue">完善银行卡分支行信息</a>。</li>
+        </ul>
+        <p class="tac"><a class="btn-pop-auth" href="javascript:void(0);" event-click="go2refer">关闭</a></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--易宝失败-->
+<div class="dn">
+  <div id="yibao-fail">
+      <div class="pop-name-auth">
+        <div id="titlebar">绑卡实名认证</div>
+        <a href="javascript:;" class="close"></a>
+        <div id="jqueryContent">
+          <p class="tac green font26 mt20 mb10 red"><img src="/public/images/pop/error.png" class="mr10" alt="">实名绑卡鉴权失败</p>
+          <p class="pop-auto-txt tal">身份审核没有通过，认证失败。请确认姓名, 身份证, 卡号以及<a href="{:U('Help/Help/viewHelpIndex',array('tpl'=>'AboutUs-faq','type'=>'3'))}" class="blue" target="_blank">预留手机号</a>是否正确。如想知道如何修改预留手机号，请越过分隔线：</p>
+          <ul class="pop-suc-txt pop-suc-txt-np">
+            <li>各银行如何<a href="{:U('Help/Help/viewHelpIndex',array('tpl'=>'AboutUs-faq','type'=>'3'))}" class="blue" target="_blank">修改预留手机号</a>？</li>
+            <li>咨询客服：<em class="red">400-821-8616</em></li>
+          </ul>
+          <p class="tac">
+            <a class="return-yibao btn-pop-auth mr20" href="javascript:void(0);" event-click="closePop">返回修改实名信息</a>
+            <a class="btn-return-error" href="javascript:void(0);" event-click="returnGzt">暂不绑卡</a>
+          </p>
+        </div>
+      </div>
+  </div>
+</div>
+
+<div  style="display: none">
+  <div id="gzt-success">
+    <div class="pop-name-auth">
+      <div id="titlebar">绑卡实名认证</div>
+      <div id="jqueryContent" class="tac">
+        <p><img src="/public/images/pop/sprite_global_01.png" alt=""></p>
+        <p class="green font26 mt20 mb20">实名认证成功</p>
+        <p class="pop-auto-txt">快去绑张提现银行卡吧</p>
+        <p class="mt10"><a href="javascript:;" class="btn-pop-auth" event-click="go2refer">确定</a></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div  style="display: none">
+  <div id="gzt-fail">
+    <div class="pop-name-auth">
+      <div id="titlebar">绑卡实名认证</div>
+      <div id="jqueryContent" class="tac">
+        <p><img src="/public/images/pop/error.png" alt=""></p>
+        <p class="red font26 mt20 mb20">实名认证失败</p>
+        <p class="pop-auto-txt">请核实您的身份信息</p>
+        <p class="mt10">
+          <a class="btn-pop-auth" href="javascript:void(0);" event-click="closePop">返回修改</a>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="dn">
+  <div id="bank-list">
+    <div class="pop-name-auth">
+      <div id="titlebar">选择银行</div>
+      <div class="jqueryscroll">
+        <div id="jqueryContent" class="pop-bank-list">
+          <div class="bank-list">
+            <label id="label_bank_01" class="bank_logo_box selected" for="bank_01">
+              <input type="radio" id="bank_01" value="ICBC" name="bank_option" checked="checked" abbr="yibatong">
+              <span class="bank_logo bank_icbc" title="工商银行">工商银行</span>
+            </label>
+            <label id="label_bank_02" class="bank_logo_box" for="bank_02">
+              <input type="radio" id="bank_02" value="ABC" name="bank_option" abbr="shenfut">
+              <span class="bank_logo bank_abc" title="农业银行">农业银行</span>
+            </label>
+            <label id="label_bank_03" class="bank_logo_box" for="bank_03">
+              <input type="radio" id="bank_03" value="CMB" name="bank_option" abbr="shenfut">
+              <span class="bank_logo bank_cmb" title="招商银行">招商银行</span>
+            </label>
+            <label id="label_bank_04" class="bank_logo_box" for="bank_04">
+              <input type="radio" id="bank_04" value="CCB" name="bank_option" abbr="yibatong">
+              <span class="bank_logo bank_ccb" title="建设银行">建设银行</span>
+            </label>
+            <label id="label_bank_05" class="bank_logo_box" for="bank_05">
+              <input type="radio" id="bank_05" value="BOC" name="bank_option" abbr="shenfut">
+              <span class="bank_logo bank_boc" title="中国银行">中国银行</span>
+            </label>
+
+            <label id="label_bank_07" class="bank_logo_box" for="bank_07">
+              <input type="radio" id="bank_07" value="BOCOM" name="bank_option" abbr="yibatong">
+              <span class="bank_logo bank_boco" title="交通银行">交通银行</span>
+            </label>
+            <label id="label_bank_08" class="bank_logo_box" for="bank_08">
+              <input type="radio" id="bank_08" value="CGB" name="bank_option" abbr="shenfut">
+              <span class="bank_logo bank_gdb" title="广发银行">广发银行</span>
+            </label>
+            <label id="label_bank_09" class="bank_logo_box" for="bank_09">
+              <input type="radio" id="bank_09" value="CMBC" name="bank_option" abbr="shenfut">
+              <span class="bank_logo bank_cmbc" title="民生银行">民生银行</span>
+            </label>
+            <label id="label_bank_10" class="bank_logo_box" for="bank_10">
+              <input type="radio" id="bank_10" value="SZPAB" name="bank_option" abbr="shenfut">
+              <span class="bank_logo bank_pingan" title="平安银行">平安银行</span>
+            </label>
+            <label id="label_bank_11" class="bank_logo_box" for="bank_11">
+              <input type="radio" id="bank_11" value="CEB" name="bank_option" abbr="shenfut">
+              <span class="bank_logo bank_cebb" title="光大银行">光大银行</span>
+            </label>
+
+            <label id="label_bank_14" class="bank_logo_box" for="bank_14">
+              <input type="radio" id="bank_14" value="HXBC" name="bank_option" abbr="shenfut">
+              <span class="bank_logo bank_hxb" title="华夏银行">华夏银行</span>
+            </label>
+
+
+            <label id="label_bank_32" class="bank_logo_box" for="bank_32">
+              <input type="radio" id="bank_32" value="PSBC" name="bank_option" abbr="yibatong">
+              <span class="bank_logo bank_post" title="邮政储蓄银行">邮政储蓄银行</span>
+            </label>
+            <label id="label_bank_33" class="bank_logo_box" for="bank_33">
+              <input type="radio" id="bank_33" value="CIB" name="bank_option" abbr="yibatong">
+              <span class="bank_logo bank_cib" title="兴业银行">兴业银行</span>
+            </label>
+            <label id="label_bank_15" class="bank_logo_box" for="bank_15">
+              <input type="radio" id="bank_15" value="CITIC" name="bank_option" abbr="yibatong">
+              <span class="bank_logo bank_ecitic" title="中信银行">中信银行</span>
+            </label>
+            <label id="label_bank_16" class="bank_logo_box" for="bank_16">
+              <input type="radio" id="bank_16" value="SPDB" name="bank_option" abbr="yibatong">
+              <span class="bank_logo bank_spdb" title="浦发银行">浦发银行</span>
+            </label>
+            <div class="clearfix"></div>
+            <!--<span id="button_bank" class="bank_logo_box other">-->
+            <!--<a class="">选择其他银行<i class="iar"></i></a>-->
+            <!--</span>-->
+
+            <!--<label id="label_bank_15" class="bank_logo_box" for="bank_15" style="display:none">-->
+            <!--<input type="radio" id="bank_15" value="NBCB" name="bank_option" abbr="shenfut">-->
+            <!--<span class="bank_logo bank_nbcb" title="宁波银行">宁波银行</span></label>-->
+            <!--<label id="label_bank_16" class="bank_logo_box" for="bank_16" style="display:none">-->
+            <!--<input type="radio" id="bank_16" value=BOB_D_B2C name="bank_option" abbr="yibatong">-->
+            <!--<span class="bank_logo bank_bob" title="北京银行">北京银行</span></label>-->
+            <!--<label id="label_bank_17" class="bank_logo_box" for="bank_17" style="display:none">-->
+            <!--<input type="radio" id="bank_17" value="HKBEA" name="bank_option" abbr="shenfut">-->
+            <!--<span class="bank_logo bank_hkbea" title="东亚银行">东亚银行</span></label>-->
+            <!--<label id="label_bank_18" class="bank_logo_box" for="bank_18" style="display:none">-->
+            <!--<input type="radio" id="bank_18" value="BOS" name="bank_option" abbr="shenfut">-->
+            <!--<span class="bank_logo bank_bosh" title="上海银行">上海银行</span></label>-->
+            <!--<label id="label_bank_20" class="bank_logo_box" for="bank_20" style="display:none">-->
+            <!--<input type="radio" id="bank_20" value="NJCB" name="bank_option" abbr="shenfut">-->
+            <!--<span class="bank_logo bank_njcb" title="南京银行">南京银行</span></label>-->
+            <!--<label id="label_bank_21" class="bank_logo_box" for="bank_21" style="display:none">-->
+            <!--<input type="radio" id="bank_21" value="CBHB" name="bank_option" abbr="shenfut">-->
+            <!--<span class="bank_logo bank_cbhb" title="渤海银行">渤海银行</span></label>-->
+            <!--<label id="label_bank_22" class="bank_logo_box" for="bank_22" style="display:none">-->
+            <!--<input type="radio" id="bank_22" value="BOCD" name="bank_option" abbr="shenfut">-->
+            <!--<span class="bank_logo bank_bocd" title="成都银行">成都银行</span></label>-->
+            <!--<label id="label_bank_24" class="bank_logo_box" for="bank_24" style="display:none">-->
+            <!--<input type="radio" id="bank_24" value="SRCB_D_B2C" name="bank_option" abbr="yibatong">-->
+            <!--<span class="bank_logo bank_srcb" title="上海农村商业银行">上海农村商业银行</span></label>-->
+          </div>
+          <div class="clearfix"></div>
+          <p class="tac"><a class="bind-bank-next btn-pop-auth" href="javascript:void(0);" event-click="closePop">确认</a></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div  style="display: none">
+  <div id="bind-bank-success">
+    <div class="pop-name-auth">
+      <div id="titlebar">银行卡绑定</div>
+      <div id="jqueryContent" class="tac">
+        <img src="/public/images/pop/sprite_global_01.png" alt="">
+        <p class="green font26 mt20 mb28">银行卡绑定成功</p>
+        <p><a href="javascript:;" class="btn-pop-auth" event-click="go2refer">确定</a></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div style="display: none;">
+<div id="bind-bank-fail">
+    <div class="pop-name-auth">
+      <div id="titlebar">银行卡绑定</div>
+      <!--<a href="javascript:;" class="close"></a>-->
+      <div id="jqueryContent">
+        <p class="tac green font26 mt20 mb10 red"><img src="/public/images/pop/error.png" class="mr10" alt="">银行卡绑定失败</p>
+        <p class="pop-auto-txt tal">该卡绑定没有通过，认证失败。请确认姓名, 身份证, 卡号以及<a href="{:U('Help/Help/viewHelpIndex',array('tpl'=>'AboutUs-faq','type'=>'3'))}" target="_blank" class="blue">预留手机号</a>是否正确。如想知道如何修改预留手机号，请越过分隔线：</p>
+        <ul class="pop-suc-txt pop-suc-txt-np">
+          <li>各银行如何<a href="{:U('Help/Help/viewHelpIndex',array('tpl'=>'AboutUs-faq','type'=>'3'))}" target="_blank" class="blue">修改预留手机号</a>？</li>
+          <li>咨询客服：<em class="red">400-821-8616</em></li>
+        </ul>
+        <p class="tac">
+          <a class="return-yibao btn-pop-auth mr20" href="javascript:void(0);" event-click="closePop">返回修改</a>
+          <a class="bank-fail-close btn-return-error" href="javascript:void(0);" event-click="go2refer">暂不绑卡</a>
+        </p>
+      </div>
+  </div>
+</div>
+</div>
+
+<div  style="display: none">
+  <div id="modify-bank-success">
+    <div class="pop-name-auth">
+      <div id="titlebar">银行卡修改</div>
+      <div id="jqueryContent" class="tac">
+        <img src="/public/images/pop/sprite_global_01.png" alt="">
+        <p class="green font26 mt20 mb28">银行卡修改成功</p>
+        <p><a href="javascript:;" class="btn-pop-auth" event-click="go2refer">确定</a></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<script>
+// 默认检查下身份证是否符合要求
+setTimeout(function() {
+  var $identify = $('#identify_pop');
+  if(!$identify.attr('disabled')) {
+    $('#identify_pop').trigger('blur');
+  }
+})
+</script>
+</block>

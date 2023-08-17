@@ -1,0 +1,31 @@
+<style type="text/css">
+.return-sincere{height: auto;overflow-y:auto;overflow-x: hidden;}
+.return-sincere table{width: 330px;height: auto;}
+.return-sincere table tr td{text-align: center;height: 22px;line-height: 22px;padding: 3px 0px;}
+.return-sincere table tr th{width: 27.5%;border-bottom: #bdbdbd 1px dashed;padding-top: 10px;height: 24px;line-height: 24px;}
+.return-sincere table tr th.pre{width: 45%;}
+.return-sincere table tr i{display: inline-block;}
+</style>
+<div class="repayment-time return-sincere">
+  <i class="time-border-triangle sincere-triangle"></i>
+  <table>
+    <tr><th>期次</th><th class="pre">预计还款时间</th><th>回款状态</th></tr>
+    <?php if(!empty($result)){
+    $i=1;
+      foreach($result as $k=>$v){
+    ?>
+      <tr><td><?php echo $i;?></td><td>
+          <?php
+          if($v['status']==1){
+          $repay_date = $value_date_shadow == 0 ? date('Y-m-d',$v['repay_date']).' 13:00:00' : date('Y-m-d',$v['repay_date']).' 24:00:00';
+          }else{
+          $repay_date = date('Y-m-d H:i:s',$v['mtime']);
+          }
+           echo $repay_date;?>
+      </td><td><?php if($v['status']==1){echo '<i class="undoned"></i>';}else{echo '<i class="completed"></i>';}?></td></tr>
+    <?php $i++;}?>
+    <?php }else{?>
+     <tr><td>暂无数据</td></tr>
+    <?php }?>
+  </table>
+</div>

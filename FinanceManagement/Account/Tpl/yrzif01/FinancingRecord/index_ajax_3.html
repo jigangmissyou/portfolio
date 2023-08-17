@@ -1,0 +1,51 @@
+{/*投标中*/}
+<table class="ui-record-table percentTable">
+  <thead>
+    <tr>
+      <th>项目名称</th>
+      <th width="10%" class="tar" order_field="1" <eq name="order_field" value="1"> order_type="{$order_type}"</eq>>融资规模</th>
+      <th width="10%" class="tac" order_field="2" <eq name="order_field" value="2"> order_type="{$order_type}"</eq>>预期年化利率</th>
+      <th width="6%" order_field="3" <eq name="order_field" value="3"> order_type="{$order_type}"</eq>>期限</th>
+      <th width="10%">还款方式</th>
+      <th width="12%" order_field="5" <eq name="order_field" value="5"> order_type="{$order_type}"</eq>>融资开标时间</th>
+      <th width="10%">融资截止时间</th>
+      <th width="14%" class="tar">剩余可投资金额（元）</th>
+      <th width="8%">融资进度</th>
+    </tr>
+    <tr class="line"><th colspan="100%"></th></tr>
+  </thead>
+  <tbody>
+    <?php if(!empty($list)){ ?>
+    <foreach name="list" item="item">
+                    <?php  
+$title = service("Financing/Financing")->getTitle($item);
+         ?>
+    <tr>
+      <td <?php echo $title; ?>>
+  		<p class="pro_name">{$item.prj_name}</p>
+				   			 <?php 
+			   echo service("Financing/Financing")->getIco($item);
+			 ?>
+        <!--<p class="blue">{$item.prj_no}</p>-->
+      </td>
+      <td class="tar" <?php echo $title; ?>><span class="mr12">{$item.demand_amount|humanMoney}</span></td>
+      <td class="tac" <?php echo $title; ?>>
+     <?php echo number_format($item['year_rate']/10,2); ?>%
+	  </td>
+      <td <?php echo $title; ?>>{$item.time_limit_display}</td>
+      <td <?php echo $title; ?>>{$item.repay_way_view}</td>
+      <td <?php echo $title; ?>><span class="time">{$item.start_bid_time|date='Y-m-d H:i',###}</span></td>
+      <td <?php echo $title; ?>><span class="time">{$item.end_bid_time|date='Y-m-d H:i',###}</span></td>
+      <td <?php echo $title; ?> class="tar">{$item.remaining_amount|humanMoney=###,2,FALSE}</td>
+      <td><div class="fina_round_bar" percent="{$item['schedule']}"><a href="javascript:;" title="融资进度" <?php if($item["schedule"] == 100){echo 'style="display:block"';} ?>>{$item['schedule']}%</a></div></td>
+    </tr>
+    </foreach>
+    <?php } else { ?>
+    <tr>
+      <td colspan="100%" class="tac">没有相关数据</td>
+    </tr>
+    <?php } ?>
+  </tbody>
+</table>
+<?php $pageNavCallback = "ajaxAfter_Account_Financing_plist"; ?>
+<include file="./app/Tpl/Public/pageAjax.html" />

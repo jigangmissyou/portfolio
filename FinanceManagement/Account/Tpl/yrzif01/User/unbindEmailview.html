@@ -1,0 +1,31 @@
+<extend name="./app/Tpl/Public/base_user.html"/>
+<block name="title">重新认证邮箱</block>
+<block name="keywords"></block>
+<block name="description"></block>
+
+<block name="style">
+  <link href="/public/css/banklogo.css" rel="stylesheet" />
+</block>
+<block name="body">
+ <div class="container-inner mt20">
+  <include file="./app/Tpl/Account/userMyBonusSider.html" />
+  <div class="main_area body-frame">
+  <div class="p20">
+    <h2 class="h2tit">解绑邮箱</h2>
+    <form method='post'  action="{:U('Account/User/unbindEmail')}">
+      <ul class="formList account-edit-form">
+        <li>
+          <label class="li-label-name">当前邮箱</label>
+          <span class="li-span-con">
+  <input type="text"   name="email" valid="required,ajax@{:U('Account/User/checkEmail')}"  class="inputCommon" style="width:235px;" value=""></span></li>
+        <li class="lastBtns">
+          <label class="li-label-name">&nbsp;</label>
+          <span class="li-span-con"><span class="button-common-blue button-blue-w120"><input type="submit" name="" value="提 交" class="btns"></span>
+          <span class="button-common-gray button-gray-w120 ml20"><input type="reset" name="" value="取 消" class="btns"></span></span>
+        </li>
+      </ul>
+    </form>
+  </div>
+  </div>
+  </div>
+</block>

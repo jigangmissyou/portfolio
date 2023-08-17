@@ -1,0 +1,88 @@
+<extend name="./app/Tpl/Public/base2.html"/>
+<block name="title">网银支付回调页面</block>
+<block name="keywords">鑫合汇投融</block>
+<block name="description">鑫合汇投融</block>
+
+<block name="body">
+<div class="main_area" id="main_area_content" style="display:none">
+  <div class="suc_tit">
+  <?php if($result['ticket']['status'] == 1 || $result['ticket']['status'] == 2) {?>
+   <img src="/public/image/suc01.png">
+  <?php } else { ?>
+   <img src="/public/image/suc02.png">
+  <?php } ?>
+	{$result['message']}
+	<?php if($result['ticket']['status'] == 1){?>
+		, 请稍后再<a href="javascript:void(0)" onclick="reload()" style="color:blue">刷新</a>
+	<?php } ?>
+  </div>
+  <div class="trade_list">
+    <div class="item"><span class="ser_num">交易流水号</span><span class="type">交易类型</span><span class="amount" style="padding: 0;">充值金额</span></div>
+    <div class="item"><span class="ser_num">{$result['ticket']['ticket_no']}</span><span class="type">充值</span><span class="amount"  style="padding: 0;"><?php echo number_format($result['ticket']['amount']/100, 2)."元"; ?></span></div>
+  </div>
+  
+  <div style="text-align:center;margin-left:auto;margin-right:auto; margin-top: 30px;">
+  	<a href="{:U('Payment/PayAccount/rechargePage')}" style="height: 26px;
+    line-height: 26px;
+    background-color: #F3F3F3;
+    display: inline-block;
+    padding: 0 10px;
+    border: 1px solid #A6A6A6;
+    border-radius: 2px;">继续充值</a>
+  	&nbsp;
+    <?php if($is_gov) { ?>
+    <a href="{:U('Financing/Invest/zfProject')}"  style="height: 26px;
+    line-height: 26px;
+    background-color: #F3F3F3;
+    display: inline-block;
+    padding: 0 10px;
+    border: 1px solid #A6A6A6;
+    border-radius: 2px;">立即投资</a>
+    <?php }else{ ?>
+    <a href="{:U('Financing/Invest/plist')}"  style="height: 26px;
+    line-height: 26px;
+    background-color: #F3F3F3;
+    display: inline-block;
+    padding: 0 10px;
+    border: 1px solid #A6A6A6;
+    border-radius: 2px;">立即投资</a>
+    <?php } ?>
+  </div>
+</div>
+
+<div class="main_area" id="main_area_load"><img src="/public/image/load/loading.gif"></div>
+<!-- 88亿市场活动弹出提示层 begin -->
+
+<div class="ganehd-box" style="display:none;" id="gehd">
+  <div id="jqueryContent">
+    <p class="font16">恭喜！您在[88亿元红包]活动中充值<strong class="orange">{$result['amount_show']}</strong>元，获得<strong class="orange">{$result['lottery_chance']}</strong>次抽奖机会，<strong class="orange">100%</strong>中奖。</p>
+    <div class="tac pt34"><label for="" class="button-common-blue button-blue-pop mr20"><a href="{:U('Index/Act/thanksgiving', array('tpl'=>'#goWin'))}" class="btns">马上去抽奖</a></label>
+    <label for="" class="button-common-blue button-blue-w200"><a href="{:U('Index/Act/thanksgiving', array('tpl'=>'#goBackMoney'))}" class="btns" style="font-size:18px; font-family: Microsoft Yahei;">投资拿返现</a></label></div>
+  </div>
+</div>
+<!-- 88亿市场活动弹出提示层 end -->
+<script>
+ ;(function(){
+	var $main_area_content = $('#main_area_content');
+	var $main_area_load = $('#main_area_load');
+	window.setTimeout(function(){
+		$main_area_load.remove();
+		$main_area_content.show();
+	}, 2000);
+}());
+
+function reload(){
+  window.location.reload(1);
+}
+  //88亿市场活动弹出提示层
+var lottery_chance = "<?php echo $result['lottery_chance'];?>";
+if(lottery_chance > 0){
+  window.onload = function(){
+    var $main_gehd_content =$("#gehd");
+    $main_gehd_content.show();
+    $.colorbox({href : "#gehd",inline:true});
+  }
+}
+
+</script>
+</block>

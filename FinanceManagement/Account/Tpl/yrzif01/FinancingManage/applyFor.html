@@ -1,0 +1,14 @@
+<input type="hidden" name="st" value="0">
+<div id="manage_status" class="statusMenusLast statusMenusLast_more">
+  <a event-click="switchStatus" data-args="0" href="javascript:" <?php if($st == 0){ ?>class="cur"<?php } ?> hidefocus="hidefocus">全部</a>
+  <a event-click="switchStatus" data-args="7" href="javascript:" <?php if($st == 7){ ?>class="cur"<?php } ?> hidefocus="hidefocus">需求待处理</a>
+  <a event-click="switchStatus" data-args="1" href="javascript:" <?php if($st == 1){ ?>class="cur"<?php } ?> hidefocus="hidefocus"><?php if($guarantor_type==4){echo '票据中介';}else{echo '担保';}?>待审核</a>
+  <a event-click="switchStatus" data-args="2" href="javascript:" <?php if($st == 2){ ?>class="cur"<?php } ?> hidefocus="hidefocus"><?php if($guarantor_type==4){echo '票据中介';}else{echo '担保';}?>审核未通过</a>
+  <a event-click="switchStatus" data-args="3" href="javascript:" <?php if($st == 3){ ?>class="cur"<?php } ?> hidefocus="hidefocus">平台审核中</a>
+  <a event-click="switchStatus" data-args="4" href="javascript:" <?php if($st == 4){ ?>class="cur"<?php } ?> hidefocus="hidefocus">平台审核未通过</a>
+  <a event-click="switchStatus" data-args="5" href="javascript:" <?php if($st == 5){ ?>class="cur"<?php } ?> hidefocus="hidefocus">融资中</a>
+  <a event-click="switchStatus" data-args="6" href="javascript:" <?php if($st == 6){ ?>class="cur"<?php } ?> hidefocus="hidefocus">融资完成</a>
+</div>
+<div class="verify_bd" id="ajaxContent_financing_manage">
+  <include file="applyFor_ajax_list" />
+</div>

@@ -1,0 +1,58 @@
+<extend name="./app/Tpl/Public/base_user.html"/>
+<block name="title">找回支付密码</block>
+<block name="keywords"></block>
+<block name="description"></block>
+
+<block name="body">
+  <div class="container-inner mt20">
+    <include file="./app/Tpl/Account/userMyBonusSider.html" />
+    <div class="main_area body-frame">
+      <div class="p20">
+        <h2 class="h2tit">找回支付密码</h2>
+        <!-- <div class="remind"><h3> <strong class="user">{$uname}</strong>你好！</h3></div> -->
+      
+        <?php  if($email_not_auth!=1):?>
+        <div class="account-edit-mobile">
+          <ul>
+            <li class="li-first current">1 安全验证<span class="edit-jiao"></span></li>
+            <li class="li-other">2 重置密码<span class="edit-jiao"></span></li>
+          </ul>
+        </div>
+        <form method='post'  action="{:U('Account/User/findPayPwd2')}" ajax=1 ajax-after="Ajax_after_findPayPwd2">
+          <ul class="formList account-edit-form">
+            <li>
+              <label class="li-label-name">验证邮箱</label>
+              <span class="li-span-con">
+                <?php echo $email;?>
+              </span>
+            </li>
+            <li>
+              <label class="li-label-name">手机动态码</label>
+          <span class="li-span-con">
+          <input type="text" class="inputCommon" name='code' style="width:190px;" value="" valid="required">
+            <a href="javascript:sendResetPayPwdMobilecode();" id="btnResetPayPwdMobilecode" class="button-code-no button-code-user-set ml10">获取</a>
+            <a class="button-code-on button-code-user-set" id="span_pay_time" style="display:none" href="javascript:void(0)">120</a>
+        </span>
+
+            </li>
+            <li class="lastBtns">
+              <label class="li-label-name">&nbsp;</label>
+          <span class="li-span-con">
+          <span class="button-common-blue button-blue-w120"><input type="submit" name="" value="下一步" class="btns"></span>
+          <span class="button-common-gray button-gray-w120 ml20"><input type="reset" name="" value="取消" class="btns"></span>
+          </span>
+            </li>
+
+          </ul>
+        </form>
+        <?php else: ?>
+        <ul class="formList account-edit-form mt40">
+          <li class="tac">
+            找回支付密码需要设置邮箱：<a href="{:U('Account/User/account',array('op'=>'email'))}" class="blue">设置邮箱</a>
+          </li>
+        </ul>
+        <?php endif;?>
+      </div>
+    </div>
+  </div>
+</block>

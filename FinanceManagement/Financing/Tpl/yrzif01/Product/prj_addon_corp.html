@@ -1,0 +1,130 @@
+<!-- 企業 -->
+<div class="info_wrap" >
+  <div class="ui_info_tit">融资方信息介绍</div>
+  <div class="info_area">
+    <div class="info_tit show">
+      <h3>基本概况</h3><i></i>
+    </div>
+    <div class="content">
+   <ul class="formList formList_newW">
+      <li>
+        <label class="li-label-name"><em class="red">*</em>所属行业：</label>
+        <span class="li-span-con">
+         <input type="text" name="trade" class="inputCommon" value="{$project.borrower.trade}" valid-model="PrjCorp">
+       </span>
+    </li>
+      <li>
+        <label class="li-label-name"><em class="red">*</em>成立日期：</label>
+        <span class="li-span-con">
+        <input type="text" name="fund_date" class="inputCommon" value="{$project.borrower.fund_date}" valid-model="PrjCorp"><span class="fillNote">年</span>
+      </span>
+    </li>
+      <li>
+        <label class="li-label-name"><em class="red">*</em>注册资本：</label>
+        <span class="li-span-con">
+        <input type="text" name="register_capital" class="inputCommon" value="{$project.borrower.register_capital}" valid-model="PrjCorp"><span class="fillNote">万</span>
+      </span>
+    </li>
+      <li>
+        <label class="li-label-name"><em class="red">*</em>主营业务：</label>
+        <span class="li-span-con">
+        <textarea class="ui_textarea" name="main_business" valid-model="PrjCorp">{$project.borrower.main_business}</textarea>
+      </span>
+    </li>
+      <li>
+        <label class="li-label-name">上一年度销售收入：</label>
+        <span class="li-span-con">
+        <input type="text" name="last_year_sale_amount" class="inputCommon" value="{$project.borrower.last_year_sale_amount}">
+      </span>
+    </li>
+      <li>
+        <label class="li-label-name"><em class="red">*</em>企业规模：</label>
+        <span class="li-span-con">
+          <span class="uid_corp_scale" valid-msg-options='{"offset":10}'>
+            <select name="corp_scale" multipleone="1" valid-model="PrjCorp" valid-hide="1">{:genDictOption('A137', $project['borrower']['corp_scale'], TRUE)}</select>
+          </span>
+      </span>
+    </li>
+      <li>
+        <label class="li-label-name">企业主持股比例：</label>
+        <span class="li-span-con">
+        <input type="text" name="sharehold_radio" class="inputCommon" value="{$project.borrower.sharehold_radio}" valid-model="PrjCorp"><span class="fillNote">％</span>
+        </span>
+      </li>
+    </ul>
+    </div>
+  </div>
+  <!-- 企业业主信息 -->
+  <div class="info_area">
+    <div class="info_tit show">
+      <h3>企业主信息</h3><i></i>
+    </div>
+    <div class="content">
+<ul class="formList formList_newW">
+      <li>
+        <label class="li-label-name"><em class="red">*</em>性别：</label>
+        <span class="li-span-con">
+          <span class="radio_box"><input id="sex1" type="radio" name="sex" value="1"<eq name="project.borrower.sex" value="1"> checked="checked"</eq>><label for="sex1">男</label></span>
+          <span class="radio_box ml40"><input id="sex2" type="radio" name="sex" value="0"<eq name="project.borrower.sex" value="0"> checked="checked"</eq> valid-model="PrjCorp" valid-msg-options='{"offset":188}'><label for="sex2">女</label></span>
+      </span>
+    </li>
+      <li>
+        <label class="li-label-name">年龄：</label>
+        <span class="li-span-con">
+        <input type="text" name="age" class="inputCommon" value="{$project.borrower.age}" valid-model="PrjCorp">
+        </span>
+    </li>
+      <li>
+        <label class="li-label-name"><em class="red">*</em>学历：</label>
+        <span class="li-span-con">
+          <span class="uid_educational" valid-msg-options='{"offset":10}'>
+          <select name="educational" multipleone="1" valid-model="PrjCorp" valid-hide="1">{:genDictOption('A003', $project['borrower']['educational'], TRUE)}</select>
+        </span>
+      </span>
+    </li>
+      <li>
+        <label class="li-label-name">婚姻状况：</label>
+        <span class="li-span-con">
+          <span class="uid_matrimonial" valid-msg-options='{"offset":10}'>
+          <select name="matrimonial" multipleone="1" valid-model="PrjCorp" valid-hide="1">{:genDictOption('A002', $project['borrower']['matrimonial'], TRUE)}</select>
+        </span>
+         </span>
+    </li>
+      <li>
+        <label class="li-label-name">户籍城市：</label>
+        <span class="li-span-con">
+        <input type="text" name="owner_city" class="inputCommon" value="{$project.borrower.owner_city}">
+      </span>
+      </li>
+     </ul>
+    </div>
+  </div>
+  <!-- 征信信息 -->
+  <div class="info_area">
+    <div class="info_tit show">
+      <h3>征信信息</h3><i></i>
+    </div>
+    <div class="content">
+      <ul class="formList formList_newW">
+      <li>
+        <label class="li-label-name"><em class="red">*</em>企业贷款卡状态：</label>
+        <span class="li-span-con">
+          <span class="uid_loan_card_desc" valid-msg-options='{"offset":10}'>
+          <select name="loan_card_desc" multipleone="1" valid-model="PrjCorp" valid-hide="1">{:genDictOption('E020', $project['borrower']['loan_card_desc'], TRUE)}</select>
+        </span>
+      </span>
+
+    </li>
+      <li>
+        <label class="li-label-name"><em class="red">*</em>企业信用状况：</label>
+        <span class="li-span-con">
+          <span class="uid_bank_credit_grade" valid-msg-options='{"offset":10}'>
+          <select name="bank_credit_grade" multipleone="1" valid-model="PrjCorp" valid-hide="1">{:genDictOption('E020', $project['borrower']['bank_credit_grade'], TRUE)}</select>
+        </div>
+      </span>
+      </li>
+     </ul>
+    </div>
+  </div>
+</div>
+<!-- infoend -->

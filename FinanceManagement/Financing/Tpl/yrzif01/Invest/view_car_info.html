@@ -1,0 +1,34 @@
+<dl>
+  <h4><!-- <i class="icon_Greyinfo"></i> -->车辆信息</h4>
+  <table class="globaltable">
+    <tr class="GreyBgcolor">
+      <td class="padLeft30" width="30%">车牌号</td>
+      <td><span style="display:none;">{ }</span><?php echo car_plate_view($carInfo['plate_number'],3);?></td>
+    </tr>
+    <tr>
+      <td class="padLeft30">车辆品牌型号</td>
+      <td>{$carInfo.car_model}</td>
+    </tr>
+    <tr class="GreyBgcolor">
+      <td class="padLeft30">登记日期</td>
+      <td>{$carInfo.register_date|date='Y-m-d H:i',###}</td>
+    </tr>
+    <tr>
+      <td class="padLeft30">车架号</td>
+      <td><?php echo marskName($carInfo['frame_number'],5,0);?></td>
+    </tr>
+    <tr class="GreyBgcolor">
+      <td class="padLeft30" width="30%">发动机号</td>
+      <td><?php echo marskName($carInfo['engine_number'],5,0);?></td>
+    </tr>
+    <tr>
+      <td class="padLeft30">发票价格</td>
+      <td><?php echo humanMoney($carInfo['invoice_price'],2,false);?></td>
+    </tr>
+    <tr class="GreyBgcolor">
+      <td class="padLeft30">表显里程(公里数)</td>
+      <td>{$carInfo.mileage}</td>
+    </tr>
+   
+  </table>
+</dl>

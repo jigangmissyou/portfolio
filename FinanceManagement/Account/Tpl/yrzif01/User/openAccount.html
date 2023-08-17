@@ -1,0 +1,210 @@
+<extend name="./app/Tpl/Public/base_hfhg.html"/>
+<block name="title">我的账户-账户概况-存管开户</block>
+<block name="keywords">存管开户</block>
+<block name="description">存管开户</block>
+
+<block name="style">
+<link href="/public/css/banklogo.css" rel="stylesheet" />
+<link rel="stylesheet" href="/public/css/sasscss/act/zskh/index.css">
+<style>
+    /*.zsJump {
+        position: relative;
+        top: -30px;
+        left: 200px;
+    }*/
+     ul,li{list-style-type:none;padding:0;margin:0;}
+     .edit_select{display: inline-block;width:228px;height:36px;line-height:36px;border:1px solid #c2c2c2;}
+     #mobile{
+      display:inline-block;
+      width:190px;
+      height:36px;
+      line-height:36px;
+      float:left;
+      margin:0;
+      padding:0 10px;
+      border:0;
+      outline:none;
+      font-size:14px;
+    }
+     #arrow_right{
+       display:inline-block; 
+       border-color:#FF6600 #FFFFFF #FFFFFF #FFFFFF;
+       border-style: solid;
+       border-width: 4px;
+       display: block;
+       font-size: 0;
+       height: 0;
+       line-height: 0;
+       width: 0;
+       float:left;margin-top:16px;
+       cursor:pointer;
+     }
+     .list{width:228px;border:1px solid #dcdcdc;border-top:0;display:none;
+        margin-top:-5px;
+        position:absolute;}
+     .list li{line-height:36px;padding:0 10px;font-size:14px;background:#fff;}
+     .list li:hover{background:#F8F3F4;cursor:pointer;}
+     .shouquan {
+      width:620px;
+      margin-left: -310px;
+     }
+     .AmountInTransit form {
+        text-align: center;
+        margin-top: 37px;
+     }
+     .zsJump {
+      background-color: #34b9ff;
+      border: 0;
+      padding: 10px 50px;
+      color: #ffffff;
+      border-radius: 4px;
+      margin-top: -17px;
+     }
+     .tipsy-inner {
+      max-width: 280px!important;
+     }
+</style>
+</block>
+
+<block name="body">
+<div class="mt20 recharge_form_area">
+    <div class="recharge_form_box">
+        <p class="orange">开户说明：</p>
+        <p>
+            1.开户操作需跳转至浙商页面完成。<br />
+            <!-- 老用户 -->
+            <!-- 2.开户时需填写<span class="blue">要绑定的银行卡预留手机号</span>及银行卡（仅支持一张） -->
+            <!-- 新用户 -->
+            <!-- 2.开户时需绑定<span class="blue">银行预留手机号</span>及银行卡（仅支持一张）
+            <a href="javascript:" class="showXianE blue">查看银行限额</a> -->
+            2.开户时需绑定银行预留手机号及银行卡，目前仅支持15家银行
+            <a href="javascript:" class="showXianE blue">查看银行限额</a>
+        </p>
+        <div class="tac mt20">
+            <img src="/public/images/zskh/logo.png" alt="" class="mt20" />
+            <p class="fz20" style="color:#404040;">鑫合汇携手浙商银行</p>
+            <p class="tac introduceTxt">开通存管账户可投资银行存管项目</p>
+        </div>
+        <form id="open_zs_form" action="{:U('Account/User/openAccount')}" method="POST" target="_blank" ajax="1" ajax-before="ajaxBefore_openAccount" ajax-after="ajaxAfter_openAccount">
+            <ul class="mt20">
+                <li class="ml100">
+                    <label class="label-name">姓名：</label>
+                    <span class="li-span-con">
+                        <?php if (!$real_name) { ?>
+                        <input type="text" class="inputBox" id="real_name" valid="required,chinesename|,姓名格式有误"  name="real_name" value="">
+                        <?php } else { ?>
+                        <input type="text" class="inputBox" id="real_name" name="real_name" value="{$real_name}" readonly>
+                        <?php } ?>
+                    </span>
+                </li>
+                <li class="ml100">
+                    <label class="label-name">身份证：</label>
+                    <span class="li-span-con">
+                        <?php if (!$person_id) { ?>
+                        <input type="text" class="inputBox" id="person_id" valid="required,ajax@{:U('Account/User/ajaxCheckIdCard')}"  name="person_id" value="{$person_id}">
+                        <?php } else { ?>
+                        <input type="text" class="inputBox" id="person_id" name="person_id" value="{$person_id}" readonly>
+                        <?php } ?>
+                    </span>
+                </li>
+                <li class="ml100">
+                    <label class="label-name" style="display:block;float:left;line-height:38px;">银行卡预留手机号：</label>
+                    <span class="li-span-con" style="display:block;float:left;position:relative;margin-left: 4px;">
+                        <!-- <select name="" id="mymobiles" style="border: #c2c2c2 solid 1px; background: #fff;padding: 0 0 0 8px;width: 230px;height: 36px; line-height: 36px;margin-bottom: 20px;">
+                             <option style="display: none" value=""></option>
+                        </select>
+                        <input type="text" placeholder="请输入" autocomplete="off" class="inputBox" id="mobile" valid="required,mobile" name="mobile" style="border: 0;position: absolute;top: -5px;left: 3px;width: 200px;height: 25px;background: #fff;padding: 0 0 0 5px;line-height: 25px;" hidefocus="hidefocus" valid-msg-options='{"offset": 20}'>  -->
+
+                         <div class="edit_select">
+                           <input type="text" id="mobile" name="mobile" autocomplete="off" value="" readonly valid="required,mobile" valid-msg-options='{"offset": 20}' />
+                           <span id="arrow_right"></span> 
+                         </div>
+                         <ul class="list">
+                            <!--  <li data-edit=1>请输入…</li>  -->
+                         </ul>
+
+                    </span>
+                    <div style="clear:both;"></div>
+                </li>
+                <li class="ml100 mb20">
+                    <label class="label-name"></label>
+                    <span>此为开户时要绑定的<em class="blue">银行卡预留手机号</em></span>
+                </li>
+                <li class="ml100 mb20">
+                    <label class="label-name"></label>
+                    <span class="li-span-con">
+                      <label for="" class="agree" style="width:280px;display:inline-block;">
+                        <input type="checkbox" checked="checked" class="refer registerProtocol" valid="id|请阅读并同意《网络交易资金存管账户开户协议》" hidefocus="hidefocus" name="agreeProtocol" value="yes" valid-msg-options='{"gravity": "n", "offset": 5, "leftAlign": 1}'>同意
+                        <a colorbox="1" href="/Index/Protocol/view?id=61" class="cboxElement" hidefocus="hidefocus"><em class="blue">《网络交易资金存管账户开户协议》</em></a>
+                      </label>
+                      <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                      <span class="red dn">请阅读并同意《网络交易资金存管账户开户协议》</span>
+                    </span>
+                    <!-- <span>此为开户时要绑定的<em class="blue">银行卡预留手机号</em></span> -->
+                </li>
+            </ul>
+            <p class="tac zsarea">
+                <span class="button-common-blue">
+                  <input type="submit" value="开通银行存管账户" id="formsubmit" class="blue-btn gary-btn btns" hidefocus="hidefocus" >
+                </span>
+            </p>
+        </form>
+<!--         <form id="jumpToZS" action="" method="post" target = "_blank">
+            <input type="hidden" name="reqMsg" value="">
+            <input class='zsJump' type='submit' value='到浙商完善开户信息' />
+        </form> -->
+    </div>
+</div>
+<div class="mask dn"></div>
+<div class="success-validation-popup khcg khcglm dn">
+    <h2 id="titlebar">开户成功了吗？</h2><!-- <a id="colorboxClose" href="javascript:;" class="del" style="z-index:503;" hidefocus="hidefocus"></a> -->
+    <div class="pay-txt">
+        <h3>请您在新打开的浙商页面完成开户后选择：</h3>
+        <p><span>开户成功</span> | 您可以选择： <a href="{:U('Account/User/index')}">查看账户</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="{:U('Payment/PayAccount/zsRechargePage')}">去充值</a></p>
+        <p><em>开户失败</em> | 我们推荐您： <a href="{:U('Help/Help/viewHelpIndex', array('tpl'=>'AboutUs-guide'))}">查看帮助中心</a><a href="
+        {:U('Account/User/openAccount')}">重新开户</a></p>
+    </div>
+    <div class="server-tel">您也可以致电我们的客服热线<br />400-821-8616</div>
+</div>
+
+<div class="success-validation-popup khcg yhxeb dn">
+    <h2 id="titlebar">银行限额表</h2><a href="javascript:;" class="del" style="z-index:503;" hidefocus="hidefocus"></a>
+    <ul class="table-head">
+        <li>银行卡</li>
+        <li>单笔限额(元)</li>
+        <li>单日限额(元)</li>
+    </ul>
+    <ul class="table-main">
+        <?php foreach ($bank_list as $data) {
+            # code...
+        echo '<li>'.$data['name'].'</li><li>'.$data['single'].'</li><li>'.$data['day'].'</li>';
+        }?>
+    </ul>
+</div>
+
+
+<div class="khcg openSuccess dn">
+    <div class="clearfix"></div>
+    <div class="tac khcg-txt">
+        <img src="/public/images/zskh/dui.png" alt="" />恭喜您开通浙商存管户
+    </div>
+    <p class="khcg-content">
+<!--         由于您的个人账户已升级为浙商存管户，需要将您账户余额<span class="orange">10000</span>元转移到浙商银行，预计今日17：30到账。 -->
+    </p>
+    <a href="/index.php/Financing/Invest/plist">
+        <div class="start-btn">
+            开启全新理财体验
+        </div>
+    </a>
+</div>
+<!-- <iframe id="zsframe" class="dn" width="100%" src="http://www.czbank.com/" frameborder="0" /> -->
+<div class="khcg shouquan dn">
+  <h2 id="titlebar">服务授权</h2>
+  <a id="colorboxClose" href="javascript:;" class="del" style="z-index:503;" hidefocus="hidefocus"></a>
+  <div class="AmountInTransit">
+    <p class="mt20"></p>
+    <p style="line-height:45px;">你即将跳转浙商银行页面完善开户信息，向其提供以下权限即可继续操作：</p>
+    <p style="line-height:40px;"><input type="checkbox" checked disabled />&nbsp;使用你的信息（姓名、身份证号及银行预留手机号）办理业务</p>
+  </div>
+</div>
+</block>

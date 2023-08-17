@@ -1,0 +1,42 @@
+<?php if($corpInfo['real_name'] || $corpInfo['age'] || !is_null($corpInfo['marital_status']) || $corpInfo['prime_assets'] || $corpInfo['income_source']){ ?>
+<!-- 借款个人信息 -->
+<dl>
+  <h4><i class="icon_Greyinfo"></i>借款个人信息</h4>
+  <table class="globaltable">
+    <?php if($corpInfo['real_name']){ ?>
+    <tr class="GreyBgcolor">
+      <td class="padLeft30">姓名</td>
+      <td><?php echo real_name_view($corpInfo['real_name'])?></td>
+    </tr>
+    <?php } ?>
+
+    <?php if($corpInfo['age']){ ?>
+    <tr>
+      <td class="padLeft30">年龄</td>
+      <td>{$corpInfo.age}</td>
+    </tr>
+    <?php } ?>
+
+    <?php if(!is_null($corpInfo['marital_status'])){ ?>
+    <tr class="GreyBgcolor">
+      <td class="padLeft30">婚姻状况</td>
+      <td><?php if($corpInfo['marital_status']){echo '已婚';}else{echo '未婚';}?></td>
+    </tr>
+    <?php } ?>
+
+    <?php if($corpInfo['prime_assets']){ ?>
+    <tr class="GreyBgcolor">
+      <td class="padLeft30">主要资产</td>
+      <td><?php echo $corpInfo['prime_assets'];?></td>
+    </tr>
+    <?php } ?>
+
+    <?php if($corpInfo['income_source']){ ?>
+    <tr>
+      <td class="padLeft30">主要经济来源</td>
+      <td>{$corpInfo.income_source}</td>
+    </tr>
+    <?php } ?>
+  </table>
+</dl>
+<?php } ?>

@@ -1,0 +1,38 @@
+<extend name="./app/Tpl/Public/base_hfhg.html"/>
+<block name="title">忘记密码</block>
+<block name="body">
+<div class="container-inner container-colorbg mt20">
+  <div class="p-lr-40">
+  <h2 class="h2tit h2tit-login">找回密码</h2>
+  <div class="account-edit-mobile">
+    <ul>
+      <li class="li-first current">1 安全验证<span class="edit-jiao"></span></li>
+      <li class="li-other current">2 重置密码<span class="edit-jiao"></span></li>
+    </ul>
+  </div>
+  <div class="forgetContainer forgetContainer-600">
+  <form method="post" action="__URL__/doResetPwd">
+    <ul class="formList account-edit-form">
+        <li>
+          <label class="li-label-name"><em class="red">*</em>新密码</label>
+          <span class="li-span-con"><input type="password" name="pwd1" class="inputCommon" value="" valid="required,lengthRange@6~16,ajax@{:U('Account/User/checkPwd')}">
+          </span>
+        </li>
+        <li>
+        <label class="li-label-name"><em class="red">*</em>确认新密码</label>
+        <span class="li-span-con">
+        <input type="password" name="pwd2" class="inputCommon" value="" valid="match@pwd1|密码不匹配">
+        </span>
+      </li>
+        <li class="lastBtns">
+          <label class="li-label-name">&nbsp;</label>
+          <span class="li-span-con">
+          <span class="button-common-blue button-blue-w200"><input type="submit" class="btns" value="确 认"></span>
+          </span>
+        </li>
+    </ul>
+ </form>
+  </div>
+  </div>
+</div>
+</block>

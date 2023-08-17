@@ -1,0 +1,60 @@
+<extend name="./app/Tpl/Public/base_user.html"/>
+<block name="title">找回支付密码</block>
+<block name="keywords"></block>
+<block name="description"></block>
+
+<block name="body">
+  <div class="container-inner mt20">
+    <include file="./app/Tpl/Account/userMyBonusSider.html" />
+    <div class="main_area body-frame">
+      <div class="p20">
+        <h2 class="h2tit">找回支付密码</h2>
+        <!-- <div class="remind"><h3> <strong class="user">{$uname}</strong>你好！</h3></div> -->
+
+        <?php  if($issetSqa):?>
+        <form method='post'  action="{:U('Account/User/forgetPayPwd2')}">
+          <ul class="formList account-edit-form">
+            <li>
+              <label class="li-label-name">选择安全问题</label>
+          <span class="li-span-con">
+          <div class="ui_select_box">
+            <select name="sqa_key" multipleOne="1" multiselect-options='{"minWidth":"310"}'>
+              {:genDictOption('E025', '', TRUE)}
+            </select>
+          </div>
+        </span>
+            </li>
+            <li>
+              <label class="li-label-name">安全问题答案</label>
+          <span class="li-span-con">
+          <input type="text" class="inputCommon" name='sqa_value' value="">
+        </span>
+            </li>
+            <li>
+              <label class="li-label-name">手机动态码</label>
+          <span class="li-span-con">
+          <input type="text" class="inputCommon" name='code' style="width:190px;" value=""><a href="javascript:sendResetPayPwdMobilecode();" id="btnResetPayPwdMobilecode" class="button-code-no button-code-user-set ml10">获取</a><a class="button-code-on button-code-user-set" id="span_pay_time" style="display:none" href="javascript:void(0)">120</a>
+        </span>
+
+            </li>
+            <li class="lastBtns">
+              <label class="li-label-name">&nbsp;</label>
+          <span class="li-span-con">
+          <span class="button-common-blue button-blue-w120"><input type="submit" name="" value="下一步" class="btns"></span>
+          <span class="button-common-gray button-gray-w120 ml20"><input type="submit" name="" value="取消" class="btns"></span>
+          </span>
+            </li>
+
+          </ul>
+        </form>
+        <?php else: ?>
+        <ul class="formList account-edit-form">
+          <li class="tac">
+            找回支付密码需要回答安全保护问题：<a href="{:U('Account/User/editSafeQuestion')}" class="blue">设置安全保护问题</a>
+          </li>
+        </ul>
+        <?php endif;?>
+      </div>
+    </div>
+  </div>
+</block>

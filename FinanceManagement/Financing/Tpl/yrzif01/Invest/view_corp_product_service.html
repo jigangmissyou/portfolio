@@ -1,0 +1,212 @@
+<?php if(!empty($corpMainSale['data']) || !empty($corpChannel['data'])){ ?>
+<dl>
+  <h4><i class="icon_Greyinfo"></i>产品服务</h4>
+  <?php if(!empty($corpMainSale['data'])){ ?>
+  <dt>销售构成</dt>
+  <div class="chartShowsCn fixed">
+    <div class="chartShowsTu fl" data-flag="corp_main_product_sale_pie">
+      图表加载中...
+    </div>
+    <div class="chartShowsTable fr">
+      <table class="globaltable tarTable">
+        <tr>
+          <th>产品/服务名称</th>
+          <th>销售额（万元）</th>
+          <th>销售占比</th>
+        </tr>
+        <?php if(!empty($corpMainSale['data'])){ foreach ($corpMainSale['data'] as $key => $vo) { ?>
+        <tr <?php if($key % 2 == 0){echo 'class="GreyBgcolor"';} ?>>
+          <td width="15%" textlength="5">{$vo.main_product}</td>
+          <td width="17%">{$vo.sale_amount|floatParse}</td>
+          <td width="17%">{$vo.sale_percent|floatParse}%</td>
+        </tr>
+        <?php }} else { ?>
+        <tr>
+          <td colspan="3" class="noData"></td>
+        </tr>
+        <?php } ?>
+      </table>
+    </div>
+  </div>
+  <script>
+  /**
+   * 销售构成
+   * @return {[type]} [description]
+   */
+  ;(function(){
+    var $corp_main_product_sale_pie = $('[data-flag="corp_main_product_sale_pie"]');
+    var dataObj = <?php if(!empty($corpMainSale['chart_json_str'])){echo $corpMainSale['chart_json_str'];} else {echo "0";} ?>;
+    if(!dataObj || dataObj && !dataObj.length){
+      $corp_main_product_sale_pie.html('无法生成图表！');
+      return false;
+    }
+    
+    // 处理dataObj，加上其他
+    var nowPercent = 0, newObj = {};
+    $.each(dataObj, function(){
+      var obj = this;
+      var y = parseFloat(obj['y'], 10);
+      nowPercent += y;
+    });
+    if(nowPercent < 100){
+      newObj['name'] = "其他";
+      newObj['y'] = 100 - nowPercent;
+      dataObj.push(newObj);
+    }
+
+    // 生成图表
+    $corp_main_product_sale_pie.highcharts({
+      chart:{
+         height:'350'
+      },
+      colors: [
+       '#45c0ff',
+       '#d1c0a5',
+       '#78a9b8',
+       '#de9187',
+       '#5c7ebb',
+       '#ffaa00',
+       '#f96500',
+       '#ffc75f',
+       '#ffecc9',
+       '#cabfac',
+       '#6f4903',
+       '#ad7001',
+       '#8cb3c4'
+      ],
+      title: {
+          text: null
+      },
+      tooltip: {
+        pointFormat: '<b>{point.percentage}%</b>' ,
+        percentageDecimals: 1,
+        formatter: function() {
+          return '<b>'+ this.point.name.substr(0, 20) +'</b>: '+ Highcharts.numberFormat(this.percentage, 2)+' %';
+        }
+      },
+      plotOptions: {
+        pie: {
+          showInLegend: false,
+          allowPointSelect: true,
+          cursor: 'pointer',
+          dataLabels: {
+            enabled: true,
+            color: '#000000',
+            connectorColor: '#000000',
+            formatter: function() {
+              return '<b>'+ this.point.name.substr(0, 6) +'</b>: '+ Highcharts.numberFormat(this.percentage, 2)+' %';
+            }
+          }
+        }
+      },
+      series: [{
+          type: 'pie',
+          data: dataObj,
+      }]
+    });
+  }());
+  </script>
+  <?php } ?>
+
+  <?php if(!empty($corpChannel['data'])){ ?>
+  <!-- 渠道 -->
+  <dt>渠道</dt>
+  <div class="chartShowsCn fixed">
+    <div class="chartShowsTu fl" data-flag="corp_product_channel_pie">
+      图表加载中...
+    </div>
+    <div class="chartShowsTable fr">
+      <table class="globaltable tarTable">
+        <tr>
+          <th>销售渠道</th>
+          <th>销售额（万元）</th>
+          <th>销售占比</th>
+        </tr>
+        <?php if(!empty($corpChannel['data'])){ foreach ($corpChannel['data'] as $key =>$vo) { ?>
+        <tr <?php if($key % 2 == 0){echo 'class="GreyBgcolor"';} ?>>
+          <td width="15%">{$vo.sale_channel}</td>
+          <td width="17%">{$vo.sale_amout|floatParse}</td>
+          <td width="17%">{$vo.sale_percent|floatParse}%</td>
+        </tr>
+        <?php }} else { ?>
+        <tr>
+          <td colspan="3" class="noData">无数据</td>
+        </tr>
+        <?php } ?>
+      </table>
+    </div>
+  </div>
+  <script>
+  /**
+   * 渠道
+   * @return {[type]} [description]
+   */
+  ;(function(){
+    var $corp_product_channel_pie = $('[data-flag="corp_product_channel_pie"]');
+    var dataObj = <?php if(!empty($corpChannel['chart_json_str'])){echo $corpChannel['chart_json_str'];} else {echo "0";} ?>;
+    if(!dataObj || dataObj && !dataObj.length){
+      $corp_product_channel_pie.html('无法生成图表！');
+      return false;
+    }
+    // 处理dataObj，加上其他
+    var nowPercent = 0, newObj = {};
+    $.each(dataObj, function(){
+      var obj = this;
+      var y = parseFloat(obj['y'], 10);
+      nowPercent += y;
+    });
+    if(nowPercent < 100){
+      newObj['name'] = "其他";
+      newObj['y'] = 100 - nowPercent;
+      dataObj.push(newObj);
+    }
+
+    // 生成图表
+    $corp_product_channel_pie.highcharts({
+      chart:{
+         height:'350'
+      },
+      colors: [
+               '#45c0ff',
+               '#d1c0a5',
+               '#78a9b8',
+               '#de9187',
+               '#5c7ebb',
+               '#ffaa00',
+               '#f96500'
+      ],
+      title: {
+          text: null
+      },
+      tooltip: {
+        pointFormat: '<b>{point.percentage}%</b>' ,
+        percentageDecimals: 1,
+        formatter: function() {
+          return '<b>'+ this.point.name.substr(0, 20) +'</b>: '+ Highcharts.numberFormat(this.percentage, 2)+' %';
+        }
+      },
+      plotOptions: {
+        pie: {
+          showInLegend: false,
+          allowPointSelect: true,
+          cursor: 'pointer',
+          dataLabels: {
+            enabled: true,
+            color: '#000000',
+            connectorColor: '#000000',
+            formatter: function() {
+              return '<b>'+ this.point.name.substr(0, 6) +'</b>: '+ Highcharts.numberFormat(this.percentage, 2)+' %';
+            }
+          }
+        }
+      },
+      series: [{
+          type: 'pie',
+          data: dataObj
+      }]
+    })
+  }());
+  </script>
+  <?php } ?>
+</dl>
+<?php } ?>

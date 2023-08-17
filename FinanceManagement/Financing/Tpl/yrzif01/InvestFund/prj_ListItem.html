@@ -1,0 +1,108 @@
+<?php
+  //项目名称
+  $prjName = $prj['name_style'];
+  //专享
+  $tipText = '';
+  $btnLabel = '待开标';
+  $iconName = '';
+  if($prj['client_type'] == 2){
+    $tipText = 'PC';
+    $btnLabel = 'PC专享';
+    $iconName = 'whiteComputer';
+  }
+  if($prj['client_type'] == 3){
+    $tipText = '微信';
+    $btnLabel = '微信专享';
+    $iconName = 'whiteWechat';
+  }
+  if($prj['client_type'] == 4){
+    $tipText = '手机';
+    $btnLabel = '手机APP专享';
+    $iconName = 'whiteMobile';
+  }
+?>
+<div class="proListBox proListBox_bd proPLnew">
+  <div class="proListLeft">
+    <h4 class="proTitle">
+      <em class="proIcon jubao"></em>
+      <a href="{$prj['url']}">{$prjName}</a>
+      <span class="classIcons">{$prj['ico']}</span>
+    </h4>
+    <div class="detailsList newsNoB">
+      <ul class="newsPer">
+        <li>基金管理人：{$prj['fund_manager']}</li>
+        <li>回款方式：{$prj["repay_way_view"]}</li>
+      </ul>
+    </div>
+    <div class="listBottomBox mtNo">
+      <span class="proItem1 shaoWd proP7">
+        <p class="txt01">预期年化收益率</p>
+        <p class="gains"><em class="fl bigNum">{$prj['rate_show']['rate_range']}</em></p>
+      </span>
+      <span class="lines mt15"></span>
+      <span class="proItem2 proP7">
+        <p class="txt01">项目期限</p>
+        <p title="<?php echo strip_tags($prj['rate_show']['time_range']);?>" class="txt02">{$prj['rate_show']['time_range']}</p>
+      </span>
+      <span class="lines mt15"></span>
+      <span class="proItem2 proItem3 proP7">
+        <p class="txt01">融资规模({$prj.demand_amount_array.unit})</p>
+        <p class="txt02"><em>{$prj.demand_amount_array.num}</em></p>
+      </span>
+      <span class="lines mt15"></span>
+      <span class="proItem2 proItem4 proP7">
+        <p class="txt01">起投金额({$prj.min_max_bid_amount.unit}) </p>
+        <p class="txt02"><em>{$prj.min_max_bid_amount.num}</em></p>
+      </span>
+    </div>
+  </div>
+  <div class="proListRight proNoB proListPding prel tac">
+
+    <?php if($prj["btn_status"] == 1){ ?>
+    <!--待开标-->
+    <div class="progressListBar investRights prel">
+      <?php if(in_array($prj['client_type'], array(1, 2, 3))){ //专享显示 ?>
+      <div class="OrangeTipBox" style="display: none">
+        <span class="OrangeTipBox_Rc tac"><i class="SmilingFace"></i>仅针对使用{$tipText}投资的用户哦~</span>
+        <em class="OrangeTipBox_Arr"></em>
+      </div>
+      <?php } ?>
+      <span data-inner="{$prj['bid_diff_time']}" data-start="{$prj.start_bid_time}" class="times_01"><em data-day class="mr14">00</em><em data-hour class="mr14">00</em><em data-min class="mr14">00</em><em data-sec>00</em>
+      </span>
+      <span data-percent class="progressBigBar progressBBar{$prj['schedule']}" style="display: none">
+        <span class="propressGoB">{$prj['schedule']}<em>%</em></span>
+      </span>
+    </div>
+    <label class="greenBigBtn"><a href="javascript:;" data-url="{$prj['url']}" class="btns font22"><i class="{$iconName}"></i>{$btnLabel}</a></label>
+    <!--//待开标-->
+    <?php } ?>
+
+    <?php if($prj["btn_status"] == 2){ ?>
+    <!--投标中-->
+    <div class="progressListBar">
+      <span class="progressBigBar progressBBar{$prj['schedule']}">
+        <span class="propressGoB">{$prj['schedule']}<em>%</em></span>
+      </span>
+    </div>
+    <label class="orgBigBtn">
+      <?php if($isFundVip){ ?>
+      <a href="{$prj['url']}" class="btns font22">{$prj['bid_status_view']}</a>
+      <?php }else{ ?>
+      <a colorbox="1" href="{:U('Financing/InvestFund/getFundUserInfo', Array('prj_id'=>$prj['id']))}" class="btns font22">{$prj['bid_status_view']}</a>
+      <?php } ?>
+    </label>
+    <!--//投标中-->
+    <?php } ?>
+
+    <?php if($prj["btn_status"] == 3){ ?>
+    <!--投标满-->
+    <div class="progressListBar">
+      <span class="progressBigBar progressBBar100">
+      </span>
+    </div>
+    <label class="grayBigBtn"><a href="javascript:;" class="btns font22">{$prj['bid_status_view']}</a></label>
+    <!--//投标满-->
+    <?php } ?>
+
+  </div>
+</div>

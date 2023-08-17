@@ -1,0 +1,100 @@
+<extend name="./app/Tpl/Public/base_hfhg.html"/>
+<block name="title">填写代理人信息</block>
+<block name="keywords">机构理财信息填写,鑫合汇</block>
+<block name="description">机构理财信息填写,鑫合汇</block>
+<block name="body">
+  <div class="institutionInfo fixed">
+  	<if condition="$getorginfo['proposer'] == 1">
+	  	<div class="institutionStepL">
+	  		<div class="institutionStepR"></div>
+	  		<div class="bigGreenR bigGreenR1"></div>
+	  	</div>
+	  	<div class="institutionStepLb">
+	  		<div class="institutionStepRb institutionStepRbd3 fl"></div>
+	  	</div>
+	  	<ul class="institutionSfont font18">
+	  		<li class="li01 fl current">填写机构信息</li>
+	  		<li class="li02 fl current">填写法定代表人信息</li>
+	  		<li class="li03 fl">确认填写信息</li>
+	  		<li class="li04 fl">等待审核</li>
+	  	</ul>
+  	<!-- proposer == 1 为代理人 -->
+		<elseif  condition="$getorginfo['proposer'] == 2" />
+	  	<div class="institutionStepL institutionStepLd">
+	  		<div class="bigGreenR bigGreenR1"></div>
+	  	</div>
+	  	<div class="institutionStepLb institutionStepLbd">
+	  		<div class="institutionStepRb institutionStepRbd institutionStepRbd3 fl"></div>
+	  	</div>
+	  	<ul class="institutionSfont font18">
+	  		<li class="li01 li01d fl current">填写机构信息</li>
+	  		<li class="li02 fl current">填写法定代表人信息</li>
+	  		<li class="li02 li01d fl current">填写代理人信息</li>
+	  		<li class="li03 fl li02d">确认填写信息</li>
+	  		<li class="li04 fl">等待审核</li>
+	  	</ul>
+  	</if>
+  	<form action="{:U('Account/User/doInfoStep3')}" method="post" id="form_infoStep">
+		  <ul class="formList institForm fl">
+				<li>
+					<label for="" class="li-label-name">代理人归属地</label>
+					<span class="li-span-con">
+						<div class="moSelectBox moSelectBox270" data-dropDown data-name="status">
+              <span class="selectValue" data-label><span>中国大陆</span><!-- <em class="jianDown"></em> --></span>
+              <!-- <div class="selectPop" data-select>
+                <ul class="selectList">
+                  <li data-value="0">中国大陆</li>
+                </ul>
+              </div> -->
+            </div>
+            <input type="hidden" value="中国大陆" name="agent_representative_land" />
+					</span>
+				</li>
+				<li>
+					<label for="" class="li-label-name">代理人真实姓名</label>
+					<span class="li-span-con">
+						<input valid="required" value="{$getorginfo['agent_representative_realname']}" type="text" name="agent_representative_realname" class="inputCommon mr10">
+					</span>
+				</li>
+				<li>
+					<label for="" class="li-label-name">身份证号码</label>
+					<span class="li-span-con">
+						<input value="{$getorginfo['agent_representative_personcode']}" valid="required" name="agent_representative_personcode" type="text" class="inputCommon mr10">
+					</span>
+				</li>
+				<li class="fixed frompop yelOrg frompop2"><i class="icon-note-heart"></i> 身份证号码由18位数字（或含字母）组成<br/>&emsp;&emsp;目前仅支持二代身份证，不支持临时身份证</li>
+				<li>
+					<label valid="id@stamp_personcode_front_agent" valid-msg-options='{"offset":180}' class="li-label-name">加盖公章的身份证正面</label>
+					<span class="li-span-con addprelative">
+						<a id="uploadifyFront" href="javascript:;" class="upBtns font14 tac inline-block j-uploadify">点击上传</a>
+						<input value="{$getorginfo['stamp_personcode_front_agent']}" valid="required" type="hidden" name="stamp_personcode_front_agent" />
+					</span>
+				</li>
+				<li>
+					<label valid="id@stamp_personcode_back_agent" valid-msg-options='{"offset":180}' class="li-label-name">加盖公章的身份证反面</label>
+					<span class="li-span-con addprelative">
+						<a id="uploadifyBack" href="javascript:;" class="upBtns font14 tac inline-block j-uploadify">点击上传</a>
+						<p class="requirePop font12">证件要求：<br/>
+							<span class="yelOrg">必须为清晰彩色原件扫描件或数码照</span>，图片大小不超过<span class="yelOrg">2M</span>
+						</p>
+						<input value="{$getorginfo['stamp_personcode_back_agent']}" valid="required" type="hidden" name="stamp_personcode_back_agent" />
+					</span>
+				</li>
+				<li class="fixed btnSelects">
+					<a href="{:U('Account/User/infoStep2')}" class="backStep inline-block tac blue fr">上一步</a>
+					<label for="" class="button-common-blue button-bluew200 fr"><button type="submit" id="formSubmit" class="btns">下一步</button></label>
+				</li>
+			</ul>
+		</form>
+		<div class="institFormR institFormR2 fr">
+			<div class="UpimageSh">
+				<img src="/public/images/institutionDemo/institutionDemoB02_03.png" alt="">
+				<div class="font14"><em class="classBg"></em><p class="tac">身份证样本(正面)</p></div>
+			</div>
+			<div class="UpimageSh UpimageSh2">
+				<img src="/public/images/institutionDemo/institutionDemoB01_03.png" alt="">
+				<div class="font14"><em class="classBg"></em><p class="tac">身份证样本(反面)</p></div>
+			</div>
+		</div>
+  </div>
+</block>

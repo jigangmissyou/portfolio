@@ -1,0 +1,89 @@
+<!--如果是速汇通类型的数据,就返回新模板add by 001181-->
+<if condition="$prjInfo['prj_type'] eq 'H' ">
+  <include file="ajaxBaseInfoSDT" />
+  <?php exit();?>
+</if>
+
+<!-- 如果是车贷执行车贷的模板 -->
+<if condition="$car_loan">
+    <include file="ajaxBaseInfoCAR" />
+    <?php exit();?>
+</if>
+
+<if condition="$bill">
+    <include file="ajaxBaseInfoBILL" />
+    <?php exit();?>
+</if>
+
+<if condition="empty($prjInfo['zhr_apply_id']) && !$prjInfo['act_prj_ext']['is_xlb'] && !$prjInfo['act_prj_ext']['is_jjs']">
+    <p style="padding-left:5px;border-bottom: #ebebeb 1px solid;">本项目为保理公司提供的保理项目</p>
+</if>
+
+
+<if condition="!empty($prjInfo['act_prj_ext']['is_jjs'])">
+    <if condition="!empty($prjInfo['act_prj_ext']['jjs_product_desc'])">
+    <dl class="firstdl">
+        <h4>产品说明</h4>
+        <p>
+            {$prjInfo['act_prj_ext']['jjs_product_desc']}
+        </p>
+    </dl>
+    </if>
+    <if condition="!empty($prjInfo['act_prj_ext']['jjs_partner_intro'])">
+    <dl class="firstdl">
+        <h4>合作方介绍</h4>
+        <p>
+            {$prjInfo['act_prj_ext']['jjs_partner_intro']}
+        </p>
+    </dl>
+    </if>
+</if>
+
+
+<if condition="!empty($prjInfo['act_prj_ext']['product_desc'])">
+<dl class="firstdl">
+    <if condition="!empty($prjInfo['act_prj_ext']['product_desc']) && $prjInfo['act_prj_ext']['is_jjs'] == '0'">
+        <h4><!-- <i class="icon_Greyinfo"></i> -->产品说明</h4>
+    </if>
+    <if condition="!empty($prjInfo['act_prj_ext']['product_desc']) && $prjInfo['act_prj_ext']['is_jjs'] == '1'">
+        <h4>基础资产说明</h4>
+
+    </if>
+    <if condition="!empty($prjInfo['act_prj_ext']['product_desc'])">
+        <p>
+            {$prjInfo['act_prj_ext']['product_desc']}
+        </p>
+    </if>
+    <if condition="!empty($prjInfo['act_prj_ext']['pc_link'])">
+        <a href="{$prjInfo['act_prj_ext']['pc_link']}" class="blue">详见产品介绍</a>
+    </if>
+</dl>
+</if>
+<!-- 借款人信息 -->
+<include file="view_borrower_info" />
+
+<!-- 基本信息 -->
+<?php D('Financing/Prj'); ?>
+<dl class="firstdl">
+    <if condition="!empty($prjInfo['act_prj_ext']['prj_intro']) && !$prjInfo['act_prj_ext']['is_xlb']">
+        <h4><!-- <i class="icon_Greyinfo"></i> -->项目简介</h4>
+        <p>
+            {$prjInfo['act_prj_ext']['prj_intro']|nl2br}
+        </p>
+    </if>
+    <h4><!-- <i class="icon_Greyinfo"></i> -->资金用途</h4>
+    <p>
+        {$prjInfo['ext']['money_using']|nl2br}
+    </p>
+    <h4><!-- <i class="icon_Greyinfo"></i> -->还款来源</h4>
+    <p>    
+        {$prjInfo['ext']['repay_origin']|nl2br}
+    </p>
+</dl>
+
+<!-- 证书展示 start -->
+<include file="view_img"/>
+<!-- 证书展示 end  -->
+
+<!-- bbs相关 开始 已删除   模板 view_baseinfo_bbs-->
+<!-- bbs相关 结束 -->

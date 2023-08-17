@@ -1,0 +1,47 @@
+<div class="grid_h220 grid_all zirong_bottom_lanse">
+  <dl class="list">
+    <dt><span class="ft14">企业基本信息</span></dt>
+    <?php if($corpInfo['register_year']): ?>
+    <dd>
+      <span class="fl">注册年限</span>
+      <span class="fr"><?php echo $corpInfo['register_year'];?>年</span>
+    </dd>
+    <?php endif;?>
+    <?php if($corpInfo['register_capital']): ?>
+    <dd class="odd">
+      <span class="fl">注册资金</span>
+      <span class="fr"><?php echo $corpInfo['register_capital'].$corpInfo['register_year_unit'].$corpInfo['register_year_currency'];?></span>
+    </dd>
+    <?php endif;?>
+    <?php if($corpInfo['trade_name']): ?>
+    <dd>
+      <span class="fl">所属行业</span>
+      <span class="fr"><?php echo $corpInfo['trade_name'];?></span>
+    </dd>
+    <?php endif;?>
+    <?php if($corpInfo['main_business']): ?>
+    <dd class="odd">
+      <span class="fl">主营业务</span>
+      <span class="fr"><?php echo $corpInfo['main_business'];?></span>
+    </dd>
+    <?php endif;?>
+    <?php if($corpInfo['opt_overview']): ?>
+    <dd>
+      <span class="fl">经营情况</span>
+      <span class="fr"><?php echo $corpInfo['opt_overview'];?></span>
+    </dd>
+    <?php endif; ?>
+    <?php if($applyInfo['legal_info']): ?>
+    <dd>
+      <span class="fl">涉诉情况</span>
+      <span class="fr"><?php echo $applyInfo['legal_info'];?></span>
+    </dd>
+    <?php endif; ?>
+    <?php if($applyInfo['credit_record']): ?>
+    <dd>
+      <span class="fl">征信记录</span>
+      <span class="fr"><?php echo $applyInfo['credit_record'];?></span>
+    </dd>
+    <?php endif; ?>
+  </dl>
+</div>

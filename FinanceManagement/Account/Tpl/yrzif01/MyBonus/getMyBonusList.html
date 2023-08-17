@@ -1,0 +1,277 @@
+<extend name="./app/Tpl/Public/base_user.html"/>
+<block name="title">我的奖励</block>
+<block name="keywords"></block>
+<block name="description"></block>
+<block name="script">
+    <script>MYDATEARR = [];</script>
+</block>
+<block name="body">
+    <div class="mask dn"></div>
+    <div class="container-inner mt20">
+        <include file="./app/Tpl/Account/userMyBonusSider.html"/>
+
+        <!--1 红包  2 满减券  3 加息券  4 理财金-->
+        <?php if ($bonus_type == 1) { ?>
+            <form action="{:U('Account/MyBonus/ajaxJavaGetMyBonusList')}" ajax="1"
+                  ajax-after="ajaxAfter_Account_MyBonus_ajaxJavaGetMyBonusList" method="post"
+                  id="formId_Account_MyBonus_ajaxJavaGetMyBonusList"
+                  ajax-before="ajaxBfore_Account_MyBonus_ajaxJavaGetMyBonusList" ajax-datatype="html">
+                <input type="hidden" name="p" value="1"/>
+                <input type="hidden" name="usedStatus" value="6"/>
+            </form>
+        <?php } else if ($bonus_type == 2) { ?>
+            <form action="{:U('Account/MyBonus/ajaxGetMyCouponsList')}" ajax="1"
+                  ajax-after="ajaxAfter_Account_MyBonus_ajaxGetMyCouponsList" method="post"
+                  id="formId_Account_MyBonus_ajaxGetMyCouponsList" ajax-datatype="html">
+                <input type="hidden" name="p" value="1"/>
+                <input type="hidden" name="usedStatus" value="1"/>
+            </form>
+        <?php } else if ($bonus_type == 4) { ?>
+            <form id="lcjajax" action="{:U('Account/MyBonus/getJavaMyLcjList')}" ajax="1"
+                  ajax-after="ajaxAfter_Account_MyBonus_getJavaMyTcjList" method="post"
+                  id="formId_Account_MyBonus_getJavaMyTcjList" ajax-datatype="html">
+                <input type="hidden" name="p" value="1"/>
+                <input type="hidden" name="usedStatus" value="1"/>
+            </form>
+            <!--<form id="lcjajax" action="{:U('Account/TyjBonus/getMyTyjBonus')}" ajax="1" ajax-after="ajaxAfter_Account_TyjBonus_getMyTyjBonus" method="post" id="formId_Account_TyjBonus_getMyTyjBonus" ajax-datatype="html">
+                <input type="hidden" name="p" value="1"/>
+                <input type="hidden" name="usedStatus" value="1"/>
+            </form>-->
+        <?php } else if ($bonus_type == 3) { ?>
+            <form action="{:U('Account/MyBonus/ajaxGetRateCouponsList')}" ajax="1"
+                  ajax-after="ajaxAfter_Account_MyBonus_ajaxGetRateCouponsList" method="post"
+                  id="formId_Account_MyBonus_ajaxGetRateCouponsList" ajax-datatype="html">
+                <input type="hidden" name="p" value="1"/>
+                <input type="hidden" name="usedStatus" value="1"/>
+            </form>
+        <?php } ?>
+
+
+        <div id="maxbox" class="main_area body-frame">
+            <div id="topbox" class="grid_list p20 " style="padding-bottom: 0px">
+                <div class="class_box">
+                    <div class="myRedPackets" id="application_type">
+                        <a id="ajaxGetMyBonusList"
+                           href="{:U('Account/MyBonus/getMyCouponsList')}" <?php if ($bonus_type == 2) { ?> class="cur arrowcur" <?php } ?>>
+                            <i class="icon-full-cut"></i>满减券<em class="textfull-cut">可用：{$my_prize.moneyCoupons}元</em>
+                        </a>
+                        <a id="ajaxGetMyBonusList"
+                           href="{:U('Account/MyBonus/getJavaMyBonusList')}" <?php if ($bonus_type == 1) { ?> class="cur arrowcur" <?php } ?>>
+                            <i class="icon-reward"></i>红包<em class="textreward">可用：{$my_prize.restAmounts}元</em>
+                        </a>
+                        <a id="ajaxGetMyBonusList"
+                           href="{:U('Account/MyBonus/getRateCouponsList')}" <?php if ($bonus_type == 3) { ?> class="cur arrowcur" <?php } ?>>
+                            <i class="icon-add"></i>加息券<em class="textadd">可用：{$my_prize.unuse_rate}张</em>
+                        </a>
+                        <a id="ajaxGetMyBonusList"
+                           href="{:U('Account/MyBonus/getJavaMyLcj')}" <?php if ($bonus_type == 4) { ?> class="cur arrowcur" <?php } ?>>
+                            <i class="icon_financial_gold"></i>专享理财金<em
+                                class="textgold">理财金：<?php if ($my_prize['lcj_money']) {
+                                    echo $my_prize['lcj_money'];
+                                } else {
+                                    echo '0';
+                                } ?>元</em>
+                        </a>
+                        <!--<a id="ajaxGetMyBonusList" href="{:U('Account/TyjBonus/index')}" class="cur arrowcur">
+                <i class="icon_financial_gold"></i>专享理财金<em class="textgold">理财金：<?php /*if($my_prize['tyj_money']){ echo $my_prize['tyj_money'];}else{echo '0.00';}*/ ?>元</em>
+            </a>
+  	    </div>-->
+                    </div>
+
+                    <!--红包 -->
+                    <?php if ($bonus_type == 1) { ?>
+                        <div class="statusMenus">
+                            <a class="myBonus-see" href="javascript:;" event-click="ajaxGetBonus" post-status="6">可使用（{$money}元）</a>
+                            <a href="javascript:;" event-click="ajaxGetBonus" post-status="7">已用完（{$use_bonus}元）</a>
+                            <a style="border-right:none" href="javascript:;" event-click="ajaxGetBonus" post-status="3">已过期（{$expire_bonus}元）</a>
+
+                            <a class="rules" href="javascript:;" event-mouseenter="showHongbaoRule"
+                               event-mouseleave="hideHongbaoRule">使用规则</a>
+                            <em class="em" style="display:none" id="hongbao-rule">1.
+                                每次投资可使用的红包金额为投资金额的一定比例，见红包上的“使用比例”，单个项目多次投资可多次使用，无使用上限。
+                                举例：若您有金额50元，使用比例为1%的红包，想进行投资金额为2000元的投资，您可使用的红包金额为2000*1%，即20元，完成这笔投资，只需扣除您账户余额1980元，此时该红包金额余30元。<br/>
+                                2.红包可叠加使用，不可与满减券、加息券等奖励共同使用。
+                                <br/>
+                                3.红包有效期见红包“有效期”。<i style="display:none">最终解释权归鑫合汇所有</i>
+                            </em>
+                        </div>
+                    <?php } ?>
+
+                    <!-- 满减券 -->
+                    <?php if ($bonus_type == 2) { ?>
+                        <div class="statusMenus myBonusListTop">
+                            <div class="font14">
+                                <!-- <em class="act-hb-icon act-mjq-icon"></em>满减券余额:&emsp;&emsp;￥<span class="red font30">{$money}</span> -->
+                                <a class="rules" href="javascript:;" event-mouseenter="showRule"
+                                   event-mouseleave="hideRule">使用规则</a>
+
+                                <a class="myBonus-see" href="javascript:;" event-click="ajaxGetFullCoupons"
+                                   post-status="1">未使用（{$money}元）</a>
+                                <a href="javascript:;" event-click="ajaxGetFullCoupons" post-status="2">已用完（{$use_bonus}元）</a>
+                                <a style="border-right:none" href="javascript:;" event-click="ajaxGetFullCoupons"
+                                   post-status="3">已过期（{$expire_bonus}元）</a>
+
+                                <em class="em" style="display:none" id="rule">1.投资项目时，须满足指定的项目期限及投资金额，才可使用满减券
+                                    <br/>2.使用时直接充当投资金额（比如充值1990即可用2000-10元券，投资金额为2000）
+                                    <br/>3.一次投资只可使用一张满减券
+                                    <br/>4.满减券不可与红包、加息券等其它奖励共同使用
+                                    <i style="display:none">最终解释权归鑫合汇所有</i>
+                                </em>
+                            </div>
+                        </div>
+
+                    <?php } ?>
+
+                    <!-- 加息券 -->
+                    <?php if ($bonus_type == 3) { ?>
+                        <div class="myBonusListTop statusMenus">
+                            <div class="font14">
+                                <a class="rules" href="javascript:;" event-mouseenter="showRule"
+                                   event-mouseleave="hideRule">使用规则</a>
+
+                                <a class="myBonus-see" href="javascript:;" event-click="ajaxGetRateCoupons"
+                                   post-status="1">未使用（{$unuse_rate}张）</a>
+                                <a href="javascript:;" event-click="ajaxGetRateCoupons" post-status="2">已使用（{$use_rate}张）</a>
+                                <a style="border-right:none" href="javascript:;" event-click="ajaxGetRateCoupons"
+                                   post-status="3">已过期（{$expire_rate}张）</a>
+
+                                <em class="em" style="display:none" id="rate-rule">1.投资项目时，须满足指定的项目期限才可使用加息券
+                                    <br/>2.使用后以“项目发布利率+加息券利率”计息，项目到期后返还加息券奖励
+                                    <br/>3.一次投资只可使用一张加息券
+                                    <br/>4.加息券可与项目奖励利率共同使用，不可与红包、满减券等其它奖励共同使用<i style="display:none">最终解释权归鑫合汇所有</i>
+                                </em>
+                            </div>
+                        </div>
+                    <?php } ?>
+
+                    <!-- 专享理财金 -->
+                    <?php if ($bonus_type == 4) { ?>
+                        <div class="statusMenus">
+                            <a class="myBonus-see clicktab" href="javascript:;" event-click="ajaxGetBonus"
+                               post-status="1">可使用（{$unuse_lcj}元）</a>
+                            <a class="clicktab" href="javascript:;" event-click="ajaxGetBonus" post-status="2,4,5,6">已用完（{$use_lcj}元）</a>
+                            <a class="clicktab" style="border-right:none" href="javascript:;" event-click="ajaxGetBonus"
+                               post-status="3">已过期（{$expire_lcj}元）</a>
+
+                            <a id="rulecli" class="rules" href="javascript:;" event-mouseenter="showRule"
+                               event-mouseleave="hideRule">使用规则</a>
+                            <em id="rulebox" class="em" style="display:none;position: absolute;top: 142px;left: 508px;">
+                                专享理财金是鑫合汇提供给用户的虚拟货币，通过投资理财金专享理财标，用户可以获得相应的投资回报。<br/>
+                                1、用户获得理财金后，需用于投资体验标，方可获得收益。<br/>
+                                2、理财金投标期满后，获得理财金收益，同时回收理财金。<br/>
+                                3、完成首次项目投资（除体验标项目）后，可提取理财金收益至个人账户。
+                                <br/>
+                                <i style="display:none">最终解释权归鑫合汇所有</i>
+                            </em>
+                        </div>
+                    <?php } ?>
+
+
+                    <div class="" data-flag="ajaxContent_ajaxGetMyBonusList">
+                        <?php if ($msg) {
+                            echo $msg;
+                        } ?>
+                    </div>
+                </div>
+            </div>
+            <!--提取收益片段-->
+            <?php if($bonus_type == 4){?>
+                <div class="lcj-money" style="padding:20px">
+                    <div class="fl lcj-money-l">
+                        <ul>
+                            <li class="earn" style="padding-top: 25px">
+                                <p class="lcj-p">待提取理财金收益：￥<em id="wait-yield"><?php if ($profits) {
+                                            echo $profits;
+                                        } else {
+                                            echo 0;
+                                        } ?>元</em></p>
+                                <?php if( $is_first_order==true){?>
+                                    <p class="margin-btm">（完成首次项目投资后，可提取到期理财金收益）</p>
+                                <?php }else{?>
+                                    <p style="visibility:hidden;" class="margin-btm">（完成首次项目投资后，可提取到期理财金收益）</p>
+                                <?php }?>
+
+                                <label style="margin-top: 5px" for=""
+                                       class="button-common-blue button-small-blue <if condition='$myStayMoney eq 0'>button-common-gray button-invest-list<else/></if>"
+                                       id="get-now"><a id="tiqubox" href="javascript:;" <?php if($status==1){?>style="background-color:#34B9FE;height: 35px;line-height: 35px;width: 30px" data-mark="1"<?php }else{?>style="height: 35px;line-height: 35px;width: 30px"<?php }?> class="btns extearn">去提取</a></label>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            <?php }?>
+        </div>
+    </div>
+
+
+
+    <script type="text/javascript">
+        $(window).ready(function () {
+            $(".user-info").on("mouseover",function(){
+                $("#pop1").show();
+            }).on("mouseout",function(){
+                $("#pop1").hide();
+            });
+            var type = {$bonus_type};
+            var getalldateurl = "/index.php/Account/MyBonus/ajaxGetMyLcjList";
+            var datajson = {
+                "pageSize": 10,
+                "p": 1
+            };
+            var json = {
+                "usedStatus": 1,
+                "pageSize": 8,
+                "p": 1
+            };
+            if (type == 4) {
+                $("#topbox").after("<div id='loadingsyq' class='loading'></div>");/*添加使用券处的loading*/
+                $(".lcj-money").after("<div id='loadingother' class='loading'></div>");/*添加投资列表的loading*/
+                var url = $("#lcjajax").attr("action")
+                $.post(getalldateurl, json, function (html) {
+                    $("#loadingsyq").remove();
+                    $("#topbox").after(html);
+                    $.post(url, datajson, function (e) {
+                        $("#loadingother").remove();
+                        $("#maxbox").append(e);
+                    });
+                });
+            }
+            $("#rulecli").on("hover", function () {
+                $("#rulebox").show();
+            });
+            $("#rulecli").on("mouseout", function () {
+                $("#rulebox").hide();
+            });
+
+            $(".clicktab").on("click", function () {/*使用券tab的切换*/
+                $("#quanbox").remove();
+                if($("#loadingsyq").length!=0){
+                    return;
+                }
+                $("#topbox").after("<div id='loadingsyq' class='loading'></div>");
+                var status = $(this).attr("post-status");
+                $(this).addClass("myBonus-see").siblings().removeClass("myBonus-see");
+                var json = {
+                    "usedStatus": status,
+                    "pageSize": 8,
+                    "p": 1
+                };
+                var getalldateurl = "/index.php/Account/MyBonus/ajaxGetMyLcjList";
+                $.post(getalldateurl, json, function (html) {
+                    $("#loadingsyq").remove();
+                    $("#topbox").after(html)
+                })
+
+            })
+            $("#get-now").on("click",function(){/*去提取*/
+                var isgo=$(this).find("a").attr("data-mark");
+                if(isgo && isgo=="1"){
+                    var url="/index.php/Account/MyBonus/ReceiveLcj";
+                    $.post(url,function(html){
+                        $(".mask").show();
+                        $("#quanbox").append(html);
+                    });
+                }
+            })
+        })
+    </script>
+</block>

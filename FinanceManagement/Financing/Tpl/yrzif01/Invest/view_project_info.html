@@ -1,0 +1,62 @@
+<?php if(C('STATIC_DEBUG')){  // 开发环境 ?>
+<script src="/public/componentjs/highcharts/js/highcharts.js"></script>
+<script src="/public/componentjs/highcharts/js/modules/exporting.js"></script>
+<script src="/public/componentjs/highcharts/js/highcharts-more.js"></script>
+<script src="/public/componentjs/highcharts/js/data.js"></script>
+<?php } else { ?>
+<script src="/public/dist/componentjs/highcharts/js/app/highcharts.spider.min.js"></script>
+<?php } ?>
+<?php 
+  $isPersonal = false;
+  if(!empty($info['zhr_apply_id']) && $info['borrower_type'] == 2){  // 个人直融项目
+    $isPersonal = true;
+  }
+ ?>
+<?php // echo "<pre>"; var_dump($corpScore); ?>
+<form ajax="1" ajax-after="ajaxAfter_View_Project_info" method="post" id="formId_View_Project_info" ajax-datatype="html">
+  <input type="hidden" name="id" value="{$info.id}">
+  <input type="hidden" name="prj_type" value="{$info.prj_type}">
+  <div id="detailSurvey">
+    <div class="investDetailTab">
+      <ul>
+        <?php if(!$is_login){ //未登录?>
+          <li event-click="prjInfoTab" data-url="{:U('Financing/Invest/ajaxBaseInfo',array('corp_id'=>$info['corp_id']))}" data-content="ajaxBaseInfo" class="current"><span class="roundTopborGy">项目详情</span><a class="hrwrite"></a></li>
+          <li event-click="prjInfoTab" data-url="{:U('Financing/Invest/safetyControl',array('prj_id'=>$info['id']))}" data-content="ajaxSecurity"><span class="roundTopborGy">安全保障</span><a class="hrwrite"></a></li>
+        <?php }else{?>
+          <?php if($car_loan){//车贷 ?>
+          <li event-click="prjInfoTab" data-url="{:U('Financing/Invest/ajaxBaseInfo',array('corp_id'=>$info['corp_id']))}" data-content="ajaxBaseInfo" class="current"><span class="roundTopborGy">项目详情</span><a class="hrwrite"></a></li>
+          <li event-click="prjInfoTab" data-url="{:U('Financing/Invest/ajaxBuyLog',array('corp_id'=>$info['corp_id']))}" data-content="ajaxBuyLog"><span class="roundTopborGy">投资记录</span><a class="hrwrite"></a></li>
+          <li event-click="prjInfoTab" data-url="{:U('Financing/Invest/ajaxRepayPlan',array('corp_id'=>$info['corp_id']))}" data-content="ajaxRepayPlan"><span class="roundTopborGy">还款计划</span><a class="hrwrite"></a></li>
+          <?php }else{ //常规?>
+          <li event-click="prjInfoTab" data-url="{:U('Financing/Invest/ajaxBaseInfo',array('corp_id'=>$info['corp_id']))}" data-content="ajaxBaseInfo" class="current"><span class="roundTopborGy">项目详情</span><a class="hrwrite"></a></li>
+          <li event-click="prjInfoTab" data-url="{:U('Financing/Invest/safetyControl',array('prj_id'=>$info['id']))}" data-content="ajaxSecurity"><span class="roundTopborGy">安全保障</span><a class="hrwrite"></a></li>
+          <?php if(!$info['act_prj_ext']['is_xlb'] && !$info['act_prj_ext']['is_jjs']){ ?>
+          <li event-click="prjInfoTab" data-url="{:U('Financing/Invest/getPrjProcedure2',array('prj_id'=>$info['id']))}" data-content="ajaxTimeline"><span class="roundTopborGy">项目进度</span><a class="hrwrite"></a></li>
+          <?php }?>
+          <?php if($bill){ ?>
+          <li event-click="prjInfoTab" data-url="{:U('Financing/Invest/ajaxProDetail',array('corp_id'=>$info['corp_id']))}" data-content="ajaxProDetail" class="current"><span class="roundTopborGy">产品说明</span><a class="hrwrite"></a></li>
+          <?php  }?>
+          <li event-click="prjInfoTab" data-url="{:U('Financing/Invest/ajaxRepayPlan',array('corp_id'=>$info['corp_id']))}" data-content="ajaxRepayPlan"><span class="roundTopborGy">还款计划</span><a class="hrwrite"></a></li>
+          <li event-click="prjInfoTab" data-url="{:U('Financing/Invest/ajaxBuyLog',array('corp_id'=>$info['corp_id']))}" data-content="ajaxBuyLog"><span class="roundTopborGy">投资列表</span><a class="hrwrite"></a></li>
+          <?php } ?>
+        <?php }?>
+      </ul>
+    </div>
+    <div class="detailSurcon">    
+
+      <div class="detailSur_ls dn" data-flag="ajaxBaseInfo"></div>
+      <div class="detailSur_ls dn" data-flag="ajaxProDetail"></div>
+      <div class="detailSur_ls dn" data-flag="ajaxCorpInfo"></div>
+      <div class="detailSur_ls dn" data-flag="ajaxBuyLog"></div>
+      <div class="detailSur_ls dn" data-flag="ajaxSurveyList"></div>
+      <div class="detailSur_ls dn" data-flag="ajaxRepayPlan"></div>
+      <div class="detailSur_ls dn" data-flag="ajaxSignInfo"></div> 
+      <div class="detailSur_ls dn detailSur_ls2" data-flag="ajaxTimeline"></div>  
+      <div class="detailSur_ls dn" data-flag="ajaxSecurity"></div>   
+    </div>
+     <!-- 添加立即投资按钮 -->
+     <div class="nowInvest-but">
+       <a class="inline-block font14 tac" href="javascript:;">立即投资</a>
+     </div>
+  </div>
+</form>

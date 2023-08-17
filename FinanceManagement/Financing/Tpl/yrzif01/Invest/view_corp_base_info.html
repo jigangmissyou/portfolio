@@ -1,0 +1,92 @@
+<dl class="firstdl">
+  <h4><!-- <i class="icon_Greyinfo"></i> -->基本信息</h4>
+  <table class="globaltable">
+    <?php if($corpBaseInfo['register_no']['data']['item_value']){ ?>
+    <tr class="GreyBgcolor">
+      <td class="padLeft30" width="30%">工商注册号</td>
+      <td><?php echo licence_no_view($corpBaseInfo['register_no']['data']['item_value']);?></td>
+    </tr>
+    <?php } ?>
+
+    <?php if($corpBaseInfo['fund_date']['data']['item_value']){ ?>
+    <tr>
+      <td class="padLeft30">成立日期</td>
+      <td>{$corpBaseInfo.fund_date.data.item_value}</td>
+    </tr>
+    <?php } ?>
+
+    <?php if($corpBaseInfo['register_capital']['data']['item_value']){ ?>
+    <tr class="GreyBgcolor">
+      <td class="padLeft30">注册资金</td>
+      <td>
+        <?php echo floatParse($corpBaseInfo['register_capital']['data']['item_value'], $corpBaseInfo['register_capital']['data']['item_unit']); ?>
+      </td>
+    </tr>
+    <?php } ?>
+
+    <?php if($corpBaseInfo['real_capital']['data']['item_value']){ ?>
+    <tr>
+      <td class="padLeft30">实收资本</td>
+      <td><?php echo floatParse($corpBaseInfo['real_capital']['data']['item_value'], $corpBaseInfo['real_capital']['data']['item_unit']); ?></td>
+    </tr>
+    <?php } ?>
+
+    <?php if($corpBaseInfo['corp_scale']['data']['item_value']){ ?>
+    <tr class="GreyBgcolor">
+      <td class="padLeft30" width="20%">企业规模</td>
+      <td>{$corpBaseInfo.corp_scale.data.item_value}</td>
+    </tr>
+    <?php } ?>
+
+    <?php if(!is_null($corpBaseInfo['staff_num']['data']['item_value'])){ ?>
+    <tr>
+      <td class="padLeft30">在职员工数</td>
+      <td>
+        <?php if($corpBaseInfo['staff_num']['data']['item_value']){ echo $corpBaseInfo['staff_num']['data']['item_value'].'人';} else {echo '-';} ?>
+      </td>
+    </tr>
+    <?php } ?>
+
+    <?php if(!is_null($corpBaseInfo['trade_id']['data']['item_value'])){ ?>
+    <tr class="GreyBgcolor">
+      <td class="padLeft30">所属行业</td>
+      <td>{$corpBaseInfo.trade_id.data.item_value}</td>
+    </tr>
+    <?php } ?>
+
+    <?php if($corpBaseInfo['main_business']['data']['item_value']){ ?>
+    <tr>
+      <td class="padLeft30">主营业务</td>
+      <td>{$corpBaseInfo.main_business.data.item_value|nl2br}</td>
+    </tr>
+    <?php } ?>
+
+    <?php if($corpBaseInfo['operate_range']['data']['item_value']){ ?>
+    <tr class="GreyBgcolor">
+      <td class="padLeft30">经营范围</td>
+      <td>{$corpBaseInfo.operate_range.data.item_value|nl2br}</td>
+    </tr>
+    <?php } ?>
+
+    <?php if($corpBaseInfo['corp_develop_period']['data']['item_value']){ ?>
+    <tr>
+      <td class="padLeft30">企业发展阶段</td>
+      <td>{$corpBaseInfo.corp_develop_period.data.item_value}</td>
+    </tr>
+    <?php } ?>
+
+    <?php if($corpBaseInfo['qiye_beijing']['data']['item_value']){ ?>
+    <tr class="GreyBgcolor">
+      <td class="padLeft30">企业背景</td>
+      <td>{$corpBaseInfo.qiye_beijing.data.item_value|nl2br}</td>
+    </tr>
+    <?php } ?>
+
+    <?php if($corpBaseInfo['loan_card_desc']['data']['item_value']){ ?>
+    <tr>
+      <td class="padLeft30">贷款卡逾期次数</td>
+      <td>{$corpBaseInfo.loan_card_desc.data.item_value}</td>
+    </tr>
+    <?php } ?>
+  </table>
+</dl>

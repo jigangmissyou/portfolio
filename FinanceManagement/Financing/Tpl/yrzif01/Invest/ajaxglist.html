@@ -1,0 +1,43 @@
+<ul class="baoProjectList">
+  <?php if(!empty($list)){ foreach ($list as $key => $vo) { // 遍历各个项目 ?>
+  <li>
+    <div class="listTop">
+      <h3 class="baoTitle"><a href="{$vo.url}">{$vo.prj_type_name}-{$vo.prj_name}</a></h3>
+      <span class="classIcons">
+        {$vo.ico}
+      </span>
+    </div>
+    <p class="baoTxt">还款方式：{$vo.repay_way_view}</p>
+    <dl class="baoInfoBox">
+      <dd class="ddItem1">
+        <p class="infoTxt">
+          预期年化收益率
+        </p>
+        {$vo.rate_show}
+      </dd>
+      <dd class="lineWd">&nbsp;</dd>
+      <dd class="ddItem2">
+        <p class="infoTxt">融资规模</p>
+        <p class="infoNub">
+          <em>{$vo.demand_amount_array.num}</em>{$vo.demand_amount_array.unit}
+        </p>
+      </dd>
+      <dd class="lineWd">&nbsp;</dd>
+      <dd class="ddItem3">
+        <p class="infoTxt">融资期限</p>
+        <p class="infoNub" title="{$vo['time_show'][1]}">
+          {$vo['time_show'][0]}
+        </p>
+      </dd>
+    </dl>
+    <include file="ajaxglist_btn"/>
+  </li>
+  <?php }} else { ?>
+  <li>无数据</li>
+  <?php } ?>
+</ul>
+<?php 
+  $pageNavCallback = "ajaxAfter_Financing_Invest_ajaxglist";
+  $noScrollTop = true;  // 点分页不跳到顶部
+ ?>
+<include file="./app/Tpl/Public/pageAjax.html" />

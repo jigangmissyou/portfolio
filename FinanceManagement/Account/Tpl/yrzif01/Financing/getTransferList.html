@@ -1,0 +1,9 @@
+<div hovercard-id="detail">
+    <table class="orderContent">
+    </table>
+</div>
+<script>
+    setTimeout($.get("/Account/Financing/getTransferListA?oid=" + {$oid}, function(res){
+        $(".orderContent").html(res);
+    },"html"),0);   
+</script>

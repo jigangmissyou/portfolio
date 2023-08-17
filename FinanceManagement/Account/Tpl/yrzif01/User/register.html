@@ -1,0 +1,221 @@
+<extend name="./app/Tpl/Public/base_hfhg.html"/>
+<block name="title">用户注册,机构注册-鑫合汇</block>
+<block name="keywords">用户注册,机构注册</block>
+<block name="description">注册为鑫合汇用户，实名认证并绑定邮箱即可进行充值投资。进入注册页面后，填写基本注册信息及手机号，获取并输入手机验证码。</block>
+<block name="style">
+	<style>
+		#container{
+			width:100%;
+		}
+	</style>
+</block>
+<block name="body">
+<div class="register-body">
+	<a href="#" id="laok" target="_blank" userurl="{:U('Account/User/registerSuccess')}" ></a>
+  <div id="seePwdTip" class="seePwdTip dn"><span class="pwdTipText">点击后显示密码</span><em class="OrangeTipBox_Arr1"><em class="OrangeTipBox_Arr2"></em></em></div>
+	<form action="{:U('Account/User/doregister')}" method="post" id="formId_Account_User_Register" novalidate>
+		<input name="uid_type" type="hidden" value='1' />
+		<div class="register-content">
+				<div class="register-formbox">
+	   			<div class="register-tab">
+	   				<div class="tab-list current">个人注册</div>
+	   				<div class="tab-list">机构注册</div>
+	   			</div>
+				<ul class="register-text">
+					<li class="name-pw-error"></li>
+					<li class="mob-phone">
+					  <label class="register-label">手机号码</label>
+						<span class="register-span">
+						<input _type="手机号码" placeholder="正确填写11位手机号码" type="text" class="inputCommon" required name="mobile"></span>
+					</li>
+					<li>
+					<label class="register-label">登录密码</label>
+						<span class="register-span prel" id="pwdWrap">
+						  <i class="icon-eye-pwd j-togglePwd"></i>
+						  <input _type="登录密码" id="password" type="password" class="inputCommon j-password" required name="pwd">
+						</span>
+					</li>
+          <li class="pwdLi dn">
+            <span class="">
+              <em class="pwdBlock weak">弱</em>
+              <em class="pwdBlock middle">中</em>
+              <em class="pwdBlock strong">强</em>
+            </span>
+          </li>
+
+          <li>
+          <label class="register-label">验证码</label>
+					   <span class="register-span authCodeSpan">
+						    <input _type="验证码" name="authCode" type="text" required style="width: 116px;" class="inputCommon"/>
+						    <a href="javascript:;">
+						        <img data-src="{:U('Index/Index/verify',array('version'=>uniqid()))}" src="{:U('Index/Index/verify',array('version'=>uniqid()))}"  class="VerifyCodeImg" width="90"height="36" />
+						    </a>
+					   </span>
+					</li>
+
+					<li>
+					<label class="register-label">手机动态码</label>
+					<span class="register-span">
+	      			<span class="dyCodeSpan">
+					<input _type="手机动态码" type="text" class="inputCommon" required style="width: 116px;margin-right: 5px;" name="code">
+					<a class="button-code-no button-code-reg show_send_btn" href="javascript:;">免费获取</a>
+					<a class="button-code-on button-code-reg time_send" href="javascript:;" style="display:none;">120秒后失效</a>
+	      			</span>
+					<span class="fillNote dn codeTipsArea"><i class="org alM mr10"></i><em class="text">收不到手机动态码，请致电<i class="org ft14 fwb"> 400-821-8616</i></em></span></span>
+		          </li>
+		          <li>
+		             <span class="register-span register-span-np">
+		             	<label class="register-selectRedA personRedA">
+		             	<input class="refer j-refer" type="checkbox" <?php if(!empty($userCode)){echo 'checked="checked"';} ?>/><if condition="$is_gov neq 1">推荐人代码<else/>客户经理代码</if></label>
+				        <span class="redP perRed" style="padding:0 0 10px;">
+				         	<input type="text" tabindex="4" name="hongbaoCode" class="inputCommon refer-input <?php if(empty($userCode)){echo 'dn';} ?>" value="<?php echo $userCode;?>" valid="ajax@{:U('Account/User/checkUserCode')}" />
+				         	<input type="hidden" name="recommend" value="{$recommend}">
+				         	<input type="hidden" name="qrcode" value="{$qrcode}">
+				         	<input type="hidden" name="type" value="{$type}">
+				        </span>
+					  </span>
+		           </li>
+					<li>
+						<span class="register-span register-span-np">
+							<label for="" class="agree"><input checked class="refer registerProtocol" required type="checkbox" />同意<a colorbox="1" href="{:U('Index/Protocol/view',array('id'=>1))}">《鑫合汇注册协议》</a></label>
+							<label for="" class="button-common-blue button-small-blue"><input type="button" ajax-submit name="" value="注 册" class="btns button-yellow-shallow"/></label>
+						</span>
+					</li>
+				</ul>
+				<ul class="register-text organization dn">
+					<li class="register-inst noFocus"><label class=" identity">申请人身份</label>
+						<span id="selectIdentity">
+							<label class="selectInstitu"><input type="radio" value="legal" class="mr5" checked name="proposer">法定代表人</label>
+							<label class="selectInstitu"><input type="radio" value="agent" class="mr5" name="proposer">代理人</label>
+						</span>
+					</li>
+					<li class="name-pw-error"></li>
+					<li class="mob-phone"><label class="register-label">用户名</label>
+						<span class="register-span">
+						<input name="uname" _type="用户名" required type="text" class="inputCommon"></span>
+					</li>
+					<li><label class="register-label">登录密码</label>
+						<span class="register-span prel" id="pwdWrap">
+						  <i class="icon-eye-pwd j-togglePwd"></i>
+						  <input  _type="登录密码" type="password" class="inputCommon j-password" required name="pwd">
+						</span>
+					</li>
+          <li class="pwdLi dn" >
+            <span class="">
+              <em class="pwdBlock weak">弱</em>
+              <em class="pwdBlock middle">中</em>
+              <em class="pwdBlock strong">强</em>
+            </span>
+          </li>
+			    <li><label class="register-label" id="toggleMobile">法人手机</label>
+						<span class="register-span">
+						<input  _type="手机号码" type="text" placeholder="正确填写11位手机号码" name="mobile" class="inputCommon" required></span>
+					</li>
+					<li>
+					   <label class="register-label">验证码</label>
+					   <span class="register-span authCodeSpan">
+						    <input  _type="验证码" type="text" name="authCode" required style="width: 116px;" class="inputCommon"/>
+						    <a href="javascript:;">
+						        <img data-src="{:U('Index/Index/verify',array('version'=>uniqid()))}" src="about:blank" class="VerifyCodeImg"
+	            width="90"height="36" />
+						    </a>
+					   </span>
+					</li>
+					<li>
+					<label class="register-label">手机动态码</label>
+					<span class="register-span">
+	      			<span class="dyCodeSpan">
+					<input _type="手机动态码" type="text" class="inputCommon" required style="width: 116px;margin-right: 5px;" name="code">
+					<a class="button-code-no button-code-reg show_send_btn" href="javascript:;" style="margin-top: 1px;">免费获取</a>
+					<a class="button-code-on button-code-reg time_send" href="javascript:;" style="display:none;">120秒后失效</a>
+	      			</span>
+					<span class="fillNote dn codeTipsArea"><i class="org alM mr10"></i><em class="text">收不到手机动态码，请致电<i class="org ft14 fwb"> 400-821-8616</i></em></span></span>
+		          </li>
+		          <li>
+		             <span class="register-span register-span-np">
+		             	<label class="register-selectRedA toogleRed" hidefocus="hidefocus"><input class="refer j-refer" type="checkbox" <?php if(!empty($userCode)){echo 'checked="checked"';} ?>/>推荐人代码</label>
+				        <span class="redP toogleP" style="padding: 0px 0px 10px;">
+				         	<input type="text" name="hongbaoCode" class="inputCommon refer-input <?php if(empty($userCode)){echo 'dn';} ?>" value="<?php echo $userCode; ?>">
+				         	<input type="hidden" name="recommend" value="" hidefocus="hidefocus">
+				         	<input type="hidden" name="qrcode" value="" hidefocus="hidefocus">
+				         	<input type="hidden" name="type" value="" hidefocus="hidefocus">
+				        </span>
+					  </span>
+		           </li>
+					<li>
+						<span class="register-span register-span-np">
+							<label for="" class="agree"><input checked class="refer registerProtocol" required type="checkbox" />同意<a colorbox="1" href="{:U('Index/Protocol/view',array('id'=>1))}">《鑫合汇注册协议》</a></label>
+							<label for="" class="button-common-blue button-small-blue"><input type="button" ajax-submit name="" value="注 册" class="btns button-yellow-shallow agreeBigBtn"/></label>
+						</span>
+					</li>
+					<li class="register-view dn">
+						<span class="register-span register-span-np" id="agreeXieyi">
+							<input type="checkbox" name="degree" style="display: none;" checked="checked"/>
+								点击“提交注册”意味着同意《<a colorbox="1" href="{:U('Index/Protocol/view',array('id'=>1))}">鑫合汇注册协议</a>》
+						</span>
+					</li>
+				</ul>
+			</div>
+		</div>
+
+		<div style="display:none" id="userListPop">
+			<div id="titlebar">请选择推荐人</div>
+			<div id="jqueryContent" class="ajax_borrower_list" style="width:400px; min-height:100px;max-height:310px;
+			overflow-x:hidden; overflow-y: auto;padding:0">
+				<div class="search">
+					<div class="borrowers" style="overflow:hidden;width:350px;margin:5px 20px" id="tuijianList">
+						<dl style="overflow:hidden"></dl>
+					</div>
+				</div>
+			</div>
+		</div>
+	</form>
+</div>
+	<!-- <div class="nocodeTip nocodeTip-register">
+		  	<p class="noteTipName org"><em class="icon-note-heart"></em>温馨提示：</p>
+		  	<p class="noteTipText noteTipText-register">
+		  		由于地域和运营商短信通道差异，偶尔有用户手机不能及时收到手机动态码的情况发生，为了保证您顺利注册，请拨打<em>客服电话 400-821-8616 </em><br/>也可以添加鑫合汇微信群或者进入社区论坛鑫吧客获取实时协助</p>
+	</div> -->
+  <?php if(C('IS_TDJC_TRACK')){ // 同盾决策 ?>
+  <script type="text/javascript">
+	(function() {
+	    _fmOpt = {
+	        partner: 'xinhehui',
+	        appName: 'xinhehui_web',
+	        token: '<?php echo $fraudmetrix_token;?>'
+	    };
+	    var cimg = new Image(1, 1);
+	    cimg.onload = function() {
+	        _fmOpt.imgLoaded = true;
+	    };
+	    cimg.src = "https://fp.fraudmetrix.cn/fp/clear.png?partnerCode=xinhehui&appName=xinhehui_web&tokenId=" + _fmOpt.token;
+	    var fm = document.createElement('script');
+	    fm.type = 'text/javascript';
+	    fm.async = true;
+	    fm.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'static.fraudmetrix.cn/fm.js?ver=0.1&t=' + (new Date().getTime() / 3600000).toFixed(0);
+	    var s = document.getElementsByTagName('script')[0];
+	    s.parentNode.insertBefore(fm, s);
+	})();
+  </script>
+  <?php }?>
+  <?php if(C('IS_ZXDSP_TRACK')){ //智效DSP ?>
+  <script type="text/javascript">
+  	var _zzot = [];
+	_zzot['zzsiteId'] = "aVBBG0ZvSIF";
+	_zzot['zzId'] = "aVBBG0ZvSIE";
+
+	_zzot['userName'] = "";
+	_zzot['userId'] = "";
+	_zzot['transExt'] = "";
+	(function() {
+		var zz = document.createElement('script');
+		zz.type = 'text/javascript';
+		zz.async = true;
+		zz.src = 'https:' == document.location.protocol ? 'https://ssl.trace.zhiziyun.com/api/order_v2.js' : 'http://static.zhiziyun.com/trace/api/order_v2.js';
+		var s = document.getElementsByTagName('script')[0];
+		s.parentNode.insertBefore(zz, s);
+	})();
+  </script>
+  <?php }?>
+</block>
+<block name="footer"><include file="./app/Tpl/Public/footer_user.html" /></block>

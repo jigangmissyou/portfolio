@@ -1,0 +1,52 @@
+<if condition="$bindBank">
+	<foreach name="bindBank" item="v">
+	  <div class="grid85">
+	    <span class="bank-icons"><img src="/public/images/bank/<?php echo $v['bank'];?>.png" alt="" class="bank-icons-logo"></span><!-- 银行ico -->
+          <div class="bank-title" style="<?php if($v['tx_status'] == 1){echo 'background: #BDBDBD'; }?>">
+              {$v['bank_name']}
+          </div>
+	    <div class="bank-content">
+            <div class="bankCardBg <?php if($v['tx_status'] != 1){echo 'dn';} ?>">
+                该银行卡未进行实名认证，不能提现至该卡，请去绑定银行卡。
+            </div>
+      <?php //dump($v['is_default']);?>
+            <span class="bank-name" style="<?php if($v['tx_status'] == 1){echo 'color: #BDBDBD'; }?>"><if
+                    condition="$v.bind_status eq 2">快捷
+                <else/>
+                储蓄卡
+            </if>
+                <?php if($v['is_default'] == 1){ ?><em class="bank-em-mo blue"
+                                                       style="<?php if($v['tx_status'] == 1){echo 'color: #BDBDBD'; }?>">默认</em><?php }?></span>
+	     <span class="bank_num"
+               style="<?php if($v['tx_status'] == 1){echo 'color: #BDBDBD'; }?>"><?php echo $v['account_no']; ?>
+        <!--data-status 记录绑卡状态  1未实名未绑卡 2实名未绑卡  3易宝绑卡-->
+         </span>
+         <div class="bank-tool js-bank-tool" event-mouseover="bankCard.toggleOperation" event-mouseout="bankCard.toggleOperation">
+            <a href="javascript:;" class="icn-bank-tool">操作</a>
+            <div class="bank-tool-list js-bank-tool-list dn" event-mouseover="bankCard.toggleOperate" event-mouseout="bankCard.toggleOperate">
+             <em class="bank-jiao"></em>
+              <a href="javascript:" class="editCard" event-click="bankCard.showPayPwd" data-args="{$v['id']}" data-status="{$v['bind_status']}">修改</a>
+              <a href="javascript:" class="delCard" data-bankCardId="{$v['id']}" event-click="delCard">删除</a>
+            </div>
+         </div>
+	    </div>
+	  </div>
+	</foreach>
+  <input type="hidden" id="bankCount" value="{$count}"/>
+</if>
+ <div class="grid85 grid-add-blank">
+  <div class="bank-add_bank">
+    <?php 
+      // 设置属性，当disabeld且为机构，则点了没反应
+      if($user['uid_type'] == 2) {
+        $org_calssName = 'blue';
+        if($getorginfo['status'] != 3){
+          $add_bank_state = 'disabled=true';
+          $add_bank_color = 'style="color:#ccc"';
+        };
+      };
+     ?>
+    <a class="bank-add_bank-txt {$org_calssName}" {$add_bank_color} {$add_bank_state } id="saveFundAccount" href="javascript:void(0)" url="{:U('Payment/PayAccount/getFundAccount')}">+</a>
+    <?php ?>
+  </div>
+</div>

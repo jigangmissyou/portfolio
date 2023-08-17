@@ -1,0 +1,115 @@
+<form action="{:U('Payment/PayAccount/saveFundAccount')}" ajax="1" ajax-after="ajaxAfter_Payment_PayAccount_saveFundAccount" method="post" id="formId_Payment_PayAccount_saveFundAccount">
+  <?php
+    // 组织机构
+    $is_org = $uid_type == 2;
+  ?>
+  <input type="hidden" id="is_org" value="{$uid_type}"/>
+  <input type="hidden" name="id" value="{$id}">
+  <div id="titlebar">编辑银行卡</div>
+  <div id="jqueryContent" class="w520">
+    <ul class="formList formList_pop">
+      <li>
+        <label class="li-label-name"><?php if($is_org) { ?>银行开户名<?php } else { ?>持卡人<?php } ?></label><span class="li-span-con"><input type="text" class="inputCommon wid" disabled="" value="{$real_name}"></span>
+      </li>
+      <li><label for="" class="li-label-name">身份证号</label><span class="li-span-con"><input type="text" class="inputCommon wid" disabled="" value="310***2122"></span></li>
+      <li>
+        <label class="li-label-name"><?php if($is_org) { ?>开户银行<?php } else { ?>银行<?php } ?></label>
+        <span class="li-span-con">
+          <select event-change="bankCard.clearSubBank" id="bankList" name="bank" multiselect-options='{"minWidth" : "282"}'  multipleOne="1">
+            <option value="">--请选择--</option>
+            <if condition="!empty($bankList)">
+              <volist name="bankList" id="vo">
+                <option value="{$vo.code}" abbr="{$vo.url}" <?php if($vo['code'] == $data['bank']) echo "selected"; ?>>{$vo.name}</option>
+              </volist>
+            </if>
+          </select>
+         <em data-elem="tips" class="red dn ml5">请选择银行</em>
+      </span>
+      </li>
+      <li>
+        <label class="li-label-name"><?php if($is_org) { ?>机构对公账户<?php } else { ?>银行卡号<?php } ?></label>
+        <span id="bankPlaceholder" class="li-span-con placeholder">
+          <input event-focus="bankCard.hideCardTip" event-blur="bankCard.showCardTip" type="text" name="account_no" class="inputCommon wid" value="{$data['account_no']}">
+          <?php if(!$data['account_no']){ ?>
+          <span id="cardNoTip" class="text" event-click="bankCard.hideCardTip">必须是<em class="orange">{$real_name}</em>的银行卡卡号</span><?php } ?></br>
+          <span data-elem="tips" class="red dn"></span>
+          <?php if($is_org) { ?>
+            <span class="addInstionBank_Pop extra_tips inline-block"><i hovercard="em@orgTips" class="caution"></i>
+              <em hovercard-id="orgTips" class="dn">公账户名需和营业执照上的机构名称保持一致（基本户、一般户均可）<br />不支持信用卡和存折认证
+              </em></span>
+          <?php } ?>
+       </span>
+      </li>
+      <li style="overflow:visible; height:37px;">
+        <label class="li-label-name ">开户城市</label>
+        <span class="li-span-con" style="position:relative; z-index: 5;">
+          <input event-focus="bankCard.getOpenCity" type="text" name="open_city" class="inputCommon wid" value="{$data['province_name']} {$data['city_name']}" readonly> <span data-elem="tips" class="red dn">请选择开户城市</span>
+          <input type="hidden" name="bank_province" <if condition="!empty($data['bank_province'])">value="{$data['bank_province']}"</if> />
+          <input type="hidden" name="bank_city" <if condition="!empty($data['bank_city'])">value="{$data['bank_city']}"</if> />
+          <div id="openCityWrap" class="bankaddPop dn" style="position:absolute;top:36px;left:20px;">
+            <span class="i_close" event-click="bankCard.closeOpenCity">×</span>
+            <div class="citylist" id="openCityList"></div>
+          </div>
+        </span>
+      </li>
+      <li style="overflow:visible; height:37px; ">
+        <label class="li-label-name">开户行</label>
+        <div class="li-span-con" style="position:relative; z-index:2 ">
+          <input event-focus="bankCard.searchOpenBank" type="text" name="sub_bank" class="inputCommon wid" value="{$data['sub_bank']}" readonly> <span data-elem="tips" class="red dn">请选择开户行</span>
+          <input type="hidden" name="sub_bank_id" <if condition='!empty($data[sub_bank_id])'>value="{$data['sub_bank_id']}"</if> />
+          <!--<input type="button" class="btn_search_blue" value="查找">-->
+          <div id="openBankListWrap" class="bankaddPop pr dn" style="position:absolute;top:36px;left:20px;">
+            <span class="i_close" event-click="bankCard.closeOpenBankList">×</span>
+            <div class="p10">
+              输入关键字<input type="text" id="bankKeyWord" style="width:200px;" class="inputCommon" value="" valid="required"><a event-click="bankCard.getOpenBankList" class="button-small-orange ml10" href="javascript:;"><span class="btns">查找</span></a>
+            </div>
+            <div class="scrollwrap bor_t_dot">
+              <ul class="content" style="overflow: auto" id="openBankList">
+              </ul>
+            </div>
+          </div>
+        </div>
+      </li>
+      <li><label for="" class="li-label-name">银行预留手机号</label><span class="li-span-con"><input type="text" class="inputCommon wid" value="1347177112" disabled=""></span></li>
+      <li><label for="" class="li-label-name">验证码</label><span class="li-span-con"><input type="text" class="inputCommon" style="width:140px;"><a href="javascript:;" style="width:122px;" class="button-code-no ml10" id="">免费获取</a></span></li>
+      <li>
+        <label class="li-label-name">&nbsp;</label>
+        <span class="li-span-con">
+          <?php if($is_org) { ?>
+            <em class="extra_tips inline-block addLineheight" style="display:block;margin-left:0;"><i class="caution"></i>如果找不到所在支行，可以选择上一级支行</em>
+          <?php } else { ?>
+            <input name="is_default" type="checkbox" class="mr5 alm" <if condition="$data['is_default'] == 1 || empty($data)">checked="checked"</if>>默认提现至该卡            
+          <?php } ?>
+          <br/>
+           <input name="is_default" type="checkbox" class="mr5 alm"><a href="javascript:;">服务协议</a>
+          </span>      
+      </li>
+      <li class="lastBtns">
+        <label for="" class="li-label-name">&nbsp;</label>
+        <span class="li-span-con">
+          <label class="button-common-blue button-blue-pop" event-click="bankCard.doAdd"><input type="button" class="btns" value="确定"></label><span class="button-common-gray button-gray-pop ml20"><a class="btns" href="javascript:;" event-click="bankCard.cancel">取消</a></span>
+        </span>
+      </li>
+    </ul>
+    <!-- <div class="nocodeTip mt20">
+        <h3 class="noteTipName org"><em class="icon-note-heart"></em>温馨提示</h3>
+        <ol class="noteTipText">
+          <li><strong>多重安全保障</strong></li>
+          <li>1.以上信息仅用于实名身份认证，我们将保证您的信息不泄露。</li>
+          <li>2.资金安全由XXX保险承保，极速全额赔付。</li>
+          <li>3.采用银行卡支付国际安全标准。</li>
+          <li>4.请确保您已在银行柜面预留手机号，如遇不一致提示，请至银行柜面，告知银行工<br/>&nbsp;&nbsp;作人员修改成您常用的手机号。</li>
+          <li>5.开通快捷卡后，您可用其他进行快捷支付。</li>
+          <li>6.请勿绑定他人银行卡。</li>
+        </ol>
+    </div> -->
+  </div>
+</form>
+<!-- 绑定成功 begin -->
+<div class="blank_tb blue f18 tac dn">
+ <img src="/public/images/pop/sprite_global_01.png" alt="">
+ <p class="green font26 mt20 mb28">银行卡绑定成功</p>
+ <p><label for="" class="button-common-blue button-blue-pop"><a href="javascript:;" style="width:120px;" class="btns">确定</a></label></p>
+ <p class="gray96 mt20 font16"><em class="org font20 mr5">5</em>秒后自动转</p>
+</div>
+

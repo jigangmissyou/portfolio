@@ -1,0 +1,435 @@
+<extend name="./app/Tpl/Public/base_user.html"/>
+<block name="title">中新力合旗下投融平台</block>
+<block name="body">
+<include file="./app/Tpl/Account/nav.html" />
+<script>
+  IS_SET_UNAME = true; //<?php echo $user['is_set_uname']; ?>;
+  URL_UPLOADIMGCORP = "{:U('Public/Upload/uploadImgCrop')}";
+  URL_UPLOADAVA = "{:U('Account/User/uploadAva')}";
+  URL_UPLOADPHOTO = "{:U('Account/User/uploadPhoto')}";
+  URL_UPLOADIMG = "{:U('Public/Upload/uploadImg')}";
+  URL_EDITUSERNAME = "{:U('Account/User/editUserName')}";
+  UPDATE_USERINFO = "{:U('Account/User/updateUserInfoNew')}";
+  NEXT_WEEK = {$nextWeekData[0]};
+  NEXT_WEEK_DATA = {$nextWeekData[1]};
+  NEXT_WEEK_COUNT = {$nextWeekData[2]};
+  IS_NULL = {$isNull};
+  IS_PREV_NULL = {$isPreNull};
+  IS_CURRENTDAY_PAYED = {$todayHasRepay};
+  DEFAULT_DATA = <?php echo json_encode($nextRepay); ?>;
+</script>
+<script src="/public/componentjs/highcharts/js/highcharts.js"></script>
+<?php if($is_show_free_notice == 1){?>
+<div class="tdtips mt10 default-pwd-tips" style="color:#333;"><em class="caution"></em><i class="orange_dark">小鑫温馨提醒：</i>您免费提现额度取消啦，乐坏宝宝了，了解更多请点击 <a href="/about/charge" class="orange_dark">查看详情</a><a href="javascript:;" class="org40 fr">知道了</a></div>
+<?php }?>
+<!-- 免费提现额度取消 提醒 end -->
+
+<?php if($CREDITOR_TRANSFER_SHOW){ ?>
+<div class="bond-point"><em class="icon_OrangeSigh anim-css3-icn"></em><i class="orange_dark">债权转让提醒：</i>您所投资的<?php foreach ($CREDITOR_TRANSFER_DATA as $key => $vo) { ?>
+{$vo.CREDITOR_TRANSFER_PRJ_TYPE}-{$vo.CREDITOR_TRANSFER_PRJ_NAME}项目在{$vo.CREDITOR_TRANSFER_REPAY_DATE_F}到期还款，
+<?php } ?>
+为确保您的投资本息能按时到达账户，请务必进行如下操作： <a href="{:U('Account/User/bondDetailed')}" colorbox="1" class="orange_dark">点我查看详情</a></div>
+<?php } ?>
+  <div class="acc_summary fixed">
+    <h2 class="h2tit" style="position: relative"><em class="lineIcon"></em>账户摘要<div class="suTipbox dn" id="suTipbox"><span></span></div></h2>
+    <div class="user_info">
+      <div class="upload_photo" id="popUploadPhoto" style="cursor:pointer;" title="更换头像"><a href="javascript:void(0)">
+        <img src="<?php if(!empty($ava['photo_path'])){echo $ava['photo_path']['attach']['url'];} else {echo "/public/image/default_01.jpg";} ?>" alt="" id="userAvatarImg"><p>上传头像</p></a></div>
+      <?php if($user['is_change_uname']){ ?>
+      <div class="username"><!-- 指引修改用户加class cbg -->
+        <!--<h3 class="bigfont name"><?php echo !$user["is_set_uname"] ? marskName($user['uname'],3,4) : $user['uname']; ?></h3>-->
+          <h3 class="bigfont name"><?php  echo !empty($user["is_id_auth"]) &&$user['real_name']? $user['real_name'] : (!empty($user['is_mobile_auth'])&&$user['mobile']?$user['mobile']:$user['uname']);?></h3>
+        <div class="guide">
+          <span class="i_close">×</span><a class="next nextStep" href="javascript:;">下一步</a>
+          <div class="content">
+            <h3>为了您账户的安全性和隐蔽性，强烈建议您修改当前用户名，修改后的用户名将不可更改！</h3>
+            <p>点击进入<a class="bigfont" id="editUserNameBtn" href="{:U('Account/User/editUserName')}" colorbox="1">用户名修改</a></p>
+            <a class="break" href="javascript:;">跳过新手引导</a>
+          </div>
+        </div>
+      </div>
+      <?php } else { ?>
+      <div class="username">
+        <?php if($user['is_set_uname']){ ?>
+        <h3 class="bigfont name">{$user.uname}</h3>
+        <?php }else{ ?>
+        <div id="setUname01"><a href="javascript:" class="blue" id="setUname">设置用户名</a><a hovercard-options="{&quot;direction&quot;:&quot;up&quot;}" hovercard="div@ct_unameTip" class="icon_unknown"></a><div class="dn" hovercard-id="ct_unameTip"><p class="hoverPinfo">设置用户名后，就可使用用户名登录。<br>用户名设置后不可更改（用户名由中文、数字、字母组成，不能全为数字）</p></div></div>
+        <div class="dn" id="setUname02">
+          <label><input style="width: 90px" type="text" id="uname"/></label>
+          <a href="javascript:" class="blue" id="applySetUname">确定</a>
+        </div>
+        <?php  } ?>
+      </div>
+      <?php } ?>
+      <?php
+        $verifyLevelArr = array(
+          'a'=>'低',
+          'b'=>'中',
+          'c'=>'高'
+        );
+       ?>
+      <!-- <div class="prog_bar"><em style="width:{$safeLevel}%;"></em></div>
+      <p>安全级别：{$safeLevel}%</p> -->
+          <div class="level"><em <?php echo ($verifyLevel == 'a') ? 'class="hight"':""; ?>>低</em><em <?php echo ($verifyLevel == 'b') ? 'class="hight"':""; ?>>中</em><em <?php echo ($verifyLevel == 'c') ? 'class="hight"':""; ?>>高</em>
+            <span class="fixed"></span>
+            <p>安全级别：<i class="green"><?php echo $verifyLevelArr[$verifyLevel] ?></i></p>
+          </div>
+      <div class="authenticate fixed" id="verifyBox">
+      <!-- 实名 -->
+        <div class="certify" id="nameVerify" >
+          <i class="i_realname <?php if(!empty($verifyInfo['is_id_auth'])){echo "light";} ?>"></i>
+          <?php if(empty($verifyInfo['is_id_auth'])){ ?>
+         <!--  <div class="guide">
+            <span class="i_close">×</span><a class="next nextStep" href="javascript:;">下一步</a>
+            <div class="content">
+              <h3>您的账户安全级别还很低，无法充值和理财哦~</h3>
+              <p>提升安全级别可进入<a class="bigfont" href="{:U('Account/User/account')}">实名认证</a></p>
+              <a class="break" href="javascript:;">跳过新手引导</a>
+            </div>
+          </div> -->
+          <div class="ui_poptip">
+            <div class="ui_poptip_arrow">
+              <em>◆</em>
+              <span>◆</span>
+            </div>
+            <div class="ui_poptip_content">您尚未进行实名认证<br/><a class="blue" href="{:U('Account/User/account')}">马上认证</a></div>
+          </div>
+          <?php } else { ?>
+          <div class="ui_poptip">
+            <div class="ui_poptip_arrow">
+              <em>◆</em>
+              <span>◆</span>
+            </div>
+            <div class="ui_poptip_content">您已完成实名认证</div>
+          </div>
+          <?php } ?>
+        </div>
+        <!-- 邮箱 -->
+        <div class="certify" id="emailVerify">
+          <i class="i_mail <?php if(!empty($verifyInfo['is_email_auth'])){echo "light";} ?>"></i>
+          <?php if(empty($verifyInfo['is_email_auth'])){ ?>
+          <div class="guide">
+            <span class="i_close">×</span><a class="next nextStep" href="javascript:;">下一步</a>
+            <div class="content">
+              <h3>您的账户安全级别已经提升，可以享受理财的乐趣了哦~</h3>
+              <p>让账户更加安全可进入<a class="bigfont" href="{:U('Account/User/account')}">邮箱认证</a></p>
+              <a class="break" href="javascript:;">跳过新手引导</a>
+            </div>
+          </div>
+          <div class="ui_poptip">
+            <div class="ui_poptip_arrow">
+              <em>◆</em>
+              <span>◆</span>
+            </div>
+            <div class="ui_poptip_content">您尚未进行邮箱认证<br/><a class="blue" href="{:U('Account/User/account')}">马上认证</a></div>
+          </div>
+          <?php } else { ?>
+          <div class="ui_poptip">
+            <div class="ui_poptip_arrow">
+              <em>◆</em>
+              <span>◆</span>
+            </div>
+            <div class="ui_poptip_content">您已完成邮箱绑定</div>
+          </div>
+          <?php } ?>
+        </div>
+        <!-- 手机 -->
+        <div class="certify" id="mobileVerify">
+          <i class="i_phone <?php if(!empty($verifyInfo['is_mobile_auth'])){echo "light";} ?>"></i>
+          <?php if(empty($verifyInfo['is_mobile_auth'])){ ?>
+          <div class="guide">
+            <span class="i_close">×</span><a class="next nextStep" href="javascript:;">下一步</a>
+            <div class="content">
+              <h3>您的账户安全级别已经提升，可以享受理财的乐趣了哦~</h3>
+              <p>让账户更加安全可进入<a class="bigfont" href="{:U('Account/User/account')}">手机认证</a></p>
+              <a class="break" href="javascript:;">跳过新手引导</a>
+            </div>
+          </div>
+          <div class="ui_poptip">
+            <div class="ui_poptip_arrow">
+              <em>◆</em>
+              <span>◆</span>
+            </div>
+            <div class="ui_poptip_content">您尚未进行手机认证<br/><a class="blue" href="{:U('Account/User/account')}">马上认证</a></div>
+          </div>
+          <?php } else { ?>
+          <div class="ui_poptip">
+            <div class="ui_poptip_arrow">
+              <em>◆</em>
+              <span>◆</span>
+            </div>
+            <div class="ui_poptip_content">您已完成手机绑定</div>
+          </div>
+          <?php } ?>
+        </div>
+        <!-- 支付密码 -->
+        <div class="certify" id="payPwdVerify">
+          <i class="i_pay <?php if(!empty($verifyInfo['is_paypwd_edit'])){echo "light";} ?>"></i>
+          <?php if(empty($verifyInfo['is_paypwd_edit'])){ ?>
+          <div class="guide">
+            <span class="i_close">×</span><a class="next nextStep" href="javascript:;">下一步</a>
+            <div class="content">
+              <h3>您进行提现和转让操作需要使用支付密码，初始的支付密码与登录密码相同哦~</h3>
+              <p>为了资金安全可<a class="bigfont" href="{:U('Account/User/account')}">修改支付密码</a></p>
+              <a class="break" href="javascript:;">跳过新手引导</a>
+            </div>
+          </div>
+          <div class="ui_poptip">
+            <div class="ui_poptip_arrow">
+              <em>◆</em>
+              <span>◆</span>
+            </div>
+            <div class="ui_poptip_content">您尚未修改支付密码<br/><a class="blue" href="{:U('Account/User/account')}">马上修改</a></div>
+          </div>
+          <?php } else { ?>
+          <div class="ui_poptip">
+            <div class="ui_poptip_arrow">
+              <em>◆</em>
+              <span>◆</span>
+            </div>
+            <div class="ui_poptip_content">您已修改过支付密码</div>
+          </div>
+          <?php } ?>
+        </div>
+        <!-- 银行卡 -->
+        <div class="certify" id="bankcardVerify">
+          <i class="i_bankcard <?php if(!empty($verifyInfo['is_bank_auth'])){echo "light";} ?>"></i>
+          <?php if(empty($verifyInfo['is_bank_auth'])){ ?>
+          <div class="guide">
+            <span class="i_close">×</span><a class="next nextStep" href="javascript:;">下一步</a>
+            <div class="content">
+              <h3>提取您账户上的资金需要绑定您本人的银行卡哦~</h3>
+              <p>让资金成功到账需<a class="bigfont" href="{:U('Account/User/account')}">绑定银行卡</a></p>
+              <a class="break" href="javascript:;">跳过新手引导</a>
+            </div>
+          </div>
+          <div class="ui_poptip">
+            <div class="ui_poptip_arrow">
+              <em>◆</em>
+              <span>◆</span>
+            </div>
+            <div class="ui_poptip_content">您尚未进行银行卡绑定<br/><a class="blue" href="{:U('Account/User/account')}">马上绑定</a></div>
+          </div>
+          <?php } else { ?>
+          <?php if($defaultCardId){ ?>
+          <div class="guide">
+            <span class="i_close">×</span><a class="next nextStep" href="javascript:;">下一步</a>
+            <div class="content">
+              <h3>为了您提现更加安全和快捷，需要您修改您之前绑定的银行卡信息~</h3>
+              <p>让资金成功到账需<a class="bigfont" href="{:U('Payment/PayAccount/getFundAccount', Array('id'=>$defaultCardId))}">编辑银行卡</a></p>
+            </div>
+          </div>
+          <?php } ?>
+          <div class="ui_poptip">
+            <div class="ui_poptip_arrow">
+              <em>◆</em>
+              <span>◆</span>
+            </div>
+            <div class="ui_poptip_content">您已完成银行卡绑定</div>
+          </div>
+          <?php } ?>
+        </div>
+        <!-- 安全保护 -->
+        <div class="certify" id="safeVerify">
+          <i class="i_safe <?php if($verifyInfo['sqa_key'] && $verifyInfo['sqa_value']){echo "light";} ?>"></i>
+          <?php if(!$verifyInfo['sqa_key'] || !$verifyInfo['sqa_value']){ ?>
+          <div class="guide">
+            <span class="i_close">×</span><a class="end endStep" href="javascript:;">完成</a>
+            <div class="content">
+              <h3>找回支付密码需要设置安全保护问题哦~</h3>
+              <p>让账户更安全需<a class="bigfont" href="{:U('Account/User/account')}">设置安全保护问题</a></p>
+              <a class="break" href="javascript:;">跳过新手引导</a>
+            </div>
+          </div>
+          <div class="ui_poptip" style="width:140px">
+            <div class="ui_poptip_arrow">
+              <em>◆</em>
+              <span>◆</span>
+            </div>
+            <div class="ui_poptip_content">您尚未设置安全保护问题<br/><a class="blue" href="{:U('Account/User/account')}">马上设置</a></div>
+          </div>
+          <?php } else { ?>
+          <div class="ui_poptip">
+            <div class="ui_poptip_arrow">
+              <em>◆</em>
+              <span>◆</span>
+            </div>
+            <div class="ui_poptip_content">您已设置安全保护问题</div>
+          </div>
+          <?php } ?>
+        </div>
+
+
+      </div>
+    </div>
+    <div class="vline"></div>
+    <?php // echo "<pre>"; var_dump($account); ?>
+    <div class="acc_amount">
+      <p class="baoping green"><a href="javascript:;" class="baoIcn"></a>资金账户由人保财险保险承保<!-- <a class="icon_unknown" hovercard="div@ctl10" hovercard-options='{"direction":"up"}'></a> --></p>
+      <div class="dn" hovercard-id="ctl10"><p class="hoverPinfo">了解更多请点击 <a href="http://bbs.xinhehui.com/thread-1913-1-1.html?t=b5" class="blue" target="blank">查看详情</a></p></div>
+      <div class="hd">
+      <div class="acc_action">
+      <?php if(!$user['finance_uid_type'] && !$guarantor_id){ ?>
+        <a class="btn_fixed_org" id="pushMoney" title="充值"  href="{:U('Payment/PayAccount/rechargePage')}">充 值</a>
+        <?php if(!($account['amount'] + $account['reward_money'] )) { ?>
+        <a class="btn_fixed_white ml10" href="javascript:void(0)" disabled="disabled" title="提现" >提现</a><p class="tip">（沒有可用余额）</p>
+      <?php } else {?>
+      <a class="btn_fixed_white ml10" title="提现" href="<?php echo U('Payment/PayAccount/getApplyCashout'); ?>">提 现</a>
+      <?php }?>
+      <?php } ?>
+      </div>
+      <h3>账户余额<a class="icon_unknown" hovercard="div@ctl3" hovercard-options='{"direction":"up"}'></a> :</h3>
+          <em class="acc_balance">￥ {$account['top_amount_view']}</em><!-- <i>元</i> -->
+      <div class="dn" hovercard-id="ctl3"><p class="hoverPinfo">指账户内投资人可自由支配的资金、活动奖励的资金及冻结资金（不包括投资中的待收利息及待收本金）</p></div>
+      <?php if($account['freeze_money']){ ?>
+      <p>含冻结金额 ￥ {$account['freeze_money']}</p>
+      <?php } ?>
+      <!--<?php if($account['reward_total_view']){ ?>
+      <p>含活动奖励金额 ￥ {$account['reward_total_view']}&nbsp;&nbsp;（可提现￥ {$account['reward_money_view']} 投资后可提现￥ {$account['invest_reward_money_view']}）</p>
+      <?php } ?>-->
+      <?php  if($account['is_merchant'] == '1'){ ?>
+      	 <div>-----</div>
+      	 <h3>冻结还款支付余额:<em class="acc_balance"> ￥ {$account['repay_freeze_view']} </em></h3>
+      	 <?php if(!$user['finance_uid_type'] && !$guarantor_id){ ?>
+      	 <span><label for="" class=""><a class="btn_fixed_org" id=rollout title="转出到可用余额" href="{:U('Payment/PayAccount/showRollout')}">转出</a></label></span>
+      <?php 	}
+			} ?>
+      </div>
+      <div class="bd">
+        <ul class="acc_amount_item acc_amount_old">
+          <li>累计收益
+              <a class="icon_unknown" hovercard="div@ctl0" hovercard-options='{"direction":"up"}'></a>：
+              <div><strong class="orange">￥ {$account['profit_view']}</strong></div>
+              <div class="dn" hovercard-id="ctl0"><p class="hoverPinfo">用户在鑫合汇所获得的所有理财收益以及其他收益<br>（包括但不限于利息补偿，不包括红包奖励及市场活动奖励）-所有已到期变现借款支付的利息</p></div>
+          </li>
+          <li>账户净资产<a class="icon_unknown" hovercard="div@ctl1" hovercard-options='{"direction":"up"}'></a>：
+              <div><strong>￥{$totalAccountView}</strong></div>
+          <div class="dn" hovercard-id="ctl1"><p class="hoverPinfo">账户净资产 = 可用余额（含活动奖励金额）+投标中金额（已冻结）<br/>+提现中金额（已冻结）+待收利息+待收本金-变现借款-变现借款待付利息</p></div>
+          </li>
+          <li><!-- 免费提现额度<a class="icon_unknown" hovercard="div@ctl2" hovercard-options='{"direction":"up"}'></a>： --><div><!-- <strong>￥{$account['free_money_view']}</strong> --></div>
+          <div class="dn" hovercard-id="ctl2"><p class="hoverPinfo">通过投资项目或者理财产品获得，具体请点击<a target="_blank"
+           href="<?php echo C('YRZKB_BBS_URL'); ?>/usc.php?usc_token=<?php echo $usc_token; ?>&referer=http://bbs.xinhehui.com/thread-35-1-1.html" class="blue">了解详情</a></p></div>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <!-- <span class="boxcor cor_lt"></span><span class="boxcor cor_lb"></span><span class="boxcor cor_rt"></span><span class="boxcor cor_rb"></span> -->
+  </div>
+
+ <?php if($lottery_num){ ?>
+  <div id="tdtips" class="tdtips mt10">
+  <i class="caution"></i>恭喜：您在“充”向世界杯的活动中，获得<em class="red" style="font-size:16px;padding:0 5px"><?php echo $lottery_num; ?></em>次抽奖机会，抽奖活动详情
+      <a class="blue" target="_blank" href="{$cupUrl}"
+>点这里</a>  ^_^
+  </div>
+ <?php } ?>
+
+  <div class="fixed grid_list">
+    <div class="grid460 boxbg">
+      <h2 class="h2tit"><em class="lineIcon"></em>资产统计</h2>
+      <ul class="finance_detail fixed">
+        <li>
+          <span class="fl">可用余额
+            <?php if($account['reward_total_view'] > 0 || $account['amount_yao1yao'] > 0) {?>(<?php }?>
+            <?php if($account['reward_total_view'] > 0){?>含活动奖励金额<span hovercard="div@ctl7">￥<?php echo $account['reward_total_view']; ?></span><?php } ?>
+            <?php if($account['reward_total_view'] > 0 && $account['amount_yao1yao'] > 0) {?>，<?php }?>
+            <?php if($account['amount_yao1yao']>0){?><span class="redPacketTips">另送红包<span hovercard="div@ctl7">￥<?php echo $account['amount_yao1yao']; ?></span></span><?php } ?>
+            <?php if($account['reward_total_view'] > 0 || $account['amount_yao1yao'] > 0) {?>)<?php }?>
+          </span>
+          <span class="fr">￥{$account['amount_use_view']}</span>
+        </li>
+        <li><span class="fl">投标中金额<i class="blue">【已冻结】</i></span><span class="fr blue">+ ￥{$account['buy_freeze_money_view']}</span></li>
+        <li><span class="fl">提现中金额<i class="blue">【已冻结】</i></span><span class="fr blue">+ ￥{$account['cash_freeze_money_view']}</span></li>
+        <li><span class="fl">待收利息</span><span class="fr">+ ￥{$sumary['will_profit_view']}</span></li>
+        <li><span class="fl">待收本金</span><span class="fr">+ ￥{$sumary['will_principal_view']}</span></li>
+        <li><span class="fl">变现借款<a class="icon_unknown" hovercard="div@ctl_bx" hovercard-options='{"direction":"up"}'></a></span><span class="fr">- ￥{$sumary['fastcash_principal']}</span><div class="dn" hovercard-id="ctl_bx"><p class="hoverPinfo">用户实际募集的变现金额</p></div>
+        </li>
+        <li><span class="fl">变现借款待付利息<a class="icon_unknown" hovercard="div@ctl_lx" hovercard-options='{"direction":"up"}'></a></span><span class="fr">- ￥{$sumary['fastcash_profit']}</span><div class="dn" hovercard-id="ctl_lx"><p class="hoverPinfo">用户变现产生的借款到期需支付的利息</p></div>
+        </li>
+         </ul>
+      <dl class="acc_sum">
+        <dd><span class="fl">净资产总额</span><span class="fr">￥{$totalAccountView}</span></dd>
+      </dl>
+      <span class="boxcor cor_lt"></span><span class="boxcor cor_lb"></span><span class="boxcor cor_rt"></span><span class="boxcor cor_rb"></span>
+    </div>
+    <div class="grid460 boxbg mlastr0">
+      <h2 class="h2tit"><em class="lineIcon"></em>理财概况</h2>
+      <ul class="finance_detail fixed">
+        <li><span class="fl">投资中</span><span class="fr">{$sumary['investing_prj_count']} | <?php echo humanMoney($sumary['investing_prj_money'],2,false); ?></span></li>
+        <li><span class="fl">待还款</span><span class="fr">{$sumary['willrepay_prj_count']+$sumary['repayIn_count']} | <?php echo humanMoney($sumary['willrepay_prj_money']+$sumary['repayIn_money'],2,false); ?></span></li>
+        <li><span class="fl">还款完毕</span><span class="fr">{$sumary['repayed_prj_count']} | <?php echo humanMoney($sumary['repayed_prj_money'],2,false); ?></span></li>
+      </ul>
+      <dl class="acc_sum">
+        <dt>笔数 | 金额（元）</dt>
+        <dd><span class="fl">共计</span><span class="fr"><em class="count">{$totalInvestCount} </em>| <em class="sum">{$totalInvestView}</em></span></dd>
+      </dl>
+      <span class="boxcor cor_lt"></span><span class="boxcor cor_lb"></span><span class="boxcor cor_rt"></span><span class="boxcor cor_rb"></span>
+    </div>
+  </div>
+  <div class="fixed acc_withdraws" style="height: auto">
+    <div class="chart pr" id="tab_caption">
+      <div class="caption"><a class="cur" href="javascript:;">待回款曲线</a><span class="gap">|</span><a href="javascript:;">待回款日历</a></div>
+      <a href="{:U('Account/Financing/index', Array('status'=>4))}" class="more blue">查看待回款项目明细</a>
+      <div class="bd" style="height: auto; position: relative">
+        <div id="line" style="height: 280px; width: 420px">
+          <!--回款曲线图-->
+        </div>
+        <div id="chartLoading" style="height: 100%; width: 100%; text-align: center; line-height: 240px; position: absolute; left: 0; top: 0; z-index: 999; opacity: 0.5;">Loading...</div>
+        <span id="noPrj" style="display: none; position: relative; top: -150px; left: 140px;">7日内暂无回款项目，<a class="blue" href="{:U('Financing/Invest/plist')}">立即投资&gt;&gt;</a></span>
+      </div>
+      <div class="bd" style="display: none; height: auto">
+        <!--回款日历-->
+        <div id="datepicker"></div>
+      </div>
+    </div>
+    <div class="charge_date">
+      <h3 class="h2tit"><em class="lineIcon"></em>下个回款日期</h3>
+      <div class="bd boxbg fixed">
+        <i class="i_previous no" id="prev_btn" <?php if($isPreNull){ ?>style="visibility: hidden"<?php } ?>></i>
+        <i class="i_next no" id="next_btn" <?php if($isNull){ ?>style="visibility: hidden"<?php } ?>></i>
+        <div class="calendar">
+          <p class="month" id="next_year_month">&nbsp;</p>
+          <p class="day" id="next_day">&nbsp;</p>
+        </div>
+        <ul class="prolist">
+          <li>回款项目<a class="num" data-url="{:U('Account/Financing/index')}"
+                     href="<?php if(!$isNull){ ?>{:U('Account/Financing/index')}<?php }else{ ?>javascript:<?php } ?>" id="next_prj_count" target="_blank">0</a>个
+          </li>
+          <li>收回本息<strong class="sum"><em class="RMB">¥</em><span id="next_fund">0.00</span></strong></li>
+        </ul>
+        <span class="boxcor cor_lt"></span>
+        <span class="boxcor cor_lb"></span>
+        <span class="boxcor cor_rt"></span>
+        <span class="boxcor cor_rb"></span>
+      </div>
+    </div>
+  </div>
+<!-- 手机认证弹层 -->
+<div id="mobileAuthWrap" style="display:none;">
+  <div id="titlebar"></div>
+  <div id="jqueryContent" style="width:380px;">
+    <div class="indent_list li-label-name_w110">
+      <p>请填写您“本人合法获得且真实有效并处于您有效掌控”的手机号码。</p>
+      <ul>
+        <li class="mt20"><label class="li-label-name"><em class="red">*</em>认证手机号码：</label><input type="text" class="inputCommon"></li>
+        <li class="mt20"><label class="li-label-name"><em class="red">*</em>手机动态码：</label><input type="text" class="inputCommon" style="width:180px"><a class="ml10 blue" href="">免费获取</a><!-- <span class="grayB8">59秒后失效</span> --><p class="red">请输入动态码</p></li>
+      </ul>
+      <div class="tc mt20"><span class="btn_bor_blue"><input type="button" class="btns" value="认证"></span></div>
+    </div>
+  </div>
+</div>
+<div id="div_delBankCard" style="display:none;">
+  <div id="titlebar"></div>
+  <div id="jqueryContent">
+    <div class="w520">
+        <ul class="formList formList_pop">
+          <li class="tac">32322323</li>
+          <li class="grid-button-box" style="text-align:center;">
+            <span class=""><a href="javascript:;" class="button-common-orange button-blue-pop mr15"><span event-click="bankCard.cancel" class="btns del-card">知道了</span></a><a href="/Activity/XinPartner3/index" class="button-common-orange button-gray-pop "><span class="btns" >去抽奖</span></a>
+          </span>
+          </li>
+        </ul>
+    </div>
+  </div>
+</div>
+</block>

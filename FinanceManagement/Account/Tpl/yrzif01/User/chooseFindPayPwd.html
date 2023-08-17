@@ -1,0 +1,38 @@
+<extend name="./app/Tpl/Public/base_user.html"/>
+<block name="title">找回支付密码</block>
+<block name="keywords"></block>
+<block name="description"></block>
+
+<block name="body">
+  <div class="container-inner mt20">
+    <include file="./app/Tpl/Account/userMyBonusSider.html" />
+    <div class="main_area body-frame">
+      <div class="p20">
+        <h2 class="h2tit">找回支付密码</h2>
+        <!-- <div class="remind"><h3> <strong class="user">{$uname}</strong>你好！</h3></div> -->
+        <ul class="account-find-pay-pwd">
+<!--           <li>
+            <em class="icon-pay-step one">01</em>
+            <p class="txt txt-s">通过回答安全保护问题找回</p>
+            <span class="account-find-button button-common-blue button-blue-find"><a href="{:U('Account/User/forgetPayPwd1')}" class="btns">点击找回</a></span>
+          </li> -->
+          <li>
+            <em class="icon-pay-step one">01</em>
+            <p class="txt txt-s">通过验证已绑定的邮箱+手机动态码找回</p>
+            <span class="account-find-button button-common-blue button-blue-find"><a href="{:U('Account/User/findPayPwd2')}" class="btns">点击找回</a></span>
+          </li>
+          <li>
+            <em class="icon-pay-step two">02</em>
+            <p class="txt txt-s">通过验证已绑定的银行卡信息+手机动态码找回</p>
+            <span class="account-find-button button-common-blue button-blue-find"><a href="{:U('Account/User/findPayPwd3')}" class="btns">点击找回</a></span>
+          </li>
+          <li>
+            <em class="icon-pay-step three">03</em>
+            <p class="txt"><strong>通过人工方式找回：</strong>您可以发送邮件至<i class="blue">helpdesk@xinhehui.com</i> 申请重置支付密码，请您在邮件中提供：
+              姓名、手机号、本人手持身份证正反面照片，客服会在24小时内处理，或拨打客服电话<i class="blue">400-821-8616</i>。</p>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</block>

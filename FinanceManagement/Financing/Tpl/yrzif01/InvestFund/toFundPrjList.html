@@ -1,0 +1,19 @@
+<extend name="./app/Tpl/Public/base2.html"/>
+<block name="title">中新力合旗下投融平台</block>
+<block name="keywords"></block>
+<block name="description"></block>
+
+<block name="style">
+
+</block>
+
+<block name="body">
+  <include file="nav" />
+  <div class="main_area">
+    <form action="{:U('Financing/InvestFund/fundPrjList')}" method="post" id="ajaxForm_fundPrjList" ajax="1" ajax-after="ajaxAfter_fundPrjList" ajax-datatype="html">
+      <div class="verify_bd" id="fundPrjListContainer">
+      </div>
+      <input type="hidden" name="status" value="0"/>
+    </form>
+  </div>
+</block>

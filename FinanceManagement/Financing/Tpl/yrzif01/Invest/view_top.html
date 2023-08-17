@@ -1,0 +1,53 @@
+<?php
+  // 不同产品类型对应不同的图标
+  if($info['prj_type'] == 'A'){ // 日益升
+    $prjTypeClass = 'proIcon';
+    $listLabel = '日益升';
+    $listUrl = U('Financing/Invest/plist',array('c'=>'2','rand'=>$rand));
+  } else if($info['prj_type'] == 'B'){  // 企易融
+    $prjTypeClass = 'proIcon qiyirong';
+    $listLabel = '年益升';
+    $listUrl = U('Financing/Invest/plist',array('c'=>'4','rand'=>$rand));
+  } else if($info['prj_type'] == 'H'){  // 速兑通
+    $prjTypeClass = 'proIcon suduitong';
+    $listLabel = '速兑通';
+    $listUrl = U('Financing/Invest/plist',array('c'=>'6','rand'=>$rand));
+  } else if($info['prj_type'] == 'F'){  // 月益升
+    $prjTypeClass = 'proIcon jubao';
+    $listLabel = '月益升';
+    $listUrl = U('Financing/Invest/plist',array('c'=>'3','rand'=>$rand));
+  } else if($info['prj_type'] == 'G'){  // 鑫湖一号
+    $prjTypeClass = 'GreenSpeed PinkProsper';
+  } else if($info['prj_type'] == 'I'){  //鑫银票
+    $prjTypeClass = 'proIcon xinyinpiao';
+    $listLabel = '鑫银票';
+    $listUrl = U('Financing/Invest/plist',array('c'=>'8','rand'=>$rand));
+  }
+ ?>
+<!-- <if condition="$is_gov neq 1">
+<div class="naviga_bar"><a href="{:U('Financing/Invest/plist')}" title="投资项目">投资项目</a><em>&gt;</em><a href="{$listUrl}" title="{$listLabel}">{$listLabel}</a><em>&gt;</em>项目详情</div>
+</if> -->
+<div id="projectTitle">
+  <div class="projectTL"><!-- <em class="{$prjTypeClass}"></em> -->
+    {$info.prj_type_name}-
+      <?php if($prj_business_type_name){
+      echo $prj_business_type_name;
+      }?>
+
+    <?php if($activity){ // 活动标 加上活动的url ?>
+      <a href="<?php echo $activity['url']? $activity['url'] : 'javascript:;'; ?>" class="orange">{$info.prj_name}</a>
+    <?php } else {  // 非活动表 直接显示 ?>
+      {$info.prj_name}
+    <?php } ?>
+
+    <span class="classIcons">
+      {$info.icon}
+    </span>
+  </div>
+  <div class="projectTR">
+    <a data-callcalculator="call" href="javascript:" hidefocus="hidefocus">
+      收益计算器<i class="icon_calculator"></i>
+    </a>
+    <i class="hot"></i><!-- <i class="icon_redSigh"></i> -->鑫合汇提醒您：投资有风险！<a href="{:U('Help/Help/education')}" title="投资者保障">[详情]</a>
+  </div>
+</div>

@@ -1,0 +1,598 @@
+<extend name="./app/Tpl/Public/base_user.html"/>
+<block name="title">【{$data.prj_info.prj_type_name} -{$data.prj_info.prj_business_type_name}{$data.prj_info.prj_name}】明细</block>
+<block name="keywords">
+    【{$data.prj_info.prj_type_name} {$data.prj_info.prj_business_type_name}{$data.prj_info.prj_name}】明细
+</block>
+<block name="description">
+    【{$data.prj_info.prj_type_name} {$data.prj_info.prj_business_type_name}{$data.prj_info.prj_name}】明细
+</block>
+<block name="body">
+  <?php
+        if($data['prj_info']['bid_status'] == PrjModel::BSTATUS_REPAID){ $show = 1; }else{ $show = 0; }//是否还款
+        if($data['prj_info']['bid_status'] == 99){ $is_liubiao = 1; }else{ $is_liubiao = 0; } //是否流标
+        if($data['prj_info']['is_pre_sale']) { $is_pre_sale = 1; }else{ $is_pre_sale = 0; } //是否预售
+        if($is_pre_sale && $data['order_info']['pre_sale_status'] == 3) { $is_pre_sale_fail = 1; }else{ $is_pre_sale_fail = 0; } //是否预售失败
+        if($is_pre_sale && $data['order_info']['pre_sale_status'] == 1) { $is_pre_sale_defalut = 1; }else{ $is_pre_sale_defalut = 0; } //是否预售进行中
+        if($data['prj_info']['act_prj_ext']['is_early_repay']) { $is_early_repay = 1; }else{ $is_early_repay = 0; } //是否提前还款
+        if($data['prj_info']['act_prj_ext']['is_early_close']) { $is_early_close = 1; }else{ $is_early_close = 0; } //是否提前结束募集期
+        if(count($data['prj_info']['transfers'])) { $bianxian = 1; }else{ $bianxian = 0; }//是否有变现数据
+        if($data['prj_info']['bid_status'] == 4 || $data['prj_info']['bid_status'] == 8) { $is_dhk = 1; }else{ $is_dhk = 0; }
+        $current_month = (int)date('m',time());$current_year = (int)date('y',time());
+
+  ?>
+
+<div class="container-inner container-colorbg p20 mt20">
+  <div class="financing-info-title">理财投资【{$data.prj_info.prj_type_name} -{$data.prj_info.prj_business_type_name}{$data.prj_info.prj_name}】明细
+    <?php if($data['order_info']['is_appoint']){ ?>
+      <a href="{:U('Index/Protocol/getProtocolView',array('name'=>'appoint'))}" class="button-see-txt r-num" colorbox="1">服务协议</a>
+    <?php } ?>
+    <?php if(($data['prj_info']['prj_type'] != PrjModel::PRJ_TYPE_C) && ($data['prj_info']['bid_status'] > PrjModel::BSTATUS_FULL) && !in_array($v['bid_status'], array(PrjModel::BSTATUS_FAILD, PrjModel::BSTATUS_END)) && !$is_pre_sale_fail && !$is_liubiao) { ?>
+        <?php if($data['prj_info']['act_prj_ext']['is_jjs'] == '1'): ?>
+        <a colorbox="1" href="{:U('Index/Protocol/view',array('id'=>'70', 'prj_id'=>$data['prj_info']['id']))}" data-flag="protocolName" class="button-see-txt" style="right: 100px;">《产品说明书》</a>
+        <a colorbox="1" href="{:U('Index/Protocol/validateView',array('id'=>$data['order_info']['id']))}" data-flag="protocolName" class="button-see-txt">《认购协议》</a>
+        <?php elseif($data['prj_info']['new_viewUrl']): ?>
+        <a href="<?php echo ($data['prj_info']['new_viewUrl']); ?>" target="_blank" class="button-see-txt">合同</a>
+        <?php elseif($data['prj_info']['viewUrl']): ?>
+        <a href="<?php echo ($data['prj_info']['viewUrl']); ?>"  class="button-see-txt" colorbox="1">合同</a>
+        <?php else: ?>
+          <a href="#" title="合同未生成" class="button-see-txt">合同</a>
+        <?php endif; ?>
+    <?php }else{ ?>
+      <a href="#" title="合同未生成" class="button-see-txt">--</a>
+    <?php } ?>
+  </div>
+  <div class="financing-info-head">
+  	<span>【时间】</span><span>明细</span><span>详情</span>
+  </div>
+  <div class="financing-info-list-box">
+  	<div class="finaning-info-axis-box">
+     <!-- begin -->
+      <div class="finaning-info-axis">
+        <em class="axis-begin"></em>
+        <div class="financing-info-time">您于【{$data.order_info.ctime}】</div>
+
+        <div class="financing-info-list financing-info-list-bg">
+          <em class="list-tip"></em><p>
+          <?php if($is_pre_sale) {?>
+            预售投标：
+          <?php }elseif( $data['order_info']['is_appoint']) { ?>
+            自动投标：
+          <?php }else{ ?>
+            投标：
+          <?php } ?>{$data.prj_info.prj_type_name} -{$data.prj_info.prj_business_type_name}{$data.prj_info.prj_name}</p>
+          <p class="num-txt orange"><?php echo $data['order_info']['money_view'];?><em>元</em></p>
+        </div>
+
+        <div class="financing-info-detail">
+          <p>预期年化收益率：<em class="green">{$data.prj_info.rate_view}%
+           <?php
+           if($data['prj_info']['add_rate'] || $data['prj_info']['activitys']['reward_money_rate']){
+               if($data['prj_info']['add_rate']){  echo '+'.$data['prj_info']['add_rate']/10; echo '%加息券'; }
+               if($data['prj_info']['activitys']['reward_money_rate']){ echo '+'.$data['prj_info']['activitys']['reward_money_rate']; echo '%奖励年化利率'; }
+           }
+           ?></em></p>
+          <p>投资期限：<em class="green">{$data.prj_info.time_limit}</em></p>
+        </div>
+        <div class="clearfix"></div>
+          <?php if($is_pre_sale) {?>
+          <?php if($is_pre_sale && (time() >= $data['prj_info']['start_bid_time']) && $is_pre_sale_defalut) {?>
+              <em class="axis-begin"></em>
+              <div class="financing-info-time">【{$data.prj_info.start_bid_time_view}】</div>
+              <div class="financing-info-list">
+                  <em class="list-tip"></em>
+                  <p>预售结束，正常开标</p>
+              </div>
+          <?php } ?>
+          <?php } ?>
+        <?php if($is_pre_sale_fail) {?>
+        <div class="financing-info-cue financing-info-cue-error"><em class="cue-horn"></em>遗憾结束，预售投标失败</div>
+        <?php } ?>
+        <?php if($data['prj_info']['remaining_amount'] && (time() < $data['prj_info']['end_bid_time'])){ ?>
+        <?php if(($is_pre_sale && time() < $data['prj_info']['start_bid_time']) && !$is_pre_sale_fail) { ?>
+        <div class="financing-info-cue orange_dark"><em class="cue-horn"></em>正在预售投标中</div>
+        <?php }elseif(!$is_pre_sale_fail){ ?>
+           <div class="financing-info-cue orange_dark"><em class="cue-horn"></em>投标结束</div>
+        <?php }} ?>
+
+      </div>
+      <?php if(!$is_pre_sale_fail){ ?>
+      <?php if(!$data['prj_info']['jixi_before'] && $data['prj_info']['prj_type'] != H){  ?>
+            <?php if(($data['prj_info']['end_bid_time'] <= time() || $data['prj_info']['remaining_amount'] == 0) && !$is_pre_sale_fail) { ?>
+            <div class="finaning-info-axis">
+            <?php }else{ ?>
+            <div class="finaning-info-axis finaning-info-axis-nobegin">
+                <?php } ?>
+                <em class="axis-begin"></em>
+                <div class="financing-info-time">
+                    <?php if(($data['prj_info']['full_scale_time'] < $data['prj_info']['end_bid_time'] ) && $data['prj_info']['full_scale_time']): ?>
+                    【{$data.prj_info.full_scale_time_view}】
+                    <?php else: ?>
+                    【{$data.prj_info.end_bid_time_view}】
+                    <?php endif;?>
+                </div>
+                <div class="financing-info-list">
+                    <em class="list-tip"></em>
+                    <p>结束募集 <?php if($is_early_close){ echo ' -（可提前结束募集）'; }?></p>
+                </div>
+
+                <?php if($data['prj_info']['procee_time'] && $data['prj_info']['income'] && !$is_pre_sale_fail && $data['prj_info']['prj_type'] != PrjModel::PRJ_TYPE_H && (time() > $data['prj_info']['value_date_time_tamp'])){ ?>
+                <div class="financing-info-detail">
+                    <?php if( $data['prj_info']['income']>0){ ?>
+                    <p>+{$data.prj_info.procee_time}天（募集期限）</p>
+                    <p>募集期占用费：<em class="green">{$data.prj_info.income} 元</em></p>
+                    <?php } ?>
+                </div>
+                <?php } ?>
+                <div class="clearfix"></div>
+                <?php if(!$show && !$is_dhk && !($data['prj_info']['value_date_time_tamp'] < time()) && !$is_pre_sale_fail){ ?>
+                <?php if(!$is_pre_sale_fail && !($is_dhk || $show )  ){  ?>
+                    <?php if($data['prj_info']['remaining_amount'] && !$data['prj_info']['full_scale_time'] && time() > $data['prj_info']['end_bid_time']): ?>
+                        <div class="financing-info-cue orange_dark"><em class="cue-horn"></em>    已募集结束（投标结束）</div>
+                    <?php elseif(!$data['prj_info']['remaining_amount'] && $data['prj_info']['full_scale_time']): ?>
+                        <div class="financing-info-cue orange_dark"><em class="cue-horn"></em>    已募集满（投标结束）</div>
+                    <?php endif; ?>
+                <?php }} ?>
+            </div>
+                <?php if($is_dhk && !($data['prj_info']['value_date_time_tamp'] < time()) && !$is_pre_sale_fail){ ?>
+                <?php if($is_dhk){ ?>
+                <div class="finaning-info-axis">
+                    <?php }else{ ?>
+                    <div class="finaning-info-axis finaning-info-axis-nobegin">
+                        <?php } ?>
+                        <div class="clearfix"></div>
+                        <?php if(($data['prj_info']['bid_status'] == 4 || $data['prj_info']['bid_status'] == 8) && !$data['prj_info']['repay_process'] ){ ?>
+                        <div class="financing-info-cue orange_dark"><em class="cue-horn"></em>待还款</div>
+                        <?php } ?>
+                    </div>
+                    <?php } ?>
+
+              <?php if($data['prj_info']['value_date_time_tamp'] < time()  && !$is_pre_sale_fail){ ?>
+              <div class="finaning-info-axis">
+              <?php }else{ ?>
+              <div class="finaning-info-axis finaning-info-axis-nobegin">
+              <?php } ?>
+                <em class="axis-begin"></em>
+                <div class="financing-info-time">【{$data.prj_info.value_date_time}】
+                </div>
+                <div class="financing-info-list">
+                  <em class="list-tip"></em>
+                  <p>开始计算利息</p>
+                </div>
+                <div class="financing-info-detail"></div>
+                <div class="clearfix"></div>
+
+                  <?php if($is_dhk && ($data['prj_info']['value_date_time_tamp'] < time()) && !$bianxian  && !$is_pre_sale_fail){ ?>
+                  <?php if($is_dhk){ ?>
+                  <div class="finaning-info-axis">
+                      <?php }else{ ?>
+                      <div class="finaning-info-axis finaning-info-axis-nobegin">
+                          <?php } ?>
+                          <div class="clearfix"></div>
+                          <?php if(($data['prj_info']['bid_status'] == 4 || $data['prj_info']['bid_status'] == 8) && !$data['prj_info']['repay_process'] ){ ?>
+                          <div class="financing-info-cue orange_dark"><em class="cue-horn"></em>待还款</div>
+                          <?php } ?>
+                      </div>
+                  <?php } ?>
+                  <?php if(!$show && !$is_dhk && ($data['prj_info']['value_date_time_tamp'] < time()) && !$is_pre_sale_fail){ ?>
+                      <?php if(!$is_pre_sale_fail && !($is_dhk || $show )  ){  ?>
+                      <?php if($data['prj_info']['remaining_amount'] && !$data['prj_info']['full_scale_time'] && time() > $data['prj_info']['end_bid_time']): ?>
+                      <div class="financing-info-cue orange_dark"><em class="cue-horn"></em>    已募集结束（投标结束）</div>
+                      <?php elseif(!$data['prj_info']['remaining_amount'] && $data['prj_info']['full_scale_time']): ?>
+                      <div class="financing-info-cue orange_dark"><em class="cue-horn"></em>    已募集满（投标结束）</div>
+                      <?php endif; ?>
+                  <?php }} ?>
+              </div>
+      <?php }else {  ?>
+                  <?php if($data['prj_info']['value_date_time_tamp'] < time() && !$is_pre_sale_fail){ ?>
+                  <div class="finaning-info-axis">
+                      <?php }else{ ?>
+                      <div class="finaning-info-axis finaning-info-axis-nobegin">
+                          <?php } ?>
+                          <em class="axis-begin"></em>
+                          <div class="financing-info-time">【{$data.prj_info.value_date_time}】
+                          </div>
+                          <div class="financing-info-list">
+                              <em class="list-tip"></em>
+                              <p>开始计算利息</p>
+                          </div>
+                          <div class="financing-info-detail"></div>
+                          <div class="clearfix"></div>
+                          <?php if(!$is_pre_sale_fail && !($is_dhk || $show )  ){  ?>
+                          <?php if(($data['prj_info']['end_bid_time'] <= time() || $data['prj_info']['remaining_amount'] != 0)  && !$is_pre_sale_fail  ) { ?>
+                          <?php if($data['prj_info']['remaining_amount'] && !$data['prj_info']['full_scale_time'] && time() > $data['prj_info']['end_bid_time']){ ?>
+                                <div class="financing-info-cue orange_dark"><em class="cue-horn"></em>    已募集结束（投标结束）</div>
+                              <?php }elseif(!$data['prj_info']['remaining_amount'] && $data['prj_info']['full_scale_time']){ ?>
+                                <div class="financing-info-cue orange_dark"><em class="cue-horn"></em>    已募集满（投标结束）</div>
+                              <?php } ?>
+                          <?php }} ?>
+                      </div>
+                  <?php if($data['prj_info']['prj_type'] != H){?>
+                  <?php if(($data['prj_info']['end_bid_time'] <= time() || $data['prj_info']['remaining_amount'] == 0 ) && !$is_pre_sale_fail ) { ?>
+                  <div class="finaning-info-axis">
+                      <?php }else{ ?>
+                      <div class="finaning-info-axis finaning-info-axis-nobegin">
+                          <?php } ?>
+                          <em class="axis-begin"></em>
+                          <div class="financing-info-time">
+                              <?php if(($data['prj_info']['full_scale_time'] < $data['prj_info']['end_bid_time'] ) && $data['prj_info']['full_scale_time']): ?>
+                                【{$data.prj_info.full_scale_time_view}】
+                              <?php else: ?>
+                                【{$data.prj_info.end_bid_time_view}】
+                              <?php endif;?>
+                          </div>
+                          <div class="financing-info-list">
+                              <em class="list-tip"></em>
+                              <p>结束募集 <?php if($is_early_close){ echo ' -（可提前结束募集）'; }?></p>
+                          </div>
+                          <?php if($data['prj_info']['procee_time'] && $data['prj_info']['prj_type'] != PrjModel::PRJ_TYPE_H && !$is_pre_sale_fail && (time() > $data['prj_info']['value_date_time_tamp'])){ ?>
+                          <div class="financing-info-detail">
+                              <?php if( $data['prj_info']['income']>0){ ?>
+                              <p>+{$data.prj_info.procee_time}天（募集期限）</p>
+                              <p>募集期占用费：<em class="green">{$data.prj_info.income} 元</em></p>
+                              <?php } ?>
+                          </div>
+                          <?php } ?>
+                          <div class="clearfix"></div>
+                          <?php if(!$is_pre_sale_fail && !($is_dhk || $show )  ){  ?>
+                          <?php if(($data['prj_info']['end_bid_time'] >= time() || $data['prj_info']['remaining_amount'] == 0)  && !$is_pre_sale_fail  ){ ?>
+                          <?php if($data['prj_info']['remaining_amount'] && !$data['prj_info']['full_scale_time'] && time() > $data['prj_info']['end_bid_time']){ ?>
+                          <div class="financing-info-cue orange_dark"><em class="cue-horn"></em>    已募集结束（投标结束）</div>
+                          <?php }elseif(!$data['prj_info']['remaining_amount'] && $data['prj_info']['full_scale_time']){ ?>
+                          <div class="financing-info-cue orange_dark"><em class="cue-horn"></em>    已募集满（投标结束）</div>
+                          <?php }}} ?>
+                      </div>
+                      <?php }?>
+                      <?php if($is_dhk && !$is_pre_sale_fail){ ?>
+                      <?php if($is_dhk){ ?>
+                      <div class="finaning-info-axis">
+                          <?php }else{ ?>
+                          <div class="finaning-info-axis finaning-info-axis-nobegin">
+                              <?php } ?>
+                              <div class="clearfix"></div>
+                              <?php if(($data['prj_info']['bid_status'] == 4 || $data['prj_info']['bid_status'] == 8) && !$data['prj_info']['repay_process'] ){ ?>
+                              <div class="financing-info-cue orange_dark"><em class="cue-horn"></em>待还款</div>
+                              <?php } ?>
+                          </div>
+                          <?php } ?>
+
+                      <?php } ?>
+
+
+
+      <?php if($is_liubiao){ ?>
+          <div class="financing-info-cue orange_dark"><em class="cue-horn"></em>遗憾结束，项目流标</div>
+      <?php } ?>
+
+      <?php if($data['prj_info']['is_cancash']){ ?>
+      <?php if($data['prj_info']['cashLight']){  ?>
+          <div class="finaning-info-axis">
+      <?php }else{ ?>
+          <div class="finaning-info-axis finaning-info-axis-nobegin">
+      <?php } ?>
+        <em class="axis-begin"></em>
+        <div class="financing-info-time">【{$data.prj_info.bianxian_time}】</div>
+        <div class="financing-info-list">
+          <em class="list-tip"></em>
+          <p>允许变现</p>
+        </div>
+        <div class="financing-info-detail"></div>
+        <div class="clearfix"></div>
+      </div>
+      <?php } ?>
+      <?php if($data['prj_info']['is_cancash'] && $data['prj_info']['transfers'][0]){ ?>
+      <?php foreach($data['prj_info']['transfers'] as $tk => $tv){ ?>
+        <?php if(($is_dhk || $show) && !$is_liubiao){ ?>
+        <div class="finaning-info-axis">
+        <?php }else{ ?>
+        <div class="finaning-info-axis finaning-info-axis-nobegin">
+        <?php } ?>
+          <em class="axis-begin"></em>
+          <div class="financing-info-time">【{$tv.ctime}】</div>
+          <div class="financing-info-list financing-info-list-bg">
+            <em class="list-tip"></em>
+            <p>变现借款【<em class="orange">{$tv.plan_money}元</em>】</p>
+          </div>
+          <div class="financing-info-detail">
+            <p>速兑通：<em class="green">{$tv.prj_name}</em></p>
+            <p>变现金额：<em class="green">{$tv.plan_money}元</em></p>
+            <p>变现借款利率：<em class="green">{$tv.rate}%</em></p>
+            <p>变现期限：<em class="green">{$tv.time_limit}天</em></p>
+            <p>变现手续费：<em class="green">{$tv.fee_money}元</em></p>
+            <p>变现到账金额：<em class="green">{$tv.curred_money}元</em></p>
+          </div>
+          <div class="clearfix"></div>
+            <?php if($is_dhk && $bianxian && !$is_pre_sale_fail ){ ?>
+            <?php if($is_dhk){ ?>
+            <div class="finaning-info-axis">
+                <?php }else{ ?>
+                <div class="finaning-info-axis finaning-info-axis-nobegin">
+                    <?php } ?>
+                    <div class="clearfix"></div>
+                    <?php if(($data['prj_info']['bid_status'] == 4 || $data['prj_info']['bid_status'] == 8) && !$data['prj_info']['repay_process'] && $tv['last'] ){ ?>
+                    <div class="financing-info-cue orange_dark"><em class="cue-horn"></em>待还款</div>
+                    <?php } ?>
+                </div>
+                <?php } ?>
+        </div>
+      <?php } ?>
+      <?php } ?>
+
+
+    <?php if($data['prj_info']['repay_way'] != 'E') { ?>
+            <?php
+                foreach ($data['prj_info']['repayplan'] as $key=>$arr) {
+            $len = count($arr);
+            for($i=0; $i<$len; $i++){
+            ?>
+        <?php if(!$is_liubiao && $arr[$i]['repay_process']){ ?>
+        <div class="finaning-info-axis">
+        <?php }else{ ?>
+        <div class="finaning-info-axis finaning-info-axis-nobegin">
+        <?php } ?>
+            <em class="axis-begin"></em>
+            <div class="financing-info-time">【<?php echo $arr[$i]['repay_date']; ?>】还款<br/>
+                <?php if($data['prj_info']['value_date_shadow'] == 1){ ?>
+                （ 16:00 -24:00 )到账
+                <?php }else{ ?>
+                （ 预计13:00之前到账）
+                <?php } ?>
+            </div>
+            <div class="financing-info-list financing-info-list-bg">
+                <em class="list-tip"></em>
+                <p> <?php echo "第". ($i + 1) ."期还款到账"; ?>【本金:<em class="orange"><?php echo $arr[$i]['capital_view']; ?>, 利息:<?php echo $arr[$i]['profit_view']; ?></em>】</p>
+            </div>
+            <div class="clearfix"></div>
+            <?php if($data['prj_info']['repay_process_step'] == $i+1 && $data['prj_info']['bid_status'] == 8){ ?>
+                <div class="financing-info-cue orange_dark"><em class="cue-horn"></em>还款中</div>
+            <?php } ?>
+        </div>
+            <?php }}
+     }else{ ?>
+
+          <?php if($show && !$is_liubiao && !$is_pre_sale_fail){ ?>
+          <div class="finaning-info-axis">
+          <?php }else{ ?>
+          <div class="finaning-info-axis finaning-info-axis-nobegin">
+          <?php } ?>
+            <em class="axis-begin"></em>
+            <div class="financing-info-time">【{$data.prj_info.last_repay_date_view}】还款<br/>
+                <?php if($data['prj_info']['value_date_shadow'] == 1){ ?>
+                （ 16:00 -24:00 )到账
+                <?php }else{ ?>
+                （ 预计13:00之前到账）
+                <?php } ?>
+            </div>
+            <div class="financing-info-list financing-info-list-bg">
+                  <em class="list-tip"></em>
+                  <p> 还款到账 【本息收益<em class="orange"><?php if($data['prj_info']['pri_interest_view']/* && !$is_pre_sale_fail*/){ echo $data['prj_info']['pri_interest_view'];}else{echo '--';} ?></em>】</p>
+                  <p><?php if($is_early_repay && !$data['prj_info']['act_prj_ext']['is_extend'] && !$data['prj_info']['act_prj_ext']['extend_day_repayed']){ ?>
+                      （允许提前还款）
+                      <?php } ?>
+                      <?php if($data['prj_info']['act_prj_ext']['is_extend'] && !$is_early_repay){ ?>
+                      <?php if($data['prj_info']['act_prj_ext']['extend_day_repayed']): ?>(已展期{$data.prj_info.act_prj_ext.extend_day_repayed}天) <?php else: ?>（允许展期）<?php endif; ?>
+                    <?php } ?>
+                      <?php   if($data['prj_info']['act_prj_ext']['is_extend'] && $is_early_repay){ ?>
+                      <?php if(!$data['prj_info']['act_prj_ext']['extend_day_repayed']){ ?>
+                      （允许提前还款,
+                      <?php } ?>
+                      <?php if($data['prj_info']['act_prj_ext']['extend_day_repayed']): ?>(已展期{$data.prj_info.act_prj_ext.extend_day_repayed}天)
+                      <?php else: ?> 允许展期）
+                      <?php endif; ?>
+                      <?php } ?>
+                  </p>
+
+            </div>
+
+            <?php if($show && !$is_pre_sale_fail){ ?>
+            <div class="financing-info-detail">
+              <p>已到账</p>
+            </div>
+            <?php } ?>
+            <div class="clearfix"></div>
+          </div>
+       <?php } ?>
+
+<!--加息券-->
+       <?php  if($data['order_info']['incomes']['income_jiaxi']){ ?>
+          <?php if($show){ ?>
+          <div class="finaning-info-axis">
+              <?php }else{ ?>
+          <div class="finaning-info-axis finaning-info-axis-nobegin">
+                  <?php } ?>
+                  <em class="axis-begin"></em>
+                  <div class="financing-info-time">【<?php echo $data['prj_info']['last_repay_date_view']; ?>】还款<br/>
+                      <?php if($data['prj_info']['value_date_shadow'] == 1){ ?>
+                      （ 16:00 -24:00 )到账
+                      <?php }else{ ?>
+                      （ 预计13:00之前到账）
+                      <?php } ?>
+                  </div>
+              <div class="financing-info-list financing-info-list-bg">
+                  <em class="list-tip"></em>
+                  <p> 加息券奖励: <em class="orange"><?php echo humanMoney($data['order_info']['incomes']['income_jiaxi'],2); ?></em></p>
+              </div>
+              <div class="clearfix"></div>
+          </div>
+       <?php } ?>
+<!--加息券End-->
+
+<!--年化利率-->
+       <?php  if($data['order_info']['incomes']['income_reward']){ ?>
+          <?php if($show){ ?>
+          <div class="finaning-info-axis">
+              <?php }else{ ?>
+          <div class="finaning-info-axis finaning-info-axis-nobegin">
+                  <?php } ?>
+                  <em class="axis-begin"></em>
+                  <div class="financing-info-time">【<?php echo $data['prj_info']['last_repay_date_view']; ?>】还款<br/>
+                      <?php if($data['prj_info']['value_date_shadow'] == 1){ ?>
+                      （ 16:00 -24:00 )到账
+                      <?php }else{ ?>
+                      （ 预计13:00之前到账）
+                      <?php } ?>
+                  </div>
+              <div class="financing-info-list financing-info-list-bg">
+                  <em class="list-tip"></em>
+                  <p> 年化利率奖励: <em class="orange"><?php echo humanMoney($data['order_info']['incomes']['income_reward'],2); ?></em></p>
+              </div>
+              <div class="clearfix"></div>
+          </div>
+       <?php } ?>
+<!--年化利率End-->
+
+      <?php if($bianxian) { ?>
+        <?php if($show && !$is_liubiao){ ?>
+        <div class="finaning-info-axis">
+        <?php }else{ ?>
+        <div class="finaning-info-axis finaning-info-axis-nobegin">
+        <?php } ?>
+          <em class="axis-begin"></em>
+          <div class="financing-info-time">【{$data.prj_info.last_repay_date_view}】还款<br/>（16:00-24:00 )到账</div>
+          <div class="financing-info-list financing-info-list-bg">
+            <em class="list-tip"></em>
+              <?php if($data['prj_info']['is_cancash'] && $data['prj_info']['fastrepay']['total']['pri_interest']): ?>
+                <p> 偿还【变现借款<em class="orange">{$data.prj_info.fastrepay.total.pri_interest} 元</em>，利息<em class="orange">{$data.prj_info.fastrepay.total.yield}元</em>】</p>
+              <?php else: ?>
+              <p> 偿还【变现借款<em class="orange">0.00 元</em>，利息<em class="orange">0.00 元</em>】</p>
+              <?php endif; ?>
+
+          </div>
+            <?php if($show){ ?>
+          <div class="financing-info-detail">
+            <p>已偿还变现借款</p>
+          </div>
+            <?php } ?>
+          <div class="clearfix"></div>
+        </div>
+      <?php } ?>
+
+      <?php if($bianxian){ ?>
+      <?php if($show && !$is_liubiao){ ?>
+      <div class="finaning-info-axis">
+      <?php }else{ ?>
+      <div class="finaning-info-axis finaning-info-axis-nobegin">
+      <?php } ?>
+        <em class="axis-begin"></em>
+        <div class="financing-info-time">【{$data.prj_info.last_repay_date_view}】还款<br/>（16:00-24:00 )到账</div>
+        <div class="financing-info-list financing-info-list-bg">
+          <em class="list-tip"></em>
+          <p> 到账结余 【<em class="orange">{$data.prj_info.sdtRest} 元</em>】</p>
+        </div>
+        <div class="financing-info-detail">
+        </div>
+        <div class="clearfix"></div>
+      </div>
+      <?php } ?>
+
+      <?php if($show && !$is_liubiao && !$is_pre_sale_fail){ ?>
+      <div class="finaning-info-axis">
+      <?php }else{ ?>
+      <div class="finaning-info-axis finaning-info-axis-nobegin">
+      <?php } ?>
+        <em class="axis-begin"></em>
+        <div class="financing-info-time"></div>
+        <div class="financing-info-list financing-info-list-bg">
+          <em class="list-tip"></em>
+          <p> 完美结束</p>
+        </div>
+        <div class="financing-info-detail">
+        </div>
+        <div class="clearfix"></div>
+      </div>
+     <!-- end -->
+    <?php }?>
+  	</div>
+  </div>
+  <?php if(!$is_pre_sale_fail){ ?>
+  <div class="financing-info-show-data">
+
+    <?php if($show || $is_dhk || $data['prj_info']['repaytotal']['wait_yield']){ ?>
+        <?php if($show){ ?>
+            <?php if(!$data['prj_info']['repay_total_step']){ ?>
+                <?php if(($data['prj_info']['repay_way'] != PrjModel::REPAY_WAY_E || $bianxian)){ ?>
+                <?php if(!($bianxian && $show)){ ?>
+            <span class="financing-list-span-fl">待收理财收益：</span>
+                <?php }else{ ?>
+            <span class="financing-list-span-fl">已收理财收益：</span>
+                <?php } ?>
+                <?php }else{ ?>
+            <span class="financing-list-span-fl">已收理财收益：</span>
+                <?php } ?>
+            <?php } ?>
+        <?php }else{ ?>
+            <span class="financing-list-span-fl">待收理财收益：</span>
+        <?php } ?>
+        <?php if(!$data['prj_info']['repay_total_step'] || ($data['prj_info']['repay_total_step'] != $data['prj_info']['repay_process_step'])){ ?>
+        <span class="financing-list-span-fr">
+              <?php if($data['prj_info']['repaytotal']['wait_yield']){ ?>
+                <p class="list-txt"><em  class="orange_dark"><?php echo $data['prj_info']['repaytotal']['wait_yield'];  ?></em><i class="orange_dark">元</i> 利息</p>
+                <p><em  class="green"><?php echo humanMoney(($data['order_info']['money']-$data['prj_info']['repaytotal']['repayedCapital']),2,false);  ?>元</em>本金</p>
+              <?php }else{ ?>
+               <p class="list-txt"><em  class="orange_dark"><?php echo humanMoney($data['order_info']['possible_yield'],2,false);  ?></em><i class="orange_dark">元</i> 利息</p>
+                <p><em  class="green"><?php echo humanMoney($data['order_info']['money'],2,false);  ?>元</em>本金</p>
+              <?php } ?>
+        </span>
+      <?php } ?>
+    <?php }else{ ?>
+    <span class="financing-list-span-fl">预期理财收益：</span>
+        <span class="financing-list-span-fr">
+          <p class="list-txt"><em  class="orange_dark"><?php echo humanMoney($data['order_info']['possible_yield'],2,false);  ?></em><i class="orange_dark">元</i> 利息</p>
+          <p><em  class="green"><?php echo humanMoney($data['order_info']['money'],2,false);  ?>元</em>本金</p>
+        </span>
+    <?php } ?>
+
+    <?php } ?>
+    <?php if($data['order_info']['free_tixian_times']): ?>
+
+    <span class="financing-list-span-fl">
+        <?php if($is_dhk || $show): ?>
+        已获理财奖励：
+        <?php else: ?>
+        预期理财奖励：
+        <?php endif; ?>
+    </span>
+      <span class="financing-list-span-fr">
+        <p class="orange_dark list-txt2">免费提现次数{$data.order_info.free_tixian_times}次</p>
+      </span>
+
+    <?php endif; ?>
+    <?php if(($bianxian || ($data['prj_info']['repay_process'] && $data['prj_info']['repay_way'] != PrjModel::REPAY_WAY_E))){ ?>
+    <?php if(!($bianxian && $show)){ ?>
+    <span class="financing-list-span-fl">已获理财收益：</span>
+    <span class="financing-list-span-fr">
+          <p class="list-txt"><em  class="orange_dark">
+              <?php if($bianxian):?>
+                {$data.prj_info.fastrepay.total.pri_interest}</em><i class="orange_dark">元</i>(本金)
+              <?php else: ?>
+                {$data.prj_info.repaytotal.getProfit}</em><i class="orange_dark">元</i> 利息
+              <?php endif; ?>
+          </p>
+          <p><em>
+            <?php if(!$bianxian):?>
+                {$data.prj_info.repaytotal.repayedCapital_view}</em><i class="green">元</i> 本金
+            <?php endif; ?>
+          </p>
+    </span>
+    <?php }} ?>
+    </div>
+    <?php if($bianxian && ($is_dhk || $show)){ ?>
+      <div class="financing-info-show-data">
+      <span class="financing-list-span-fl">
+      <?php if($is_dhk) { ?>
+          变现待偿还借款：
+      <?php }else{ ?>
+          变现已偿还借款：
+      <?php } ?>
+      </span>
+        <span class="financing-list-span-fr">
+          <p class="list-txt"><em  class="green">-{$data.prj_info.fastrepay.total.pri_interest}</em><i class="green">元</i>本金</p>
+          <p><em  class="green">-{$data.prj_info.fastrepay.total.yield}元</em>利息</p>
+          <?php if($show){ ?>
+            <p><em  class="green">-{$data.prj_info.fastrepay.total.fee_money}元</em>手续费</p>
+          <?php } ?>
+        </span>
+      </div>
+    <?php } ?>
+
+</div>
+</block>

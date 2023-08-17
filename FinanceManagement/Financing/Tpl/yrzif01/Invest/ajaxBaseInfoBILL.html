@@ -1,0 +1,53 @@
+<!-- 基本信息 -->
+<dl class="firstdl">
+    <p>本项目为保理公司提供的保理项目</p>
+    <h4><!-- <i class="icon_Greyinfo"></i> -->基本信息</h4>
+    <dd class="mtb20">某企业将上述银行承兑汇票的所有权益作为质押物，通过票据中介公司在鑫合汇理财平台进行融资。鑫合汇团队和票据中介公司已对借款主体进行确认，并委托合作票据托管银行杭州联合银行对质押物进行验票，已办妥查询及托管手续。借款协议已通过法务部仔细审核，项目到期借款人保证按时还款，质押物做全额保证，票据到期后合作银行进行托收。
+    </dd>
+    <dd>{$prjInfo['ext']['money_using']}</dd>
+    <?php if(isset($prjInfo['ext']['repay_origin']) && $prjInfo['ext']['repay_origin']){ ?>
+    <dt>还款来源</dt>
+    <dd>{$prjInfo['ext']['repay_origin']}</dd>
+    <?php } ?>
+    <h4><i class="icon_Greyinfo"></i>保障措施</h4>
+    <dd class="mtb20">1）融资企业合法持有的银行承兑汇票作为质押担保；
+
+        2）所有质押票据均由合作票据托管银行杭州联合银行进行保管和托收，保障了质押票据的安全。
+    </dd>
+    <h4><i class="icon_Greyinfo"></i>法律依据</h4>
+    <dd class="mtb20">银行承兑汇票是由在承兑银行开立存款账户的存款人出票，向开户银行申请并经银行审查同意承兑的，保证在指定日期无条件支付确定的金额给收款人或持票人的票据。
+
+        基于《票据法》无因性原则，承兑行需见票无条件付款。
+
+    </dd>
+</dl>
+
+<!-- 担保信息 -->
+<?php if(!empty($guarantorName) || !empty($prjInfo['addcredit_desc'])){ // 存在担保信息或保障措施说明 ?>
+<dl>
+    <h4><i class="icon_Greyinfo"></i>担保信息</h4>
+    <?php if(!empty($guarantorName)){ // 存在担保人 ?>
+    <dt>担保人</dt>
+    <dd>{$guarantorName}</dd>
+    <?php } ?>
+    <?php if(!empty($prjInfo['addcredit_desc'])){  // 存在保障措施说明 ?>
+    <dt>保障措施说明</dt>
+    <dd>
+        {$prjInfo.addcredit_desc}
+    </dd>
+    <?php } ?>
+</dl>
+<?php } ?>
+
+<!-- 评级信息 开始 -->
+<?php if(!empty($showQuotaChart)){ ?>
+<include file="view_baseinfo_spider" />
+<?php } ?>
+<!-- 评级信息 结束 -->
+
+<!-- 保理相关 开始 -->
+<include file="view_baseinfo_baoli" />
+<!-- 保理相关 结束 -->
+
+<!-- bbs相关 开始 -->
+<include file="view_baseinfo_bbs" />

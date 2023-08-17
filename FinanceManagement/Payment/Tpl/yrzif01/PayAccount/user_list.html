@@ -1,0 +1,31 @@
+<div id="ajax_getUserList">
+    <div id="titlebar"></div>
+    <div id="jqueryContent" style="width:450px;">
+        <div class="fixed">
+            <span class="text">用户名：</span>
+            <input type="text" id="uname" class="ipt_search" />
+            <button data-eventFn="applyUserSearch" class="btn_search_blue">搜索</button>
+        </div>
+        <div class="mt20 mlr15 line_b_dashed">
+            <ul id="userList" class="fixed">
+                <?php if(!empty($list['data'])){ ?>
+                <foreach name="list.data" item="item">
+                <li style="float:left;width:50%;">
+                    <label><input data-eventFn="toggleSelect" data-args="{$item.uname}" type="checkbox" value="{$item.uid}"/>{$item.uname}</label>
+                </li>
+                </foreach>
+                <?php }else{ ?>
+                <li>没有相关数据</li>
+                <?php } ?>
+            </ul>
+            <?php $pageNavCallback = "ajaxAfter_getUserListPaging"; $initPageNav = "false"; ?>
+            <include file="./app/Tpl/Public/pageAjax.html"/>
+        </div>
+        <!--<div id="selectedUser">
+            <label>已选择：</label>
+        </div>-->
+        <div class="tc mt20">
+            <span class="btn_bor_blue"><button data-eventFn="applySelect" class="btns">确定</button></span>
+        </div>
+    </div>
+</div>

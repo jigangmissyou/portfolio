@@ -1,0 +1,47 @@
+<extend name="./app/Tpl/Public/base_user.html"/>
+<block name="title">重新绑定手机</block>
+<block name="keywords"></block>
+<block name="description"></block>
+
+<block name="style">
+  <link href="/public/css/banklogo.css" rel="stylesheet" />
+</block>
+<block name="body">
+<div class="container-inner mt20">
+  <include file="./app/Tpl/Account/userMyBonusSider.html" />
+  <div class="main_area body-frame">
+    <div class="p20">
+      <h2 class="h2tit">更换手机号</h2>
+      <div class="account-edit-mobile">
+        <ul>
+          <li class="li-first current">1 安全验证<span class="edit-jiao"></span></li>
+          <li class="li-other">2 重新绑定<span class="edit-jiao"></span></li>
+        </ul>
+      </div>
+      <form method='post'  action="{:U('Account/User/editMobileView2')}">
+        <ul class="formList account-edit-form">
+          <li>
+            <label class="li-label-name">当前手机号码</label>
+            <span class="li-span-con">{$mobile}</span>
+              <input type="hidden" name="oldMobile" value="{$raw_mobile}">
+          </li>
+          <li>
+            <label class="li-label-name">手机动态码</label>
+            <span class="li-span-con">
+            <input type="text" class="inputCommon" style="width:190px;" value="" name='code' valid="required"/><a href="javascript:;" class="button-code-no button-code-user-set ml10" id="show_send_btn">免费获取</a>
+            <a href="javascript:;" class="button-code-on button-code-user-set ml10" id="time_send" style="display:none">120秒</a>
+          </span>
+          </li>
+          <li class="lastBtns">
+            <label for="" class="li-label-name">&nbsp;</label><span class="li-span-con">
+              <span class="button-common-blue button-blue-w120"><input type="submit" name="" value="下一步" class="btns"></span>
+              <span class="button-common-gray button-gray-w120 ml20"><input type="reset" name="" value="取 消" class="btns"></span>
+            </span>
+          </li>
+        </ul>
+      </form>
+      <p class="account-edit-tip">温馨提示：若您当前手机号码已停止使用，可以发送邮件至 <i class="blue">helpdesk@xinhehui.com</i> 申请更换手机号码，请您在邮件中提供：姓名、手机号、本人手持身份证正反面照片，客服会在24小时内处理，或拨打客服电话<i class="blue">400-821-8616</i></p>
+    </div>
+  </div>
+</div>
+</block>

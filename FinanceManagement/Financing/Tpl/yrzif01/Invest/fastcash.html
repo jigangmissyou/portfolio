@@ -1,0 +1,47 @@
+<extend name="./app/Tpl/Public/base_hfhg.html"/>
+<block name="title">我要理财-项目详情</block>
+<block name="keywords">我要理财</block>
+<block name="description">我要理财</block>
+
+<block name="script">
+  <script>
+  var URL_FINANCING_INVEST_BUY = "{:U('Financing/Invest/buy')}";  // 投资服务
+  var URL_FINANCING_INVEST_BUYSUCCESS = "{:U('Financing/Invest/buySuccess')}";  // 投资服务
+  </script>
+</block>
+
+<block name="body">
+<?php // echo "<pre>"; print_r($info); ?>
+<include file="./app/Tpl/Public/invest-subnav.html" />
+<div class="invest-container">
+<!-- 标题 开始 -->
+<include file="view_top" />
+<!-- 标题 结束 -->
+
+<!-- 标的详情 开始 -->
+<div id="standardInfo">
+  <h3 class="standardH3">
+    <div class="standardNa"><!-- <i class="icon_itemSigh"></i> -->项目编号：{$info.prj_no}</div>
+    <div class="standardTi">开标时间 : <em>{$info.start_bid_time_view}</em></div>
+  </h3>
+  <div class="standardDf">
+    <!-- 项目信息 左侧 -->
+    <include file="fastcash_info" />
+    <!-- 投资部分 右侧 -->
+    <include file="fastcash_invest" />
+  </div>
+</div>
+</div>
+
+<!-- 蒙版 -->
+<div class="mask-detail dn"></div>
+<!-- 标的详情 结束 -->
+
+<!-- 项目概况 页签 开始 -->
+<include file="fastcash_project_info" />
+<!-- 项目概况 页签 结束 -->
+<input type="hidden" name="is_paypwd_edit" value="<?php echo $is_paypwd_edit;?>">
+
+</block>
+
+<block name="footer"><include file="./app/Tpl/Public/footer_user.html" /></block>

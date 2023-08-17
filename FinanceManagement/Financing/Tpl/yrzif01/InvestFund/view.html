@@ -1,0 +1,444 @@
+<extend name="./app/Tpl/Public/base_hfhg.html"/>
+<block name="title">鑫合汇理财产品,投资理财产品,理财产品排行推荐,日益升-短期理财产品推荐,月益升理财产品,中长期理财产品推荐,年益升-企业融资,中小企业融资理财产品,新客专区</block>
+<block name="description">鑫合汇理财产品,投资理财产品,理财产品排行推荐,日益升-短期理财产品推荐,月益升理财产品,中长期理财产品推荐,年益升-企业融资,中小企业融资理财产品,新客专区</block>
+<block name="style">
+  <style>
+  .nowInvest-but{display:none;}
+  .half-col{
+    width: 49%;
+    margin-right: 1%;
+    float: left;
+  }
+  </style>  
+</block>
+<block name="script">
+  <script>
+  var URL_FINANCING_INVEST_BUY = "{:U('Financing/Invest/buy')}";  // 投资服务
+  var URL_FINANCING_INVEST_BUYSUCCESS = "{:U('Financing/Invest/buySuccess')}";  // 投资服务
+  </script>
+</block>
+<block name="body">
+
+  <div id="naviga_bar" data-appraisal='{$completed_risk_test}' class="naviga_bar"><a href="{:U('Financing/InvestFund/plist')}">理财产品</a><em>&gt;</em><a href="javascript:;" class="">项目详情</a></div>
+  <div id="projectTitle">
+    <div class="projectTL">{$detail_info.fund_name}-{$detail_info.prj_name}</div>
+    <div class="projectTR"><i class="icon_redSigh"></i>鑫合汇提醒您：投资有风险！<a href="{:U('Help/Help/education')}">[详情]</a></div>
+  </div>
+
+  <!-- 标题——end -->
+  <!-- 标的详情 -->
+  <input type="hidden" id="prj_id" value="{$detail_info.prj_id}"/>
+  <div id="standardInfo">
+    <div class="standardDf mt20">
+      <!-- 左侧 start -->
+      <div class="standardDl">
+        <div class="standardDt">
+          <ul>
+            <li class="annualRev">
+              <span class="title">预期年化收益率</span>
+              <span class="details">{$detail_info.rate_range_show}</span>
+            </li>
+            <li class="invesPeriod">
+              <span class="title">期限</span>
+              <span class="details">{$detail_info.rate_time_show}</span>
+            </li>
+            <li class="methodRepay">
+              <span class="title">已募集</span>
+              <span class="details">{$detail_info.demand_amount_already}</span>
+            </li>
+          </ul>
+        </div>
+        <div class="standardDi standardDi_liCai">
+          <ul>
+            <li>
+              <span class="standardDi1">募集规模：{$detail_info._demand_amount}</span>
+              <span class="standardDi2">起投额度：<em class="orange">{$detail_info._min_bid_amount}</em></span>
+            </li>
+            <li>
+              <span class="standardDi1">起 息  日： T（成交日）+ <em class="orange">{$detail_info.value_date_shadow}</em>天      </span>
+              <span class="standardDi2">回款方式：<em class="orange">{$detail_info._payment_way}</em></span>
+            </li>
+            <li>
+              <span class="standardDi1">募集时间：<em class="blue">{$detail_info.raise_dateline}个月</em>（以实际募集天数为准）</span>
+              <span class="standardDi2"> 投资类别：<em class="orange">{$detail_info._investor_class}</em><if condition="$detail_info.investor_class eq 1">（风险低、收益稳定） </if></span>
+            </li>
+            <li>
+              <span class="standardDi1">资金托管：{$detail_info.loanbank.bank_name}</span>
+              <span class="standardDi2">产品备案：{$detail_info.fund_filing}</span>
+            </li>
+            <li class="lastLi">
+              <span class="standardDi1">产品发起：{$detail_info.fund_launch}</span>
+              <span class="standardDi2"> 产品管理：{$detail_info.fund_manager}</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- 左侧 end -->
+      <!-- 右侧 start -->
+      <div class="standardMs standardMs_licai">
+        <!-- 待开标 -->
+        <?php if($detail_info['bid_status'] == PrjModel::BSTATUS_WATING){ ?>
+          <dl class="standDl">
+            <dt>
+              <i class="icon_greywallet"></i>离开标时间还有：<br>
+              <span id="bid_starting" class="countDown org_color" data-inner="{$detail_info.format_start_bid_time_view}" style="padding-bottom: 0">
+                <em data-day>00</em>:<em data-hour>00</em>:<em data-min>00</em>:<em data-sec>00</em>
+              </span>
+            </dt>
+            <dd>起投金额：<em>{$detail_info.min_bid_amount_name}</em></dd>
+            <dd>递增金额：<em>{$detail_info.step_bid_amount_name}</em></dd>
+            <dd>最高限额：<em><?php if(!empty($detail_info['max_bid_amount_name'])){echo $detail_info['max_bid_amount_name'];} else {echo "不限";} ?></em></dd>
+            <dd style="height: auto">
+              <div class="immInvest_but forthOpen_But">
+                <label for="" class="greenBigBtn"><a href="javascript:;" class="btns font22">即将开标</a></label>
+              </div>
+            </dd>
+          </dl>
+        <!-- 开标中 -->
+        <?php }elseif($detail_info['bid_status'] == PrjModel::BSTATUS_BIDING){ ?>
+          <!-- 余额充足 -->
+          <?php if(!$moneyNotEnough){ ?>
+            <dl>
+              <dt>
+                <i class="icon_greywallet"></i>剩余可投金额：
+                <div class="ProgressBar_div">
+                   <div class="ProgressBarOrg">
+                     <span class="ProgressBarGry" data-flag="prjProgress" style="width:<?php echo $detail_info['schedule']; ?>%">
+                       <em class="bar_rt" style="<?php if ($detail_info['schedule']*0.99 >= 0.1) { ?> display:block <?php } else { ?> display:none <?php } ?>"></em>
+                     </span>
+                   </div>
+                </div>
+                <em class="org_color">
+                  <span class="moneytotle">{$detail_info.remaining_amount_name}</span>元
+                </em>
+              </dt>
+              <dd class="noHdd">
+                <span class="spanNubs">
+                  <p class="perNum"><b>{$detail_info.invest_users}</b>人</p>
+                  <p>已认购人</p>
+                </span>
+                <span class="spanNubs">
+                  <p class="perNum"><b>{$detail_info.remaining_daytime}</b>天</p>
+                  <p>募集期剩余时间</p>
+                </span>
+              </dd>
+              <dd>
+                <div class="moSelectBox" data-dropDown data-name="rate_id">
+                  <span class="selectValue" data-label><span>选择投资期限</span><em class="jianDown"></em></span>
+                  <div class="selectPop" data-select>
+                    <ul class="selectList" id="timeLimitSelect">
+                      <li id="timeLimitDefault" data-value="0" data-limitDay="0" data-rate="0" data-selected="1">选择投资期限</li>
+                      <foreach name="detail_info.rate.rate_list" item="vo">
+                        <li data-value="{$vo.id}" data-timeLimit="{$vo.time_limit}" data-limitUnit="{$vo.time_limit_unit}" data-rate="{$vo.year_rate}">{$vo._time_limit}</li>
+                      </foreach>
+                    </ul>
+                  </div>
+                </div>
+              </dd>
+              <dd class="liCaimayCast" data-step>
+                <div class="liCaiMayBox">
+                  <p class="fl">可投金额：</p>
+                  <p class="fr">
+                    <input data-input id="money" style="border: none; text-align: right"
+                           type="text" value="{$detail_info.max_invest_money_view}"/>
+                  </p>
+                </div>
+                <div class="liCaiAddCast"><span class="inLabel"><button data-del class="afterreduce">-</button><input id="stepMoney" type="text" data-value="{$detail_info.step_bid_amount_show}" value="递增额度：{$detail_info.step_bid_amount_show}元" class="inputTxt"><button data-add class="beforeadd">+</button></span></div>
+              </dd>
+              <dd class="investMnum payCipherC">
+                <label class="monNum payCipher">支付密码：<input type="password" name="password" event-click="showApplyInvest"></label>
+              </dd>
+              <dd class="agreeTransfer">
+                <label><input type="checkbox" checked class="alm" id="alm"> 我同意并接受<a colorbox="1" href="{:U('/Index/Protocol/view', array('id' => $detail_info['protocol']['jjht']['code_no'], 'prj_id' => $detail_info['prj_id']))}" class="blue">《{$detail_info['protocol']['jjht']['code_name']}》</a>及<a colorbox="1" href="{:U('/Index/Protocol/view', array('id' => $detail_info['protocol']['rzqrs']['code_no'], 'prj_id' => $detail_info['prj_id']))}" class="blue">《{$detail_info['protocol']['rzqrs']['code_name']}》</a></label>
+              </dd>
+              <dd>
+                <div class="immInvest_but"><label class="button-common-orange button-plist-btn orgBigBtn"><a event-click="applyBuy" href="javascript:void(0);" class="btns font22">立即投资</a></label></div>
+              </dd>
+            </dl>
+          <!-- 余额不足 -->
+          <?php }else{ ?>
+            <dl>
+              <dt>
+                <i class="icon_greywallet"></i>剩余可投金额：&ensp;
+                <div class="ProgressBar_div">
+                   <div class="ProgressBarOrg">
+                     <span class="ProgressBarGry" data-flag="prjProgress" style="width:<?php echo $detail_info['schedule']; ?>%"><em class="bar_rt" style="display: none;"></em></span>
+                   </div>
+                </div><em class="org_color">
+              <span class="moneytotle">{$detail_info.remaining_amount_name}</span>元</em>
+              </dt>
+              <dd>起投金额：<em>{$detail_info.min_bid_amount_name}</em></dd>
+              <dd>递增金额：<em>{$detail_info.step_bid_amount_name}</em></dd>
+              <dd>最高限额：<em><?php if(!empty($detail_info['max_bid_amount_name'])){echo $detail_info['max_bid_amount_name'];} else {echo "不限";} ?></em></dd>
+              <dd>当前账户可用余额：<em class="org_color">{$detail_info.remaining_amount_avaliable}元</em></dd>
+              <dd class="promptInade"><i class="icon_redSigh"></i>&ensp;您当前账户可用余额不足</dd>
+              <dd>
+                <div class="immInvest_but">
+                  <label class="button-common-orange"><a href="{:U('Payment/PayAccount/rechargePage')}" class="btns" style="font-size:22px;">立即充值</a></label>
+                </div>
+              </dd>
+            </dl>
+          <?php } ?>
+          <!-- 已满标 -->
+          <?php }elseif(1){ ?>
+            <dl>
+              <!-- <dt>
+                <i class="icon_greywallet"></i>剩余可投金额：&ensp;
+              <div class="ProgressBar_div">
+                  <div class="ProgressBarOrg">
+                    <div class="ProgressBarGry" style="width:99%">
+                      <em class="bar_rt"></em>
+                    </div>
+                  </div>
+              </div>
+              </dt> -->
+              <div class="progressBigBar progressBBar100" id="view_bid_over"></div>
+              <dd class="next_bid_time tac">
+                <?php if(in_array($detail_info['bid_status'], array(PrjModel::BSTATUS_FULL, PrjModel::BSTATUS_END_MANUAL, PrjModel::BSTATUS_REPAYING, PrjModel::BSTATUS_END, PrjModel::BSTATUS_REPAY_IN))){ ?>
+                  <span>预计<?php if(!$detail_info['is_endate']): ?>下次<?php endif; ?>还款日{$detail_info.next_repay_date_view}</span>
+                <?php } elseif($detail_info['bid_status'] == PrjModel::BSTATUS_REPAID){ // 已还款结束 ?>
+                  <span> 已于{$detail_info.actual_repay_time_view}还款完成</span>
+                <?php } ?>
+              </dd>
+              <dd>
+                <div class="immInvest_but"><label class="button-common-gray grayBigBtn"><a href="javascript:;" class="btns font22">{$detail_info['bid_status_view']}</a></label></div>
+              </dd>
+            </dl>
+          <?php } ?>
+          <!-- 投资确认明细 -->
+          <div id="investConfir" class="investConfir">
+            <table class="investConfir_tab">
+              <thead>
+                 <tr>
+                   <th>投资确认</th>
+                 </tr>
+               </thead>
+               <tbody>
+                  <tr>
+                   <td>
+                    <div class="standardna_name">
+                       {$detail_info.prj_name}
+                    </div>
+                   </td>
+                  </tr>
+                  <tr>
+                   <td class="td-line-pt">
+                      <div class="">预期年化收益率：<em class="org_6e"  id="rateShow"></em> </div>
+                      <div class="ovh">
+                        <span class="LeftC leftC-w">期限：<em class="grey_66" id="timeShow"></em></span>
+                        <span class="LeftC leftC-w">还款方式：<em class="grey_66">{$detail_info._payment_way}</em></span>
+                      </div>
+                   </td>
+                  </tr>
+                  <tr>
+                     <td class="td-line-pt">
+                       <div class="greybgc"><span class="LeftC">投资金额：<em class="blue_52" id="moneyPop">{$detail_info.max_invest_money_view}元</em></span></div>
+                     </td>
+                  </tr>
+                  <tr>
+                     <td>
+                       <span class="LeftC">预估收益：<em class="green" data-flag="incomePop" id="moneyIncome"></em></span>
+                     </td>
+                  </tr>
+                  <tr>
+                    <td class="td-line-pt"><p class="friendshippro"><i class="icon_OrangeSigh"></i>友情提示：请确认您在点击“立即投资”前已全面了解投资相关信息，谨慎决策，并自行承担投资风险。</p></td>
+                  </tr>
+              </tbody>
+            </table>
+            <div class="writetriangle">
+            </div>
+          </div>
+        <!--  <div id="investConfir" class="investConfir finaInvest" style="display:none">
+          <dl class="standDl">
+            <dt>投资确认</dt>
+            <dd class="standardna">鑫湖理财计划</dd>
+            <dd>
+              <div class="fixed ovh"><span class="LeftC">预期年化收益率：<em class="org_6e" id="rateShow"></em></span>
+                <span class="LeftC">期限：<em class="grey_66" id="timeShow"></em></span></div>
+              <div class="fixed ovh"><span class="LeftC">还款方式：<em class="grey_66">{$detail_info._payment_way}</em></span></div>
+            </dd>
+            <dd class="greybgc">
+              <span class="LeftC">投资金额：<em class="blue_52" id="moneyPop">{$detail_info.max_invest_money_view}元</em></span>
+              <span class="LeftC">预估收益：<em class="grey_66" id="moneyIncome">0.00元</em></span>
+            </dd>
+            <dd class="friendshippro"><i class="icon_OrangeSigh"></i>友情提示：请确认您在点击“立即投资”前已全面了解投资相关信息，谨慎决策，并自行承担投资风险。</dd>
+          </dl>
+          <div class="writetriangle">
+          </div>
+        </div> -->
+        <!-- 投资确认明细 -end-->
+      </div>
+      <!-- 右侧 end -->
+       <!-- 蒙版 -->
+      <div class="mask-detail dn"></div>
+    </div>
+  </div>
+<!-- <div class="mask-detail dn"></div> -->
+<div class="finaContainer">
+  <div class="finaFrame">
+    <div data-tab class="fina_liCaiBox">
+      <div class="detailSurTab fina_liCai prel">
+        <ul>
+          <li class="current"><span class="roundTopborGy">项目募集期信息披露</span><a class="hrwrite"></a></li>
+          <?php if($detail_info['bid_status'] > 3){ ?>
+            <li><span class="roundTopborGy">项目成立期信息披露</span><a class="hrwrite"></a></li>
+            <li><span class="roundTopborGy">项目封闭期信息披露</span><a class="hrwrite"></a></li>
+          <?php } ?>
+        </ul>
+      </div>
+      <!-- 项目募集期信息披露 star -->
+      <div data-tabPanel class="finaLiCaiContent" style="display: block;">
+        <h4 class="detailSurconh4"><i class="icon_Greyinfo"></i>收益计算方式</h4>
+        <table width="100%" class="finaTab">
+          <thead>
+          <tr>
+            <td width="14%">期限</td>
+            <foreach name="detail_info.rate.rate_list" item="vo">
+              <td>{$vo._time_limit}</td>
+            </foreach>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td>预计收益率<br/>（年化）</td>
+            <foreach name="detail_info.rate.rate_list" item="vo">
+              <td><em class="orange">{$vo._year_rate}</em><if condition = "$vo.extra_income eq 1">+浮动收益</if></td>
+            </foreach>
+          </tr>
+          </tbody>
+        </table>
+        <h4 class="detailSurconh4"><i class="icon_Greyinfo"></i>项目简介</h4>
+        <p class="finaText">{$detail_info.project_introduce}</p>
+        <h4 class="detailSurconh4"><i class="icon_Greyinfo"></i>业务模式</h4>
+        <div class="ywms" style="margin-top:28px;">
+          <img src="{$not_show_material.8.url}" alt="业务模式" width="645">
+        </div>
+        <h4 class="detailSurconh4"><i class="icon_Greyinfo"></i>资金投向</h4>
+        <div class="detailSurcon">
+          <p class="finaText tindex24">{$detail_info.fund_direction}</p>
+        </div>
+        <h4 class="detailSurconh4"><i class="icon_Greyinfo"></i>风险提示</h4>
+        <p class="finaText tindex24">{$detail_info.risk_tip}</p>
+        <!-- 证书展示 -->
+        <h4 class="detailSurconh4"><i class="icon_Greyinfo"></i>项目材料公示</h4>
+        <div class="scroll finaImgScroll fixed">
+          <span class="btn_prev" id="btn_prev_01"><em></em></span>
+          <div class="list">
+            <ul style="width:1190px" id="popImageWrapBox_01" class="jcarousel-skin-tango">
+              <foreach name="material" item="vo">
+                <li event-click="popPrjImg" class="mod_focus_mpic" style="display: block;">
+                  <a href="javascript:;" hidefocus="hidefocus">
+                    <img url="{$vo.thumbs.big}" alt="{$vo.code_name}" src="{$vo.thumbs.small}"></a>
+                  <p>{$vo.code_name}</p>
+                </li>     
+              </foreach>
+            </ul>
+          </div>
+          <span class="btn_next btn_next_hover" id="btn_next_01"><em></em></span>
+        </div>
+        <!--证书展示——end  -->
+        <!-- 项目募集期信息披露 end -->
+      </div>
+      <div data-tabPanel class="finaLiCaiContent" style="display:none;">
+        <if condition="!empty($fundPrjExtraInfo['fund_filing_data'])">
+          <table class="globaltable topBd" style="margin:30px 0 12px;">
+            <tbody>
+            <tr class="GreyBgcolor">
+              <td>基金成立日期</td>
+              <td>{$fundPrjExtraInfo.fund_filing_data.fund_establish_time}</td>
+            </tr>
+            <tr>
+              <td>基金投资人数</td>
+              <td>{$fundPrjExtraInfo.fund_filing_data.fund_invest_num}人</td>
+            </tr>
+            <tr class="GreyBgcolor">
+              <td>基金备案登记号 </td>
+              <td>{$fundPrjExtraInfo.fund_filing_data.fund_filing_no}</td>
+            </tr>
+            </tbody>
+          </table>
+          <if condition = "!empty($fundPrjExtraInfo['fund_filing_data']['fund_filing_material_data'])">
+            <!-- 证书展示 -->
+            <h4 class="detailSurconh4"><i class="icon_Greyinfo"></i>项目材料公示</h4>
+            <div class="scroll finaImgScroll fixed">
+              <span class="btn_prev" id="btn_prev_02"><em></em></span>
+              <div class="list">
+                <ul style="width:1190px" id="popImageWrapBox_02" class="jcarousel-skin-tango">
+                  <foreach name="fundPrjExtraInfo.fund_filing_data.fund_filing_material_data" item="vo">
+                    <li event-click="popPrjImg" class="mod_focus_mpic" style="display: block;">
+                      <a href="javascript:;" hidefocus="hidefocus">
+                        <img url="{$vo.thumbs.big}" alt="{$vo.code_name}" src="{$vo.thumbs.small}"></a>
+                      <p>{$vo.code_name}</p>
+                    </li>
+                  </foreach>
+                </ul>
+              </div>
+              <span class="btn_next btn_next_hover" id="btn_next_02"><em></em></span>
+            </div>
+            <!--证书展示——end  -->
+          </if>
+        <else/>
+          <div class="no-data">没有相关数据</div>
+        </if>
+      </div>
+      <div data-tabPanel class="finaLiCaiContent" style="display:none;">
+        <div id="evnetTab">
+            <div class="category mt38"><a href="javascript:;">运营报告</a><a href="javascript:;">重大事件</a></div>
+            <div data-eventContent style="display:block;">
+              <if condition = "!empty($fundPrjExtraInfo['fund_report_data'])">
+                <ul class="materialsList">
+                 <foreach name="fundPrjExtraInfo.fund_report_data" item="vo">
+                   <li><em class="num">{$key + 1}.</em>{$vo.file_name}<a href="{$vo.downloadUrl}" class="annes"><em class="annesIcn"></em>附件</a></li>
+                 </foreach>
+               </ul>
+              <else/>
+                <div class="no-data">没有相关数据</div>
+              </if>
+            </div>
+            <div data-eventContent style="display:none;">
+              <if condition = "!empty($fundPrjExtraInfo['fund_event_data'])">
+                <ul class="materialsList">
+                  <foreach name="fundPrjExtraInfo.fund_event_data" item="vo">
+                    <li style="height:inherit;overflow: hidden;"><div style="float:left;width:525px;"><em class="num">{$key + 1}.</em>{$vo.title}</div><a  href="{:U('Financing/InvestFund/viewEvent', array('prj_id' => $detail_info['prj_id'], 'id' => $vo['id']))}" class="annes" style="top:inherit;" colorbox="1"><em class="annesIcn"></em>查看</a></li>
+                  </foreach>
+                </ul>
+              <else/>
+                <div class="no-data">没有相关数据</div>
+              </if>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- 右边栏 star -->
+  <div class="finaSider">
+    <div class="siderBox">
+      <div class="detailsTitleBox prel"><em class="lineIcon"></em>基金管理人介绍 <img src="/public/images/005.png" class="compIcn" alt=""></div>
+      <h3 class="siderCompTitle">杭州点石引导投资管理有限公司</h3>
+      <ul>
+        <li>◆　基金管理人杭州点石引导投资管理有限公司由杭州市西湖区政府与中新力合股份有限公司于2008年共同出资设立，因金融创新而诞生；</li>
+        <li>◆　公司在国内最早开始小企业集合债权基金创新运作，被国家财政部财政研究所持续关注调研，称之为PPP（Public-Private-Partnership,公私合营）模式的典范；</li>
+        <li>◆　公司以债权基金运作为特色，累计发行债权基金规模逾10.5亿，服务小企业455家，户均约230万；</li>
+        <li>◆　公司拥有中国证券投资基金业协会颁发的“私募投资基金管理人”牌照。</li>
+      </ul>
+      <div class="detailsTitleBox prel"><em class="lineIcon"></em>常见问题</div>
+      <ul class="faqList">
+        <li class="fqLi"><em class="fqIcn fl"></em><span class="fl">什么是鑫湖理财？</span></li>
+        <li class="faLi"><em class="fqIcn fl"></em><span class="fl">鑫湖理财所投资的产品为杭州点石引导投资管理有限公司管理的基金产品，募集的资金由第三方银行独立托管，详细信息可参考产品说明书。</span></li>
+        <li class="fqLi"><em class="fqIcn fl"></em><span class="fl">鑫湖理财计划的收益方式是什么？</span></li>
+        <li class="faLi"><em class="fqIcn fl"></em><span class="fl">投资者所投资的本金和收益到期一次性赎回，在产品到期后自动转入投资者的鑫合汇账户。</span></li>
+        <li class="fqLi"><em class="fqIcn fl"></em><span class="fl">产品募集期内可以撤销投资吗？</span></li>
+        <li class="faLi"><em class="fqIcn fl"></em><span class="fl">募集期内，用户已投资鑫湖理财计划的资金将被冻结，投资不可撤销。</span></li>
+        <li class="fqLi"><em class="fqIcn fl"></em><span class="fl">可以提前赎回资金吗？</span></li>
+        <li class="faLi"><em class="fqIcn fl"></em><span class="fl">鑫湖理财计划所投资的鑫湖2号基金为封闭式基金，因此，在基金存续期内不可赎回。</span></li>
+        <li class="fqLi"><em class="fqIcn fl"></em><span class="fl">鑫湖理财计划有什么风险吗？</span></li>
+        <li class="faLi"><em class="fqIcn fl"></em><span class="fl">任何理财方式都存在一定风险，鑫湖理财计划的主要风险有市场风险、管理风险、信用风险、操作风险及其他风险，详细信息可参考产品说明书。</span></li>
+      </ul>
+    </div>
+  </div>
+  <!-- 右边栏 end -->
+</div>
+
+<?php //p($fundPrjExtraInfo["fund_event_data"]);?>
+</block>

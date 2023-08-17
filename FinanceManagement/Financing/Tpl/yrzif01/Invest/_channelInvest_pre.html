@@ -1,0 +1,45 @@
+<?php if($is_login){?>
+
+<?php if((int)$info['pre_remaind_amount'] == 0) { ?>
+  <!-- 已满标以上状态 开始 -->
+  <dl class="standDl">
+    <!-- <dt>
+      <i class="icon_greywallet"></i>&emsp;剩余可投金额
+    <div class="ProgressBar_div">
+      <div class="ProgressBarOrg"><span class="ProgressBarGry" style="width:100%"><em class="bar_rt"></em></span></div>
+    </div>
+    </dt> -->
+    <div class="progressBigBar progressBBar100" id="view_bid_over"></div>
+    <dd style="margin: 55px 0px 0px;">
+      <div class="immInvest_but"><label class="button-common-gray  grayBigBtn"><a href="javascript:;" class="btns font22">预售结束</a></label></div>
+    </dd>
+  </dl>
+  <!-- 已满标以上状态 结束 -->
+<?php } else { ?>
+  <dl class="standDl">
+    <include file="view_invest_base"/>
+    <dd>投资递增额度：{$info.step_bid_amount_name}</dd>
+    <dd>最高投资额度：<?php if(!empty($info['max_bid_amount_name'])){echo $info['max_bid_amount_name'];} else {echo "不限";} ?></dd>
+    <dd style="padding:80px 0 0;" class="prel">
+      <!-- 提示框 -->
+      <div class="OrangeTipBox" style="top:44px" data-flag="eventclientBtn" class="fixed" style="display:none;">
+        <span class="OrangeTipBox_Rc tac"><i class="SmilingFace"></i>仅针对专享项目投资的用户哦~</span>
+        <em class="OrangeTipBox_Arr"></em>
+      </div>
+      <!-- 专享按钮 -->
+      <div class="immInvest_but" event-mouseover="overClientBtn" event-mouseout="outClientBtn">
+        <label class="button-common-orange grayBigBtn">
+          <a href="javascript:;" class="btns font22">特定专享标</a>
+        </label>
+      </div>
+    </dd>
+  </dl>
+<?php } ?>
+
+
+<?php }else{ ?>
+  <!--未登录-->
+  <include file="_nologin_pre"/>
+<?php } ?>
+
+

@@ -1,0 +1,27 @@
+<?php if(!empty($imgData)){ ?>
+<h4><!-- <i class="icon_Greyinfo"></i> -->项目材料</h4>
+<div class="scroll fixed">
+  <span class="btn_prev" id="btn_prev"><em></em></span>
+  <div class="list">
+    <ul style="width:1190px" class="jcarousel-skin-tango" id="popImageWrapBox" data-flag="popImageWrapBox">
+      <?php foreach ($imgData as $k => $v) {  // 遍历项目材料 ?>
+      <li class="mod_focus_mpic" event-click="popPrjImg" <?php if($k > 4){echo 'style="display:none"';} ?>>
+        <a href="javascript:;">
+          <img url="<?php echo $v['big'];?>" alt="{$v.name}" src="<?php echo $v['small'];?>">
+        </a>
+        <p>
+          <?php 
+            if($v['name'] == '担保函' || $v['name'] == '担保承诺函'){ 
+              echo '同意担保函';
+            } else { 
+              echo $v['name'];
+            }
+          ?>
+        </p>
+      </li>
+      <?php } ?>
+    </ul>
+  </div>
+  <span class="btn_next btn_next_hover" id="btn_next"><em></em></span>
+</div>
+<?php } ?>

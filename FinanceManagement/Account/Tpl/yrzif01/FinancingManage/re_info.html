@@ -1,0 +1,56 @@
+<div class="tab_pannel">
+    <table class="ui-record-table">
+        <thead>
+        <tr>
+            <th width="15%">期次</th>
+            <th width="10%">还款日</th>
+            <th width="15%" class="tar">应还本金（元）</th>
+            <th width="15%" class="tar">应还利息（元）</th>
+            <th width="15%" class="tar">剩余本金（元）</th>
+            <th width="20%" class="tac">还款状态</th>
+            <th width="10%" class="tac">操作</th>
+        </tr>
+        <tr class="line"><th colspan="100%"></th></tr>
+        </thead>
+    </table>
+    <div class="bd" style="max-height:380px;overflow-y:auto">
+    <table class="ui-record-table">
+        <tbody>
+        <?php if($list): ?>
+        <?php foreach($list as $k=>$v):?>
+        <?php if($v['yield'] == 0) continue;?>
+        <?php if($v['is_auto'] == 1): ?>
+            <tr>
+                <td  width="15%">募集期利息</td>
+                <td  width="10%"><?php echo $v['repay_date_view'];?></td>
+                <td width="15%" class="tar"></td>
+                <td width="15%" class="tar"><?php echo $v['yield_view'];?></td>
+                <td width="15%" class="tar"><?php echo $v['rest_principal_view'];?></td>
+                <td  width="20%" class="tac"><?php echo $v['status_view'];?></td>
+                <td  width="10%" class="tac">-</td>
+            </tr>
+        <?php else: ?>
+            <tr>
+                <td width="15%"><?php echo $v['repay_periods'];?></td>
+                <td width="10%"><?php echo $v['repay_date_view'];?></td>
+                <td width="15%" class="tar"><?php echo $v['principal_view'];?></td>
+                <td width="15%" class="tar"><?php echo $v['yield_view'];?></td>
+                <td width="15%" class="tar"><?php echo $v['rest_principal_view'];?></td>
+                <td width="20%" class="tac"><?php echo $v['status_view'];?></td>
+                <td width="10%" class="tac">
+                <?php if($v['status'] == PrjRepayPlanModel::PRJ_REPAYMENT_STATUS_SUCCESS): ?>
+                <a class="blue" data-btn="viewDetail" data-id="{$v['id']}"  href="javascript:">查看明细</a>
+                <?php endif; ?>
+               </td>
+            </tr>
+        <?php endif;?>
+        <?php endforeach; ?>
+        <?php else: ?>
+            <tr>
+                  <td colspan="100%">没有相关数据</td>
+            </tr>
+        <?php endif; ?>
+        </tbody>
+    </table>
+    </div>
+</div>

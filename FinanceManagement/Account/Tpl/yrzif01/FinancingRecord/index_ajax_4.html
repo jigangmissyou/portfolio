@@ -1,0 +1,51 @@
+{/*已满标*/}
+<table class="ui-record-table">
+  <thead>
+    <tr>
+      <th>项目名称</th>
+      <th width="10%" class="tar" order_field="1" <eq name="order_field" value="1"> order_type="{$order_type}"</eq>>融资规模</th>
+      <th width="10%" class="tac" order_field="2" <eq name="order_field" value="2"> order_type="{$order_type}"</eq>>预期年化利率</th>
+      <th width="10%" order_field="3" <eq name="order_field" value="3"> order_type="{$order_type}"</eq>>期限</th>
+      <th width="15%">还款方式</th>
+      <th width="12%" order_field="5" <eq name="order_field" value="5"> order_type="{$order_type}"</eq>>融资开标时间</th>
+      <th width="10%">融资截止时间</th>
+      <th width="13%">实际融资额度（元）</th>
+    </tr>
+    <tr class="line"><th colspan="100%"></th></tr>
+  </thead>
+  <tbody>
+    <?php if(!empty($list)){ ?>
+    <foreach name="list" item="item">
+                          <?php  
+$title = service("Financing/Financing")->getTitle($item);
+         ?>
+    <tr>
+      <td <?php echo $title; ?>>
+        <p class="pro_name">{$item.prj_name}</p>
+        <p class="icoarea">
+				   			 <?php 
+			   echo service("Financing/Financing")->getIco($item);
+			 ?>
+        </p>
+        <!--<p class="blue">{$item.prj_no}</p>-->
+      </td>
+      <td class="tar" <?php echo $title; ?>><span class="mr12">{$item.demand_amount|humanMoney}</span></td>
+      <td class="tac" <?php echo $title; ?>>
+        <?php echo number_format($item['year_rate']/10,2); ?>%
+	  </td>
+      <td <?php echo $title; ?>>{$item.time_limit_display}</td>
+      <td <?php echo $title; ?>>{$item.repay_way_view}</td>
+      <td <?php echo $title; ?>><span class="time">{$item.start_bid_time|date='Y-m-d H:i',###}</span></td>
+      <td <?php echo $title; ?>><span class="time">{$item.end_bid_time|date='Y-m-d H:i',###}</span></td>
+      <td  <?php echo $title; ?>  class="tar">{$item.real_amount|humanMoney=###,2,FALSE}</td>
+    </tr>
+    </foreach>
+    <?php } else { ?>
+    <tr>
+      <td colspan="8" class="tac">没有相关数据</td>
+    </tr>
+    <?php } ?>
+  </tbody>
+</table>
+<?php $pageNavCallback = "ajaxAfter_Account_Financing_plist"; ?>
+<include file="./app/Tpl/Public/pageAjax.html" />

@@ -1,0 +1,76 @@
+<?php if($info['bid_status'] == PrjModel::BSTATUS_WATING){ // 待开标 ?>
+<!-- 待开标状态 开始 -->
+<dl class="standDl standDl2 waiting-open">
+  <div class="clearfix"></div>
+  <dt class="time-rest">
+    离开标还有：
+    <span data-flag="format_start_bid_time_view" data-inner="0" class="countDown org_color setout">
+    <em data-day>00</em>天<em data-hour>00</em>小时<em data-min>00</em>分<em data-sec>00</em>秒
+  </span>
+  </dt>
+  <dd>起投金额：<em>{$info.min_bid_amount_name}</em></dd>
+  <dd>递增金额：<em>{$info.step_bid_amount_name}</em></dd>
+  <dd>最高限额：<em><?php if(!empty($info['max_bid_amount_name'])){echo $info['max_bid_amount_name'];} else {echo "不限";} ?></em></dd>
+  <dd class="prel">
+    <div class="investLoginBtn noLoginBtn button-common-blue button-prepare-btn"><a class="btns invest-login-btn nowLoginBtn" href="/login">立即登录</a></div>
+    <div class="logo-code">
+      <ul>
+        <li class="photo"><img src="/public/images/invest/logo-code.png"></li>
+        <li class="download-app">您可以下载手机APP<br/>安全 快捷
+        <span><img src="/public/images/invest/hand.png"></span>
+        </li>
+      </ul>
+    </div>
+  </dd>
+</dl>
+<!-- <div class="wait-opening">
+  <label class="button-common-green button-common-green-pro">
+    <a href="javascript:;" class="btns wait-btn">立即登录</a>
+  </label>
+</div> -->
+<!-- 待开标状态 结束 -->
+<?php } ?>
+<?php if($info['bid_status'] == PrjModel::BSTATUS_BIDING){ // 投资中 ?>
+  <dl class="standDl">
+    <include file="view_invest_base"/>
+    <dd class="prel">
+      <div class="investLoginBtn button-common-blue button-prepare-btn"><a class="btns invest-login-btn" href="<?php
+              echo C('LOGIN_IN_PASSPORT') == 1 ? C('PASSPORT_URL') . 'login?url=' . $url2 . '&PORTALCODE=1234567890' : '/login';
+            // };
+            ?>">立即登录</a></div>
+<!--       <p style="width: 320px;margin-left: -20px;color:#34b9ff;">· 该项目为浙商银行存管项目，开通存管账户即可投</p>
+      <div class="investLoginBtn button-common-blue button-prepare-btn"><a class="btns invest-login-btn" href="/login">开通浙商银行存管账户</a></div> -->
+      <div class="logo-code">
+        <ul>
+          <li class="photo"><img src="/public/images/invest/logo-code.png"></li>
+          <li class="download-app">您可以下载手机APP<br/>安全 快捷
+          <span><img src="/public/images/invest/hand.png"></span>
+          </li>
+        </ul>
+      </div>
+    </dd>
+  </dl>
+<?php } ?>
+<?php if($info['bid_status'] >= PrjModel::BSTATUS_FULL){  // 已满标 ?>
+<!-- 已满标以上状态 开始 -->
+<dl class="standDl standDl2">
+  <!-- <dt> -->
+    <!-- <i class="icon_greywallet"></i>&emsp; 剩余可投金额-->
+  <!-- <div class="ProgressBar_div">
+    <div class="ProgressBarOrg"><span class="ProgressBarGry" style="width:100%"><em class="bar_rt"></em><em class="propress-data finish-data">100%</em></span></div>
+  </div>
+  </dt> -->
+
+  <div class="progressBBar100  progressBigBar2" id="view_bid_over"><div class="progress-finish"></div></div>
+  <dd class="next_bid_time tac repayment-date">
+    <?php if($info['bid_status'] == PrjModel::BSTATUS_FULL || $info['bid_status'] == PrjModel::BSTATUS_REPAYING || $info['bid_status'] == PrjModel::BSTATUS_END || $info['bid_status'] == PrjModel::BSTATUS_REPAY_IN){  // 已满标、待还款、截止投标、还款中 ?>
+    预计<?php if(!$isEndate): ?>下次<?php endif; ?>还款日{$info.next_repay_date_view}
+    <?php } else if($info['bid_status'] == PrjModel::BSTATUS_REPAID){ // 已还款结束 ?>
+    已于{$info.actual_repay_time_view}还款完成
+    <?php } ?>
+  </dd>
+  <dd>
+    <div class="immInvest_but"><label class="grayBigBtn button-common-gray button-end-btn"><a href="javascript:;" class="btns" style="margin-top: 35px;">{$info['bid_status_view']}</a></label></div>
+  </dd>
+</dl>
+<?php } ?>

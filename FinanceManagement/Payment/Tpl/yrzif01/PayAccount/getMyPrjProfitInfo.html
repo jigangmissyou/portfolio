@@ -1,0 +1,18 @@
+<div class="hoverInfo bor-red hoar">
+	<div class="hoverArrow">
+    <em>◆</em>
+    <span>◆</span>
+  </div>
+  <div class="text">
+    <?php
+    //print_r($data);
+  ?>
+  收到【<?php echo $data['name']; ?>】项目
+  <?php if($data['repay_periods'] != '0' && $data['repay_periods'] != '2001'){ ?>第<span class="blue">{$data['repay_periods']}</span>期{$data['type']}(共<span class="blue">{$data['total_periods']}</span>期)
+  <?php } else { echo $data['type']; }?> <strong class="f14">{$data['pri_interest']}元</strong><br/>
+
+ <!--  <?php if($data['give_free_money']) echo "同时获得了".$data['give_free_money']."元免费提现额度";
+     else echo "使用了".$data['give_free_money']."元免费提现额度"; 
+ ?> -->
+  </div>
+</div>

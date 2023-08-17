@@ -1,0 +1,417 @@
+<extend name="./app/Tpl/Public/base_hfhg.html"/>
+<block name="title">我要理财-投资成功</block>
+<block name="keywords">我要理财</block>
+<block name="description">我要理财</block>
+<block name="style">
+  <link rel="stylesheet" href="/public/css/sasscss/act/actMaskPop/actMaskPop.css">
+<!--       <style>
+        .act-pop{
+          width:517px;
+          height: 302px;
+          position: fixed;
+          left:50%;
+          top:50%;
+          margin:-151px 0 0 -257px;
+          z-index: 11;
+        }
+        .act-pop-content{
+          position: relative;
+          background: #ca1b2c;
+          border-radius: 10px;
+          behavior: url(public/pie/PIE.htc);
+        }
+        .act-pop-content.act-pop-filed-content{
+          padding:26px 0 0;
+          background: url(/public/images/act/gwbt/pc/pop-filed.png) no-repeat;
+        }
+        .act-pop-suc{
+          height: 98px;
+          line-height: 98px;
+          padding:32px 0 0 228px;
+          font-size: 44px;
+          color:#ffc000;
+          background: url(/public/images/act/gwbt/pc/popbg.png) no-repeat center 12px;
+        }
+        .act-pop-txt{
+          color:#fff;
+          text-align: center;
+        }
+        .act-pop-txt-p1{
+          line-height: 40px;
+          font-size: 30px;
+        }
+        .act-pop-close{
+          position: absolute;
+          right:13px;
+          top:13px;
+          display: block;
+          width:20px;
+          height: 20px;
+          line-height: 20px;
+          text-align: center;
+          color:#ffaf28;
+          font-size: 20px;
+        }
+        .act-pop-btn-box{
+          padding:30px 0;
+        }
+        .act-pop-btn-box a{
+          display: inline-block;
+          /*width:114px;*/
+          padding:0 10px;
+          height: 38px;
+          line-height: 38px;
+          text-align: center;
+          color:#cb1c2d;
+          font-size: 23px;
+          background: #ffc000;
+          border-radius: 5px;
+          behavior: url(public/pie/PIE.htc);
+        }
+
+        /* 高温补贴 */
+        .love-pop-content{
+          background:#ffd8e0;
+        }
+        .love-pop-content .act-pop-suc{
+          background: url(/public/images/act/love/pc/popbg.png) no-repeat center 12px;
+          color:#fe949c;
+        }
+        .love-pop-content .act-pop-txt-p1{
+          color:#fe949c;
+        }
+        .love-pop-content .act-pop-btn-box a{
+         color:#ffe5ea;
+         background:#ff4558;
+        }
+
+        /* 开学季 */
+          #sept-act-pop{
+            background: url(/public/images/act/septSchool/pc/pop-bg.png) no-repeat center center;
+          }
+        #sept-act-pop .act-pop-content{
+          background: none;
+          }
+        #sept-act-pop .sept-close{
+          top: 0px;
+          width: 48px;
+          height: 46px;
+          }
+        #sept-act-pop .act-pop-btn-box a{
+          width:170px;
+          height:75px;
+          background: url(/public/images/act/septSchool/pc/pop-con-bg.png) no-repeat -167px -508px;
+          margin-top: 0px;
+          padding: 0;
+          position: absolute;
+          top: 150%;
+          left: 34%;
+          }
+        #sept-act-pop .act-pop-suc{
+          height: 70px;
+          line-height: 70px;
+          font-size: 44px;
+          color:#ffc000;
+          padding: 0;
+          margin-top:12px;
+          background:url(/public/images/act/septSchool/pc/pop-con-bg.png);
+          background-position:30px -256px;
+        }
+        #sept-act-pop .act-pop-txt-p1{
+          position: absolute;
+          top: 78%;
+          left: 17%;
+        }
+        #i-known a{
+          width:170px;
+          height:75px;
+          background: url(/public/images/act/septSchool/pc/pop-con-bg.png) no-repeat -346px -508px;
+          margin-top: 0px;
+          padding: 0;
+          position: absolute;
+          top: 69%;
+          left: 34%;
+          }
+        #tips-pop .act-pop-txtpic{
+          background:url(/public/images/act/septSchool/pc/act-pop-txtpic.png) no-repeat;
+          width: 524px;
+          height: 315px;
+        }
+
+        /*三月植树*/
+       .tips-mask2{
+        display: none;
+        width: 380px;
+        height: 293px;
+        background: url(/public/images/act/zhishu/pc/investSuccess.png) no-repeat top center;
+        z-index: 99999;
+        position: absolute;
+        top: 250px;
+        left: 50%;
+        margin-left: -190px;
+
+       }
+        .treeText{
+          width: 320px;
+          margin: 90px auto 0;
+        }
+        .lookBtn{
+          width: 150px;
+          height: 50px;
+
+          position: absolute;
+          top: 220px;
+          left: 190px;
+          margin-left: -75px;
+        }
+        .treeClose{
+          width: 50px;
+          height: 50px;
+
+          position: absolute;
+          top: 5px;
+          right: 0px;
+        }
+      </style> -->
+  <style>
+.pop{
+    width:550px;
+    height:350px;
+    background: url(/public/images/act/maymoney/pc/pop.png);
+    position: fixed;
+    left:50%;
+    margin-left: -275px;
+    top:180px;
+    z-index:99;
+}
+.close-btn{
+    width:30px;
+    height:30px;
+    position: absolute;
+    top:15px;
+    right:13px;
+    // background: rgba(0,0,0,.4);
+}
+.tittle{
+    text-align: center;
+    font-size: 34px;
+    line-height: 90px;
+    color:#fff;
+}
+.fz24{
+    font-size: 24px;
+    line-height: 32px;
+}
+.mt50{
+    margin-top:50px;
+}
+.confirm-btn{
+    width:243px;
+    height:64px;
+    line-height:64px;
+    background:#dc4e4c;
+    text-align: center;
+    color:#fff;
+    display:block;
+    font-size: 30px;
+    border-radius:5px;
+    margin: 25px auto 0;
+}
+.confirm-btn:hover{
+  color:#fff;
+}
+.confirm-btn .gary{
+    background: #c3c3c3;
+}
+.confirm-btn .wid185{
+    width:185px;
+    float:left;
+    margin:30px 40px;
+}
+.confirm-btn .wid280{
+    width:280px;
+}
+.qianzhang{
+    position: absolute;
+    top: -65px;
+    left: 550px;
+}
+.button-common-orange a.btns{
+  background: #fb822b;
+}
+  </style>
+
+</block>
+
+<block name="body">
+<include file="./app/Tpl/Public/invest-subnav.html" />
+<div class="invest-success-container mt20 ">
+  <div class="invest-success-content">
+      <div class="invest-success-path">
+        <div class="invest-success-state">
+          <dl class="invest-success-msg tac">
+            <if condition="$is_pre_sale eq 1">
+              <dt><em class="invest-success-icn-yes mr20"></em>预售成功！</dd>
+              <else/>
+              <dt><em class="invest-success-icn-yes mr20"></em>投资成功！</dd>
+            </if>
+          </dl>
+        </div>
+        <div class="clearfix"></div>
+        <if condition="$is_pre_sale eq 1">
+          <p class="invest-success-note tac">本次投资将在项目开标后进行资金划扣，在开标前请确保账户内资金充足。</p>
+        </if>
+        <div class="invest-success-tips tac" style="position:relative;">
+          <p>起息日<span>{$QixiDay}</span>，</p>
+          <p>预计还款时间：<span>{$RepayDay}</span></p>
+          <?php if($is_show_security){ ?>
+            <p>鑫盾风控全程监控资金，电子签名保障合法权益</p>
+            <div class="qianzhang"><img src="/public/images/qianzhang.png" alt="" width="130px;"/></div>
+          <?php }?>
+          
+        </div>
+        <div class="invest-success-btn-box invest-success-btn-other tac">
+           <label class="button-common-orange button-orange-w200 mr-value">
+            <a class="btns" href="{:U('Financing/Invest/plist')}">继续投资</a>
+          </label>
+          <label class="button-common-blue button-blue-w200 mr-value ">
+            <a class="btns" href="{:U('Account/User/index')}">查看账户</a>
+          </label>
+          <?php  if($is_view_auto_icon == 1) { ?>
+          <label class="button-common-green button-green-w200">
+            <a class="btns" href="{:U('Financing/Appoint/appoint')}">自动续投</a>
+          </label>
+          <?php }?>
+        </div>
+      </div>
+  </div>
+
+  <if condition="$is_pre_sale neq 1">
+    <div class="invest-fundcoupon-tu tac">
+      <?php if(!empty($bonus_money) && $bonus_money > 0 || !empty($tixian) ||!empty($rewardMoneyRate) ){?>
+      <div style="display:inline-block;">您将额外获得</div>
+      <?php }?>
+
+      <div class="invest-fundcoupon-tu-c">
+
+        <?php if(!empty($bonus_money) && $bonus_money > 0){ // 首投红包 ?>
+        <div class="invest-fundcoupon-list icn-fund-bg-06 fwb tal">
+            <div class="invest-fund-content"><p class="basenumber">¥{$bonus_money}</p><p>红包</p><span class="useRule">使用规则</span></div>
+            <!--首投红包使用规则 start-->
+            <div id="firstBuyTip" class="OrangeTipBox-Red dn" data-flag="rateFloatTip">
+              <em class="OrangeTipBox_Arr1"><em class="OrangeTipBox_Arr2"></em></em>
+              <p>使用规则:</p>
+              <p>1.[注册红包]可投资平台上任意项目，每次投资可使用的红包金额为投资金额的<em class="orange">1%</em>，单个项目多次投资可多次使用，无使用上限；</p>
+              <p>2.[注册红包]可与其它红包同时使用；</p>
+              <p>3.红包有效期至<span class="yelcolor">2015年11月30日</span>；</p>
+              <p>4.最终解释权归鑫合汇所有。</p>
+            </div>
+            <!--首投红包使用规则 end-->
+        </div>
+        <?php } ?>
+
+
+        <?php if(!empty($tixian)){ $freeText = "提现次数"; // 赠送免费提现次数 ?>
+         <div class="invest-fundcoupon-list icn-fund-bg-07 tal">
+          <div class="invest-fund-content invest-fund-free">
+           <p class="invest-fund-txt1">获得<em class="em">{$tixian}</em>次</p>
+           <p class="invest-fund-txt2">免费提现次数</p>
+          </div>
+        </div>
+        <?php } ?>
+        <?php if(!empty($rewardMoneyRate)){ $freeText = "年化利率"; // 赠送年化红包 ?>
+        <div class="invest-fundcoupon-list icn-fund-bg-07 tal">
+          <div class="invest-fund-content invest-fund-free">
+            <p class="invest-fund-txt1"><em class="em">{$rewardMoneyRate}%</em></p>
+            <p class="invest-fund-txt2">赠送年化利率</p>
+          </div>
+        </div>
+        <?php } ?>
+        <?php if($tstatus){ ?>
+          <div class="invest-fundcoupon-list icn-fund-bg-05 n-mr tal">
+              <div class="invest-fund-content invest-fund-te"><em class="licai-wang-icn"></em>特权<br/>邀请好友注册<br>获得1000元专享理财金</div>
+          </div>
+          <?php } ?>
+
+      </div>
+    </div>
+
+  </if>
+</div>
+
+<div class="mask dn"></div>
+<!-- 投资成功 -->
+<div class="pop dn aprilfoe-luck act-aprilfoe">
+    <a href="javascript:;" class="close-btn"></a>
+    <p class="tittle">
+    <img src="/public/images/act/maymoney/pc/dui.png" alt="" />
+        投资成功
+    </p>
+    <p class="fz24 tac mt50">恭喜，您拥有*次抽奖次数<br />
+赶紧去518理财节活动页进行抽奖吧！
+    </p>
+    <a href="/Activity/AprilFoe/index" target="_blank" class="confirm-btn">去抽奖</a>
+</div>
+<!-- 投资成功 -->
+<div class="pop dn aprilfoe act-aprilfoe">
+    <a href="javascript:;" class="close-btn"></a>
+    <p class="tittle">
+    <img src="/public/images/act/maymoney/pc/dui.png" alt="" />
+        投资成功
+    </p>
+    <p class="fz24 tac mt50">518理财节活动火爆进行中，<br />
+百万现金红包任性送， 万元旅游大奖等你拿<br />
+快去查看吧！
+    </p>
+    <a href="/Activity/AprilFoe/index" target="_blank" class="confirm-btn">去查看活动</a>
+</div>
+
+<!-- 投资失败页面 -->
+<div class="invest-success-container invest-failure dn">
+  <div class="cry-face"><img src="/public/images/invest/fail-face.png"></div>
+  <div class="situation"><h3>投资失败！</h3><p>月益升-垫资贷2015111001A1 ,投资失败！</p></div>
+
+  <div class="invest-success-btn-box invest-success-btn-other tac mt20">
+    <label for="" class="button-common-gray button-gray-w200 mr-value">
+      <a class="btns" href="{:U('Financing/Invest/plist')}">离开</a>
+    </label>
+    <label for="" class="button-common-blue button-blue-w200">
+      <a class="btns" href="{:U('Financing/Invest/plist')}">返回再次投资</a>
+    </label>
+  </div>
+</div>
+
+
+<!-- 弹出层 -->
+<div class="septSchool-mask"></div>
+<div class="tips-mask2">
+    <p class="treeText">招财树正在等着你，
+快来参加“鑫意盎然植树种钱”活动，
+每日浇水投资即可赢得红包、满减券，
+前十名更可获得最高3000现金奖励！
+活动期间您专属的招财树总生长值目前为<span></span>，
+此次投资获得生长值为<span></span>，点击按钮快去查看吧。
+</p>
+<a href="/Activity/Show/zhishu" class="lookBtn"></a>
+<a href="javascript:;" class="treeClose"></a>
+
+</div>
+<?php if($is_open){ ?>
+<div class="septSchool-mask"></div>
+<div class="tips-mask">
+    <p>您已获得理财运动会参赛资格！</p>
+    <p>最高可获得<em>苹果6S</em>玫瑰金哦~</p>
+    <p class="btn">
+      <a class="next-say sport-no" href="javascript:;">下次再说</a>
+      <a class="participate-in" href="{:U('Activity/SportAct/index')}">立即参与</a>
+    </p>
+</div>
+<?php }?>
+
+<script>
+  var is_open = "<?php echo $is_open;?>"
+  var chance = "<?php echo $chance;?>"
+</script>
+
+</block>
+<block name="footer"><include file="./app/Tpl/Public/footer_user.html" /></block>

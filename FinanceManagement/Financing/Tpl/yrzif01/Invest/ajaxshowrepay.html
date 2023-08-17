@@ -1,0 +1,53 @@
+<div class="hoverRecord">
+  <div class="hoverArrow">
+      <em>◆</em>
+      <span>◆</span>
+  </div>
+  <div class="hd">
+    <table class="hover-table" style="width:700px">
+      <thead>
+        <tr>
+          <th width="16%" class="tac">期次</th>
+          <th width="15%" class="tac">还款日</th>
+		      <th width="16%" class="tar">应收本息（元）</th>
+          <th width="16%" class="tar">应收利息（元）</th>
+          <th width="16%" class="tar">应收本金（元）</th>
+          <th width="16%" class="tar">剩余本金（元）</th>
+          <th width="5%"></th>
+         </tr>
+      </thead>
+    </table>
+  </div>
+  <div class="bd">
+    <table class="hover-table">
+      <tbody>
+      
+     	<?php if($list):?>
+     	<?php foreach($list as $k=>$v):?>
+     	<?php if($k==0): ?>
+     	  <tr>
+          <td width="16%" class="tac">募集期资金占用费</td>
+          <td width="15%" class="tac">{$v['repay_date_view']}</td>
+         <td width="16%" class="tar">{$v['repay_money_view']}</td>
+          <td width="16%" class="tar">{$v['yield_view']}</td>
+		   <td width="16%" class="tar">0.00</td>
+          <td width="16%" class="tar">{$v['rest_principal_view']}</td>
+          <td width="5%"></td>
+        </tr>
+        <?php else: ?>
+        <tr>
+          <td width="16%" class="tac"><?php echo $v['repay_periods']; ?></td>
+          <td width="15%" class="tac"><?php echo $v['repay_date_view']; ?></td>
+          <td width="16%" class="tar">{$v['repay_money_view']}</td>
+          <td width="16%" class="tar"><?php echo $v['yield_view']; ?></td>
+		  <td width="16%" class="tar"><?php echo $v['principal_view']; ?></td>
+          <td width="16%" class="tar"><?php echo $v['rest_principal_view']; ?></td>
+          <td width="5%"></td>
+        </tr>
+        <?php endif; ?>
+        <?php endforeach;?>
+       <?php endif; ?>
+      </tbody>
+    </table>
+  </div>
+</div>

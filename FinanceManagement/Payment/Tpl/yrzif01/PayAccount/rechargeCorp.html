@@ -1,0 +1,224 @@
+<extend name="./app/Tpl/Public/base2.html"/>
+<block name="title">我的账户-账户概况-机构充值</block>
+<block name="keywords">机构充值</block>
+<block name="description">机构充值</block>
+
+<block name="style">
+    <link href="/public/css/banklogo.css" rel="stylesheet" />
+</block>
+
+<block name="body">
+    <?php
+      if($role==2 || $role==6){
+    ?>
+    <div class="detailSurTab surTabUl mt30 mb20">
+        <ul>
+            <li><span class="roundTopborGy"><a href="{:U('Application/ProjectManage/index')}">项目管理</a></span><a class="hrwrite"></a></li>
+            <li><span class="roundTopborGy"><a href="{:U('Application/ProjectRepayment/index')}">还款计划</a></span><a class="hrwrite"></a></li>
+            <li><span class="roundTopborGy"><a href="{:U('Application/ProjectManage/getMyMoneyList')}">资金记录</a></span><a class="hrwrite"></a></li>
+            <li class="current"><span class="roundTopborGy"><a href="{:U('Application/ProjectManage/accountInfo')}">我的账户</a></span><a class="hrwrite"></a></li>
+        </ul>
+    </div>
+    <?php }else{ ?>
+    <include file="nav" />
+    <?php   } ?>
+
+    <div class="main_area" style="overflow: auto;">
+        <input type="hidden" id="is_id_auth" value="{$is_id_auth}"/>
+        <div class="insurance assume-title" style="border-bottom: #ededed solid 1px;">
+          <h2 class="h2tit" style="border:none;display:inline;margin-right:20px;font-size:18px;">机构充值</h2>
+          <i class="protect"></i><em></em><span>鑫盾风控对您的资金流向进行全流程监控</span>
+          <i class="lock"></i><em></em><span>银行级安全防护</span>
+        </div>
+        <div class="corp-cz">
+          <div class="recharge_form">
+            <form method="POST" id="submit_form" action="{:U('Payment/PayAccount/submit')}" target="_blank">
+                <ul class="formList">
+                    <li>
+                        <label class="li-label-name" style="padding-top:20px;">充值方式</label>
+        <span class="li-span-con" style="padding: 0 0 0 40px;">
+          <ul class="recharge_mode">
+              <?php if($is_xia_recharge == 1){ ?>
+              <li>
+                  <input id="m_transfer" name="recharge_mode" type="radio" value="xianxia">
+                  <label for="transfer">充值预约　（以下银行无法满足您的要求？请预约充值）</label>
+
+                  <!-- <span class="grayB5">（通过转账支付，免收<a href="{:U('Help/Help/viewHelpIndex', array('tpl'=>'AboutUs-tariffInfo'))}" target="blank"  class="blue">资金管理服务费</a>）</span> -->
+
+              </li>
+              <?php } ?>
+              <li>
+                  <input id="m_bank" name="recharge_mode" type="radio" value="bank" checked><label for="online">网上银行充值</label>
+
+                  <div class="needclose bank_list">
+                      <!-- <label id="label_bank_01" class="bank_logo_box" for="bank_01">
+                          <input type="radio" id="bank_01" value="ICBC" name="bank_option" abbr="shenfut">
+                          <span class="bank_logo bank_icbc" title="工商银行">工商银行</span></label> -->
+                      <label id="label_bank_01" class="bankbox bank_logo_box" for="bank_01">
+                        <input type="radio" id="bank_01" data-info="单笔限额1000万，单日限额1亿" value="ICBC" name="bank_option" abbr="yibaoapi">
+                        <span class="bank_logo bank_icbc" title="工商银行">工商银行</span></label>
+                      <!-- 选择其他银行 -->
+                      <label data-type="choosebankfor" class="dn" id="chosebankfor" for="" style="position:relative;">
+                        <a href="javascript:;" id="chosebank" class="blue others">选择其他银行<i class="iar"></i></a>
+                      </label>
+                      <!--<div id="bankbox" class="dn">-->
+                       
+                      <label id="label_bank_02" class="bankbox dn bank_logo_box" for="bank_02">
+                        <input type="radio" id="bank_02" data-info="充值无限额" value="ABC" name="bank_option" abbr="yibaoapi">
+                        <span class="bank_logo bank_abc" title="农业银行">农业银行</span></label>
+                      <label id="label_bank_03" class="bankbox dn bank_logo_box" for="bank_03">
+                        <input type="radio" id="bank_03" data-info="充值无限额" value="CMB" name="bank_option" abbr="yibaoapi">
+                        <span class="bank_logo bank_cmb" title="招商银行">招商银行</span></label>
+                      <label id="label_bank_04" class="bankbox dn bank_logo_box" for="bank_04">
+                        <input type="radio" id="bank_04" data-info="充值无限额" value="CCB" name="bank_option" abbr="yibaoapi">
+                        <span class="bank_logo bank_ccb" title="建设银行">建设银行</span></label>
+                      <label id="label_bank_05" class="bankbox dn bank_logo_box" for="bank_05">
+                        <input type="radio" id="bank_05" data-info="单笔限额5000万，单日限额1亿" value="BOC" name="bank_option" abbr="yibaoapi">
+                        <span class="bank_logo bank_boc" title="中国银行">中国银行</span></label>
+                      <label id="label_bank_07" class="bankbox dn bank_logo_box" for="bank_07">
+                        <input type="radio" id="bank_07" data-info="单笔限额10亿，单日限额10亿"value="BOCOM" name="bank_option" abbr="yibaoapi">
+                        <span class="bank_logo bank_boco" title="交通银行">交通银行</span></label>
+                      <label id="label_bank_08" class="bankbox dn bank_logo_box" for="bank_08">
+                        <input type="radio" id="bank_08" data-info="充值无限额" value="CGB" name="bank_option" abbr="yibaoapi">
+                        <span class="bank_logo bank_gdb" title="广发银行">广发银行</span></label>
+                      <label id="label_bank_09" class="bankbox dn bank_logo_box" for="bank_09">
+                        <input type="radio" id="bank_09" data-info="充值无限额" value="CMBC" name="bank_option" abbr="yibaoapi">
+                        <span class="bank_logo bank_cmbc" title="民生银行">民生银行</span></label>
+                      <label id="label_bank_10" class="bankbox dn bank_logo_box" for="bank_10">
+                        <input type="radio" id="bank_10" data-info="充值无限额"value="SZPAB" name="bank_option" abbr="yibaoapi">
+                        <span class="bank_logo bank_pingan" title="平安银行">平安银行</span></label>
+                      <label id="label_bank_11" class="bankbox dn bank_logo_box" for="bank_11">
+                        <input type="radio" id="bank_11" data-info="充值无限额" value="CEB" name="bank_option" abbr="yibaoapi">
+                        <span class="bank_logo bank_cebb" title="光大银行">光大银行</span></label>
+                      <label id="label_bank_13" class="bankbox dn bank_logo_box" for="bank_13">
+                        <input type="radio" id="bank_13" data-info="充值无限额" value="CITIC" name="bank_option" abbr="yibaoapi">
+                        <span class="bank_logo bank_ecitic" title="中信银行">中信银行</span></label>
+                      <label id="label_bank_14" class="bankbox dn bank_logo_box" for="bank_14">
+                        <input type="radio" id="bank_14" data-info="充值无限额" value="HXBC" name="bank_option" abbr="yibaoapi">
+                        <span class="bank_logo bank_hxb" title="华夏银行">华夏银行</span></label>
+                      <!--<label id="label_bank_31" class="bank_logo_box" for="bank_31">
+                        <input type="radio" id="bank_31" value="HZCB_D_B2C" name="bank_option" abbr="yibatong">
+                        <span class="bank_logo bank_hzb" title="杭州银行">杭州银行</span></label>-->
+                      <!--<label id="label_bank_32" class="bank_logo_box" for="bank_32">
+                        <input type="radio" id="bank_32" value="POSTGC_D_B2C" name="bank_option" abbr="yibatong">
+                        <span class="bank_logo bank_post" title="邮政储蓄银行">邮政储蓄银行</span></label>-->
+                      <label id="label_bank_33" class="bankbox dn bank_logo_box" for="bank_33">
+                        <input type="radio" id="bank_33" data-info="充值无限额" value="CIB" name="bank_option" abbr="yibaoapi">
+                        <span class="bank_logo bank_cib" title="兴业银行">兴业银行</span></label>
+                      <label id="label_bank_06" class="bankbox dn bank_logo_box" for="bank_06">
+                          <input type="radio" id="bank_06" data-info="充值无限额" value="SPDB" name="bank_option" abbr="yibaoapi">
+                          <span class="bank_logo bank_spdb" title="浦发银行">浦发银行</span></label>
+                      <!--<label id="label_bank_15" class="bank_logo_box" for="bank_15">
+                        <input type="radio" id="bank_15" value="NBCB" name="bank_option" abbr="shenfut">
+                        <span class="bank_logo bank_nbcb" title="宁波银行">宁波银行</span></label>-->
+                      <!--<label id="label_bank_16" class="bankbox dn bank_logo_box" for="bank_16">
+                        <input type="radio" id="bank_16" data-info="充值无限额" value="BCCB" name="bank_option" abbr="yibaoapi">
+                        <span class="bank_logo bank_bob" title="北京银行">北京银行</span></label>-->
+                      <!--<label id="label_bank_17" class="bank_logo_box" for="bank_17">
+                        <input type="radio" id="bank_17" value="HKBEA" name="bank_option" abbr="shenfut">
+                        <span class="bank_logo bank_hkbea" title="东亚银行">东亚银行</span></label>-->
+                      <!--<label id="label_bank_18" class="bank_logo_box" for="bank_18" >
+                        <input type="radio" id="bank_18" value="BOS" name="bank_option" abbr="shenfut">
+                        <span class="bank_logo bank_bosh" title="上海银行">上海银行</span></label>
+                      <label id="label_bank_20" class="bank_logo_box" for="bank_20">
+                        <input type="radio" id="bank_20" value="NJCB" name="bank_option" abbr="shenfut">
+                        <span class="bank_logo bank_njcb" title="南京银行">南京银行</span></label>
+                      <label id="label_bank_21" class="bank_logo_box" for="bank_21">
+                        <input type="radio" id="bank_21" value="CBHB" name="bank_option" abbr="shenfut">
+                        <span class="bank_logo bank_cbhb" title="渤海银行">渤海银行</span></label>
+                      <label id="label_bank_22" class="bank_logo_box" for="bank_22">
+                        <input type="radio" id="bank_22" value="BOCD" name="bank_option" abbr="shenfut">
+                        <span class="bank_logo bank_bocd" title="成都银行">成都银行</span></label>
+                      <label id="label_bank_24" class="bank_logo_box" for="bank_24">
+                        <input type="radio" id="bank_24" value="SRCB_D_B2C" name="bank_option" abbr="yibatong">
+                        <span class="bank_logo bank_srcb" title="上海农村商业银行">上海农村商业银行</span></label>-->
+                     <!--</div>-->
+                  </div>
+                  <p id="forxiane" class="needclose"></p>
+                  <!-- 银行限额  增删银行时别忘记增删限额提示-->
+                  <!-- <div class="bank_limits">
+                      <include file="bankLimits" />
+                  </div> -->
+             <!-- </span>-->
+                        </li>
+
+                    <!--
+                      <li>
+                        <input id="m_three_pay" name="recharge_mode" type="radio" value="three_pay"><label for="sanf">第三方支付平台支付</label>
+                         <div class="channel_list" id="channel_list">
+                      <label id="label_bank_100" class="bank_logo_box" for="bank_100">
+                        <input type="radio" id="bank_100" value="100" name="bank_option" abbr="shenfut">
+                        <span class="bank_logo bank_shenfut" title="盛付通">盛付通</span></label>
+                    </div>
+                      </li>
+                      -->
+                    <li style="display:none">
+                        <label class="protocol_tip"><input name="readProtocol" type="checkbox" value=""><?php if($has_recharge){ ?>checked<?php } ?>>我同意《<a class="blue" colorbox='1' href="{:U('Index/Protocol/view',array('id'=>2))}" url="{:U('Index/Protocol/view',array('id'=>2))}">鑫合汇资金管理服务协议</a>》
+                            <div id="protocolTip" class="ui_hovertips dn">
+                                <i class="art"></i><i class="sidel"></i><i class="sider"></i>
+                                <p class="cont">协议中有充值的相关收费规则，<br/>请您仔细阅读～<i class="face"></i></p>
+                            </div><span id="readTips" class="red dn">请先阅读并同意《鑫合汇资金管理服务协议》</span>
+                        </label>
+                    </li>
+                </ul>
+                <!--</li>-->
+                <input type="hidden" id="payType" name="payType" value="shenfut"/>
+                <input type="hidden" id="bankCode" name="bankCode" value=""/>
+                <!-- <li><label for="" class="li-label-name">&nbsp;</label><span class="li-span-con" style="padding: 0 0 0 36px;"><i class="paul17px"></i>&ensp;第三方担保公司全额本息担保&emsp;<i class="safety17px"></i>&ensp;账户资金由人保财险保险承保</span></li> -->
+                <li class="needclose pr">
+                  <label class="li-label-name">充值金额</label><span class="li-span-con" style="padding: 0 0 0 36px;"><input type="text" class="inputCommon" valid-msg-options='{"offset":180}' id="amount" valid-msg-text="" name="amount" value=""><!--valid="minNumber@50000|单笔充值金额小于50000元"-->
+                  <span class="fillNote">元
+                      <?php if($minMoney){ ?><span class="grayB5">(最低充值金额不少于{$minMoney}元)</span><?php } ?></span>
+                                    <?php if(empty($_COOKIE['nextNotTip'])){ ?>
+                                    <!-- 遮罩层 -->
+                  <!-- <div class="mask" style="display:block" id="maskLayer"></div>
+                  <div class="recharge_tip_d" id="recharge_tip_d"></div>
+                  <div class="recharge_tip" id="recharge_tip">
+                  <span class="i_close closePopBox">×</span><a class="next nextStep closePopBox" href="javascript:;" hidefocus="hidefocus">知道了</a>
+                  <div class="content">
+                    <p>目前<em class="blue">仅支持本人的借记卡</em>给自己的鑫合汇账户<em class="blue">转账充值</em>（借记卡的户名与鑫合汇账户实名一致），不支持给他人的鑫合汇账户转账充值。转账代付的<em class="blue">资金</em>将会被<em class="blue">退回原卡</em>，请知晓~</p>
+                    <p class="mt10"><label class="blue"><input type="checkbox" style="vertical-align:-2px;" id="nextNotTip">下次不再提示</label></p>
+                  </div>
+                  </div> -->
+                                    <?php } ?>
+                    </span>
+                </li>
+              <!-- //跳转充值预约界面 -->
+              <li style="padding: 0 0 0 129px;">
+                <div class="button-common-blue button-blue-pop"><input style="display: none" type="button" id="czbrecharge" name="recharge" value="充值预约" class="btns w250"></div>
+              </li>
+                <li class="needclose lastBtns"><label class="li-label-name">&nbsp;</label>
+                  <span class="li-span-con" style="padding: 0 0 0 36px;">
+                    <div class="button-common-blue button-blue-pop"><input type="button" id="brecharge" name="recharge" value="登录到网上银行充值" class="btns w250 btn-gray">
+                    </div>
+                  </span>
+                </li>
+
+                </ul>
+            </form>
+            <div class="nocodeTip">
+                <p class="noteTipName">温馨提示</p>
+                <ol class="noteTipText1">
+                    <li>1. 充值后未用于投资的金额，提现将收取0.2%的提现转账费用（由第三方支付平台收取）</li>
+                    <li>2. 在支付页面完成充值后，请点击“返回商户”按钮，不要直接关闭支付页面窗口，否则可能会造成充值金额延后到账。</li>
+                    <li>3. 每日的充值限额以各银行限额为准</li>
+                </ol>
+            </div>
+        </div>
+        <input type="hidden" id="xx_url" value="{:U('Payment/PayAccount/xianxia')}">
+        <input type="hidden" id="pay_url" value="{:U('Payment/PayAccount/submit')}">
+        <input type="hidden" id="record_url" value="{:U('Payment/PayAccount/getMyMoneyList')}">
+        <input type="hidden" id="minMoney" value="{$minMoney}">
+        </div>
+    </div>
+
+    <script>
+        //选择更多银行
+        $(document).on("click","#chosebank",function(){
+            $(".bankbox").show();
+            $("#chosebank").hide();
+        });
+    </script>
+
+</block>
+

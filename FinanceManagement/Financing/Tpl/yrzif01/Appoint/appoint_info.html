@@ -1,0 +1,37 @@
+<div class="appoint-standard-l">
+  <div class="appoint-standardDt">
+    <ul class="standardDtApp">
+      <li>
+        <span class="title">可预约收益率区间</span>
+        <p class="gains"><em class="bigNum orange-dark"><strong>8</strong>%-<strong>18</strong>%</em></p>
+      </li>
+      <li class="last li-pl">
+        <span class="title">可预约项目期限区间</span>
+        <span class="gains"><em class="bigNum green">1-91</em>天</span>
+      </li>
+    </ul>
+      <?php if($appointRecord){ ?>
+        <span class="button-common-green"><a href="javascript:;" class="btns" event-click="ajaxCancle">取消预约</a></span>
+      <?php }?>
+  </div>
+  <div class="appont-infoList">
+       <ul class="appoint-Ul">
+         <li class="li-br"><em class="icon-appoint item_1"></em><span class="appoint-span">
+             <p class="appTxt"><em><?php if($status['1']==1){ ?>{$summary.num}<?php }else{ ?> {$stat['succ_count']}<?php }?></em>笔</p>
+            <p class="appTxt2">预约成功</p>
+           </span></li>
+         <li class="li-pl"><em class="icon-appoint item_2"></em><span class="appoint-span">
+             <p class="appTxt">目前只支持日益升</p>
+             <p class="appTxt2">预约产品</p>
+           </span></li>
+         <li class="li-pt li-br"><em class="icon-appoint item_3"></em><span class="appoint-span">
+             <p class="appTxt"><?php if($status['1']==1){ ?>{$summary.total}<?php }else{ ?> {$stat['succ_amount']}  <?php }?>元</p>
+             <p class="appTxt2">成交金额</p>
+           </span></li>
+         <li class="li-pt li-pl"><em class="icon-appoint item_4"></em><span class="appoint-span">
+             <p class="appTxt">{$stat['uid_count']}人</p>
+             <p class="appTxt2">预约人数</p>
+           </span></li>
+       </ul>
+  </div>
+</div>

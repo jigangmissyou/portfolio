@@ -1,0 +1,55 @@
+<span class="infoBtnbox" style="position: relative;">
+  <?php 
+    $client_type = $vo['client_type'];  // 0-全部 1-PC 2-微信 3-手机app
+    $hoverEvent = '';
+    $bid_status_view = $vo['bid_status_view'];
+
+    if($vo['bid_status'] <= PrjModel::BSTATUS_BIDING && empty($vo['isChannel'])){  // 待开标、投资中的鑫合汇的标
+      $buttonStyle = "orgBigBtn";
+      $viewUrl = $vo['url'];
+
+      if($client_type > 0){  // 1-PC 2-微信 3-手机app
+        $hoverEvent = 'event-mouseover="overClientBtn" event-mouseout="outClientBtn"';  // 鼠标放到按钮上的事件
+        if($client_type == 1){  // PC专享
+          $bid_status_view = 'PC专享';
+        } else if($client_type == 2){ // 微信
+          $client_type_config[2].='WAP';
+          $bid_status_view = '微信专享';
+        } else if($client_type == 3){ // 手机APP
+          $bid_status_view = '手机APP专享';
+        }
+      }
+
+      if(!empty($vo['is_new'])){  // 新客专享标 老用户
+        $limitWords = '首次';
+        $bid_status_view = '新客专享';
+        if(empty($is_newbie)){ // 非新客
+          $buttonStyle = "grayBigBtn";
+          $viewUrl = "javascript:;";
+        }
+      }
+    } else {  // 满标以上状态及非鑫合汇标
+      $buttonStyle = "grayBigBtn";
+      $viewUrl = "javascript:;";
+    }
+   ?>
+
+  <label class="{$buttonStyle}" {$hoverEvent}>
+    <a class="btns font22" target="_blank" href="{$viewUrl}">{$bid_status_view}</a>
+  </label>
+
+  <?php if(!empty($hoverEvent)){  // 有hover状态的时候才加载这块dom ?>
+    <!-- 提示框 -->
+    <?php if(!empty($vo['isChannel'])){ // 其他渠道标 ?>
+    <div class="OrangeTipBox" data-flag="eventclientBtn" class="fixed" style="display:none; left: 100px; top: -37px;">
+      <span class="OrangeTipBox_Rc tac"><i class="SmilingFace"></i>仅针对使用专享项目投资的用户哦~</span>
+      <em class="OrangeTipBox_Arr"></em>
+    </div>
+    <?php } else {  // 鑫合汇标 ?>
+    <div class="OrangeTipBox" data-flag="eventclientBtn" class="fixed" style="display:none; left: 100px; top: -37px;">
+      <span class="OrangeTipBox_Rc tac"><i class="SmilingFace"></i>仅针对{$limitWords}使用{$client_type_config[$client_type]}投资的用户哦~</span>
+      <em class="OrangeTipBox_Arr"></em>
+    </div>
+    <?php } ?>
+  <?php } ?>
+</span>

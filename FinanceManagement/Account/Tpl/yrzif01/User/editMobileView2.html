@@ -1,0 +1,46 @@
+<extend name="./app/Tpl/Public/base_user.html"/>
+<block name="title">重新绑定手机</block>
+<block name="keywords"></block>
+<block name="description"></block>
+
+<block name="style">
+  <link href="/public/css/banklogo.css" rel="stylesheet" />
+</block>
+<block name="body">
+<div class="container-inner mt20">
+  <include file="./app/Tpl/Account/userMyBonusSider.html" />
+  <div class="main_area body-frame">
+   <div class="p20">
+    <h2 class="h2tit">重新绑定手机</h2>
+    <div class="account-edit-mobile">
+        <ul>
+          <li class="li-first current">1 安全验证<span class="edit-jiao"></span></li>
+          <li class="li-other current">2 重新绑定<span class="edit-jiao"></span></li>
+        </ul>
+      </div>
+    <form method='post'  action="{:U('Account/User/resetEditMobile')}" ajax="1" ajax-after="Ajax_after_resetEditMobileForm">
+      <ul class="formList account-edit-form">
+        <li>
+          <label class="li-label-name">新手机号码</label>
+          <span class="li-span-con">
+          <input type="text" class="inputCommon" name="mobile" style="width:300px;" value="" valid="required,mobile"></span>
+        </li>
+        <li>
+          <label class="li-label-name">手机动态码</label>
+          <span class="li-span-con">
+          <input type="text" class="inputCommon" name='code' style="width:190px;" value="" valid="required,number,fixedLength@6" valid-msg-options='{"offset": 110}'><a href="javascript:;" id="show_send_btn" class="button-code-no button-code-user-set ml10">免费获取</a><a href="javascript:;"  id="time_send"  class="button-code-on button-code-user-set ml10" style="display:none">120秒</a>
+        </span>
+      </li>
+        <li class="lastBtns">
+          <label class="li-label-name">&nbsp;</label>
+          <span class="li-span-con">
+          <span class="button-common-blue button-blue-w120"><input type="submit" name="" value="提 交" class="btns"></span>
+          <span class="button-common-gray button-gray-w120 ml20"><input type="reset" name="" value="取 消" class="btns"></span>
+          </span>
+        </li>
+      </ul>
+    </form>
+  </div>
+  </div>
+</div>
+</block>

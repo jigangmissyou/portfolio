@@ -1,0 +1,96 @@
+<extend name="./app/Tpl/Public/base_user.html"/>
+<block name="title">更换银行预留手机号</block>
+<block name="keywords"></block>
+<block name="description"></block>
+
+<block name="style">
+  <link href="/public/css/banklogo.css" rel="stylesheet" />
+  <link rel="stylesheet" href="/public/css/sasscss/act/zskh/index.css">
+</block>
+<block name="body">
+<div class="container-inner mt20">
+  <include file="./app/Tpl/Account/userMyBonusSider.html" />
+  <div class="main_area body-frame">
+    <div class="p20">
+      <h2 class="h2tit">更换银行预留手机号</h2>
+        <p class="orange" style="margin:50px 0 10px 160px;">请先通过银行柜面更换银行卡的预留手机号,再进行以下操作</p>
+      <form method='post'  action="{:U('Account/User/editBankMobile')}"  ajax="1" ajax-before="ajaxBefore_submit" ajax-after="ajaxAfter_submit">
+        <ul class="formList account-edit-form">
+          <li>
+            <label class="li-label-name">当前手机号码</label>
+            <span class="li-span-con">{$zs_bank_mobile}</span>
+            <input type="hidden" name="oldMobile" value="{$raw_mobile}">
+          </li>
+          <li class="canhidden">
+            <label class="li-label-name">新手机号码</label>
+            <span class="li-span-con">
+            <input type="text" class="inputCommon" placeholder="新的银行预留手机号" style="width:300px;" value="" name='mobile' valid="ajax@{:U('Account/User/ajaxCheckBankMobile')}"/>
+          </span>
+          </li>
+          <li class="canhidden">
+            <label class="li-label-name">手机动态码</label>
+            <span class="li-span-con">
+              <input type="text" class="inputCommon" style="width:190px;" value="" name='verifyCode' valid="required,number,lengthRange@4~6"  valid-msg-options='{"offset": 110}'/>
+              <span href="javascript:;" class="button-code-no button-code-user-set ml10" id="show_send_btn">免费获取</span>
+              <a href="javascript:;" class="button-code-on button-code-user-set ml10" id="time_send" style="display:none">120</a>
+            </span>
+          </li>
+          <li class="lastBtns canhidden">
+            <label for="" class="li-label-name">&nbsp;</label><span class="li-span-con">
+              <span class="button-common-blue button-blue-w120"><input type="submit" id="formsubmit" name="" value="确定" class="btns"></span>
+              <a href="{:U('/Account/User/account')}"><span class="button-common-gray button-gray-w120 ml20"><input type="reset" name="" value="取 消" class="btns"></span></a>
+            </span>
+          </li>
+          <div class="handling dn" style="margin: 0 auto;text-align: center;width: 58%;height: 200px;line-height:200px;border: 2px solid #F1F1F1;border-radius: 8px">
+            <img src="/public/images/zskh/loading.gif" alt="" /><span class="recharging">处理中</span>
+          </div>
+
+          <div class="success dn" >
+          <div style="margin: 0 auto;text-align: center;width: 58%;height: 200px;line-height:200px;border: 2px solid #F1F1F1;border-radius: 8px">
+            <img src="/public/images/zskh/czcg.png" alt="" /><span class="recharging">更换成功!</span><br>
+          </div>
+          <div style="margin: 0 auto;text-align: center;width: 58%;height: 200px;padding-top: 10px">
+            <div style="width: 80%;margin: 0 auto;text-align: left ">
+              <span><span style="color: #FFA900;">温馨提示：</span>若手机号未修改成功，可能原因是</span><br>
+              <span>1、手机动态码输入错误</span><br>
+              <span>2、新手机号非当前绑定银行卡的预留手机号</span>
+            </div>
+          </div>
+          </div>
+
+          <div class="fail dn">
+          <div class="tac" style="padding-top:20px;width: 420px;height: 180px;margin: 0 auto;border: 1px solid #F1F1F1;">
+            <img src="/public/images/zskh/czsb.png" alt="" /><span class="recharging">更换失败</span>
+            <p id="tipsbox" class="tac" style="line-height:46px;">手机号不是银行卡预留手机号</p>
+            <span class="button-common-blue button-blue-w120">
+              <a href="javascript:;" class="btns closeFail">关闭</a>
+            </span>
+          </div>
+          <div style="margin: 0 auto;text-align: center;width: 58%;height: 200px;padding-top: 10px">
+            <div style="width: 80%;margin: 0 auto;text-align: left ">
+              <span><span style="color: #FFA900;">温馨提示：</span>若手机号未修改成功，可能原因是</span><br>
+              <span>1、手机动态码输入错误</span><br>
+              <span>2、新手机号非当前绑定银行卡的预留手机号</span>
+            </div>
+          </div>
+          </div>
+        </ul>
+      </form>
+    </div>
+  </div>
+</div>
+<!-- 弹窗开始 -->
+  <div class="mask dn" style="opacity: 0.1;"></div>
+  <!--<div class="khcg zscz-load tac handling dn">
+    <img src="/public/images/zskh/loading.gif" alt="" /><span class="recharging">处理中</span>
+  </div>-->
+  <!--<div class="khcg zscz-load tac success dn">
+    <img src="/public/images/zskh/czcg.png" alt="" /><span class="recharging">更换成功!</span>
+  </div>-->
+  <!--<div class="khcg zscz-load tac fail dn" style="width: 420px;height: 210px;">
+    <img src="/public/images/zskh/czsb.png" alt="" /><span class="recharging">更换失败</span>
+    <p class="tac" style="line-height:30px;">手机号不是银行卡预留手机号</p>
+    <span class="button-common-blue button-blue-w120"><input type="submit" name="" value="关闭" class="btns closeFail"></span>
+  </div>-->
+<!-- 弹窗结束 -->
+</block>

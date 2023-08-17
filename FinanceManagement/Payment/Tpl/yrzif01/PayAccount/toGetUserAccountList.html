@@ -1,0 +1,24 @@
+<extend name="./app/Tpl/Public/base2.html"/>
+<block name="title">应用-资金管理</block>
+<block name="body">
+<include file="navM" />
+
+<div class="main_area">
+  <form action="{:U('Payment/PayAccount/getUserAccountList')}" ajax="1" ajax-after="ajaxAfter_Payment_PayAccountAdmin_form"
+        method="post" id="formId_Payment_PayAccountAdmin_form" ajax-datatype="html">
+    <div class="simple_search">
+      <sapn class="text">用户名：</sapn>
+      <input type="text" name="uname" class="ipt_search" value="{$parameter.uname}" style="width:140px">
+      <sapn class="text">姓名：</sapn>
+      <input type="text" name="real_name" class="ipt_search" value="{$parameter.real_name}" style="width:140px">
+      <input type="submit" class="btn_search_blue" value="查找">
+      <a href="javascript:" class="btn_nobg fr" event-click="exportExcel">导出Excel</a>
+    </div>
+    <div id="ajaxContent_Payment_PayAccountAdmin_form"></div>
+  </form>
+  <div style="display: none;">
+    <div id="viewRecodeList"></div>
+  </div>
+</div>
+<input type="hidden" id="exportUrl" value="{:U('Payment/PayAccount/exportUserAccountList')}">
+</block>

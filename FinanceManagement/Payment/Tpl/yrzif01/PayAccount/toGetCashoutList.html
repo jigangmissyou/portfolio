@@ -1,0 +1,56 @@
+<extend name="./app/Tpl/Public/base2.html"/>
+<block name="title">应用-提现管理</block>
+<block name="style">
+  <style>
+    .statusMenusLast a{
+      padding: 0;
+    }
+  </style>
+</block>
+<block name="body">
+<include file="navM" />
+
+<div class="main_area">
+	<form action="{:U('Payment/PayAccount/getCashoutList')}" ajax="1" ajax-after="ajaxAfter_Payment_PayAccount_getCashoutList" ajax-before="ajaxBefore_Payment_PayAccount_getCashoutList" method="post" id="formId_Payment_PayAccount_getCashoutList" ajax-datatype="html">
+	  <input type="hidden" id="status" name="status" value="1">
+		  <div class="statusMenusLast" id="getCashoutListStatus">
+		  	<a status="1" href="javascript:;" class="cur">待审核（ <span id="totalTodo_span">0</span> ）</a>
+		    <a status="5" href="javascript:;">提现中（ <span id="totalDoing_span">0</span> ）</a>
+        <a status="99" href="javascript:;">提现处理中（ <span id="totalBeing_span">0</span> ）</a>
+		    <a status="2" href="javascript:;" class="">提现成功（ <span id="totalSuccess_span">0</span> ）</a>
+		    <a status="3" href="javascript:;" class="">提现失败（ <span id="totalFailed_span">0</span> ）</a>
+		    <a status="6" href="javascript:;" class="">机器待处理（ <span id="totalMacTodo_span">0</span> ）</a>
+		    <a status="7" href="javascript:;" class="">机器处理中（ <span id="totalMacDoing_span">0</span> ）</a>
+		    <a status="8" href="javascript:;" class="">客服跟踪（ <span id="totalMacCustom_span">0</span> ）</a>
+		  </div>
+		  <div class="simple_search">
+		  <a id="cashoutExport" class="btn_nobg fr" href="javascript:void(0)" style="margin-top:0">导出</a>
+			<input type="text" ghosttext="用户名" class="ipt_search" id="uname" name="uname" style="width:80px;">
+			<input type="text" ghosttext="真实姓名" class="ipt_search" id="real_name" name="real_name" style="width:80px;">
+			站点：
+			<select id="mi_no" name="mi_no" style="width:80px;">
+			   <?php foreach ($mi_list as $key =>$value):?>
+			   <option value="{$key}">{$value['mi_name']}</option>     
+			   <?php endforeach;?>  
+			</select>&nbsp;&nbsp;
+			  类别：
+			  <select name="company_id" id="company_id">
+				  <option value="0">全部</option>
+				  <option value="1">UPG</option>
+			  </select>&nbsp;&nbsp;
+		  	<em class="rple">提现时间：</em>
+		  	<span class="date_pannel">
+		  		<input type="text" datepicker="1" class="ipt_search" id="start_time" name="start_time" readonly=""> <i class="icon_time"></i>
+		  	</span>
+		  	<span class="mr10">&mdash;</span>
+		  	<span class="date_pannel">
+		  		<input type="text" datepicker="1" class="ipt_search" id="end_time" name="end_time" readonly=""> <i class="icon_time"></i>
+		  	</span>
+		  	<input type="submit" value="搜索" class="btn_search_blue">
+		  	
+		  </div>
+		<div class="verify_bd loadding" id="ajaxContent_Payment_PayAccount_getCashoutList"></div>
+	</form>
+</div>
+<input type="hidden" id="exportUrl" value="{:U('Payment/PayAccount/exportCashoutList')}">
+</block>

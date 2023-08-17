@@ -1,0 +1,10 @@
+<?php // p($list); ?>
+<if condition="$list">
+  <foreach name="list" item="prj">
+  <include file="prj_ListItem" />
+  </foreach>
+  <?php $pageNavCallback = "ajaxAfter_Financing_InvestFund_ajaxList"; ?>
+  <include file="./app/Tpl/Public/pageAjax.html" />
+<else/>
+  <div class="no-data">没有相关数据</div>
+</if>

@@ -1,0 +1,80 @@
+<style>
+  .icon-none{
+    background: none !important;
+  }
+</style>
+<p class="investCensus fixed">
+  <?php if($prjInfo['bid_status'] <= PrjModel::BSTATUS_BIDING){ // 投资中 ?>
+  <?php if($prjInfo['is_jjs'] == '1'){ ?>
+  <span>发售金额</span>： <em class="green">{$demandAmount}</em>&emsp;&emsp;
+  <?php } else { ?>
+  <span>融资规模</span>： <em class="green">{$demandAmount}</em>&emsp;&emsp;
+  <?php } ?>
+  剩余可投资金额： <em class="orange">{$remainingAmount}</em>&emsp;&emsp;
+  <?php } ?>
+  已投资共计：<em class="blue"><?php echo $totalRow ? $totalRow :0; ?></em>笔
+</p>
+<?php
+$arr_icon = array();
+$icon_none_pre = '';
+$icon_none_appoint = '';
+foreach ($list as $row) {
+    if($row['is_pre_sale'] && !isset($arr_icon['is_pre_sale'])) {
+      $arr_icon['is_pre_sale'] = 1;
+      $icon_none_pre = '<span class="auto-icon icon-none"></span>';
+    }
+    if($row['is_appoint'] && !isset($arr_icon['is_appoint'])) {
+      $arr_icon['is_appoint'] = 1;
+      $icon_none_appoint = '<span class="auto-icon icon-none"></span>';
+    }
+}
+$icon_none = str_repeat('<span class="auto-icon icon-none"></span>', count($arr_icon));
+?>
+<table class="globaltable investCensusTable">
+  <tr class="tabtitle">
+    <th class="tal pd-l">{$icon_none}投标人</th>
+    <th class="tal pd-l">投资金额（元）</th>
+    <th class="tal pd-l">投标时间</th>
+  </tr>
+  <?php if(!empty($list)){ foreach ($list as $key => $vo) { ?>
+  <tr <?php if($key%2 == 0){echo 'class="GreyBgcolor"';} ?>>
+    <td class="pd-l bidder">
+
+    <?php if($vo['is_pre_sale']){ ?>
+      <span class="auto-icon pre_sale_icon"></span>
+    <?php } else { echo $icon_none_pre; }?>
+
+    <?php if($vo['is_appoint']){ ?>
+      <span class="auto-perch auto-icon-change"></span>
+    <?php } else { echo $icon_none_appoint; }?>
+
+    <if condition="$vo.show_type eq 'auto_invest'">
+       <em class="bidder-icon1"><i>自动投标</i></em>
+    </if>
+    <if condition="$vo.show_type eq 'app'">
+      <em class="bidder-icon2"><i>手机客户端投资</i></em>
+    </if>
+    <if condition="$vo.show_type eq 'pre_sale'">
+     <em class="bidder-icon3"><i>预售投资</i></em>
+    </if>
+    <if condition="$vo.show_type eq 'xjh'">
+     <em class="bidder-icon4"><i>司马小鑫</i></em>
+    </if>
+    {$vo.real_name||remainFirst}
+    </td>
+    <td class="pd-l">{$vo.money_view}</td>
+    <td class="pd-l">{$vo.ctime_view}</td>
+  </tr>
+  <?php }} else { ?>
+  <tr class="GreyBgcolor">
+    <td colspan="100%" style="text-align: center;">无数据</td>
+  </tr>
+  <?php } ?>
+</table>
+
+<?php 
+  $pageNavCallback = "ajaxAfter_View_Project_info";
+  $noScrollTop = true;
+  $scrollTo = '#detailSurvey';
+ ?>
+<include file="./app/Tpl/Public/pageAjax.html" />

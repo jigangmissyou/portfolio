@@ -1,0 +1,465 @@
+<extend name="./app/Tpl/Public/base_user.html"/>
+<block name="title">我的账户-账户概况-提现</block>
+<block name="keywords">提现</block>
+<block name="description">提现</block>
+<block name="style">
+<link href="/public/css/banklogo.css" rel="stylesheet" />
+<link rel="stylesheet" href="/public/css/sasscss/act/zskh/index.css">
+
+  <style>
+  #container{
+    width: 100%;min-width: 1000px;position: relative;
+  }
+  </style>
+</block>
+<block name="body">
+<?php
+function getLast4($money){
+  return substr($money, -4);
+}
+?>
+<input type="hidden" name="is_paypwd_edit" value="<?php echo $is_paypwd_edit;?>">
+  <input type="hidden" name="not_bind_card" value="<?php echo $not_bind_card;?>">
+
+  <!-- 预约投资金额确认 开始 -->
+<div class="investConfir" style="left:25%;top:27%;">
+  <table class="investConfir_tab">
+   <thead>
+     <tr>
+       <th>提现金额确认</th>
+     </tr>
+   </thead>
+   <tbody>
+     <tr>
+       <td>
+          <div class="appoint-warnIcon"><em class="warnIcon"></em></div>
+       </td>
+     </tr>
+     <tr>
+       <td>
+          <div class="appoint-cont">
+            <p>您自动预约投标金额为<span class="org_color"></span>元，因为您本次操作后余额不足，将取消预约。</p>
+          </div>
+       </td>
+     </tr>
+     <tr>
+       <td>
+          <div class="appoint-btns">
+            <label class="button-yellow-shallow " id="confirm" style="float:left;margin:0 10px 18px;"><input type="button" value="确 认" class="btns" style="width:155px;*width:81px;" hidefocus="hidefocus"></label>
+            <label class="grayBigBtn_37 " id="cancle" style="float:left;margin:0 10px 18px;"><input type="button" value="修改金额" class="btns" style="width:155px;*width:81px;" hidefocus="hidefocus"></label>
+          </div>
+       </td>
+     </tr>
+   </tbody>
+  </table>
+  <div class="writetriangle" style="top:261px;left:46px;">
+  </div>
+</div>
+<!-- 预约投资金额确认 结束 -->
+
+<div class="main_area bdlr withdrawal-content " style="padding: 0px;">
+  <div class="withdraw_form Cashout-modcolor">
+    <div class="selectRechargeWay pt20">
+      <ul class="">
+          <a href="javascript:;"><li class="cur">普通账户提现</li></a>
+          <li class="rightBorder"></li>
+          <a href="{:U('Payment/PayAccount/zsGetApplyCashout')}"><li>存管账户提现</li></a>
+      </ul>
+    </div>
+
+  <!-- 普通 -->
+      <?php if($uid_type==1){?>
+      <div class="tac  <if condition='$userStatus.xhh_status eq 1'>dn</if>">
+      <?php }else{?>
+          <div class="tac dn">
+      <?php }?>
+
+      <div class="tac mt20">
+        <img src="/public/images/zskh/sick.png" alt="" class="mt20 mb20" />
+        <p class="tac introduceTxt" style="width:100%;">你未在普通账户绑定银行卡</p>
+        <?php if(!$userStatus['is_id_auth']) { ?>
+        <a href="{:U('Account/Bank/identify')}" class="openAccountBtn mt40 orangeBg">
+            去绑卡
+        </a>
+        <?php } else { ?>
+        <a href="{:U('Account/Bank/identify', array('addbank'=>'1'))}" class="openAccountBtn mt40 orangeBg">
+            去绑卡
+        </a>
+        <?php } ?>
+      </div>
+  </div>
+          <?php if($uid_type==1){?>
+          <form method="POST" id="applyCashout_form" ajax="1" ajax-after="ajaxAfter_Payment_PayAccount_applyCashout" action="/Payment/PayAccount/applyCashout" style="padding-top: 10px; <if condition='$userStatus.xhh_status eq 0'>display:none;</if>">
+          <?php }else{?>
+          <form method="POST" id="applyCashout_form" ajax="1" ajax-after="ajaxAfter_Payment_PayAccount_applyCashout" action="/Payment/PayAccount/applyCashout" style="padding-top: 10px;">
+          <?php }?>
+      <input type="hidden" value="" name="bank_name">
+      <input type="hidden" value="" name="bank_no">
+      <div class="withdraw-boder">
+      <ul class="formList">
+      <li>
+        <?php $totalMoney = ($amount+$reward_money)/100;?>
+        <label class="li-label-name">账户余额：</label>
+        <span class="li-span-con amount">
+          <?php echo number_format(($amount+$reward_money)/100, 2)."<i>元</i>"; ?>
+          <span class="grayB5" style="font-size:16px;"><?php if($reward_money) echo "（含奖励金额".number_format($reward_money/100, 2)."元）"; ?></span>
+        </span>
+        <br />
+        <label class="li-label-name" style="clear: both;">（可免费提现金额：<a class="icon_quest" hovercard="div@cashFree" hovercard-options="{&quot;direction&quot;:&quot;up&quot;}" hidefocus="hidefocus"></a></label>
+        <span class="li-span-con"><?php echo number_format($free_money/100, 2)."元"; ?>，可免费提现次数：<?php echo $free_tixian_times; ?>次）
+        <div class="dn" hovercard-id="cashFree">
+          <p class="hoverPinfo">
+            充值用于投资的金额都计入可免费提现金额；充值未用于投资的金额，<br/>
+            提现时按0.2%的比率收取提现转账费用，具体请参照
+            <a href="{:U('Help/Help/viewHelpIndex?tpl=AboutUs-guide')}" class="blue">帮助</a>
+          </p>
+        </div>
+        </span>
+        
+      </li>
+      <li class="ovh" id="bankCardItem">
+        <label class="li-label-name select-card">选择银行卡：</label>
+        <span class="li-span-con bank-card">
+         <?php
+         //p($account_list);
+          $checkfirst=false;
+          $account_len = count($account_list);
+          $default_bank = array();
+          if(!empty($account_list)){
+            foreach ($account_list as $key => $vo) {
+              if($vo['is_default']==1){
+                array_push($default_bank, $vo);
+                break;
+              }
+            }
+
+            foreach ($account_list as $key => $vo) {
+              if($vo['is_default']!=1){
+                array_push($default_bank, $vo);
+              }
+            }
+          }
+          $account_list = $default_bank;
+          if(!empty($account_list)){ foreach ($account_list as $key => $vo) { ?>
+
+         <!-- 下面加了hack为了兼容IE7，为了防止修改更多 -->
+          <div data-auto="1" data-card-type="{$vo.bind_status}" class="prel block bank-card-bj <?php if($key>0){?>dn<?php }?>" data-should-verify="{$vo.sub_bank_status}">
+            <input event-click="validAutoCashOut" data-args="{$vo.autocashout}" data-bank-name="{$vo.bank_name}" data-bank-no="<?php echo getLast4($vo['account_no']); ?>" type="radio" class="vam" name="out_account_id" value="{$vo.id}" <?php if($vo['is_default'] || count($account_list) == 1) echo "checked"; ?>>
+            <span class="bank_tipbg"><i class="arl"></i><span class="">
+            <div class="small-bank-logo">
+              <img src="/public/images/bank/<?php echo $vo['bank'];?>.png">
+            </div>{$vo.bank_name}</span><span class="end-of">尾号：</span><span class="grayB5"> <?php echo getLast4($vo['account_no']); ?>
+            <!-- 以下php输出注释是银行卡号现改为4位数字8757调试用 -->
+              <?php //echo bank_no_view($vo['account_no']); ?>
+            </span></span>
+            <span class="grayB5 dn j-tip">
+              <?php if($vo['bind_status']==2){ ?>
+              <span class="debit-card-text button-bank-card">快捷</span>
+              <?php }else if($vo['bind_status']==1){ ?>
+              <span class="debit-card-text button-bank-card">储蓄卡</span>
+              <?php } ?>
+              <div class="most-transfer">
+              本次最多转出至此卡：<em class="orange" data-val="money"><?php echo $vo['cashoutAmount']/100;?></em>元
+              <span class="details-modify"><a class="details" href="javascript:;">限额详情
+              <span class="tips">同卡进出安全限额策略，即用户提现时，只能提由该卡充值到鑫合汇的金额及用户在鑫合汇平台投标后的利息收入之和。</span>
+              </a>
+              <a href="javascript:;" class="modify-bank dn">修改</a></span>
+              </div>
+            </span>
+            <!--<a href="javascript:void(0)" class="button-code-no modify-bank dn" style="display: inline-block;">修改</a>-->
+            <div class="tdtips default-pwd-tips org40 dn" style="width:65%; padding:0 10px; margin-left:16px;">
+                <i class="icon_OrangeSigh"></i>该银行卡未维护分支行信息，若要提现至该卡，请先添加分支行信息。
+            </div>
+          </div>
+        <?php $checkfirst = true; }} else { ?>
+        <span class="li-span-con"> &nbsp;</span> <span class="grayB5"> &nbsp;</span>
+         <?php } ?>
+        </span>
+        <span class="fixed" style="height:0; font-size: 0;"></span>
+          <?php if($account_len>0){ ?>
+          <div class="add-other-bank">
+          <?php }else{?>
+           <div class="add-other-bank" style="padding-left: 0">
+          <?php }?>
+          <?php if($account_len>1){ ?>
+          <span style="cursor:pointer;" id="show-banks-btn"><i class="other-bank"></i>其他银行卡</span>
+          <?php }?>
+            <input class="dn synofor" type="text" value="<?php echo $uid_type?>"/>
+          <span id="add-bank-btn"><i class="add-bank"></i><a href="javascript:;" hidefocus="hidefocus">添加银行卡</a></span>
+        </div>
+      </li>
+      <li class="one dn">
+        <label class="li-label-name">持卡人姓名：</label><span class="li-span-con">{$real_name}</span>
+      </li>
+      <li class="dn">
+        <label class="li-label-name">可免收手续费次数：</label><span class="li-span-con"><?php echo $free_tixian_times; ?>次
+        <span class="grayB5">
+       <!--  （<a href="<?php echo C('YRZKB_BBS_URL'); ?>/usc.php?usc_token=<?php echo $usc_token; ?>&referer=http://bbs.xinhehui.com/thread-4304-1-1.html" class="blue">如何获得更多次数</a>） -->
+       （<a href="http://bbs.xinhehui.com/thread-4304-1-1.html" class="blue">如何获得更多次数</a>）
+       </span>
+      </span>
+      </li>
+      <li style="overflow:visible;" class="fixed">
+
+        <div class="li-span-con gains transfer-amount" style="height:auto;">
+            <label class="li-label-name">转出金额：</label>
+          <input name="xhh_cashout_money" type="text" style="width:192px;  margin-left: 16px;position:relative;z-index:4;" class="inputCommon money" valid="required" id="money"  value="" autocomplete="off">
+          <span class="fillNote">元</span>
+          <!--<span id="cashouttips" class="org dn">该卡提现上限为： <em class="orange" data-money="current"></em>元&lt;!&ndash;<i class="icon_greyMark" id="J-money"></i> )&ndash;&gt;</span>-->
+            <span id="cashouttips" style="margin-left:8px;color:#999999;font-size:13px" class="fortips org">限额：
+            <?php if($uid_type==2){?>
+             <em style="color:#999999;font-size:13px" class="fortips orange">2000万/笔</em><!--<i class="icon_greyMark" id="J-money"></i> )--></span>
+            <?php }else{?>
+            <em style="color:#999999;font-size:13px" class="fortips orange">50万/笔</em>
+            <?php }?>
+
+            <span id="money-overflow" class="org dn"></span>
+          <span id="money-get" class="org ml20 dn reality">实际到账金额： <span id="cashout_money">0</span> 元</span>
+          <div id="J-moneyTip" class="OrangeTipBox-Red dn">
+            提现金额不能大于该卡本次最多可提现金额。<!-- 了解<br />更多请点击<a class="orange" href="">查看详情</a> -->
+            <em class="OrangeTipBox_Arr1"><em class="OrangeTipBox_Arr2"></em></em>
+          </div>
+         <!--  <?php if($reward_money){ ?> -->
+          
+         <!--  <?php } ?> -->
+         <div class="mt10 mb10 dn">
+            <input style="vertical-align: middle;" type="checkbox" name="use_reward_money" class="alm mr5" value="1" checked>提现金额优先从可提现的活动奖励金额中提取（可提现的活动奖励金额：<?php echo number_format($reward_money/100, 2)."元"; ?>）
+          </div>
+         <div class="charge">
+            <span>
+              <em>收取提现转账费用：<a hovercard="div@cashMoney" hovercard-options="{&quot;direction&quot;:&quot;up&quot;}" hidefocus="hidefocus"></a>
+                <span id="cashout_fee">0.00</span>
+                 元</em>
+            </span>
+          <span class="ml20">
+            <em>收取手续费： <a hovercard="div@cashShouxu" hovercard-options="{&quot;direction&quot;:&quot;up&quot;}" hidefocus="hidefocus"></a>
+            <span id="cashout_cash_fee"><?php if($free_tixian_times) echo '0.00'; else echo sprintf("%.2f", CASHOUT_CASH_FEE/100);  ?></span>
+            元</em>
+          </span>
+         </div>
+         </div>
+      </li>
+      <div class="dn" hovercard-id="cashMoney"><p class="hoverPinfo">充值后未用于投资的金额，<br/>提现时将按0.2%的比率收取</p></div>
+      <div class="dn" hovercard-id="cashShouxu"><p class="hoverPinfo">每笔提现固定收取2元金额</p></div>
+      <li class="account-time"><label class="li-label-name" style="margin-right:16px;">到账时间：</label>
+      <span>预计到账时间<em>{$rearch_time}</em>24点</span></li>
+      <li>
+        <?php
+        $jump_url = U('Payment/PayAccount/getApplyCashout');
+         ?>
+        <label class="li-label-name">支付密码：</label>
+        <span class="li-span-con">          
+          <input class="dn"><!-- 用于防止chrome保存密码 -->
+          <input name="xhh_cashout_pwd"  style="width:192px;  margin-left: 16px;" type="password" onpaste="return false;" class="inputCommon" valid="required" id="payPwd" value="" autocomplete="off" valid-msg-options='{"offset":80}' /><a href="{:U('Account/User/forgetPayPwd1',array('jump_url'=>$jump_url))}" id="!reset-paypwd" class="blue ml5">忘记密码?</a>
+          </span>
+      </li>
+      <li>
+        <label class="li-label-name">手机动态码：</label>
+        <span class="li-span-con">
+        <input valid-msg-options='{"offset":90}' type="text" class="inputCommon" style="width:192px;" name="code" valid="required">
+          <span class="btn_sblue" id="btnCashoutMobilecode"><a href="javascript:void(0);" class="btns">获取</a></span>
+          <span class="btn_sgray" id="cashout_pay_time" style="display:none"><a class="btns" href="javascript:void(0)">120</a></span>
+          <p class="dn" style="color:#f30023">提现确认后，该笔申请将发往银行处理，在<br />此过程中，用户无法撤销提现申请，请悉知</p>
+          <p class="confirm-transfer-bank"><label class="button-common-blue button-small-blue"><input type="submit" id="formSubmit" name="" value="确认转出至银行卡"  class="btns confirm"></label></p>
+          </span>
+      </li>
+      </ul>
+      <div class="formRight">
+        <div class="safe-guard">
+        <h1>安全保障</h1>
+       <div class="guarant">
+          <p><i class="claims" style="background-image: url(/public/images/account/suo.png);background-repeat: no-repeat;    background-position: 0 0px;height: 62px;width: 62px;"></i></p>
+          <p>多重安全保障</p>
+          <p class="blue">理财更安心</p>
+        </div>
+        <div class="guarant">
+          <p><i class="service-tel"></i></p>
+          <p>大额资金变动</p>
+          <p class="blue">客服实时电话回呼</p>
+        </div>
+        </div>
+      </div>
+    </div>
+    </form>
+    <input type="hidden" id="amount" value="{$amount}">
+    <input type="hidden" id="is_init" value="{$is_init}">
+    <input type="hidden" id="uid_type" value="{$uid_type}">
+    <input type="hidden" id="reward_money" value="{$reward_money}">
+    <input type="hidden" id="cashout_url" value="{:U('Payment/PayAccount/getApplyCashout')}">
+  </div>
+  <div class="plf20 dn">
+    <div id="naviga_bar" class="naviga_bar">
+    <a href="javascript:;">账户概况</a>
+    <em>></em>
+    <a class="" href="javascript:;">提现</a>
+    </div>
+    <div class="nocodeTip">
+      <p class="noteTipName org"><i class="tangerineHeart inline-block alm"></i> &ensp;温馨提示：</p>
+      <p class="noteTipText" style="line-height:30px;">
+        <em class="red">1.为了保护您的资金安全，请您在申请提现前绑定您本人的银行卡</em><br/>
+        2. 收到您的提现请求后，鑫合汇将在1-3个工作日（双休日和法定节假日除外）之内，将资金转入您绑定的银行卡<br/>
+        3. 在双休日和法定节假日期间，您可以申请提现，但鑫合汇将暂时不能处理，需要等恢复正常上班后才可以进行处理。 不便之处，请您谅解
+      </p>
+    </div>
+  </div>
+  <!--<div class="withdrawal-instructions">
+    <h2><i class="state-icon"></i>提现说明：</h2>
+    <p>1.为了保护您的资金安全，请您在申请提现前绑定您本人的银行卡；</p>
+    <p>2. 如您的卡已完成鉴权认证，符合<span class="blue">同卡进出</span>，则提现上限为100万元（含）；如您未完成鉴权认证（或原绑定卡不在鉴权范围内），您的提现上限为5万元（含）；</p>
+    <p>3.鑫合汇有三种到账时间：</p>
+    <p>1）小额同卡进出：如您的卡已完成鉴权认证，且提现金额小于5万元（不含），且在工作时间内提现（9：00~17：00），则工作日最快2小时内到账。支持鉴权的银行为：工行、农行、中行、建行、招行、交行、民生、浦发、华夏、光大、中信、平安、邮储、兴业、广发。非工作时间小额提现，则最慢次日24：00前到账。</p>
+    <p>2）大额同卡进出：如您的卡已完成鉴权，但提现金额大于5万元（含），则最慢次日24：00前到账。支持银行同上。</p>
+    <p>3）非同卡进出：如您的卡未鉴权或您的卡不在可鉴权范围内，则鑫合汇会在次日24：00前为您代付至您的银行卡，到账时间依收款行情况不同而不同。最晚三个工作日到账。<br />
+以上到账时间，节假日均顺延。不便之处敬请谅解。</p>
+
+    <h2>为何会提现失败？</h2>
+    <p>造成您提现失败的原因可能有以下几种：</p>
+    <p>1.银行开户行信息错误；</p>
+    <p>2.银行账号/户名错误，或是账号和户名不符；</p>
+    <p>3.银行账户冻结或正在办理挂失。<br/>如果遇到以上情况，我们会在收到银行转账失败的通知后解除您的提现资金冻结，并及时通知您相关信息，请您不必担心资金安全。</p>
+
+    <h2>为何单次提现只能5万？</h2>
+    <p>为了保证您的账户安全，鑫合汇平台已建立了同卡进出机制，即您的平台资金只能回到您名下的银行卡内。因此，需要用户在提现前完成银行卡认证操作。在用户未完成实名认证的情况下，单次提现金额限制为5万。</p>
+
+    <p class="button-common-blue button-small-blue more"><a class="btns" href="{:U('Help/Help/viewHelpIndex', array('tpl'=>'AboutUs-faq','type'=>'3'))}">更多帮助</a></p>
+  </div>-->
+    <div class="withdrawal-instructions">
+        <h2><i class="state-icon"></i>提现说明：</h2>
+        <p>1.个人投资人提现上限为50万元每笔（含）；机构投资人提现上限为2000万元每笔（含）；</p>
+        <p>2. 个人投资人：工作日内9：00~17：00发起提现，则最快2小时内到账；非工作时间及节假日发起提现，最晚下一工作日24：00前到账。</p>
+        <p>3.企业投资人：工作日内9：00~17：00发起提现，当日24：00前为您代付至您的银行卡；非工作时间及节假日顺延。到账时间依收款行情况不同而不同，最晚三个工作日到账。</p>
+        <p>4.为了保证您的账户安全，鑫合汇平台已建立了同卡进出机制，即您的平台资金只能提现至您对应的充值银行卡内。</p>
+
+        <h2>为何会提现失败？</h2>
+        <p>造成您提现失败的原因可能有以下几种：</p>
+        <p>1.银行开户行信息错误；</p>
+        <p>2.银行账号/户名错误，或是账号和户名不符；</p>
+        <p>3.银行账户冻结或正在办理挂失。<br/>如果遇到以上情况，我们会在收到银行转账失败的通知后解除您的提现资金冻结，并及时通知您相关信息，请您不必担心资金安全。</p>
+
+        <!--<h2>为何单次提现只能5万？</h2>
+        <p>为了保证您的账户安全，鑫合汇平台已建立了同卡进出机制，即您的平台资金只能回到您名下的银行卡内。因此，需要用户在提现前完成银行卡认证操作。在用户未完成实名认证的情况下，单次提现金额限制为5万。</p>-->
+
+        <p class="button-common-blue button-small-blue more"><a class="btns" href="{:U('Help/Help/viewHelpIndex', array('tpl'=>'AboutUs-faq','type'=>'3'))}">更多帮助</a></p>
+    </div>
+</div>
+
+
+<!-- 重置支付密码    start-->
+<div id="div_account_user_resetPayPwd" style="display:none;">
+  <div id="titlebar">找回支付密码</div>
+  <div id="jqueryContent">
+    <div class="w520
+  <form method="post" action="{:U('Account/User/resetPayPwd')}"
+   ajax="1" ajax-after="ajaxAfter_Account_User_resetPayPwd" id="formId_Account_User_resetPayPwd" autocomplete='off'>
+      <ul class="formList formList_pop">
+          <li><label>身份证号：</label>
+            <span class="li-span-con">
+            <input type="text" name="person_id" class="inputCommon"  valid="required,ajax@{:U('Account/User/checkPersonId')}">
+          </span>
+          </li>
+          <li><label>手机验证码：</label>
+            <span class="li-span-con">
+            <input type="text" class="inputCommon" id="change_code" name='code' valid="required" style="width:120px">
+          <span class="ml10 btn_sblue"><a href="javascript:void(0);" id="btnResetPayPwdMobilecode" class="btns">获取</a></span>
+          <span class="ml10 btn_sgray" id="span_pay_time" style="display:none"><a class="btns" href="#">120</a></span>
+          </span>
+          </li>
+          <li><label>新密码：</label>
+            <span class="li-span-con">
+            <input type="password" name="pwd1" class="inputCommon" id="change_pwd1" ghosttext="输入6-16位字符" valid="required,lengthRange@6~16,ajax@{:U('Account/User/checkPwd')}" valid="required" autocomplete='off'>
+          </span>
+          </li>
+          <li><label>确认新密码：</label>
+            <span class="li-span-con">
+            <input type="password" name="pwd2" class="inputCommon" id="change_pwd2"   valid="match@pwd1|密码不匹配" autocomplete='off'>
+          </span>
+          </li>
+          <li><label for="" class="li-label-name">&nbsp;</label><span class="li-span-con">
+            <span class="button-common-blue button-blue-pop"><input type="submit" id="changePasswordSubmit" class="btns" value="提交"></span>
+          </span>
+          </li>
+        </ul>
+ </form>
+    </div>
+    </div>
+</div>
+<!-- 重置支付密码     end-->
+
+<!-- 提现理由 开始 -->
+<div class="pop-cashBox" data-flag="tixianBox" style="width: 700px;display:none;">
+  <form method="post" action="{:U('Payment/PayAccount/cashoutSuccess')}" ajax="1" ajax-after="ajaxAfter_Payment_PayAccount_cashoutSuccess" id="formId_Payment_PayAccount_cashoutSuccess" autocomplete='off'>
+    <div id="titlebar">申请提现</div>
+    <div id="jqueryContent">
+      <div class="w520" style="margin:0 auto">
+        <h3 class="cashTitle"> <em class="imgNoteBig_Green mr10"></em>
+          提现申请已提交成功！
+        </h3>
+        <p class="tac font16">预计1-3个工作日内到账（节假日顺延）</p>
+        <ul class="cashwhy" style="padding-left:120px;">
+          <li>请告诉我们提现的原因，帮助我们改进产品</li>
+          <?php foreach ($questions as $key => $vo) { ?>
+          <li>
+            <label><input type="radio" id="code_no{$key}" name="code_no" value="{$vo.code_no}" class="mr10 alm">{$vo.code_name}</label>
+          </li>
+          <?php } ?>
+          <li>
+            <label><input type="radio" id="code_orther" name="code_no" value="orther" class="mr10 alm" hidefocus="hidefocus">其他</label>
+          </li>
+          <li id="ortherInputs" class="dn">
+            <textarea name="comment" style="width:252px;" class="ui_textarea" id="" cols="30" rows="10"></textarea>
+          </li>
+          <li style="width:260px">
+            <label for="" class="button-common-blue button-blue-pop">
+              <input type="submit" class="btns" value="确 定">
+            </label>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </form>
+</div>
+<!-- 提现理由 结束 -->
+<script>
+  var totalMoney = parseFloat("<?php echo $totalMoney;?>",10);
+  var is_paypwd_edit = '<?php echo $is_paypwd_edit;?>';
+  var not_bind_card = '<?php echo $not_bind_card;?>';
+
+</script>
+
+<div id="improve-bank-info" style="display: none">
+<div class="pop-name-auth" style="height:420px;">
+  <div id="titlebar">温馨提示</div>
+  <div id="jqueryContent">
+    <div class="tac" >
+    <img src="/public/images/pop/sprite_global_04.png" alt="">
+    <p class="font26 mt20 mb28">请先完善您的银行卡信息</p>
+    <ul class="pop-suc-txt pop-suc-txt-np tac">
+      <li>在已绑定银行卡处点击后面的<a href="javascript:;" class="blue" event-click="go2ModifyBank">修改按钮</a>完善您的银行卡分支行信息</li>
+    </ul>
+    <p class="tac"><a class="box-close btn-pop-auth" href="javascript:void(0);">我知道了</a></p>
+    </div>
+  </div>
+</div>
+</div>
+
+<div id="bind-bank-fail" style="display: none">
+ <div class="pop-name-auth">
+  <div id="titlebar">银行卡绑定</div>
+  <div id="jqueryContent">
+    <p class="tac red font26 mt20 mb10"><img src="/public/images/pop/error.png" class="mr10" alt="">实名绑卡鉴权失败</p>
+    <p class="pop-auto-txt tal">身份审核没有通过，认证失败。请确认姓名, 身份证, 卡号以及<a href="/about/common-question?tpl=HelpCenter-helpQuestionList&current=3" class="blue">预留手机号</a>是否正确。如想知道如何修改预留手机号，请越过分隔线：</p>
+    <ul class="pop-suc-txt pop-suc-txt-np">
+        <li>各银行如何<a href="/about/common-question?tpl=HelpCenter-helpQuestionList&current=3" class="blue">修改预留手机号</a>？</li>
+        <li>咨询客服：<em class="red">400-821-8616</em></li>
+      </ul>
+    <p class="tac"><a class="bind-bank-next btn-pop-auth mr20" href="javascript:void(0);">返回修改</a><a class="box-close btn-return-error" href="javascript:void(0);">暂不绑卡</a></p>
+    </div>
+</div>
+</div>
+
+</block>
+
+
+
+
+

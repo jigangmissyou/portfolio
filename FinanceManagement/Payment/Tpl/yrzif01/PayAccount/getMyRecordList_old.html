@@ -1,0 +1,192 @@
+<div class="prel">
+  <div class="moneysum">
+    <?php if(!$show_total){ ?>
+    <?php
+    if($status == 1) echo "充值总金额:<strong class='org'>".($record_sum['recharge_sum']/100)."</strong>元";
+    if($status == 2) echo "投资总金额:<strong class='org'>".($record_sum['invest_sum']/100)."</strong>元";
+    if($status == 3) echo "回款总金额:<strong class='org'>".($record_sum['repay_sum']/100)."</strong>元";
+    if($status == 4) echo "提现总金额:<strong class='org'>".($record_sum['cashout_sum']/100)."</strong>元";
+    if($status == 5) echo "奖励总金额:<strong class='org'>".($record_sum['reward_sum_old']/100)."</strong>元";
+    if($status == 6) echo "买入债权总金额:<strong class='org'>".($record_sum['transfer_in_sum']/100)."</strong>元<br/>卖出债权总金额:<strong class='org'>".($record_sum['transfer_our_sum']/100)."</strong>元";
+    //if($status == 7) echo "免费提现额度:<strong class='org'>".($total_free_money/100)."</strong>元";
+    ?>
+    <?php }else{
+    echo "账户余额:<strong class='org'>".$tenant['total_amount_view']."</strong>元（含冻结金额".$tenant['repay_freeze_money_view']."元）";
+    } ?>
+  </div>
+  <table class="ui-record-table">
+    <thead>
+    <tr>
+      <th width="18%">资金流水号</th>
+      <th>项目名称</th>
+      <th width="8%">类型</th>
+      <th width="9%" class="tar">冻结(元)</th>
+      <th width="10%" class="tar">存入(元)</th>
+      <th width="10%" class="tar">支出(元)</th>
+      <?php if($status != 7){  ?>
+      <th width="10%" class="tar">可用余额(元)</th>
+      <?php }else{  ?>
+      <!-- <th width="10%" class="tar">免费提现额度(元)</th> -->
+      <?php }  ?>
+      <th width="12%" class="tac">备注</th>
+      <th width="9%"><span style="margin-left:10px">时间</span></th>
+    </tr>
+    <tr class="line">
+      <th colspan="100%"></th>
+    </tr>
+    </thead>
+    <tbody>
+    <?php if(!empty($list['data'])){
+		if($status == 7){
+foreach ($list['data'] as $key => $vo) { ?>
+    <tr>
+      <td>
+        <p>{$vo.record_no}</p>
+      </td>
+      <td>
+
+        <?php if(!empty($vo['prj_name'])){ ?>
+        <p class="pro_name">{$vo.prj_name}</p>
+        <?php
+			   echo service("Financing/Financing")->getIco($vo,$vo['from_order_id'],$vo['ext']['prj_id']);
+        ?>
+        <!-- <p class="blue">{$vo.prj_no}</p> -->
+        <?php } ?>
+      </td>
+      <td>{$vo.type}</td>
+      <td class="tac">--</td>
+      <td class="tal org"><?php if($vo['give_free_money']>0){ echo "+".number_format($vo['give_free_money']/100, 2);} ?></td>
+      <td class="tar"><div class="green"><?php
+		if($vo['give_free_money']<0){ echo number_format($vo['give_free_money']/100, 2);}
+        else if($vo['use_free_money']){ echo "-".number_format($vo['use_free_money']/100, 2);} ?></div></td>
+      <!-- <td class="tar"><?php echo number_format($vo['to_free_money']/100, 2)."";?></td> -->
+      <td class="tac">--</td>
+      <td>
+        <span class="time80px" style="margin-left:10px"><?php echo  date("Y-m-d H:i", $vo['ctime']); ?></span>
+      </td>
+
+      <?php
+		}} else {
+		foreach ($list['data'] as $key => $vo) { // echo "<pre>"; print_r($vo); ?>
+      <tr>
+        <td>
+          <p>{$vo.record_no}</p>
+        </td>
+
+        <td>
+
+          <?php if(!empty($vo['prj_name'])){ ?>
+          <p class="pro_name">{$vo.prj_name}</p>
+          <?php
+			   echo service("Financing/Financing")->getIco($vo,$vo['from_order_id'],$vo['ext']['prj_id']);
+          ?>
+          <!-- <p class="blue">{$vo.prj_no}</p> -->
+          <?php } ?>
+        </td>
+        <td>{$vo.type}</td>
+        <td class="tar"><?php if($vo['freeze_money']){ if($vo['in_or_out'] == 1) echo "+"; else echo "-";} ?><?php echo number_format($vo['freeze_money']/100, 2)."";?>
+        </td>
+        <td class=" org">
+          <?php if($vo['repay_way'] != 'endate' && $vo['is_repay'] == 1){ ?>
+          <p class="orange">
+            <?php } ?>
+            <?php
+            D("Payment/PayAccount");
+            if($vo['mod_money'] && $vo['in_or_out'] == 1 ){
+				if($vo['obj_type'] == PayAccountModel::OBJ_TYPE_REPAY || $vo['obj_type'] == PayAccountModel::OBJ_TYPE_REPAY_FREEZE || $vo['obj_type'] == PayAccountModel::OBJ_TYPE_ROLLOUT || $vo['obj_type'] == PayAccountModel::OBJ_TYPE_RAISINGINCOME){
+            ?>
+
+            <?php
+              }
+				if($vo['obj_type'] == PayAccountModel::OBJ_TYPE_USE_COUPON){
+					echo "<em class='org'>+".number_format($vo['give_free_money']/100, 2)."</em>";
+            } else {
+            if($vo['to_amount']< $vo['from_amount']){
+            echo "";
+            } else {
+            echo "<em class='org'>+".number_format($vo['mod_money']/100, 2)."</em>";
+            }
+            ?>
+            <?php if($vo['is_repay'] == 1){ ?>
+            <i class="icon ico-q" hovercard="ajax@{:U('Payment/PayAccount/getMyPrjProfitInfo?recordId=')}{$vo['id']}" hovercard-options='{"direction":"down","theme":"red"}'></i>
+            <?php }?>
+          </p>
+          <?php if($vo['transfer_fee']){
+					echo "<p class='org'>(另扣除手续费";
+          echo number_format(($vo['transfer_fee'])/100, 2)."元)</p>";
+          }
+          ?>
+          <?php
+            }
+}
+				// if($vo['in_or_out'] == 1 && $vo['give_free_money']>0){
+    //       if($vo['mod_money']){
+    //       echo "<div class='hoverInfo bor-red hoar' hovercard-id='ct".$vo['id']."' style='display: none'><div class='hoverArrow'><em>◆</em><span>◆</span></div><div class='text'>(同时获得".number_format(($vo['give_free_money'])/100,
+    //       2)."元免费提现额度)</div><div>";
+    //       } else {
+    //       echo '<p class="orange">+'.number_format(($vo['give_free_money'])/100, 2)."<br>免费提现额度</p>";
+    //       }
+    //       }
+          ?>
+        </td>
+        <td class="tar">
+          <div class="green"><?php if($vo['mod_money'] && $vo['in_or_out'] == 2){ echo "-".number_format($vo['mod_money']/100, 2)."";}
+                else if($vo['mod_money'] && $vo['to_amount'] < $vo['from_amount']){echo "-".number_format($vo['mod_money']/100, 2)."";}?>
+            <?php if(($vo['mod_money'] && ($vo['reward_money'] > 0 || $vo['invest_reward_money'] > 0) && $vo['in_or_out'] == 2)){ ?>
+            <i class="icon ico-q" hovercard="div@ct2{$vo.id}" hovercard-options='{"direction":"down","theme":"red"}'></i>
+            <?php } ?>
+
+            <div class="hoverInfo bor-red hoar" hovercard-id="ct2{$vo.id}" style="display: none">
+              <div class="hoverArrow">
+                <em>◆</em>
+                <span>◆</span>
+              </div>
+              <div class="text"><?php if($vo['mod_money'] && ($vo['reward_money'] > 0 || $vo['invest_reward_money'] > 0) && $vo['in_or_out'] == 2){
+                echo "<div class='green'>(含奖金";
+                  if($vo['reward_money'] > 0 || $vo['invest_reward_money'] > 0){
+                  echo number_format(($vo['reward_money']+$vo['invest_reward_money'])/100, 2)."元)";
+
+                  }
+                  echo "</div>";
+                }
+
+                // if($vo['use_free_money']){
+                // echo "(同时使用".number_format(($vo['use_free_money'])/100, 2)."元免费提现额度)";
+                // }
+
+                // if($vo['in_or_out'] == 2 && $vo['give_free_money']>0){
+                // echo "(同时获得".number_format(($vo['give_free_money'])/100, 2)."元免费提现额度)";
+                // }
+
+                ?></div>
+            </div>
+          </div>
+        </td>
+        <td class="tar"><?php echo number_format($vo['amount']/100, 2)."";?></td>
+        <td>
+          <?php echo $vo['remark'];?>
+        </td>
+        <td>
+          <span class="time80px" style="margin-left:10px"><?php echo  date("Y-m-d H:i", $vo['ctime']); ?></span>
+        </td>
+      </tr>
+      <?php }}
+} else { ?>
+      <tr>
+        <td colspan="100%" class="tac">没有相关数据</td>
+      </tr>
+      <?php } ?>
+    </tbody>
+  </table>
+  <?php $pageNavCallback = "ajaxAfter_Payment_PayAccount_getMyMoneyList"; ?>
+  <include file="./app/Tpl/Public/pageAjax.html" />
+  <input type="hidden" id="totalRecordList" value="{$total}">
+  <input type="hidden" id="totalrecharge" value="{$totalrecharge}">
+  <input type="hidden" id="totalTouzhi" value="{$totalTouzhi}">
+  <input type="hidden" id="totalHuikuan" value="{$totalHuikuan}">
+  <input type="hidden" id="totalTixian" value="{$totalTixian}">
+  <input type="hidden" id="totalJiangli" value="{$totalJiangli}">
+  <input type="hidden" id="totalZhuangrang" value="{$totalZhuangrang}">
+  <input type="hidden" id="totalFreeMoney" value="{$totalFreeMoney}">
+  <input type="hidden" id="totalPtFee" value="{$totalPtFee}">
+</div>

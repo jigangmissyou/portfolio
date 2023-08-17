@@ -1,0 +1,46 @@
+<extend name="./app/Tpl/Public/base_hfhg.html"/>
+<block name="title">我要融资-变现产品</block>
+<block name="keywords">我要融资</block>
+<block name="description">我要融资</block>
+<block name="style">
+</block>
+
+<block name="body">
+<include file="./app/Tpl/Account/nav.html" />
+<script>
+var URL_AJAX_DO_TRANSFER = "{:U('Financing/Product/do_transfer')}",
+    URL_AJAX_SEND_MCODE_TRANSFER = "{:U('Financing/Product/send_mcode_transfer')}";
+</script>
+<div class="main_area">
+  <form ajax="1" ajax-after="ajaxAfter_Account_Financing_tlist" method="post" id="formId_Account_Financing_tlist" ajax-datatype="html">
+    <div class="class_box">
+       <div class="category pb10">
+      <a href="{:U('/Account/Financing/index')}">我的投资</a>
+      <a href="{:U('Account/Financing/fundIndex')}">我的理财</a>
+      <a  class="cur"  href="{:U('Account/Financing/tlist')}">投资变现</a>
+      </div>
+      <div class="statusMenusLast" id="product_type">
+        <a class="cur" href="{:U('Account/Financing/tlist')}" type="total">可变现(<span>{$total}</span>)</a>
+        <a href="javascript:;" url="{:U('Account/Financing/ajaxt',array('status_transfer'=>1))}" type="1">变现中(<span>{$countInfo[1]}</span>)</a>
+        <a href="javascript:;"  url="{:U('Account/Financing/ajaxt',array('status_transfer'=>2))}"  type="2">已变现(<span>{$countInfo[3]}</span>)</a>
+        <!--<a href="javascript:;"  url="{:U('Account/Financing/ajaxt',array('status_transfer'=>3))}"  type="3">已过期(<span>{$countInfo[2]}</span>)</a>-->
+      </div>
+    </div>
+    <div class="ajax_datalist" id="ajax_datalist"><include file="tlist_ajax" /></div>
+  </form>
+
+  <div class="tran-tips">
+    <h3><em class="icon-note-heart"></em>温馨提示</h3>
+    <ol class="list">
+        <li>1、可变现的项目指项目持有的期限&gt;60天且距项目到期日还有30天以上；</li>
+        <li>2、所持有的项目必须一次性全部变现；</li>
+        <li>3、变现信息在变现市场中成功发布，72小时后若变现不成功，将自动下架；</li>
+        <li>4、变现后的项目可再次变现；</li>
+        <li>5、变现信息发布成功后，所持有的项目将显示在“变现市场-债权项目”列表中；如果交易成功您所持有的项目将被投资人买入并且按变现价格将资金从投资人账户转到您的账户中，您的账户余额会相应增加并且交易产生的记录会记录在“我的账户-资金记录”中；</li>
+        <li>6、变现项目会收取变现中介费，费用为变现标的总金额的0.2%</li>
+
+    </ol>
+  </div>
+</div>
+
+</block>

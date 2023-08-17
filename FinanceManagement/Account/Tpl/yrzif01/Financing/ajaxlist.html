@@ -1,0 +1,180 @@
+<!-- <script src="http://tjs.sjs.sinajs.cn/open/api/js/wb.js" type="text/javascript" charset="utf-8"></script> -->
+<!-- 白富美 待还款 -->
+<table class="ui-record-table percentTable">
+  <thead>
+  <tr>
+    <th width="13%" order_field="order11" <eq name="order_field" value="order11"> order_type="{$order_type}"</eq>>还款日期</th>
+    <th width="24%">项目</th>
+    <th width="15%" class="tac" order_field="order14" <eq name="order_field" value="order14"> order_type="{$order_type}"</eq>>投资金额(元)</th>
+    <th width="12%" class="tac" order_field="order15" <eq name="order_field" value="order15"> order_type="{$order_type}"</eq>>收益(元)</th>
+    <th width="11%" order_field="order16" <eq name="order_field" value="order16"> order_type="{$order_type}"</eq>>成交时间</th>
+    <th width="10%" class="tac">状态</th>
+    <th width="15%" class="tac">详情</th>
+  </tr>
+  </thead>
+  <tbody>
+  <?php // echo "<pre>"; print_r($list); ?>
+  <if condition="$list">
+    <foreach name="list" item="v">
+      <tr hovercard="div@{$v['id']}" hovercard-options='{"direction":"center", "minWidth":"230px"}'>
+        <td>
+        <p class="pro_name">
+          {$v['expect_repay_time_view']}<br/>
+          <?php if($v['is_pre_sale']){ ?>
+          <a href="javascript:;">
+            <em class="icon_open_booking" title="预售投标"></em>
+          </a>
+          <?php }?>
+          <?php if($v['is_appoint']){ ?>
+          <a href="javascript:;">
+            <em class="icon_automatic_bid" title="自动投标"></em>
+          </a>
+          <?php }?>
+          <?php if(!in_array($v['from_client'],[1,6,9])){ ?>
+          <a href="javascript:;">
+            <em class="bidder-icon2" title="手机端投资"></em>
+          </a>
+          <?php }?>
+          <?php if($v['bid_status'] == PrjModel::BSTATUS_REPAID): ?>
+             还款完成
+          <?php endif;?>
+        </p>
+        <?php if($v['notice_repay_extend']){ ?>
+        <br>项目展期<i class="icon_greyMark" hovercard="div@nextRepay{$v['id']}" hovercard-options='{"direction":"up"}'></i>
+        <div class="dn" hovercard-id="<?php echo 'nextRepay'.$v['id'];?>">
+          <p class="hoverPinfo">
+            {$v['notice_repay_extend']}
+          </p>
+        </div>
+        <?php } ?>
+        </td>
+        <td>
+        <p class="name-color">
+          <a href="{$v['viewPrjUrl']}" target="_blank"><?php echo service('Financing/Prj')->getPrjTitleShow($v['project']['id'], $v['project']); ?></a></p>
+        <?php
+                 echo service("Financing/Financing")->getIco($v['project'],$v['is_fed'],$v['prjid']);
+        ?>
+        </td>
+        <td class="tac">
+          <span class="orange">{$v['money_view']}</span>
+          <?php if($v['order_ext_totle'] > 0 && $v['reward_type'] == 1): ?>
+          <br><span class="mr12">
+          <!-- 使用红包 -->
+              <i class="icon-reward" title="红包"></i>
+          		</span>
+          <?php endif; ?>
+          <!-- 满减券 -->
+          <?php if($v['reward_type'] == 2): ?>
+          <br />
+          <span class="mr12"><i class="icon-full-cut" title="满减券"></i></span>
+          <?php endif;?>
+          <!-- 加息券 -->
+          <?php if($v['reward_type'] == 3): ?>
+          <br />
+          <span class="mr12"><i class="icon-add" title="加息券"></i></span>
+          <?php endif; ?>
+        </td>
+        <!--<td class="tac green"><div class="prel envelopes_parent">{$v['pri_interest_view']}</div></td>-->
+        <td class="tac green"><div class="prel envelopes_parent"><?php if($v['rest_income_view']!=0.00) echo $v['rest_income_view']; else echo '--'; ?></div></td>
+        <td><p style="margin-left:5px">{$v['order_create_time_view']}</p></td>
+        <td class="tac">
+          <?php if($v["bid_status"] == PrjModel::BSTATUS_ZS_REPAYING) echo '<br /><span style="color:#00a0e9;">银行划拨资金</span><br>'; ?>
+        <?php if(($v['bid_status'] >= PrjModel::BSTATUS_BIDING) && (!$v['is_endate']) && $v['isShowReplay'] && $v['bid_status'] != PrjModel::BSTATUS_FAILD): ?>
+              <span style="margin-top: -60px">
+              <?php
+              if(!$v['creditor_rights_status']) {
+                if($v['pre_sale_status'] == PrjOrderPreModel::STATUS_FAIL){
+                  echo $v['bid_status_view'];
+                }else{
+                  echo $v['bid_status'] == PrjModel::BSTATUS_BIDING ? "投标结束":$v['bid_status_view']; //2016226 将投标中改成投资结束
+                }
+              } else {
+                echo $v['creditor_rights_status'] == 1 ? '债权转让中' : '债权已转让';
+              }
+              ?>
+              </span>
+        <?php else: ?>
+        <?php
+              if(!$v['creditor_rights_status']) {
+                echo $v['bid_status'] == PrjModel::BSTATUS_BIDING ? "投标结束":$v['bid_status_view'];//2016226 将投标中改成投标结束
+              } else {
+                echo $v['creditor_rights_status'] == 1 ? '债权转让中' : '债权已转让';
+              }
+              ?>
+        <?php endif; ?>
+
+        <?php if ($v['repay_way'] != $REPAY_WAY_E): ?>
+        <?php if($v['repay_percent']): ?>
+        <br>
+        <a href="javascript:;"><?php echo $v['repay_percent']; ?></a>
+        <?php endif;?>
+        <?php endif; ?>
+        </td>
+        <!--查看跳转地址 /Account/Financing/financinginfo -->
+        <td class="tac">
+          <label class="button-small-info">
+            <a href="<?php echo ($v['financingUrl']); ?>" target="_blank" class="btns">查看</a>
+              
+              <?php if($v['prj_type'] != 'H' && !$v['project']['act_prj_ext']['is_jjs']){ ?>
+            <a href="/Financing/Invest/getPrjProcedure?prj_id=<?php echo ($v['prjid']); ?>" target="_blank" class="btns" style="margin-top: 5px;">进度详情</a>
+              <?php }?>
+          </label>
+          <div>
+            <?php if(in_array($v['prjid'], $transfer_prj_ids) && $v['creditor_rights_status'] >= 1): ?>
+            <a href="javascript:;" url="{:U('Index/Protocol/downloadContract')}?uid={$current_uid}&order_id={$v.id}&prj_id={$v.prjid}" colorbox="1"  class="block blue">合同下载及签署规范</a>
+            <?php endif; ?>
+
+            <?php if($v['show_creditor_transfer']){  //债权转让标 ?>
+            <a href="javascript:;" class="underline" url="{:U('Account/User/addCreditorTransfer')}" prjid="{$v.prjid}" data-flag="zqRequest" style="display: inline-block;">债权转让申请</a>
+            <?php } ?>
+          </div>
+          <div hovercard-id="{$v['id']}" class="dn hoverPinfo">
+            <p>项目：{$v.time_limit}|
+            <?php echo service("Financing/Financing")->getRateShow($v,$v['is_fed']);?>
+              <!--活动奖励利息和加息券-->
+            <?php if($v['reward_money_rate'] > 0 || $v['add_rate']): ?>
+            <?php echo " ("; ?>
+            <?php endif; ?>
+              <?php if($v['reward_money_rate'] > 0) { echo "活动奖励".$v['reward_money_rate']."%"; }?>
+            <?php if($v['add_rate']): ?>
+              <?php if($v['reward_money_rate'] > 0): ?>
+              <?php echo "+"; ?>
+              <?php endif; ?>
+            <?php echo $v['reward_type_tips']; ?>
+            <?php endif; ?>
+            <?php if($v['reward_money_rate'] > 0  || $v['add_rate']){ echo ")"; } ?>
+
+            <?php if($v['reward_type']){ ?>
+            <p> 使用奖励：
+            <?php if($v['order_ext_totle'] > 0 && $v['reward_type'] == 1): ?>
+            <?php echo "红包".humanMoney($v['order_ext_totle'],2,false)."元";?>
+            <?php endif; ?>
+            <?php if($v['reward_type'] && $v['reward_type_tips']){ ?>
+            <?php echo $v['ticket_tips'];?>
+            <?php } }?></p>
+            <p>预计到账时间：<?php if($v['value_date_shadow'] == 1): ?>
+                16:00 -24:00(还款当天)
+              <?php else: ?>
+                13:00之前(还款当天)
+              <?php endif; ?></p>
+          </div>
+        </td>
+      </tr>
+    </foreach>
+    <else />
+    <tr>
+      <td colspan="100%" class="tac"><?php if($msg){ echo $msg; }else{ echo '没有相关数据'; }?></td>
+    </tr>
+  </if>
+  </tbody>
+</table>
+<?php $pageNavCallback = "ajaxAfter_Account_Financing_index"; ?>
+<include file="./app/Tpl/Public/pageAjax.html" />
+<input type="hidden" name="totalAll" value="{$totalAll}">
+<input type="hidden" name="totalBiding" value="{$totalBiding}">
+<input type="hidden" name="totalEnd" value="{$totalEnd}">
+<input type="hidden" name="totalFull" value="{$totalFull}">
+<input type="hidden" name="totalRepaying" value="{$totalRepaying}">
+<input type="hidden" name="totalRepaySuccess" value="{$totalRepaySuccess}">
+<input type="hidden" name="totalRebackPrj" value="{$totalRebackPrj}">
+<input type="hidden" name="totalPreSaleFailPrj" value="{$totalPreSaleFailPrj}">

@@ -1,0 +1,14 @@
+<div id="manage_status" class="statusMenusLast statusMenusLast_more">
+  <a event-click="switchStatus" data-args="0" href="javascript:" <?php if($st == 0){ ?>class="cur"<?php } ?> hidefocus="hidefocus">全部</a>
+  <a event-click="switchStatus" data-args="1" href="javascript:" <?php if($st == 1){ ?>class="cur"<?php } ?> hidefocus="hidefocus">待缴费</a>
+  <a event-click="switchStatus" data-args="2" href="javascript:" <?php if($st == 2){ ?>class="cur"<?php } ?> hidefocus="hidefocus">待开标</a>
+  <a event-click="switchStatus" data-args="3" href="javascript:" <?php if($st == 3){ ?>class="cur"<?php } ?> hidefocus="hidefocus">投资中</a>
+  <a event-click="switchStatus" data-args="4" href="javascript:" <?php if($st == 4){ ?>class="cur"<?php } ?> hidefocus="hidefocus">投资结束</a>
+  <a event-click="switchStatus" data-args="5" href="javascript:" <?php if($st == 5){ ?>class="cur"<?php } ?> hidefocus="hidefocus">待还款</a>
+  <a event-click="switchStatus" data-args="6" href="javascript:" <?php if($st == 6){ ?>class="cur"<?php } ?> hidefocus="hidefocus">还款中</a>
+  <a event-click="switchStatus" data-args="7" href="javascript:" <?php if($st == 7){ ?>class="cur"<?php } ?> hidefocus="hidefocus">已还款结束</a>
+  <a event-click="switchStatus" data-args="8" href="javascript:" <?php if($st == 8){ ?>class="cur"<?php } ?> hidefocus="hidefocus">已流标</a>
+</div>
+<div class="verify_bd" id="ajaxContent_financing_manage">
+  <include file="ProjectList_ajax_list" />
+</div>

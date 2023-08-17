@@ -1,0 +1,63 @@
+<extend name="./app/Tpl/Public/base_user.html"/>
+<block name="title">邮箱认证</block>
+<block name="body" >
+<div class="container-inner mt20">
+<include file="./app/Tpl/Account/userMyBonusSider.html" />
+  <div class="main_area body-frame">
+   <div class="p20">
+     <div class="emailVerify">
+       <div class="verifyLeft">
+        <h4 class="name"><i class="icon alM"></i>请验证您的邮箱...</h4>
+        <div class="verifyTxt">
+          <p>我们已经发送验证邮件到您的邮箱：</p>
+          <p><em>{$email}</em></p>
+          <p>
+            <if condition="$action eq 1">
+              请点击邮件中的解绑链接完成解绑。
+              <elseif condition="$action eq 2"/>
+              请点击邮件中的链接重置密码
+              <else/>
+              请点击邮件中的激活链接完成验证。
+            </if>
+          </p>
+          <if  condition="$loginUrl">
+          	<div class="button-common-orange mt20">
+              <a href="{$loginUrl}" class="btns" target="_blank"/>
+              <if condition="$action eq 1">
+                进入解绑邮箱
+                <elseif condition="$action eq 2"/>
+                进入邮箱
+                <else/>
+                进入激活邮箱
+              </if>
+              </a>
+            </div>
+          </if>
+        </div>
+       </div>
+       <div class="verifyRight">
+          <h4 class="noAccept">收不到邮件？</h4>
+          <p class="noWhy">
+            * 有可能您的邮箱设置屏蔽了我们的邮件，建议设置xinhehui.com为<br/>&nbsp;&nbsp;白名单域名<br/>
+            * 有可能被误判为垃圾邮件了，请到垃圾邮件文件夹找找。可能由<br/>&nbsp;&nbsp;于网络问题，验证邮件会有1-10分钟的延迟，请稍候片刻<br/>
+            * 请联系网站客服<br/>
+            &nbsp;&nbsp;
+            <input type="hidden" id="uid" value="{$user['uid']}">
+            <input type="hidden" id="email" value="{$email}" >
+            <?php
+              if($action==1){
+                $email = '/Account/User/resendUnbindEmail';
+              }else if($action==2){
+                $email = '/Account/User/resendPayPwdEmail';
+              }else{
+                $email = '/Account/User/resendActiveEmail';
+              }
+            ?>
+            <a href="javascript:;" class="blue" id="resetSendEmail" data-url="{$email}">重发邮件</a>
+          </p>
+       </div>
+     </div> 
+  </div>
+  </div>   
+</div>
+</block>

@@ -1,0 +1,39 @@
+<style type="text/css">
+  .usage-record table td{
+    padding:7px 10px 0 10px;
+  }
+  .record-txt p.date{
+    padding-left: 10px;
+  }
+</style>
+<div class="usage-record">
+  <div class="record-txt">
+    <p class="date">使用记录</p>
+    <table>
+      <tr>
+        <td class="date">使用日期</td>
+        <?php if($type != 3){ ?>
+          <td class="money">金额</td>
+        <?php }?>
+        <td class="product">投资理财产品</td>
+      </tr>
+      <?php //dump($data);?>
+      <?php if($data):?>
+        <?php foreach($data as $key => $vo):
+          ?>
+          <tr>
+            <td><?php echo $vo['usedTime']; ?></td>
+            <?php if($type != 3){ ?>
+              <td><?php echo $vo['usedAmount']; ?>元</td>
+            <?php }?>
+            <td><?php echo $vo['prjName']; ?></td>
+          </tr>
+        <?php endforeach;?>
+      <?php else:?>
+        <tr>
+          <td colspan="3" style="text-align:center;"><?php if($msg){ echo $msg; }else{ echo '暂无数据';} ?></td>
+        </tr>
+      <?php endif; ?>
+    </table>
+  </div>
+</div>

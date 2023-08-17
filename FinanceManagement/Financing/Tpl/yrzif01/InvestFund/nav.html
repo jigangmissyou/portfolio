@@ -1,0 +1,8 @@
+<div class="detailSurTab surTabUl mt30 mb20">
+  <ul>
+    <li<?php if(ACTION_NAME=='toFundPrjList' || ACTION_NAME=='toAddFundPrj') {?> class="current"<?php }?>><span class="roundTopborGy"><a href="{:U('Financing/InvestFund/toFundPrjList')}">项目管理</a></span><a class="hrwrite"></a></li>   
+    <li<?php if(ACTION_NAME=='fundaccount') {?> class="current"<?php }?>><span class="roundTopborGy"><a href="{:U('Application/ProjectManage/fundaccount')}">资金账户管理</a></span><a class="hrwrite"></a></li>
+    <li<?php if(  ACTION_NAME=='index' && MODULE_NAME =='ProjectRepayment') {?> class="current"<?php }?>><span class="roundTopborGy"><a href="{:U('Application/ProjectRepayment/index')}">还款管理</a></span><a class="hrwrite"></a></li>
+    <li<?php if(ACTION_NAME=='getMyMoneyList') {?> class="current"<?php }?>><span class="roundTopborGy"><a href="{:U('Application/ProjectManage/getMyMoneyList')}">资金记录</a></span><a class="hrwrite"></a></li>
+  </ul>
+</div>

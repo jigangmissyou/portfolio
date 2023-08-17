@@ -1,0 +1,114 @@
+<?php if($is_login){ ?>
+  <!--已登录start-->
+  <?php if((int)$info['pre_remaind_amount'] == 0) {?>
+    <!-- 已满标以上状态 开始 -->
+    <dl class="standDl">
+      <if condition="$info['act_prj_ext']['is_auto_start'] eq 1">
+        <dt>
+          <i class="icon_greywallet"></i>离开标时间还有：<br>
+              <span data-flag="format_start_bid_time_view" data-inner="0" class="countDown org_color">
+                <em data-day>00</em>:<em data-hour>00</em>:<em data-min>00</em>:<em data-sec>00</em>
+              </span>
+        </dt>
+        <!--php 和 thinkphp模板 混用导致错误-->
+        <span style="display: none;">{}</span>
+        <dd>起投金额：{$info.min_bid_amount_name}</dd>
+        <dd>投资递增额度：{$info.step_bid_amount_name}</dd>
+        <dd>最高投资额度：<?php if(!empty($info['max_bid_amount_name'])){echo $info['max_bid_amount_name'];} else {echo "不限";} ?></dd>
+      <else/>
+        <!-- <dt>
+          <i class="icon_greywallet"></i>&emsp;剩余可投金额
+        <div class="ProgressBar_div">
+          <div class="ProgressBarOrg"><span class="ProgressBarGry" style="width:100%"><em class="bar_rt"></em></span></div>
+        </div>
+        </dt> -->
+        <!-- <div class="progressBigBar progressBBar100" id="view_bid_over"></div> -->
+        <div id="view_bid_over" class="prel">
+          <div class="progressListBar" >
+            <!-- 进度长背景 -->
+              <span class="progressBigBar progressBOver">
+                <em class="pregress-tip-w"></em> <!-- 外右圆角 -->
+                <em class="propress-data">{$prj['schedule']}%</em> <!-- 进度数据 -->
+              </span>
+          </div>
+        </div>
+        <dd style="margin: 55px 0px 0px;">
+          <div class="immInvest_but"><label class="button-common-gray grayBigBtn"><a href="javascript:;" class="btns font22">预售结束</a></label></div>
+        </dd>
+      </if>
+    </dl>
+    <!-- 已满标以上状态 结束 -->
+  <?php } else { ?>
+    <?php
+      if(!$client_permission || $mustDisable){ // 专享标或新客标
+        $limitStr = 'disabled="disabled"';  // 禁用表单字符串
+        $limitAdd = 'disable_add';
+        $limitDel = 'disable_del';
+      }
+    ?>
+
+    <!-- 预售 -->
+    <?php if($money_notEnough){ // 资金不足 ?>
+      <dl class="standDl">
+        <include file="view_invest_base"/>
+        <dd class="now-remaining">当前账户可用余额：</dd>
+        <dd class="data-display">
+          <em class="org_color" data-flag="userAccountFund">数据加载中...</em>
+          <span style="display:none;" data-flag="awardAmount">数据加载中...</span>
+        </dd>
+        <dd  class="promptInade insufficient-prompt"><!-- <i class="icon_redSigh"></i>&ensp; -->(不足起投金额)</dd>
+        <dd>
+          <div class="immInvest_but">
+            <label class="button-common-green button-common-green-pro"><a href="<?php echo '/Payment/PayAccount/rechargePage';?>" class="btns" style="font-size:18px;">余额不足，请先充值</a></label>
+          </div>
+        </dd>
+      </dl>
+    <?php } else {  // 资金充足 ?>
+      <input type="hidden" name="has_money" value="1">
+      <dl class="standDl">
+        <include file="view_invest_base"/>
+
+        <dd class="prel dd-addRedShow">
+          <label for="" class="fl">预估收益：</label>
+                  <span style="float: right;">
+                  <?php if($isEndate || !$isShowPlan){  // 已结束或无还款计划 ?>
+                    <span id="income" data-flag="income">0.00元</span>
+                    <?php } else { ?>
+                    <a class="green" id="income" data-flag="income" hovercard="ajax@{:U('Financing/Invest/ajaxShowRepay?id=')}{$info.id}&money=<?php echo $info['min_bid_amount']/100; ?>" hovercard-options='{"direction":"left","theme":"light", "ajaxCached":false}'>{$income}</a>元
+                    <?php } ?>
+                  </span>
+                    <?php if($activity && ($activity['reward_money_rate'] > 0)){  // 有红包收益 ?>
+                    <span class="coinPosition">
+                      <i class="icon_greyMark" data-flag="rateFloatDesc">
+                        <div class="OrangeTipBox-Red dn" data-flag="rateFloatTip">
+                          <em class="OrangeTipBox_Arr1"><em class="OrangeTipBox_Arr2"></em></em>预估收益=利息收益+奖励收益
+                        </div>
+                      </i>
+                    </span>
+                    <?php } ?>
+
+                    <?php if($activity && ($activity['reward_money_rate'] > 0)){  // 有红包收益 ?>
+                    <p>(含奖励收益<em class="green" style="float:none" data-flag="hongbaoGain">{$redBaoProfit}</em>元)</p>
+                    <?php } ?>
+        </dd>
+        <dd class="investMnum payCipherC">
+          <label class="monNum payCipher">支付密码：
+            <!-- 用于防止chrome保存密码 --><input class="dn">
+            <input type="password" {$limitStr} name="paypwd" valid="required" event-focus="showApplyInvest" event-blur="hideApplyInvest"></label>
+        </dd>
+        <dd class="agreeTransfer" style="margin-top: 4px;  white-space: nowrap;">
+          <label><input type="checkbox" {$limitStr} name="agree" checked="checked"> 我同意并接受<a colorbox="1" href="{:U('Index/Protocol/view',array('id'=>$protocolInfo['id'], 'prj_id'=>$info['id']))}" class="bluecolor" data-flag="protocolName">《{$protocolInfo.name}》</a>和<a colorbox="1" href="{:U('Index/Protocol/view',array('id'=>47, 'prj_id'=>$info['id']))}" class="bluecolor" data-flag="protocolName">《预售服务协议》</a></label>
+        </dd>
+
+        <!-- 投资按钮 -->
+        <include file="view_invest_btn"/>
+      </dl>
+    <?php } ?>
+    <!-- 预售 -->
+  <?php } ?>
+  <!--已登录end-->
+<?php }else{ ?>
+  <!--未登录start-->
+  <include file="_nologin_pre"/>
+  <!--未登录end-->
+<?php } ?>

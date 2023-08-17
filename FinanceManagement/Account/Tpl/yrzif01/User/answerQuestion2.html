@@ -1,0 +1,63 @@
+<extend name="./app/Tpl/Public/base_hfhg.html"/>
+<block name="title">找回支付密码</block>
+<block name="keywords"></block>
+<block name="description"></block>
+
+<block name="style">
+<link href="/public/css/banklogo.css" rel="stylesheet" />
+</block>
+<block name="body">
+<div class="container-inner mt20">
+  <include file="./app/Tpl/Account/userMyBonusSider.html" />
+  <div class="main_area body-frame">
+  <div class="p20">
+  <h2 class="h2tit">找回支付密码</h2>
+  <div class="account-edit-mobile">
+    <ul>
+      <li class="li-first current">1 安全验证<span class="edit-jiao"></span></li>
+      <li class="li-other">2 重置密码<span class="edit-jiao"></span></li>
+    </ul>
+  </div>
+  <?php if(0){ ?>
+  <form method='post'  action="{:U('Account/User/savePayPassword')}">
+  <ul class="formList account-edit-form">
+    <li>
+      <label class="li-label-name">选择安全问题</label>
+      <span class="li-span-con">
+        <select name="select_questions" multipleone="1" valid="required" multiselect-options='{"minWidth":"310"}'>
+        {:genDictOption('E025')}
+      </select>
+      </span>
+    </li>
+    <li>
+      <label class="li-label-name">问题答案</label>
+      <span class="li-span-con">
+        <input type="password" valid="required" class="inputCommon"  name="oldpwd" value="" autocomplete="off">
+      </span>
+    </li>
+    <li>
+      <label class="li-label-name">手机动态码</label>
+      <span class="li-span-con">
+      <input type="text" class="inputCommon" name='code' style="width:235px;" value="">
+      <a href="javascript:;" id="show_send_btn" class="button-code-no button-code-user-set ml10">免费获取</a>
+      <a href="javascript:;"  id="time_send"  class="button-code-on button-code-user-set ml10" style="display:none">120秒</a>
+    </span>
+  </li>
+    <li class="lastBtns">
+      <label class="li-label-name">&nbsp;</label>
+      <span class="li-span-con">
+      <span class="button-common-blue button-blue-w120"><input type="submit" name="" value="提 交" class="btns w250"></span>
+      <span class="button-common-gray button-gray-w120"><input type="reset" name="" value="取 消" class="btns w250"></span>
+      </span>
+    </li>
+  </ul>
+  </form>
+  <?php }else{ ?>
+  <ul class="formList account-edit-form">
+    <li>>找回支付密码需要回答安全保护问题：<button>设置安全保护问题</button></li>
+  </ul>
+  <?php } ?>
+</div>
+</div>
+</div>
+</block>

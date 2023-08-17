@@ -1,0 +1,55 @@
+<extend name="./app/Tpl/Public/base_user.html"/>
+<block name="title">港澳台用户实名认证</block>
+<block name="keywords"></block>
+<block name="description"></block>
+
+<block name="style">
+<link href="/public/css/banklogo.css" rel="stylesheet" />
+</block>
+
+<block name="body">
+<div class="container-inner mt20">
+   <include file="./app/Tpl/Account/userMyBonusSider.html" />
+<div class="main_area body-frame">
+	<div class="ganggaotai_Cn p20">
+		<h2 class="h2tit">用户资料 > 港澳台实名认证 <!-- <label for="" class="button-small-info fr"><a class="btns" href="javascript:;" id="backToPrev">返回上一页</a></label> --></h2>
+		<div class="ganggaotai_con tac">
+			<ul style="padding-right:60px;">
+				<li>
+					<p class="tac">通行证正面</p>
+					<img src="/public/images/gangaotai/1.png" alt="" />
+				</li>
+				<li>
+					<p class="tac">通行证背面</p>
+					<img src="/public/images/gangaotai/2.png" alt="" />
+				</li>
+				<li>
+					<p class="tac">手持通行证</p>
+					<img src="/public/images/gangaotai/3.png" alt="" />
+				</li>
+			</ul>
+			<ul style="padding-left:60px;border-left:1px dashed #b4b4b4;">
+				<li>
+					<p class="tac">银行卡正面</p>
+					<img src="/public/images/gangaotai/4.png" alt="" />
+				</li>
+				<li>
+					<p class="tac">银行卡背面</p>
+					<img src="/public/images/gangaotai/5.png" alt="" />
+				</li>
+				<li>
+					<p class="tac">手持银行卡</p>
+					<img src="/public/images/gangaotai/6.png" alt="" />
+				</li>
+			</ul>
+		</div>
+		<div class="tac back-btn">
+			<a href="{:U('Account/User/userAuthGangaotai')}">
+				<span style="">返回</span>
+			</a>
+		</div>
+	</div>
+</div>
+</div>
+
+</block>

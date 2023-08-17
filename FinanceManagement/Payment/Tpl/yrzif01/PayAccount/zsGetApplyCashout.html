@@ -1,0 +1,274 @@
+<extend name="./app/Tpl/Public/base_user.html"/>
+<block name="title">我的账户-账户概况-提现</block>
+<block name="keywords">提现</block>
+<block name="description">提现</block>
+<block name="style">
+<link href="/public/css/banklogo.css" rel="stylesheet" />
+<link rel="stylesheet" href="/public/css/sasscss/act/zskh/index.css">
+
+  <style>
+  #container{
+    width: 100%;min-width: 1000px;position: relative;
+  }
+  </style>
+  <script>
+    var reach_time1 = '<?php echo $reach_time1;?>';
+    var reach_time2 = '<?php echo $reach_time2;?>';
+    var cahout_person_limit = '<?php echo $cashout_limit["person"];?>';
+    var cahout_company_limit = '<?php echo $cashout_limit["company"];?>';
+    var zs_amount_num = '<?php echo $account_money["zs_amount_num"];?>';
+  </script>
+</block>
+<block name="body">
+<?php
+function getLast4($money){
+  return substr($money, -4);
+}
+?>
+<input type="hidden" name="is_paypwd_edit" value="<?php echo $is_paypwd_edit;?>">
+<input type="hidden" name="not_bind_card" value="<?php echo $not_bind_card;?>">
+
+<!-- 预约投资金额确认 开始 -->
+<div class="investConfir" style="left:25%;top:27%;">
+  <table class="investConfir_tab">
+   <thead>
+     <tr>
+       <th>提现金额确认</th>
+     </tr>
+   </thead>
+   <tbody>
+     <tr>
+       <td>
+          <div class="appoint-warnIcon"><em class="warnIcon"></em></div>
+       </td>
+     </tr>
+     <tr>
+       <td>
+          <div class="appoint-cont">
+            <p>您自动预约投标金额为<span class="org_color"></span>元，因为您本次操作后余额不足，将取消预约。</p>
+          </div>
+       </td>
+     </tr>
+     <tr>
+       <td>
+          <div class="appoint-btns">
+            <label class="button-yellow-shallow " id="confirm" style="float:left;margin:0 10px 18px;"><input type="button" value="确 认" class="btns" style="width:155px;*width:81px;" hidefocus="hidefocus"></label>
+            <label class="grayBigBtn_37 " id="cancle" style="float:left;margin:0 10px 18px;"><input type="button" value="修改金额" class="btns" style="width:155px;*width:81px;" hidefocus="hidefocus"></label>
+          </div>
+       </td>
+     </tr>
+   </tbody>
+  </table>
+  <div class="writetriangle" style="top:261px;left:46px;">
+  </div>
+</div>
+<!-- 预约投资金额确认 结束 -->
+
+<div class="main_area bdlr withdrawal-content" style="padding-top: 0px;">
+  <div class="withdraw_form Cashout-modcolor">
+  <div class="selectRechargeWay pt20">
+      <ul class="">
+          <a href="{:U('Payment/PayAccount/getApplyCashout')}"><li>普通账户提现</li></a>
+          <li class="rightBorder"></li>
+          <a href="javascript:;"><li class="cur">存管账户提现</li></a>
+      </ul>
+    </div>
+
+  <!-- 存管 -->
+  <div class="tac  <if condition='$userStatus.zs_status eq 1'>dn</if>">
+      <div class="tac mt20">
+        <p class="fz20" style="color:#404040;margin-top:54px;">鑫合汇-浙商银行存管系统已上线</p>
+        <img src="/public/images/zskh/logo.png" alt="" class="mt20 mb20" />
+        <p class="tal introduceTxt">· 存管户资金由浙商银行存管;<br />
+        · 存管户资金可用于投资浙商银行存管项目</p>
+        <a href="{:U('Account/User/openAccount')}" class="openZS openAccountBtn mt40">
+            开通浙商银行存管账户
+        </a>
+      </div>
+  </div>
+    <form method="POST" id="applyCashout_form" ajax="1" ajax-after="ajaxAfter_Payment_PayAccount_applyCashout" action="{:U('Payment/PayAccount/zsApplyCashout')}" style="padding-top: 10px;  <if condition='$userStatus.zs_status eq 0'>display: none</if>">
+      <input type="hidden" value="" name="bank_name">
+      <input type="hidden" value="" name="bank_no">
+      <div class="withdraw-boder" style="height:384px;">
+      <ul class="formList">
+      <li>
+        <label class="li-label-name li-label-name1 wid110">提现银行卡：</label>
+        <span class="">&nbsp;<img src="/public/images/bank/{$bank.bank_code}.png" alt="" width="18px;" />&nbsp;{$bank.bank_name}（***{$bank.bank_no}）</span>
+      </li>
+      <li>        
+        <label class="li-label-name li-label-name1 wid110">可提现余额：</label>        
+        <span class="li-span-con amount" id="can_cahsout_money">
+          0
+        </span> 元
+        <input id="canCashMoney" type="hidden" value="100" />
+        <a class="icon_quest" hovercard="div@cashFree" hovercard-options="{&quot;direction&quot;:&quot;right&quot;}" hidefocus="hidefocus"></a>
+        <div class="dn" hovercard-id="cashFree">
+          <p class="hoverPinfo">
+            <div style="font-size:12px;color:#777777;">当天充值金额当天不可提现，第二个工作日清算后才可提现。</div>
+            <div style="font-size:18px;color:#00a0e9;"><span class="blue">可提现金额</span> = <span class="blue">账户余额</span> - <span class="blue">充值未清算金额</span></div>
+            <ul style="font-size:12px;color:#717171;" id="tips">
+              <li  style="display:inline-block;width:100px;" class="tac">￥<span class="orange">500000.00</span></li>
+              <li  style="display:inline-block;width:100px;" class="tac">￥<span class="orange">{$account_money.zs_amount}</span></li>
+              <li  style="display:inline-block;width:100px;" class="tac">￥<span class="orange">500000.00</span></li>
+            </ul>
+          </p>
+        </div>
+      </li>
+      <li>
+        <label class="li-label-name li-label-name1 wid110">账户余额：</label>
+        <span class="li-span-con" style="font-size:20px;color:#32bb30;">
+          {$account_money.zs_amount}
+        </span> 元
+      </li>
+      <li style="overflow:visible;" class="fixed">
+        <label class="li-label-name li-label-name1 wid110">提现金额：</label>
+        <div class="li-span-con gains transfer-amount" style="height:auto;width:530px;margin-left:-17px;">
+          <input name="xhh_cashout_money" type="text" style="width:192px;  margin-left: 16px;position:relative;z-index:4;" class="inputCommon money" valid="required,maxNumAfterPoint@2,minValue@0,notLargerThan@canCashMoney,maxValue@50000|,提现金额只精确到分,提现金额应大于0,提现金额不大于可提现金额#0#元,公测阶段单笔提现金额小于5万元，每日提现金额不限" valid-msg-options='{"offset":40}' id="money"  value="" autocomplete="off">
+          <span class="fillNote">元</span>
+          <span id="money-overflow" class="org dn"></span>
+          <span id="money-get" class="org ml20  reality dn">实际到账金额： <span id="cashout_money">0</span> 元</span>
+         <div class="charge">
+            <span>
+              <em>提现转账费用：
+                <span id="cashout_fee">0.00</span>
+                 元</em>
+            </span>
+          <span class="ml20">
+            <em>手续费： 
+            <span id="cashout_cash_fee">0.00</span>
+            元</em>
+          </span>
+<!--           <span class="blue">（如何减免费用）</span> -->
+<!--           <br />
+          <span class="">
+            <em>免费提现金额：
+            <span id="free_money">0.00</span>
+            元</em>
+          </span>
+          <span class="ml20">
+            <em>免费提现次数： 
+            <span id="free_tixian_times">0</span>
+            次</em>
+            <a class="icon_quest" hovercard="div@cashFree1" hovercard-options="{&quot;direction&quot;:&quot;up&quot;}" hidefocus="hidefocus"></a>
+            <div class="dn" hovercard-id="cashFree1">
+              <p class="hoverPinfo">
+                <span class="org">免费提现金额：</span><br />
+                充值后用于投资的金额计为免费提现金额，若提现金额≤免费提现金额，本次提现免费。否则收取提现转账费用：（提现金额-免费提现金额）*0.2%<br />
+                <span class="org">免费提现次数：</span><br />
+                若免费提现次数大于0，则不收取手续费，否则收取2元一笔的手续费
+              </p>
+            </div>
+          </span> -->
+         </div>
+         </div>
+      </li>
+      <li class="account-time"><label class="li-label-name li-label-name1 wid110">到账时间：</label>
+      <span>预计到账时间<em class="org" id="reach_time">{$reach_time1}前</em></span></li>
+      <li>
+        <label class="li-label-name li-label-name1 wid110">短信验证码：</label>
+        <span class="li-span-con">
+          <input valid-msg-options='{"offset":90}' type="text" class="inputCommon" style="width:192px;" name="code" valid="required,qq,lengthRange@4~6|,此项为数字格式">
+          <span class="btn_sblue" style="width:76px;" id="btnCashoutMobilecode"><a href="javascript:void(0);" class="btns">免费获取</a></span>
+          <span class="btn_sgray" id="cashout_pay_time" style="display:none"><a class="btns" href="javascript:void(0)">重发(120)</a></span>
+          <em class="dn" style="font-size:14px;margin-left:10px;" id="show_mobile">已发送至{$bank.mobile}</em>
+          <p class="dn" style="color:#f30023;font-size:13px;">验证码输入错误</p>
+          <p class="confirm-transfer-bank">
+            <label class="button-common-blue">
+              <input type="submit" id="formSubmit" name="" value="确定提现"  class="btns confirm">
+            </label>
+          </p>
+        </span>
+      </li>
+      </ul>
+      <div class="formRight">
+        <div class="safe-guard" style="height: 320px;">
+        <h1>安全保障</h1>
+        <div class="guarant">
+          <p><i class="claims"></i></p>
+          <p>银行存管</p>
+          <p class="blue">确保账户资金安全</p>
+        </div>
+        <div class="guarant">
+          <p><i class="service-tel"></i></p>
+          <p>大额资金变动</p>
+          <p class="blue">客服实时电话回呼</p>
+        </div>
+        </div>
+      </div>
+    </div>
+    </form>
+    <input type="hidden" id="amount" value="{$amount}">
+    <input type="hidden" id="is_init" value="{$is_init}">
+    <input type="hidden" id="uid_type" value="{$uid_type}">
+    <input type="hidden" id="reward_money" value="{$reward_money}">
+    <input type="hidden" id="cashout_url" value="{:U('Payment/PayAccount/getApplyCashout')}">
+    <input type="hidden" name="inWhiteList" value="<?php echo $userStatus['if_white_name'];?>">
+  </div>
+  <div class="plf20 dn">
+    <div id="naviga_bar" class="naviga_bar">
+    <a href="javascript:;">账户概况</a>
+    <em>></em>
+    <a class="" href="javascript:;">提现</a>
+    </div>
+    <div class="nocodeTip">
+      <p class="noteTipName org"><i class="tangerineHeart inline-block alm"></i> &ensp;温馨提示：</p>
+      <p class="noteTipText" style="line-height:30px;">
+        <em class="red">1.为了保护您的资金安全，请您在申请提现前绑定您本人的银行卡</em><br/>
+        2. 收到您的提现请求后，鑫合汇将在1-3个工作日（双休日和法定节假日除外）之内，将资金转入您绑定的银行卡<br/>
+        3. 在双休日和法定节假日期间，您可以申请提现，但鑫合汇将暂时不能处理，需要等恢复正常上班后才可以进行处理。 不便之处，请您谅解
+      </p>
+    </div>
+  </div>
+  <div class="withdrawal-instructions" style="color:#717171;">
+    <h2><i class="state-icon"></i>提现说明：</h2>
+    <p>1. 提现银行卡为您开通浙商存管户时绑定的银行卡，目前浙商只支持绑定一张银行卡</p>
+    <p>2. 资金只可提现至您本人的充值银行卡（与提现银行卡为同一张卡），若您修改银行卡成功，原银行卡充值的钱可通过新银行卡提现</p>
+    <p>3. 提现到账时间：<br />
+    &nbsp;&nbsp;&nbsp;&nbsp;提现金额≤5万元，7*24小时资金2小时内到账<br />
+    &nbsp;&nbsp;&nbsp;&nbsp;提现金额＞5万元，支持工作日(9:00至17:00)2小时内到账，节假日提现到账时间顺延
+    </p>
+    <p>
+    4. 提现费用:<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;若提现金额≤免费提现金额且单笔提现金额小于5万，提现免费，否则浙商银行将收取提现费用<a href="{:U('Help/Help/viewHelpIndex?tpl=AboutUs-tariff');}" class="blue">&nbsp;&nbsp;资费说明</a>
+    </p>
+  </div>
+</div>
+<!-- 弹窗开始 -->
+  <div class="mask dn"></div>
+  <!--申请加入白名单-->
+  <div class="khcg applyWL openSuccess dn">
+    <div class="fr close-btn">
+        <a href="javascript:;"><img src="/public/images/zskh/close.png" alt="" /></a>
+    </div>
+    <div class="clearfix"></div>
+    <div class="tac khcg-txt">
+        <p class="mt20"></p>
+        <p class="tac introduceTxt mt20" style="width:100%;font-size:18px;color:#575757;">存管账户正在分批激活，请您耐心等待通知。</p>
+        <a href="<?php echo C('payment.public_apply_url'); ?>" class="openAccountBtn " style="width:140px;font-size:16px;margin-top:40px;">
+          了解存管
+        </a>
+    </div>
+  </div>
+
+  <div class="khcg  tac success tixiansuccess dn">
+  <br />
+  <br />
+    <img src="/public/images/zskh/czcg.png" alt="" /><span class="recharging" style="font-size:26px;color:#575757;vertical-align: text-top;">&nbsp;提现申请已提交成功</span>
+  <br />
+  <br />
+    <p class="tac" style="font-size:18px;color:#999;">预计2小时内到账（节假日顺延）</p>
+    <br />
+    <span class="button-common-blue button-blue-w120"><input type="submit" name="" value="关闭" class="btns closeFail"></span>
+  </div>
+  <div class="khcg  tac success tixianfailure dn">
+  <br />
+  <br />
+    <img src="/public/images/zskh/czsb.png" alt="" /><span class="recharging" style="font-size:26px;color:#575757;vertical-align: text-top;">&nbsp;提现失败</span>
+  <br />
+  <br />
+    <p class="tac" style="font-size:18px;color:#999;">失败原因：银行系统错误</p>
+    <br />
+    <span class="button-common-blue button-blue-w120"><input type="submit" name="" value="关闭" class="btns closeFail"></span>
+  </div>
+<!-- 弹窗结束 -->
+</block>

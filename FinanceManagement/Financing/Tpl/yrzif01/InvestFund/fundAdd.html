@@ -1,0 +1,27 @@
+<extend name="./app/Tpl/Public/base2.html"/>
+<block name="title">中新力合旗下投融平台</block>
+<block name="keywords"></block>
+<block name="description"></block>
+
+<block name="style">
+
+</block>
+
+<block name="body">
+  <include file="nav" />
+  <div class="main_area">
+    <div class="info_fill_step"  style="margin:30px 0 20px 97px; text-align:left;" id="stepNav">
+      <?php if(!$fund_prj_data || $fund_prj_data['status'] == 3){ ?>
+      <span class="filled filling" event-click="loadFundStepFrom" data-args="addFundPrj" style="cursor: pointer">项目信息</span>
+      <?php } ?>
+      <?php if($fund_prj_data['bid_status'] == 4 || $fund_prj_data['bid_status'] == 8){ ?>
+      <span class="filled filling" event-click="loadFundStepFrom" data-args="addInvestFundFiling" style="cursor: pointer">备案登记信息</span>
+      <span class="filled" event-click="loadFundStepFrom" data-args="toFundReports" style="cursor: pointer"><i></i>运营报告</span>
+      <span class="filled" event-click="loadFundStepFrom" data-args="addFundEvent" style="cursor: pointer"><i></i>重大事件披露</span>
+      <?php } ?>
+    </div>
+    <div class="form_container" id="form_container">
+    </div>
+    <input type="hidden" id="edit_Prj_Id" value="{$prj_id}"/>
+  </div>
+</block>

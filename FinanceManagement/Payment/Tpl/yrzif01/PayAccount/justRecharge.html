@@ -1,0 +1,39 @@
+<extend name="./app/Tpl/Public/base.html"/>
+
+<block name="header">
+支付测试
+</block>
+<block name="body">
+	<form method="POST" action="{:U('Payment/PayAccount/justDoRecharge')}">
+	<table>
+		<tr>
+		    <td>金额:</td>
+		    <td><input type="text" id="amount" name="amount" value="1" size="50"/>(元)</td>
+		</tr>
+		<tr>
+		    <td>选择银行:</td>
+		    <td>
+				<select id="bankCode" name="bankCode">
+					<option value="">--请选择--</option>
+					<volist name="list" id="bankParam">
+						<option value="{$bankParam.code}">{$bankParam.name}</option>
+					</volist>
+				</select>
+			</td>
+		</tr>
+		<tr>
+		    <td>银行账号:</td>
+		    <td><input type="text" id="out_account_no" name="out_account_no" value="" size="50"/></td>
+		</tr>
+		<tr>
+		    <td>银行账号id:</td>
+		    <td><input type="text" id="out_account_id" name="out_account_id" value="" size="50"/></td>
+		</tr>
+		<tr><td colspan=2 width="100%"><center><input type="submit" name="submit" id="submit" value="付款"/></center></td></tr>
+	
+	</table>
+	</form>
+</block>
+<block name="footer">
+{~R('Page/footer','','Widget')}
+</block>

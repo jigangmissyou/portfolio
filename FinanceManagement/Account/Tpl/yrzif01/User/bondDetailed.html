@@ -1,0 +1,64 @@
+<!-- 申请债权转让 star -->
+<?php 
+  $prjIds = array();
+  $prjNames = array();
+  foreach ($CREDITOR_TRANSFER_DATA as $key => $vo) {
+    array_push($prjIds, $vo['CREDITOR_TRANSFER_PRJ_ID']);
+    array_push($prjNames, $vo['CREDITOR_TRANSFER_PRJ_NAME']);
+  } 
+  // echo "<pre>"; print_r($CREDITOR_TRANSFER_DATA);
+  $prjIdStr = implode(',', $prjIds);
+  $prjNameStr = implode('、', $prjNames);
+ ?>
+<div id="titlebar"><?php foreach ($CREDITOR_TRANSFER_DATA as $key => $vo) { ?>&nbsp;&nbsp;{$vo.CREDITOR_TRANSFER_PRJ_TYPE}-{$vo.CREDITOR_TRANSFER_PRJ_NAME}<?php } ?>项目债权转让需知及操作说明</div>
+<div class="jqueryscroll bond-pop-box">
+	<div class="bond-top-content">
+		<p class="bond-title">尊敬的{$user.real_name}先生/女士：</p>
+		<div class="bond-text-content">
+			<p>因借款方秦皇岛龙汇物流有限公司暂时出现经营性资金困难，无法按时还款；同时，担保方河北融投担保集团中瑞担保有限公司也因自身原因将延期代偿。在此情况下，作为一家有责任心的知名网贷平台，我们第一时间予以介入并进行风险评估调研，保障投资者的利益不受损失。</p>
+			<p>由于借贷双方是企业与投资者，鑫合汇作为信息撮合平台在法律层面上并不具备向借款企业追讨债权的资格。为了维护您的权益，我们将通过债权转让形式，全额支付投资者的本金与利息，也就说，您可以将债权转让给鑫合汇，并由债权受让方行使追讨职责。完成债权转让后，您将会在项目到期后收到投资本金及相应的利息。</p>
+			<p>我们的客服工作人员会及时与您联系，告知具体情况，并向您邮箱发送债权转让协议或邮寄书面协议。</p>
+			<p>鑫合汇依托中新力合集团十年中小微企业金融服务经验，拥有优秀的风控团队和严格的项目审批流程，一直以来规范经营，尤其重视自己的品牌声誉及社会公信力，对于出现的任何问题，处理原则都是首先保障投资人的权益。</p>
+			<p>今后，鑫合汇也将始终秉承这一原则，严格把关合作机构和融资项目，为建设良性自律、客户至上的互联网金融生态圈贡献一份力量！</p>
+		</div>
+	</div>
+  <div class="bond-middle-content"><span>债权转让操作流程说明</span></div>
+  <div class="bond-bottom-content">
+    <p class="bond-botton-text org40">1. 登陆系统后，在我的账户>理财记录中搜索{$prjNameStr}项目>点击搜索</p>
+         <img src="/public/images/bond/bond_07.png" alt="">
+         <img src="/public/images/bond/bond_09.png" alt="">
+         <p class="bond-botton-text org40">2. 在{$prjNameStr}项目列表中点击债权转让申请按钮</p>
+         <img src="/public/images/bond/bond_12.png" alt="">
+      <p class="tac mt30"><label for="" class="bond-button-box"><a href="{:U('Account/Financing/index',array('prj_id'=>$prjIdStr))}" data-flag="toMyPlist">快速发起债权转让申请<em>点我1步即可完成</em></a></label></p>
+  </div>
+
+  <div class="bond-middle-content"><span>合同签署操作指南</span></div>
+  <div class="download-text-info">
+    第一步：请您详细阅读<font class="red">《线下合同签署规范及注意事项》</font><br/>
+    第二步：请您点击下载<font class="red">《合同》</font>。请您根据<font class="red">《线下合同签署规范及注意事项》</font>内的样例签署您的合同。<br/>
+    第三步：请您将所需签署的材料邮寄至鑫合汇总部。<br/>
+    <font class="blue">邮寄地址：浙江省杭州市拱墅区祥园路88号智慧信息产业园5号楼金融大厦9F，杭州鑫合汇网络科技有限公司 法务部 马女士（收）邮编：310015 联系方式：0571-88197037。</font><br/>
+    <font class="blue">关于费用：请选择到付，快递费用由鑫合汇承担。建议顺丰快递加急邮寄，顺丰联系方式：95338</font><br/>
+    <font class="red">如您有任何问题，请联系鑫合汇电话客服400-821-8616。我们的工作时间每日09：00-17：00。</font>
+  </div>
+
+  <div class="bond-middle-content"><span>线下合同签署规范及注意事项</span></div>
+    <div class="download-text-info">
+    	<p class="font18 grey-46">投资者需打印并签署</p>
+附件1：<a href="javascript:;" event-click="prewImg" data-args="zhuanrang" class="blue">《债权转让合同》</a>一式两份，每页需投资人签名，两份共8个签名；<br/>
+附件2：<a href="javascript:;" class="blue" event-click="prewImg" data-args="jiekuan">《借款合同》</a>一式两份；最后一页签名，两份共2个签名<font class="red">(只需打印合同的最后一页)</font>；<br/>
+附件3：  对借款人的<a href="javascript:;" class="blue" event-click="prewImg" data-args="tongzhi1">《债权转让通知书》</a>一式两份，在“转让方”签名，两份共2个签名；<br/>
+附件4：  对保证人的<a href="javascript:;" class="blue" event-click="prewImg" data-args="tongzhi2">《债权转让通知书》</a>一式两份，在“转让方”签名，两份共2个签名；<br/>
+附件5：  需要提供<em class="blue">身份证正反面复印件</em>（必要）、户口本本人页复印件。
+<p class="font16 red">以上需投资人在14处用中文简体黑色水笔或黑色签字笔签名，切勿使用圆珠笔。</p>
+    </div>
+    <div id="contractImg" data-flag="contractImg" style="display:none;">
+      <img type="zhuanrang" src="/public/images/bond/1-03.jpg" alt="合同">
+      <img type="zhuanrang" src="/public/images/bond/1-07.jpg" alt="合同">
+      <img type="zhuanrang" src="/public/images/bond/1-04.jpg" alt="合同">
+      <img type="jiekuan" src="/public/images/bond/1-02.jpg" alt="合同">
+      <img type="tongzhi1" src="/public/images/bond/1-01.jpg" alt="合同">
+      <img type="tongzhi2" src="/public/images/bond/1-06.jpg" alt="合同">
+    </div>
+</div>
+<!-- 申请债权转让 end -->

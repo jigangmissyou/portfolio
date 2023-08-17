@@ -1,0 +1,37 @@
+<style>
+  #cboxContent{background-color: #fff;}
+  #cboxLoadedContent{overflow-x: hidden !important;}
+</style>
+
+<div id="titlebar">查看项目信息</div>
+<div id="jqueryContent" style="width:900px;height: 400px;">
+<div id="colorbox-tab" class="detailSurTab surTabUl mb20">
+  <ul>
+    <li class="current">
+      <span class="roundTopborGy">
+        <a class="ajax-tab" href="{:U('Financing/InvestFund/viewFundPrj', Array('pid'=>$prj_id, 'is_view'=>1, 'is_tab'=>1))}">
+          项目管理
+        </a>
+      </span>
+      <a class="hrwrite"></a>
+    </li>
+    <li class="">
+      <span class="roundTopborGy">
+        <a class="ajax-tab" href="{:U('Financing/InvestFund/getInvestorsOfPrjByPrjId', Array('prj_id'=>$prj_id, 'p'=>1))}">
+          投资记录
+        </a>
+      </span>
+      <a class="hrwrite"></a>
+    </li>
+  </ul>
+</div>
+
+  <form action="{:U('Financing/InvestFund/getInvestorsOfPrjByPrjId')}" method="post" id="ajaxForm_getInvestorsOfPrjByPrjId" ajax="1" ajax-after="ajaxAfter_getInvestorsOfPrjByPrjId" ajax-datatype="html">
+    <div class="ajax-container" id="getInvestorsContainer">
+
+
+    </div>
+  </form>
+
+
+</div>

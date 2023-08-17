@@ -1,0 +1,43 @@
+<form action="{:U('Payment/PayAccount/cashoutRollback_list_edit')}" ajax="1" ajax-after="ajaxAfter_Payment_PayAccount_cashoutRollback_edit" method="post">
+	<input type="hidden" name="cashoutId" value="{$rollback.apply_id}">
+  <input type="hidden" name="id" value="{$rollback.id}">
+	<!-- RollbackTime / RedoTime -->
+	<div id="cashoutFailBox">
+		<div id="jqueryContent">
+		  <div class="w520">
+		    <ul class="formList">
+		      <li>
+            <label class="li-label-name">退回时间：</label>
+            <?php
+             if(!empty($rollback['rollback_time'])){
+              $rollback_time=date('Y-m-d',$rollback['rollback_time']);
+             }else{
+              $rollback_time='';
+             }
+
+             if(!empty($rollback['redo_time'])){
+              $redo_time=date('Y-m-d',$rollback['redo_time']);
+             }else{
+              $redo_time='';
+             }
+            ?>
+            <span class="li-span-con"><input  datepicker name="RollbackTime" type="text" value="{$rollback_time}"></span>
+          </li>
+		      <li><label class="li-label-name">重新支付时间：</label><span class="li-span-con"><input  datepicker name="RedoTime" type="text" value="{$redo_time}"></span></li>
+          <li>
+            <label class="li-label-name">退回原因：</label>
+            <span class="li-span-con">
+              <textarea name="backreason" cols="30" rows="3">{$rollback.backreason}</textarea>
+            </span>
+          </li>
+          <li>
+		      	<label for="" class="li-label-name">&nbsp;</label>
+		      	<span class="li-span-con">
+		      		<span class="button-common-blue button-blue-pop"><input type="submit" class="btns rollback-save" value="确定"></span>
+		      	</span>
+		      </li>
+		    </ul>
+		  </div>
+		</div>
+	</div>
+</form>

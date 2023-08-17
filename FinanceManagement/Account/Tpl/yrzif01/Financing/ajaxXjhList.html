@@ -1,0 +1,123 @@
+<!-- <script src="http://tjs.sjs.sinajs.cn/open/api/js/wb.js" type="text/javascript" charset="utf-8"></script> -->
+<!-- 白富美 待还款 -->
+<table class="ui-record-table percentTable">
+    <thead>
+    <tr>
+        <!--<th width="14%" order_field="order11" <eq name="order_field" value="order11"> order_type="{$order_type}"</eq>>还款日期</th>
+        <th width="25%">项目</th>
+        <th width="16%" class="tac" order_field="order14" <eq name="order_field" value="order14"> order_type="{$order_type}"</eq>>投资金额(元)</th>
+        <th width="13%" class="tac" order_field="order15" <eq name="order_field" value="order15"> order_type="{$order_type}"</eq>>收益(元)</th>
+        <th width="12%" order_field="order16" <eq name="order_field" value="order16"> order_type="{$order_type}"</eq>>成交时间</th>
+        <th width="10%" class="tac">状态</th>
+        <th width="10%" class="tac">详情</th>-->
+        <th width="14%" order_field="order11" <eq name="order_field" value="order11"> order_type="{$order_type}"</eq>>到期日期</th>
+        <th width="12%">期限</th>
+        <th width="18%" class="tac" order_field="order14" <eq name="order_field" value="order14"> order_type="{$order_type}"</eq>>委托金额(元)</th>
+        <th width="18%" class="tac" order_field="order15" <eq name="order_field" value="order15"> order_type="{$order_type}"</eq>>到期收益(元)</th>
+        <th width="18%" order_field="order16" <eq name="order_field" value="order16"> order_type="{$order_type}"</eq>>委托时间</th>
+        <th width="10%" class="tac">状态</th>
+        <th width="10%" class="tac">详情</th>
+    </tr>
+    </thead>
+    <tbody>
+    <if condition="$list">
+        <foreach name="list" item="v">
+            <tr hovercard="div@{$v['id']}" hovercard-options='{"direction":"center", "minWidth":"230px"}'>
+                <td>
+                    <p class="pro_name">
+                        {$v['expect_repay_time_view']}<br/>
+                        <?php if(in_array($v['from_client'],[2,3])){ ?>
+                        <a href="javascript:;">
+                            <em class="bidder-icon2" title="手机端投资"></em>
+                        </a>
+                        <?php }?>
+                        <?php if($v['status'] == XPrjOrderModel::STATUS_FINISH): ?>
+                        还款完成
+                        <?php endif;?>
+                    </p>
+                </td>
+                <td>
+                    <p class="name-color">
+                        <?php echo $v['xprj_name']; ?>
+                    </p>
+                </td>
+                <td class="tac">
+                    <span class="orange">{$v['money_view']}</span>
+                    <?php if($v['reward_type'] == 1): ?>
+                    <br><span class="mr12">
+          <!-- 使用红包 -->
+              <i class="icon-reward" title="红包"></i>
+          		</span>
+                    <?php endif; ?>
+                    <!-- 满减券 -->
+                    <?php if($v['reward_type'] == 2): ?>
+                    <br />
+                    <span class="mr12"><i class="icon-full-cut" title="满减券"></i></span>
+                    <?php endif;?>
+                    <!-- 加息券 -->
+                    <?php if($v['reward_type'] == 3): ?>
+                    <br />
+                    <span class="mr12"><i class="icon-add" title="加息券"></i></span>
+                    <?php endif; ?>
+                </td>
+                <!--<td class="tac green"><div class="prel envelopes_parent">{$v['pri_interest_view']}</div></td>-->
+                <td class="tac green"><div class="prel envelopes_parent"><?php if($v['rest_income_view']!=0.00) echo $v['rest_income_view']; else echo '--'; ?></div></td>
+                <td>
+                    <p style="margin-left:5px">
+                        {$v['order_date_view']}
+                        <br/>
+                        {$v['order_time_view']}
+                    </p>
+                </td>
+                <td class="tac">
+                    {$v['status_show']}
+                </td>
+                <td class="tac">
+                    <label class="button-small-info">
+                        <a href="{:U('Account/Financing/xjhOrder')}?xoid={$v.id}" target="_blank" class="btns">查看</a>
+                    </label>
+                    <div>
+                        <?php if(in_array($v['prjid'], $transfer_prj_ids) && $v['creditor_rights_status'] >= 1): ?>
+                        <a href="javascript:;" url="{:U('Index/Protocol/downloadContract')}?uid={$current_uid}&order_id={$v.id}&prj_id={$v.prjid}" colorbox="1"  class="block blue">合同下载及签署规范</a>
+                        <?php endif; ?>
+
+                        <?php if($v['show_creditor_transfer']){  //债权转让标 ?>
+                        <a href="javascript:;" class="underline" url="{:U('Account/User/addCreditorTransfer')}" prjid="{$v.prjid}" data-flag="zqRequest" style="display: inline-block;">债权转让申请</a>
+                        <?php } ?>
+                    </div>
+                    <div hovercard-id="{$v['id']}" class="dn hoverPinfo">
+                        <p>
+                          司马小鑫：{$v.time_limit_day} 天 | {$v.rate}
+                          <?php if ($v['activity_rate_raw']>0) { ?>(含奖)<?php }?>
+                        </p>
+                        <if condition="$v['reward_type']">
+                          <p> 使用奖励：
+                            {$v['reward_type_tips']}
+                           </p>
+                        </if>
+                        <p>
+                            预计到账时间：
+                            16:00 -24:00(还款当天)
+                        </p>
+                    </div>
+                </td>
+            </tr>
+        </foreach>
+        <else />
+        <tr>
+            <td colspan="100%" class="tac"><?php if($msg){ echo $msg; }else{ echo '没有相关数据'; }?></td>
+        </tr>
+    </if>
+    </tbody>
+</table>
+<?php $pageNavCallback = "ajaxAfter_Account_Financing_index"; ?>
+<include file="./app/Tpl/Public/pageAjax.html" />
+<input type="hidden" name="totalCommissioned" value="{$totalCommissioned}">
+<input type="hidden" name="totalAll" value="{$totalAll}">
+<input type="hidden" name="totalBiding" value="{$totalBiding}">
+<input type="hidden" name="totalEnd" value="{$totalEnd}">
+<input type="hidden" name="totalFull" value="{$totalFull}">
+<input type="hidden" name="totalRepaying" value="{$totalRepaying}">
+<input type="hidden" name="totalRepaySuccess" value="{$totalRepaySuccess}">
+<input type="hidden" name="totalRebackPrj" value="{$totalRebackPrj}">
+<input type="hidden" name="totalPreSaleFailPrj" value="{$totalPreSaleFailPrj}">

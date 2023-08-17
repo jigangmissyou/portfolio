@@ -1,0 +1,89 @@
+<?php if(!empty($client_permission) && !$mustDisable && $salary_permission){ // 非专享标并且不是新客标 不是其他企业的企福鑫标  ?>
+  <dd>
+    <?php
+      $is_pre = ($info['act_prj_ext']['is_pre_sale']==1 && $info['bid_status'] == PrjModel::BSTATUS_WATING);
+      if($is_pre){ ?>
+      <div class="immInvest_but" event-click="investSubmit">
+        <label class="button-common-blue button-prepare-btn">
+          <a href="javascript:;" class="btns">预售投资</a>
+        </label>
+      </div>
+    <?php }else{ ?>
+      <?php if($info['act_prj_ext']['is_deposit']==1 && $user['zs_status'] != 2) { ?>
+        <p style="width: 320px;margin-left: -20px;color:#34b9ff;">· 该项目为浙商银行存管项目，开通存管账户即可投</p>
+        <div class="investLoginBtn button-common-blue button-prepare-btn"><a class="openZS btns invest-login-btn" href="{:U('Account/User/openAccount')}">开通浙商银行存管账户</a></div>
+      <?php } else { ?>
+        <div class="immInvest_but button-common-orange button-plist-btn" event-click="investSubmit">
+          <label class="orgBigBtn"><a href="javascript:;" class="btns">确认支付</a></label>
+        </div>
+      <?php } ?>
+    <?php }?>
+  </dd>
+<?php } else {	//专享客户端、新客，按钮灰色，文字改变，不可点击、鼠标移上tips ?>
+  <dd class="Exclu_channel_But">
+    <?php
+      if($client_type == 1){  // PC
+        if($is_pre){
+          $investLabelStyle = 'blueBigBtn';  // label上的class样式
+          $investBtnStyle = 'whiteComputer';  // i上的class样式
+        }else{
+          $investLabelStyle = 'orgBigBtn';  // label上的class样式
+          $investBtnStyle = 'whiteComputer';  // i上的class样式
+        }
+      } else if($client_type == 2) {  // 微信
+        $investLabelStyle = 'grayBigBtn';
+        $investBtnStyle = 'whiteWechat';
+        $client_type_config[2].='WAP';  // 微信改成微信WAP
+      } else if($client_type == 3){  // 手机app
+        $investLabelStyle = 'grayBigBtn';
+        $investBtnStyle = 'whiteMobile';
+      }
+
+      // 投资按钮上的文字
+      $btnLabel = $client_type_config[$client_type].'专享';
+      $floatTips = '仅针对使用'.$client_type_config[$client_type].'投资的用户哦~';
+
+      if($info['is_new']){  // 新客标
+        $btnLabel = '新客专享';
+        $investLabelStyle = 'orgBigBtn';  // label上的class样式
+        if($mustDisable){ // 非新客打开新客标
+          $investLabelStyle = 'grayBigBtn';  // label上的class样式
+        }
+        $floatTips = '仅针对首次投资的用户哦~';
+      }
+      if(!$salary_permission){  // 其它企业的企福鑫标
+        if($is_pre){
+          $investLabelStyle = 'blueBigBtn';
+          $btnLabel = '预售投资';
+        }else{
+          $investLabelStyle = 'grayBigBtn';  // label上的class样式
+          $btnLabel = '确认支付';
+        }
+      }
+
+     ?>
+    <!-- 专享按钮 -->
+    <div class="immInvest_but" <?php if($client_type == 1 && empty($mustDisable) && $salary_permission){ // PC专享并且未受新客限制 ?> event-click="investSubmit"<?php } ?> event-mouseover="overClientBtn" event-mouseout="outClientBtn">
+      <label class="button-common-orange {$investLabelStyle}">
+        <a href="javascript:;" class="btns font22">
+          <?php if(!empty($investBtnStyle)){  // 有样式才显示，新客专享不显示 ?>
+          <i class="{$investBtnStyle}"></i>
+          <?php } ?>
+          {$btnLabel}
+        </a>
+      </label>
+    </div>
+    <!-- 提示框 -->
+    <?php if(!$salary_permission){  // 其他企业的企福鑫标 ?>
+    <div class="OrangeTipBox OrangeTipBox-Red" data-flag="eventclientBtn" style="display: none">
+      <em class="OrangeTipBox_Arr1"><em class="OrangeTipBox_Arr2"></em></em>
+       仅支持以下企业用户：<p class="orange"><?php echo implode('<br/>', $info['companylist']); ?></p>
+    </div>
+    <?php } else { ?>
+    <div class="OrangeTipBox" data-flag="eventclientBtn" class="fixed" style="display:none;">
+      <span class="OrangeTipBox_Rc tac"><i class="SmilingFace"></i>{$floatTips}</span>
+      <em class="OrangeTipBox_Arr"></em>
+    </div>
+    <?php } ?>
+  </dd>
+<?php } ?>

@@ -1,0 +1,83 @@
+<!-- 高富帅 白富美 列表 -->
+<table class="ui-table ui-record-table percentTable">
+  <thead>
+  <tr>
+    <th><p class="ml10">项目名称</p></th>
+    <th <?php if($c == 4):?> width="15%" <?php else:?> width="15%" <?php endif;?> class="tac"
+      <?php  if($hasBid) echo " order_field=\"order2\" ";?>
+      <?php  if($order_field=='order2') echo " order_type='".$order_type."' ";?>
+    >预期年化利率</th>
+    <th width="10%" class="tac"
+      <?php  if($hasBid) echo " order_field=\"order3\" ";?>
+      <?php  if($order_field=='order3') echo " order_type='".$order_type."' ";?>
+     >期限</th>
+    <th width="15%">还款方式</th>
+    <th width="12%" class="tl"
+      <?php  if($hasBid) echo " order_field=\"order4\" ";?>
+      <?php  if($order_field=='order4') echo " order_type='".$order_type."' ";?>
+    >转让价格</th>
+    <th width="12%" class="tar">预期收益</th>
+    <th width="15%" class="tac">操作/状态</th>
+  </tr>
+  </thead>
+  <tbody>
+
+  <if condition="$list">
+    <foreach name="list" item="v">
+      <?php
+			if($isLogin){
+    $url = U('Financing/Invest/viewFed',array('id'=>$v['id_view']));
+        }else{
+        $viewUrl = U('Financing/Invest/viewFed',array('id'=>$v['id_view']));
+        $url = U('Account/User/login',array("url"=>rawurlencode($viewUrl)));
+        }
+      ?>
+      <?php
+		  	$title = service("Financing/Financing")->getTitle($v);
+         ?>
+      <tr>
+        <td  <?php echo $title; ?>>
+        <p class="pro_name ftad ml10"><a href="<?php echo $url; ?>" textlength="16">
+            <?php echo service("Financing/Project")->setPrjNameStyle($v,1);?>
+        </a>
+        </p>
+        <p class="icoarea ml10">
+							   	   			 <?php 
+			   echo service("Financing/Financing")->getIco($v);
+			 ?>
+        </p>
+        </td>
+        <td class="tac"   <?php echo $title; ?>>
+          <?php if($v['transfer_status'] == AssetTransferModel::PRJ_TRANSFER_BIDED): ?>
+          <p class="rate rate_g"><?php echo number_format($v['year_rate']/10,2); ?>%</p>
+          <?php else:?>
+        <p class="rate"><?php echo number_format($v['year_rate']/10,2); ?>%</p>
+          <?php endif;?>
+        </td>
+        <td class="tac">
+          <?php echo $v['expire_time_limit'][2];?>
+        </td>
+        <td   <?php echo $title; ?>>{$v.repay_way_view}</td>
+        <td class="tl"   <?php echo $title; ?>><span class="mr12">{$v.demand_amount_view}</span></td>
+        <td class="tar">
+          <?php echo $v['income_get_view'];?>元
+        </td>
+        <td class="tc popCiteLayer">
+          <?php if($v['transfer_status'] == AssetTransferModel::PRJ_TRANSFER_BIDED): ?>
+          <a class="btn_big_gray" href="javascript:;"><span class="btns">已转让</span></a>
+          <?php else:?>
+          <a href="{$url}" class="btn_big_orange"><span class="btns">投资</span></a>
+          <?php endif;?>
+        </td>
+      </tr>
+    </foreach>
+    <else />
+    <tr>
+      <td colspan="100%" class="tac">没有相关数据</td>
+    </tr>
+  </if>
+  </tbody>
+</table>
+<?php $pageNavCallback = "ajaxAfter_Financing_Invest_fed"; ?>
+<?php $scrollTo = "#project_zhaiquan_container"; ?>
+<include file="./app/Tpl/Public/pageAjax.html" />

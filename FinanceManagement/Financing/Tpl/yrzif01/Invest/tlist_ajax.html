@@ -1,0 +1,66 @@
+<table class="ui-record-table">
+<thead>
+  <tr>
+    <th width="10%">下一还款日期</th>
+    <th>项目名称</th>
+    <th width="10%">预期年化利率</th>
+    <th width="8%">期限</th>
+    <th width="13%">还款方式</th>
+    <th width="10%" class="tac">到期本息</th>
+    <th width="8%">剩余期限</th>
+    <th width="10%" class="tac">转让价格
+    </th>
+    <th width="12%" class="tac">操作</th>
+  </tr>
+  <tr class="line"><th colspan="100%"></th></tr>
+</thead>
+<tbody>
+  <?php if(!empty($list)){ ?>
+  <foreach name="list" item="item">
+	<?php
+	 	$title = service("Financing/Financing")->getTitle($item);
+	?>
+  <tr>
+    <td   <?php echo $title; ?>>{$item.project.next_repay_date_view}</td>
+    <td>
+      <p class="pro_name"   <?php echo $title; ?>>{$item.prj_name}</p>
+      <p class="icoarea"   <?php echo $title; ?>>
+									   	   			 <?php 
+			   echo service("Financing/Financing")->getIco($item);
+			 ?>
+      </p>
+      <!-- <p class="blue">{$item.prj_no}</p> -->
+    </td>
+    <td><p class="blue"   <?php echo $title; ?>>
+		   <?php echo number_format($item['year_rate']/10,2); ?>%
+	</p></td>
+    <td   <?php echo $title; ?>>{$item.project.time_limit}<if condition="$item.project.time_limit_unit == 'month'">个</if>{$item.project.time_limit_unit_view}</td>
+    <td>{$item.repay_way|getCodeName='E004',###}</td>
+    <td   <?php echo $title; ?> class="tac">
+    {$item['all_income_money_view']}<br>
+    <?php if(!$item['is_end']): ?>
+    <a  class="underline" href="javascript:" hovercard="ajax@{:U('Account/Financing/ajaxShowRepay?id=')}{$item['id']}" hovercard-options='{"direction":"down","theme":"light"}'>
+    {$item.repay_count}/{$item.total_count}
+    </a><?php endif; ?>
+    </td>
+    <td class="tac">
+           <?php echo $item['expire_time_limit'][2];?>
+    </td>
+    <td class="tac"   <?php echo $title; ?>>{$item.money_view}</td>
+    <td class="tac">
+      <if condition="$item.disabled eq TRUE">
+      <span class="btn_gray"><span class="btns">转让</span></span>
+      <else/>
+      <a href="{:U('Financing/Product/transfer?prj_id=' . $item["prj_id"] . '&ord_id=' . $item["id"])}" class="button-small-info" colorbox="1"><span class="btns">转让</span></a>
+      </if>
+    </td>
+  </tr>
+  </foreach>
+  <?php } else { ?>
+  <tr>
+    <td colspan="100%" class="tac">没有相关数据</td>
+  </tr>
+  <?php } ?>
+</tbody>
+</table>
+{$paging}

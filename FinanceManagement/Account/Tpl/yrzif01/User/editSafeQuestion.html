@@ -1,0 +1,49 @@
+<extend name="./app/Tpl/Public/base_user.html"/>
+<block name="title">设置安全保护问题</block>
+<block name="keywords"></block>
+<block name="description"></block>
+<block name="style">
+<style>.indent_list .ui-multiselect.custom{height:34px!important}</style>
+</block>
+<block name="body">
+<div class="container-inner mt20">
+  <include file="./app/Tpl/Account/userMyBonusSider.html" />
+  <div class="main_area body-frame">
+   <div class="p20">
+    <?php if (!$hash_sqa): ?>
+    <h2 class="h2tit">设置安全保护问题</h2>
+    <?php else: ?>
+    <h2 class="h2tit">修改安全保护问题</h2>
+    <?php endif ?>
+    <!-- <div class="remind"><h3><strong class="user">{$user['uname']}</strong>你好！</h3></div> -->
+    <div class="account-edit-mobile">
+        <ul>
+          <li class="li-first current">1 安全验证<span class="edit-jiao"></span></li>
+          <li class="li-other current"><?php if (!$hash_sqa): ?>2 设置问题<?php else: ?>2 重新设置<?php endif ?><span class="edit-jiao"></span></li>
+        </ul>
+      </div>
+    <form method='post'  action="{:U('Account/User/editSafeQuestion')}">
+    <ul class="formList account-edit-form">
+      <li>
+        <label class="li-label-name">选择安全问题：</label>
+        <span class="li-span-con">
+        <select name="sqa_key" multipleone="1" valid="required" multiselect-options='{"minWidth":"310"}'>
+          <option value="">选择问题</option>
+          {:genDictOption('E025')}
+        </select>
+      </span>
+    </li>
+      <li>
+        <label class="li-label-name">安全问题答案</label>
+        <span class="li-span-con">
+        <input type="text" valid="required,safeAnswer" class="inputCommon"  name="sqa_vaule" value="" autocomplete="off">
+      </span>
+    </li>
+      <li class="lastBtns"><label class="li-label-name">&nbsp;</label><span class="li-span-con"><span class="button-common-blue button-blue-w120"><input type="submit" name="" value="提 交" class="btns"></span><span class="button-common-gray button-gray-w120 ml20"><input type="reset" name="" value="取 消" class="btns"></span>
+      </span></li>
+    </ul>
+   </form>
+</div>
+</div>
+</div>
+</block>

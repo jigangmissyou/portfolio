@@ -1,0 +1,135 @@
+<div class="prel">
+  <div class="moneysum">
+    <?php if(!$show_total){ ?>
+    <?php
+    if($status == 1) echo "充值总金额:￥<em class='orange'>".($record_sum['recharge_sum']/100)."</em>元";
+    if($status == 2) echo "投资总金额:￥<em class='orange'>".($record_sum['invest_sum']/100)."</em>元";
+    if($status == 3) echo "回款总金额:￥<em class='orange'>".($record_sum['repay_sum']/100)."</em>元";
+    if($status == 4) echo "提现总金额:￥<em class='orange'>".($record_sum['cashout_sum']/100)."</em>元";
+    if($status == 5) echo "奖励总金额:￥<em class='orange'>".($record_sum['reward_sum']/100)."</em>元";
+    //if($status == 6) echo "买入债权总金额:￥<em class='orange'>".($record_sum['transfer_in_sum']/100)."</em>元<br/>卖出债权总金额:￥<em class='orange'>".($record_sum['transfer_our_sum']/100)."</em>元";
+    // if($status == 7) echo "免费提现额度:<em class='orange'>".($total_free_money/100)."</em>元";
+    ?>
+    <?php }else{
+    echo "账户余额:￥<em class='orange'>".$tenant['total_amount_view']."</em>元";
+    } ?>
+  </div>
+  <table class="ui-record-table">
+    <thead>
+    <tr>
+      <th width="19%"><span class="pl10">时间</span></th>
+      <th width="18%" class="tac">类型</th>
+      <th width="18%" class="tac">交易金额(元)</th>
+      <?php if($status != 7){  ?>
+      <th width="17%" class="tac">账户余额(元)</th>
+      <?php }else{  ?>
+      <!-- <th width="10%" class="tar">免费提现额度(元)</th> -->
+      <?php }  ?>
+      <th width="18%" class="tac">摘要</th>
+      <th width="8%" class="tac"></th>
+    </tr>
+    </thead>
+    <tbody>
+    <?php if(!empty($list['data'])){
+
+		foreach ($list['data'] as $key => $vo) { // echo "<pre>"; print_r($vo); ?>
+      <tr>
+        <td>
+          <span class="time pl10"><?php echo  date("Y-m-d H:i", $vo['ctime']); ?></span>
+        </td>
+        <td class="tac">{$vo.type}</td>
+        <?php if($vo['in_or_out'] ==1 ){?>
+        <td class="tac orange">
+            <?php
+
+              if($vo['repay_way'] != 'endate' && $vo['is_repay'] == 1){ ?>
+                <p class="orange">
+              <?php
+              }
+              D("Payment/PayAccount");
+                if($vo['mod_money'] && $vo['in_or_out'] == 1 ){
+                  if($vo['obj_type'] == PayAccountModel::OBJ_TYPE_USE_COUPON){
+                      echo "<em class='orange'>+".number_format($vo['give_free_money']/100, 2)."</em>";
+                  } else {
+                    if($vo['to_amount']< $vo['from_amount']){
+                      echo "";
+                    } else {
+                      echo "<em class='orange'>+".number_format($vo['mod_money']/100, 2)."</em>";
+                    }
+              ?>
+                    <?php if($vo['is_repay'] == 1){ ?>
+                    <i class="icon ico-q" hovercard="ajax@{:U('Payment/PayAccount/getMyPrjProfitInfo?recordId=')}{$vo['id']}" hovercard-options='{"direction":"down","theme":"red"}'></i>
+                    <?php }
+                        if($vo['transfer_fee']){
+                            echo "<p class='orange'>(另扣除手续费";
+                            echo number_format(($vo['transfer_fee'])/100, 2)."元)</p>";
+                        }
+                    }
+                }
+            if($vo['obj_type'] == PayAccountModel::OBJ_TYPE_PAY  AND  $vo['in_or_out'] !=1){
+              echo "<em class='orange'>+".number_format($vo['mod_money']/100, 2)."</em>";
+            }
+            if($vo['obj_type'] == PayAccountModel::OBJ_TYPE_CASHOUTDONE){
+              echo "<em class='orange'>+".number_format($vo['mod_money']/100, 2)."</em>";
+            }
+          ?>
+        </td>
+        <?php }
+        if($vo['in_or_out'] ==2 ){ ?>
+        <td class="tac">
+          <div class="green">
+            <?php if($vo['mod_money'] && $vo['in_or_out'] == 2){ echo "-".number_format($vo['mod_money']/100, 2)."";}
+                else if($vo['mod_money'] && $vo['to_amount'] < $vo['from_amount']){echo "-".number_format($vo['mod_money']/100, 2)."";}?>
+
+             <?php
+                  if($vo['obj_type'] == PayAccountModel::OBJ_TYPE_REPAY) echo "-".number_format($vo['freeze_money']/100, 2);
+                  if($vo['obj_type'] == PayAccountModel::OBJ_TYPE_PAYFREEZE) echo "-".number_format($vo['freeze_money']/100, 2);
+                  ?>
+               
+                </div>
+        </td>
+        <?php } ?>
+        <td class="tac"><?php echo number_format($vo['amount']/100, 2)."";?></td>
+        <td style="padding: 0 15px;">
+            <?php
+            if($vo['is_zs'] == 1){
+              echo '【存管账户】';
+            }else{
+              echo '【普通账户】';
+            }
+            if($vo['obj_type'] == PayAccountModel::OBJ_TYPE_USER_TYJ_CASH_BONUS || $vo['obj_type'] == PayAccountModel::OBJ_TYPE_REWARD_ZS){
+            echo $vo['adesc'];
+            }else{
+            echo $vo['remark'];
+            }
+            ?>
+        </td>
+        <td class="tac">
+          <em class="tag-records"  hovercard="div@{$vo['id']}" hovercard-options='{"direction":"up"}'></em>
+          <p><!-- {$vo.record_no} --></p>
+          <div class="dn" hovercard-id="{$vo['id']}">
+            <p class="hover-title">资金流水号</p>
+            <p class="hoverPinfo">{$vo.record_no}</p>
+          </div>
+        </td>
+      </tr>
+      <?php }
+} else { ?>
+      <tr>
+        <td colspan="100%" class="tac">没有相关数据</td>
+      </tr>
+      <?php } ?>
+    </tbody>
+  </table>
+  <?php $pageNavCallback = "ajaxAfter_Payment_PayAccount_getMyMoneyList"; ?>
+  <include file="./app/Tpl/Public/pageAjax.html" />
+  <input type="hidden" id="totalRecordList" value="{$total}">
+  <input type="hidden" id="totalrecharge" value="{$totalrecharge}">
+  <input type="hidden" id="totalTouzhi" value="{$totalTouzhi}">
+  <input type="hidden" id="totalHuikuan" value="{$totalHuikuan}">
+  <input type="hidden" id="totalTixian" value="{$totalTixian}">
+  <input type="hidden" id="totalJiangli" value="{$totalJiangli}">
+  <input type="hidden" id="totalZhuangrang" value="{$totalZhuangrang}">
+  <input type="hidden" id="totalFreeMoney" value="{$totalFreeMoney}">
+  <input type="hidden" id="totalPtFee" value="{$totalPtFee}">
+</div>

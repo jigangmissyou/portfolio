@@ -1,0 +1,80 @@
+<div class="tab_pannel" style="display:block">
+    <table class="ui-record-table">
+        <thead>
+        <tr>
+            <th width="200px">项目</th>
+            <th width="100px">投资人</th>
+            <th width="100px">类型</th>
+            <th width="" class="tar">投资金额(元)</th>
+            <th width="" class="tar">
+                <?php
+    echo $prjInfo['repay_way'] != PrjModel::REPAY_WAY_E ? "每月":"";
+               ?>应还本息(元)</th>
+            <th width="" class="tac">还款日</th>
+            <th width="10%"><a class="btn_light" target="_blank" href="{:U('Index/Repay/export_cu',array('id'=>$prjId,'t'=>1))}">导出明细</a></th>
+        </tr>
+        <tr class="line">
+            <th colspan="100%"></th>
+        </tr>
+        </thead>
+        <tbody>
+        <?php if($list): ?>
+        <?php foreach($list as $v):?>
+        <?php if($v['pri_interest'] == 0) continue;?>
+        <tr>
+            <td><?php echo $v['prj_name']; ?></td>
+            <td><?php echo $v['uname']; ?></td>
+            <td><?php if($v['ptype'] == 1) echo "第".$v['repay_periods']."期"; if($v['ptype'] == 2) echo "募集期"; if($v['ptype'] == 3) echo "利息补偿"; if($v['ptype'] == 4) echo "展期利息"; ?></td>
+            <td class="tar"><?php echo $v['money_view']; ?></td>
+            <td class="tar"><?php echo $v['pri_interest_view']; ?></td>
+            <td class="tac"><?php echo $v['repay_date_view']; ?></td>
+            <td></td>
+        </tr>
+        <?php endforeach;?>
+        <?php else: ?>
+        <tr>
+            <td colspan="100%">
+                没有相关数据
+            </td>
+        </tr>
+        <?php endif; ?>
+        </tbody>
+    </table>
+    <?php $pageNavCallback = "ajaxAfter_Application_ProjectRepayment_repaymentList"; ?>
+    <include file="./app/Tpl/Public/pageAjax.html" />
+    <div class="formula ovh">
+        <div class="fl">
+            <?php if($guarant_fee){ ?>  <p>机构服务费：<strong><?php echo $guarant_fee/100; ?></strong>元</p><?php } ?>
+        <?php if($deposit_fee){ ?>  <p>平台服务费：<strong><?php echo $deposit_fee/100; ?></strong>元</p><?php } ?>
+        <p>本息：<strong><?php echo $totalPriInterest/100 ?></strong>元</p>
+        <p>共计：<strong><?php echo $totalMoney; ?></strong>元</p>
+        </div>
+        <div class="fr">
+          <?php if($list): ?>
+            <?php if($toDeal && !$isRepayed): ?>
+              <input id="priId" type="hidden" value="{$prjRepaymentId}"/>
+              <input id="spid" type="hidden" value="{$spid}"/>
+              <a class="button-common-orange ml20" href="javascript:" id="doRepay" target="_blank"><span class="btns">还&nbsp;&nbsp;款</span></a>
+            <?php elseif($is_show_extend): ?>
+              <a href="javascript:void(0)" class="button-common-orange ml20">
+                <span class="btns" url="{:U('Account/FinancingManage/extendRepayPlan', array('prj_id'=>$prjId))}" id="extend_repay" url2="{:U('Account/FinancingManage/getRepayPlanProgress', array('prj_id'=>$prjId))}">展期还款</span>
+              </a>
+            <?php else: ?>
+              <div class="tar">
+                <a href="javascript:;" class="button-common-gray ml20">
+                  <input type="button" id="" name="" value="还款" class="btns">
+                </a>
+              </div>
+            <?php endif; ?>
+          <?php endif; ?>
+
+          <?php if(!$is_repayed && $early_repay_id): ?>
+            <input id="earlyrepayId" type="hidden" value="{$prjId}"/>
+            <a href="javascript:void(0)" class="button-common-orange ml20">
+              <span class="btns" url="{:U('Account/FinancingManage/earlyRepayPlan', array('prj_id'=>$prjId))}" id="early_repay" url2="{:U('Account/FinancingManage/getRepayPlanProgress', array('prj_id'=>$prjId))}">提前还款</span>
+            </a>
+          <?php endif;?>
+        </div>
+    </div>
+
+</div>

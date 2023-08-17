@@ -1,0 +1,23 @@
+<extend name="./app/Tpl/Public/base2.html"/>
+<block name="title">重置密码</block>
+<block name="body">
+    <div class="pointTitle">重置密码</div>
+    <div class="emailGo">
+     <form action="{:U('Account/User/doResetPwd')}"  method="post" id="formId_Account_User_doResetPwd">
+      <ul class="formList">
+         <li><label class="li-label-name">新密码：</label>
+         <span class="li-span-con">
+         <input class="inputCommon" type="password" name="pwd1" ghosttext="输入6-16位字符" valid="required,lengthRange@6~16,ajax@{:U('Account/User/checkPwd')}" />
+         </span>
+         </li>
+         <li>
+         <label class="li-label-name">确认新密码：</label><span class="li-span-con">
+         <input class="inputCommon" type="password"  name="pwd2"  valid="match@pwd1|密码不匹配"/></span>
+         </li>
+         <li id="btnLi" class="lastBtsns"><label class="li-label-name">&nbsp;</label><span class="li-span-con">
+           <label for="" class="button-common-orange"><input type="button" id="submit_Account_User_doResetPwd"  name="" value="提&nbsp;&nbsp;交" class="btns w250"/></label>
+         </span>
+         </li>
+      </ul>
+    </div>
+</block>

@@ -1,0 +1,57 @@
+<!-- <script src="http://tjs.sjs.sinajs.cn/open/api/js/wb.js" type="text/javascript" charset="utf-8"></script> -->
+<!-- 白富美 待还款 -->
+<table class="ui-record-table percentTable">
+      <thead>
+        <tr>
+          <th width="7%" order_field="order11" <eq name="order_field" value="order11"> order_type="{$order_type}"</eq>>预售时间</th>
+          <th width="13%">项目名称</th>
+          <th width="14%" order_field="order12" <eq name="order_field" value="order12"> order_type="{$order_type}"</eq>>预期年化利率</th>
+          <th width="8%" order_field="order13" <eq name="order_field" value="order13"> order_type="{$order_type}"</eq>>期限</th>
+          <th width="10%" order_field="order14" <eq name="order_field" value="order14"> order_type="{$order_type}"</eq>>预售金额</th>
+          <th width="10%">预期本息收益</th>
+           <th width="7%" class="tac" order_field="order16" <eq name="order_field" value="order16"> order_type="{$order_type}"</eq>>成交时间</th>
+          <th width="10%" class="tac">状态</th>
+          <th width="8%" class="tac">合同</th>
+        </tr>
+        <tr class="line"><th colspan="100%"></th></tr>
+    </thead>
+      <tbody>
+       <if condition="$list">
+      <foreach name="list" item="v">
+        <tr >
+            <td>{$v['ctime_show']}</td>
+            <td>{$v['prj_name']}</td>
+            <td>{$v['rate_show']}</td>
+            <td>{$v['time_limit_show']}</td>
+            <td>{$v['money_show']}</td>
+            <td>{$v['profit_show']}</td>
+            <td>{$v['buy_time_show']}</td>
+            <td>{$v['status_show']}</td>
+            <td>
+              <div class="action_box">
+                <a href="javascript:void(0);" class="btn_edit" hovercard="div@ctl{$v.oid}"></a>
+                <div class="dn" hovercard-id="ctl{$v.oid}">
+                  <ul class="action_item">
+                    <if condition="($v.status eq 1) OR ($v.status eq 2)">
+                      <li><a href="{$v['pre_protocol']}" class="edit-fee">借款合同</a></li>
+                    </if>
+                    <li><a href="{$v['server_protocol']}" class="edit-fee">服务协议</a></li>
+                  </ul>
+                </div>
+              </div>
+            </td>
+        </tr>
+      </foreach>
+        <else />
+        <tr>
+          <td colspan="100%" class="tac">没有相关数据</td>
+        </tr>
+      </if>
+      </tbody>
+    </table>
+    <?php $pageNavCallback = "ajaxAfter_Account_Financing_index"; ?>
+    <include file="./app/Tpl/Public/pageAjax.html" />
+    <input type="hidden" name="total" value="{$allNum.total}">
+    <input type="hidden" name="pre_num" value="{$allNum.pre_num}">
+    <input type="hidden" name="suc_num" value="{$allNum.suc_num}">
+    <input type="hidden" name="fail_num" value="{$allNum.fail_num}">

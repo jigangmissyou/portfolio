@@ -1,0 +1,173 @@
+<extend name="./app/Tpl/Public/base_user.html"/>
+<block name="title">预约自动投标-鑫合汇</block>
+<block name="keywords">预约自动投标,预约通道,鑫合汇</block>
+<block name="description">预约是鑫合汇平台推出的一项便捷增值服务,用户可以进行提前预约,自行设置产品目标（包括预期收益率、期限、产品类型）和金额,由系统自动匹配并排队抢购符合设置要求的产品。</block>
+
+<block name="body">
+<div class="container-inner mt20">
+  <include file="./app/Tpl/Account/account_sider.html" />
+<div class="main_area body-frame">
+ <div class="p20">
+  <!-- banner star -->
+  <div class="bannerBox appoint-banner-box">
+    <div class="bannerLeft">
+      <div id="imgPlay">
+        <ul class="imgs" id="actor" style="position: relative">
+          <?php if(!empty($banners)){ foreach($banners as $v){ ?>
+            <?php if(!empty($v['img'])){ ?>
+            <li style="height:225px;width:540px;"><img style="position: absolute; top: 0;" src="{$v['img']['attach']['url_s100']}" width="707" height="279"/><a  <if condition="empty($v['href'])"> style="position: absolute; top: 0; left: 0; width:540px;height:225px; background: url({$v['img']['attach']['url']}) no-repeat center; cursor:default" href="##"<else/>href="{$v['href']}" style="position: absolute; top: 0; left: 0; width:540px;height:225px; background: url({$v['img']['attach']['url']}) no-repeat center; " </if>></a>
+            </li>
+            <?php } ?>
+          <?php }} ?>
+        </ul>
+        <div class="num" id="numInner"></div>
+      </div>
+    </div>
+    <div class="bannerRight bannerRight_licai">
+      <!-- 登陆前的区域的内容 star -->
+      <ul>
+        <li class="liCaiLast appointBbm">已参与申请的人数</li>
+        <li class="firstNames"><span class="appointPerson">{$stat['uid_count']}</span><span class="appointRen"></span><em class="txt">人</em></li>
+        <li class="liButtons">
+          <?php if($is_limit_apply == 0){ ?>
+          <label for="" class="button-common-blue">
+            <a href="{:U('Financing/Appoint/appoint')}" class="btns font18">立即申请自动投标</a>
+          </label>
+          <?php } else if($is_limit_apply == 1){ ?>
+          <label for="" class="button-common-gray">
+            <a href="javascript:void(0);" class="btns font22">人数已达上限，请等待</a>
+          </label>
+          <?php }?>
+        </li>
+      </ul>
+      <!-- 登陆前的区域的内容 end --> </div>
+  </div>
+  <!-- banner end -->
+  <div class="appontBox">
+    <div class="boxList1">
+     <em class="appointIcn amountBigIcn"></em>
+      <div class="appoint-listName">
+        累积自动投标成交金额
+      </div>
+      <p class="appoint-appNum">
+        <em>{$stat['succ_amount']}</em>元
+      </p>
+    </div>
+    <div class="boxList2">
+    <em class="appointIcn yieldBigIcn"></em>
+      <div class="appoint-listName">
+        近一月平均年化收益率
+      </div>
+      <p class="appoint-appNum">
+        <em>{$stat['month_rate']}</em>%
+      </p>
+    </div>
+    <div class="boxList3">
+    <em class="appointIcn turnoverTimeIcn"></em>
+      <div class="appoint-listName">
+        预约成交项目平均期限
+      </div>
+      <p class="appoint-appNum">
+         <em> <?php
+           $time = $stat['avg_time_limit_day'];
+              //$hour = (int)($time/3600);
+              //$minute = (int)(($time-$hour*3600)/60);
+              //$second = (int)($time-$hour*3600-$minute*60);
+             if(!$time){
+              $time = 0;
+             }
+           ?>
+          <?php //if($hour){ ?>
+          <!-- {$hour}<em>小时</em> -->
+          <?php //} ?>
+  <!--       {$minute}
+        <em>分</em>
+        {$second}
+        <em>秒</em> -->
+        {$time}</em>
+        天
+      </p>
+    </div>
+  </div>
+</div>
+<div class="p20 appoint-border">
+  <h4 class="appointTitle">
+    自动投标介绍
+  </h4>
+  <p class="appoint-text">
+   自动投标是鑫合汇平台在原有预约功能基础上改进后的一项增值服务，在您设定的条件下，它会帮助您自动循环投标，不仅能有效提升您的资金利用率，还让您在本平台的投资兼具灵活与高收益。
+  </p>
+  <p style="border:1px dashed #e2e2e2"></p>
+  <h4 class="appointTitle">
+    自动投标条件
+  </h4>
+  <div class="appoint-tremBox">
+    <span class="trem1">
+      <em class="doubleDotted mr5"></em>鑫合汇注册用户，已完成充值
+    </span>
+    <span class="trem2">
+      <em class="doubleDotted mr5"></em>预约时，最大预约金额小于等于账户余额
+    </span>
+  </div>
+  <p style="border:1px dashed #e2e2e2"></p>
+  <h4 class="appointTitle">
+    自动投标规则
+  </h4>
+  <div class="appoint-rulesBox">
+  <div class="appoint-tremBox">
+    <span class="trem1">
+      <em class="doubleDotted mr5"></em>按约标提交先后顺序排队，系统自动匹配、成交
+    </span>
+    <span class="trem2">
+      <em class="doubleDotted mr5"></em>自动投标每修改保存一次，排队顺序会被系统自动重置到队尾
+    </span>
+  </div>
+     <dl class="appoint-dlds">
+         <dd>
+         产品类型：<em class="icon-rys mr10" ></em>日益升<i class="fc-red">（目前只开放日益升可预约）</i>
+          </dd>
+          <dd>
+           投资金额：自定义投标金额。
+          </dd>
+          <dd class="dd-mabp">预约有效期：当前预约的有效期限。
+            <div class="appoint-tremBox prel" style="padding-bottom:0;">
+            匹配顺序：
+              <span class="trem7"><em class="tremIcn"></em>产品类型</span>
+              <span class="trem4">
+                <em class="tremIcn"></em>
+                预约时间
+              </span>
+            </div>
+          </dd>
+          <dd class="dd-matp">
+            <div class="dldsItemBox">
+              <div class="fixed">
+                <span class="trem6">1)先预约先匹配；若同时有多个项目符合要求，则系统优先选择收益率最高的，其次是期限最短的。</span><br />
+                <span class="trem6">2)同一时间具有相同资格预约同一标的的用户，系统随机分配。</span><br />
+                <span class="trem6">3)若系统已自动为用户分配标的，则意味着已经将约定金额全额投资，此次投资到期后，将继续为您进行循环投资。</span>
+              </div>
+            </div>
+          </dd>
+      </dl>
+  </div>
+  <p style="border:1px dashed #e2e2e2"></p>
+  <h4 class="appointTitle">
+    自动投标优势
+  </h4>
+  <div class="appoint-oddsBox">
+    <span class="oddsItems items1">
+      <em class="icon-odds"></em>
+      <p class="txt">自动连续投标，避免资金闲置</p>
+    </span>
+    <span class="oddsItems items2">
+      <em class="icon-odds"></em>
+      <p class="txt">不收任何费用</p>
+    </span>
+    <span class="oddsItems items3">
+      <em class="icon-odds"></em>
+      <p class="txt">随时取消预约，且只投日益升</p>
+    </span>
+  </div>
+</div>
+</div>
+</block>

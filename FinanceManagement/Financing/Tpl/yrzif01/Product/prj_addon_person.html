@@ -1,0 +1,114 @@
+<!-- 個人 -->
+<div class="info_wrap">
+  <div class="ui_info_tit">融资方信息介绍</div>
+  <div class="info_area">
+    <div class="info_tit show">
+      <h3>基本概况</h3><i></i>
+    </div>
+    <div class="content">
+      <ul class="formList formList_newW">
+         <li>
+            <label class="li-label-name"><em class="red">*</em>性别：</label>
+            <span class="li-span-con">
+            <span class="radio_box"><input id="sex1" type="radio" name="sex" value="1"<eq name="project.borrower.sex" value="1"> checked="checked"</eq>><label for="sex1">男</label></span>
+            <span class="radio_box ml40"><input id="sex2" type="radio" name="sex" value="0"<eq name="project.borrower.sex" value="0"> checked="checked"</eq> valid-model="PrjPerson" valid-msg-options='{"offset":170}'><label for="sex2">女</label></span>
+            </span>
+          </li>
+         <li>
+            <label class="li-label-name">年龄：</label>
+            <span class="li-span-con"><input type="text" name="age" class="inputCommon" value="{$project.borrower.age}" valid-model="PrjPerson">
+           </span>
+          </li>
+         <li>
+            <label class="li-label-name"><em class="red">*</em>学历：</label>
+            <span class="li-span-con">
+              <label>
+                <select name="educational" multipleone="1" valid-model="PrjPerson" valid-hide="1">{:genDictOption('A003', $project['borrower']['educational'], TRUE)}</select>
+              </label>
+           </span>
+          </li>
+         <li>
+            <label class="li-label-name"><em class="red">*</em>婚姻状况：</label>
+            <span class="li-span-con">
+              <select name="matrimonial" multipleone="1" valid-model="PrjPerson" valid-hide="1">{:genDictOption('A002', $project['borrower']['matrimonial'], TRUE)}</select>
+           </span>
+          </li>
+         <li>
+            <label class="li-label-name">职业：</label>
+            <span class="li-span-con"><input type="text" name="occupation" class="inputCommon" value="{$project.borrower.occupation}">
+           </span>
+          </li>
+  </ul>
+    </div>
+  </div>
+  <!-- 个人资产状况 -->
+  <div class="info_area">
+    <div class="info_tit show">
+      <h3>个人资产状况</h3><i></i>
+    </div>
+    <div class="content">
+      <ul class="formList formList_newW">
+     <li>
+        <label class="li-label-name"><em class="red">*</em>个人年现金收入：</label>
+        <span class="li-span-con">
+        <input type="text" name="annual_earnings" class="inputCommon" value="{$project.borrower.annual_earnings}" valid-model="PrjPerson">
+       </span>
+      </li>
+      <li>
+        <label class="li-label-name">个人金融资产：</label>
+        <span class="li-span-con">
+        <span class="radio_box"><input id="zichan1" type="radio" name="has_financial_assets" value="1"<eq name="project.borrower.has_financial_assets" value="1"> checked="checked"</eq>><label for="zichan1">有</label></span>
+        <span class="radio_box ml40"><input id="zichan2" type="radio" name="has_financial_assets" value="0"<eq name="project.borrower.has_financial_assets" value="0"> checked="checked"</eq>><label for="zichan2">无</label></span>
+       </span>
+      </li>
+      <li>
+        <label class="li-label-name">房产情况：</label>
+        <span class="li-span-con">
+          <span class="radio_box"><input id="house1" type="radio" name="has_house" value="1"<eq name="project.borrower.has_house" value="1"> checked="checked"</eq>><label for="house1">有</label></span>
+          <span class="radio_box ml40"><input id="house2" type="radio" name="has_house value="0""<eq name="project.borrower.has_house" value="0"> checked="checked"</eq>><label for="house2">无</label></span>
+        </span>
+      </li>
+      <li>
+        <label class="li-label-name">车辆情况：</label>
+        <span class="li-span-con">
+        <span class="radio_box"><input id="car1" type="radio" name="has_car" value="1"<eq name="project.borrower.has_car" value="1"> checked="checked"</eq>><label for="car1">有</label></span>
+        <span class="radio_box ml40"><input id="car2" type="radio" name="has_car" value="0"<eq name="project.borrower.has_car" value="0"> checked="checked"</eq>><label for="car2">无</label></span>
+      </span>
+      </li>
+    </ul>
+    </div>
+  </div>
+  <!-- 个人信用信息 -->
+  <div class="info_area">
+    <div class="info_tit show">
+      <h3>个人信用信息</h3><i></i>
+    </div>
+    <div class="content">
+      <ul class="formList formList_newW">
+     <li>
+        <label class="li-label-name">有无其他贷款：</label>
+        <span class="li-span-con">
+        <span class="radio_box"><input id="daikuan1" type="radio" name="has_other_loan" value="1"<eq name="project.borrower.has_other_loan" value="1"> checked="checked"</eq>><label for="daikuan1">有</label></span>
+        <span class="radio_box ml40"><input id="daikuan2" type="radio" name="has_other_loan" value="0"<eq name="project.borrower.has_other_loan" value="0"> checked="checked"</eq>><label for="daikuan2">无</label></span>
+      </span>
+      </li>
+      <li>
+        <label class="li-label-name">信用卡情况：</label>
+        <span class="li-span-con">
+        <span class="radio_box"><input id="creditcard1" type="radio" name="loan_card_desc" value="1"<eq name="project.borrower.loan_card_desc" value="1"> checked="checked"</eq>><label for="creditcard1">正常</label></span>
+        <span class="radio_box ml40"><input id="creditcard2" type="radio" name="loan_card_desc" value="0"<eq name="project.borrower.loan_card_desc" value="0"> checked="checked"</eq>><label
+            for="creditcard2">--</label></span>
+          </span>
+      </li>
+      <li>
+        <label class="li-label-name">个人信用记录：</label>
+        <span class="li-span-con">
+        <span class="radio_box"><input id="credit1" type="radio" name="bank_credit_grade" value="1"<eq name="project.borrower.bank_credit_grade" value="1"> checked="checked"</eq>><label for="credit1">正常</label></span>
+        <span class="radio_box ml40"><input id="credit2" type="radio" name="bank_credit_grade" value="0"<eq name="project.borrower.bank_credit_grade" value="0"> checked="checked"</eq>><label for="credit2">--</label></span>
+      </span>
+      </li>
+    </ul>
+    </div>
+  </div>
+</div>
+<!-- infoend -->

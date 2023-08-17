@@ -1,0 +1,24 @@
+<div class="standardMs fixed standardMs-zj">
+  <form method="POST" id="formId_Financing_Invest_buy">
+    <input type="hidden" value="{$id}" id="bidId"/>
+    <input type="hidden" value="{$hashId}" id="bidHashId"/>
+    <input type="hidden" value="{$xprjIdAccess}" id="xprjIdAccess"/>
+    <input type="hidden" name="prjid" id="prjid" value="{$info.id}" >
+    <input type="hidden" name="is_pre_buy" id="is_pre_buy" value="1" >
+    <input type="hidden" name="step" value="<?php echo $info['step_bid_amount']/100; ?>">
+    <input type="hidden" name="minVal" value="<?php echo $info['min_bid_amount']/100; ?>">
+    <input type="hidden" name="maxVal" value="<?php echo $info['max_bid_amount']/100; ?>">
+    <input type="hidden" name="max_invest_money_view" value="{$max_invest_money_view}">
+    <input type="hidden" name="prj_typ" value="{$prj_type}">
+    <input type="hidden" name="uid" value="{$user['uid']}">
+
+    <?php $isChannel = $info['mi_no'] != $user['mi_no']; // 其他渠道 ?>
+
+    <?php if($isChannel && $info['mi_no'] != '1234567889'){ // 其他渠道并且不等于全部 ?>
+      <include file="_channelInvest_pre"/>
+    <?php }else{ //常规 ?>
+      <include file="_normalInvest_pre"/>
+    <?php } ?>
+
+  </form>
+</div>

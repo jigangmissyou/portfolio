@@ -1,0 +1,50 @@
+<extend name="./app/Tpl/Public/base_user.html"/>
+<block name="title">忘记密码</block>
+<block name="body">
+<block name="body">
+<div class="container-inner container-colorbg mt20">
+  <div class="p-lr-40">
+	<h2 class="h2tit h2tit-login">找回密码</h2>
+  <div class="account-edit-mobile">
+    <ul>
+      <li class="li-first current">1 安全验证<span class="edit-jiao"></span></li>
+      <li class="li-other">2 重置密码<span class="edit-jiao"></span></li>
+    </ul>
+  </div>
+  <div class="forgetContainer forgetContainer-600">
+  <form method="post" action="__URL__/doforgetpwd2">
+     <ul class="formList account-edit-form">
+      <li>
+      <label class="li-label-name"><em class="red">*</em>您绑定的手机号是：</label>
+      <span class="org li-span-con">{$mobile}</span>
+      </li>
+         <li>
+             <label class="li-label-name">
+                 <em class="red">*</em>验证码：</label>
+      <span class="li-span-con">
+<input type="text" valid="required,ajax@{:U('Index/Index/checkAuthCode')}" valid-msg-options='{"offset":135}' name="authCode" style="width:190px;" class="inputCommon">
+      <a href="javascript:;" class="ml10"><img src="{:U('Index/Index/verify',array('version'=>uniqid()))}"  id="VerifyCodeImg"  width="95px" height="46px"></a>
+       <!--  <a href="javascript:;" class="blue ml12"  id="refreshVerifyCode" >刷新验证码</a> -->
+       </span>
+         </li>
+      <li>
+        <label class="li-label-name">
+        <em class="red">*</em>手机动态码：</label>
+        <span class="li-span-con">
+        <input type="hidden"  name="mobile" value="{$mobile}" class="inputCommon">
+        <input type="text"  name="code" style="width:206px;"  valid="required"  class="inputCommon"><a href="javascript:;"  id="show_send_btn"  class="button-code-no button-code-user-set ml10">免费获取</a><a href="javascript:;" id="time_send"  class="button-code-on button-code-user-set ml10"  style="display:none">120秒后失效</a>
+      </span>
+      </li>
+      <li class="lastBtns">
+      <label class="li-label-name">&nbsp;</label>
+      <span class="li-span-con">
+     <span class="button-common-blue button-blue-w200"><input type="submit" name="" value="下一步" class="btns"></span>
+      </span>
+      </span>
+    </li>
+  </ul>
+   </form>
+  </div>
+</div>
+</div>
+</block>

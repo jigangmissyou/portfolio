@@ -1,0 +1,49 @@
+<!-- 投资成功弹窗 -->
+<div id="usesuccess" class="closelijbox invest-success-container mt20" style="position: fixed;z-index:99999;left: 50%;top: 20%;width: 500px;margin-left: -250px;">
+    <div class="invest-success-content">
+        <div class="invest-success-path">
+            <div class="invest-success-state">
+                <dl class="invest-success-msg tac">
+                    <dt><em class="invest-success-icn-yes mr20"></em>投资成功！</dt>
+                </dl>
+            </div>
+            <div class="clearfix"></div>
+            <div class="invest-success-tips tac">
+                <p>　　　起息日：<span><?php echo $data['usedTime']?></span></p>
+                <p>预计还款时间：<span><?php echo $data['repaymentDate']?></span></p>
+            </div>
+            <div class="invest-success-btn-box invest-success-btn-other tac">
+                <label class="button-common-orange button-orange-w200 mr-value">
+                    <a class="btns" href="{:U('Financing/Invest/plist')}">去投资</a>
+                </label>
+                <label class="button-common-blue button-blue-w200 mr-value ">
+                    <a class="btns" href="{:U('Account/MyBonus/getJavaMyLcj')}">理财金投资记录</a>
+                </label>
+            </div>
+        </div>
+    </div>
+    <!--  <div class="invest-fundcoupon-tu tac">
+      <div style="display:inline-block;">您将额外获得</div>
+      <div class="invest-fundcoupon-tu-c" style="vertical-align: middle;">
+        <div class="invest-fundcoupon-list icn-fund-bg-07 tal">
+          <div class="invest-fund-content invest-fund-free">
+            <p class="invest-fund-txt1">获得<em class="em">{$tixian}</em>次</p>
+            <p class="invest-fund-txt2">免费提现次数</p>
+           </div>
+        </div>
+      </div>
+    </div> -->
+</div>
+<script>
+    $(window).ready(function(){
+        $(".closelijbox").on("click",function(e){
+            e.stopPropagation();
+        });
+        $("body").on("click",function(){
+            $(".closelijbox").remove();
+            $(".mask").hide();
+            window.location.reload();
+        });
+    })
+
+</script>

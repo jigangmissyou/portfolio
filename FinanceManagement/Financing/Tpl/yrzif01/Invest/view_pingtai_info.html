@@ -1,0 +1,57 @@
+<?php if(!empty($dbstat)){ ?>
+<!--担保机构平台担保情况 -->
+<dl>
+  <h4><i class="icon_Greyinfo"></i>担保机构平台担保情况</h4>
+  <table class="globaltable">
+    <tr>
+      <th class="padLeft30 tal" width="30%">状态</th>
+      <th class="tal" width="30%">项目数</th>
+      <th class="tal">金额（万元）</th>
+    </tr>
+    <tr class="GreyBgcolor">
+      <td class="padLeft30">投资中</td>
+      <td><?php echo $dbstat[2]['cnt']; ?></td>
+      <td><?php echo $dbstat[2]['money_view']; ?></td>
+    </tr>
+    <tr>
+      <td class="padLeft30">待还款</td>
+      <td><?php echo $dbstat[4]['cnt']; ?></td>
+      <td><?php echo $dbstat[4]['money_view']; ?></td>
+    </tr>
+    <tr class="GreyBgcolor">
+      <td class="padLeft30">还款中</td>
+      <td><?php echo $dbstat[8]['cnt']; ?></td>
+      <td><?php echo $dbstat[8]['money_view']; ?></td>
+    </tr>
+      <tr>
+          <td class="padLeft30">已还款结束</td>
+          <td><?php echo $dbstat[5]['cnt']; ?></td>
+          <td><?php echo $dbstat[5]['money_view']; ?></td>
+      </tr>
+  </table>
+</dl>
+<?php } ?>
+<?php if(!empty($corpStat)){ //p($corpStat); ?>
+<!-- 融资企业平台融资情况 -->
+<dl>
+  <h4><i class="icon_Greyinfo"></i>融资<?php if($prjInfo['borrower_type'] == 2){echo "人";} else {echo "企业";} ?>平台融资情况</h4>
+  <table class="globaltable">
+    <tr class="GreyBgcolor">
+      <td class="padLeft30" width="30%">总项目（笔）</td>
+      <td><?php echo $corpStat['all']; ?></td>
+    </tr>
+    <tr>
+      <td class="padLeft30">还款中（笔）</td>
+      <td><?php echo $corpStat['repaying']; ?></td>
+    </tr>
+    <tr class="GreyBgcolor">
+      <td class="padLeft30">已正常还款（笔）</td>
+      <td><?php echo $corpStat[5]; ?></td>
+    </tr>
+      <tr>
+      <td class="padLeft30">已逾期（笔）</td>
+          <td>0<?php //echo $corpStat['outdate']; ?></td>
+    </tr>
+  </table>
+</dl>
+<?php } ?>

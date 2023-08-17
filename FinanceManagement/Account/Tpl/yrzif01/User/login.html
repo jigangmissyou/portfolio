@@ -1,0 +1,86 @@
+<extend name="./app/Tpl/Public/base_hfhg.html"/>
+<block name="title">用户登录</block>
+<block name="keywords">用户登录,鑫合汇</block>
+<block name="description">用户登录,鑫合汇</block>
+<block name="style">
+  <style>
+   #container{
+    width:auto;
+   }
+  </style>
+</block>
+<block name="body">
+ <div class="login-container">
+  <div class="login-content">
+    <div class="login-content-banner">
+       <div class="login-sider-content">
+          <div class="tab_hd"><span class="left current">普通登录</span><span>短信登录</span></div>
+          <div class="tab_bd">
+            <!-- 错误提示 -->
+            <div class="tips dn" id="form-error"></div>
+            <div id="tips-show-mobile" class="tips-show-mobile dn">[已发送至手机<span>132***2425</span>请在120秒内输入]</div>
+            <ul class="login-form-list">
+              <form method="post" action="__URL__/dologin" ajax="1" ajax-after="ajaxAfter_Account_User_login" id="formId_Account_User_login">
+                <li id="liUserName">
+                  <input type="text" name="username" _info="用户名" value="{$loginName}" ghosttext="用户名/手机/邮箱" id="username" class="inputCommon" autocomplete="off" />
+                </li>
+                <li id="pwd-li" class="<?php if(empty($showAuthCode)){ echo "pwd-li";}?>">
+                  <input _info="密码" type="password" id="pwd" name="pwd" ghosttext="请输入密码" class="inputCommon" autocomplete="off"/>
+                </li>
+               <?php // echo "string".$showAuthCode; ?>
+                <li id="verifyCodeArea" class="login-identify <?php if(empty($showAuthCode)){echo "dn";} ?>" >
+                  <div class="code-tips dn" id="authCodeBlock"><i class="code_wrong"></i><span></span></div>
+                  <input type="text" _info="验证码" class="inputCommon" ghosttext="请输入验证码" id="authCode" name="authCode" maxlength="4" style="width:140px;"/>
+                  <a href="javascript:;"><img src="{:U('Index/Index/verify',array('key'=>'login','version'=>uniqid()))}"  id="VerifyCodeImg"  width="90" height="50" /></a><p class="login-verify-code-text"><a href="javascript:;" id="refreshVerifyCode">看不清<br/>换一张</a></p>
+                </li>
+                <li class="login-li-btn"><label for="" class="button-common-orange button-orange-new-w300"><input id="normalSub" type="submit" name="sub" value="登 录" class="btns"/></label></li>
+                <li class="ovh">
+                <a class="fl blue" href="{:U('/Account/User/forgetpwd2')}">忘记密码？</a>
+                  <label class="fr"><a href="{:U('/Account/User/register')}" class="blue">免费注册</a></label>
+                </li>
+                
+              </form>
+            </ul>
+            <!-- 短信登录 -->
+            <ul class="login-form-list list-height" style="display:none">
+              <form method="post" action="__URL__/doSMSLogin" ajax="1" ajax-after="ajaxAfter_Account_User_sms_login" id="ajaxForm_phone">
+                <li class="ipt_hover">
+                  <input type="text" _info="手机号" ghosttext="请输入手机号"  id="phone_mobile" name="mobile" class="inputCommon"/>
+                </li>
+                <li class="login-identify">
+                  <input type="text" _info="动态码" style="width:175px;" name="code" id="phone_code" valid-name="code" class="inputCommon" ghosttext="请输入动态码"/>
+                  <a href="javascript:;" id="show_send_btn" class="button-code-no button-code-login ml10" style="width:80px;">免费获取</a>
+                  <a class="button-code-on button-code-login ml10" id="time_send" href="javascript:;" style="display:none; width:80px;">120</a>
+                <!-- <span class="extra_tips" style="left:260px;"><em class="text">请输入动态码</em></span> --></li>
+                <li  class="login-li-btn"><label for="" class="button-common-orange button-orange-new-w300"><input id="phone_submit" type="button" name="" value="登 录" ajax-submit class="btns"/></label></li>
+              </form>
+            </ul>
+          </div>
+        </div>
+    </div>
+  </div>
+  </div>
+  <?php if(C('IS_TDJC_TRACK')){ // 同盾决策 ?>
+  <script type="text/javascript">
+    (function() {
+        _fmOpt = {
+            partner: 'xinhehui',
+            appName: 'xinhehui_web',
+            token: '<?php echo $fraudmetrix_token;?>'
+        };
+        var cimg = new Image(1, 1);
+        cimg.onload = function() {
+            _fmOpt.imgLoaded = true;
+        };
+        cimg.src = "https://fp.fraudmetrix.cn/fp/clear.png?partnerCode=xinhehui&appName=xinhehui_web&tokenId=" + _fmOpt.token;
+        var fm = document.createElement('script');
+        fm.type = 'text/javascript';
+        fm.async = true;
+        fm.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'static.fraudmetrix.cn/fm.js?ver=0.1&t=' + (new Date().getTime() / 3600000).toFixed(0);
+        var s = document.getElementsByTagName('script')[0];
+        s.parentNode.insertBefore(fm, s);
+    })();
+  </script>
+  <?php }?>
+</block>
+<block name="footer"><include file="./app/Tpl/Public/footer_user.html"/></block>

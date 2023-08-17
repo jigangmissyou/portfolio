@@ -1,0 +1,69 @@
+<style type="text/css">
+.speedAgainstTong .gains .OrangeTipBox-Red{top: -52px;left: 207px;}
+</style>
+
+<!-- 基本信息 -->
+<dl class="firstdl">
+    <p>本项目为保理公司提供的保理项目</p>
+    <h4><!-- <i class="icon_Greyinfo"></i> -->基本信息</h4>
+    <dt>借款用途</dt>
+    <dd>借款人资金周转临时需求</dd>
+    <dt>还款来源</dt>
+    <dd>借款人以其已经在平台上持有的债权或其他任何资产权益，作为其履行还款义务的保障。</dd>
+</dl>
+<!--借款人原始投资信息 -->
+<dl>
+    <h4><!-- <i class="icon_Greyinfo"></i> -->借款人原始投资信息</h4>
+    <table class="globaltable">
+        <tr>
+            <td class="padLeft30">项目名称</td>
+            <td>{$subInfo.prj_name}</td>
+        </tr>
+        <tr>
+            <td class="padLeft30">项目编号</td>
+            <td>{$subInfo.prj_no}</td>
+        </tr>
+        <tr class="padLeft30">
+            <td class="padLeft30">投资期限</td>
+            <td>{$subInfo.time_show.0}</td>
+        </tr>
+        <tr class="speedAgainstTong">
+            <td class="padLeft30">投资金额</td>
+            <td>{$prjInfo.money|moneyView=###}元</td>
+        </tr>
+        <tr>
+            <td class="padLeft30">投资收益率</td>
+            <td>{$subInfo.rateShow}</td>
+        </tr>
+        <tr>
+            <td class="padLeft30">还款方式</td>
+            <td>{$subInfo.repay_way_name}</td>
+        </tr>
+        <tr>
+            <td class="padLeft30">链接</td>
+            <td><a href="{:U('Financing/Invest/view',array('id'=>$subInfo['id']))}">查看</a></td>
+        </tr>
+    </table>
+</dl>
+<!-- 借款人信息 -->
+<dl>
+    <h4><!-- <i class="icon_Greyinfo"></i> -->借款人信息</h4>
+    <table class="globaltable">
+        <tr class="padLeft30">
+            <td class="padLeft30">用户名</td>
+            <td>{$userInfo.uname}</td>
+        </tr>
+        <tr>
+            <td class="padLeft30">注册日期</td>
+            <td>{$userInfo.ctime|date='Y-m-d',###}</td>
+        </tr>
+        <tr class="padLeft30">
+            <td class="padLeft30">姓名</td>
+            <td>{$userInfo.real_name}</td>
+        </tr>
+        <tr>
+            <td class="padLeft30">身份证</td>
+            <td>{$userInfo['person_id']|person_id_view_prefix}</td>
+        </tr>
+    </table>
+</dl>

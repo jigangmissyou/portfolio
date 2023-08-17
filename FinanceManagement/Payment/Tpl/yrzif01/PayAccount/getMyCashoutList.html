@@ -1,0 +1,92 @@
+  <table class="ui-record-table">
+    <thead>
+      <tr>
+        <th width="12%">申请时间</th>
+        <th width="23%" class="tac">申请提现金额(元)</th>
+        <th width="20%" class="tac">提现至银行</th>
+        <th width="15%" class="tac">提现转账费(元)</th>
+        <?php if($status == 2){ ?>
+        <th width="14%" class="tal">处理时间</th>
+        <?php } else if($status == 3) { ?>
+        <th width="14%" class="tal">处理时间</th>
+        <?php } else if($status == 4) { ?>
+        <th width="14%" class="tal">处理时间</th>
+        <?php } ?>
+        <th width="16%" class="tac">备注</th>
+      </tr>
+    </thead>
+    <tbody>
+      <?php if(!empty($list['data'])){ foreach ($list['data'] as $key => $vo) { ?>
+      <tr>
+        <td>
+          <span class="time"><?php echo  date("Y-m-d H:i", $vo['ctime']); ?></span>
+        </td>
+        <td class="tac green"><?php $tixian_money = $vo['money'] + $vo['fee']; echo "-".number_format($tixian_money/100, 2)."元";
+          if($vo['reward_money']){
+           // echo '<p>(使用了活动奖励金额'.number_format($vo['reward_money']/100, 2)."元)</p>";
+      }
+        ?></td>
+        <td class="tac">
+          <p>{$vo.out_account.bank_name}</p>
+          <!--<if condition="!empty($vo['out_account']['sub_bank'])"><p>{$vo.out_account.sub_bank}</p></if>-->
+          <p>尾号 <?php echo substr($vo['out_account']['account_no'],-4); ?></p>
+        </td>
+        <!-- <td class="tac">
+        <?php echo number_format($vo['free_money']/100, 2)."元"; ?>
+        </td> -->
+        <!--<td class="tar">-->
+        <!--<?php if($vo['prj_id'] && $vo['fee']){ echo "<p>".$vo['prj_name']."(".$vo['prj_no'].")项目支付手续费</p>"; } ?>-->
+        <!--<?php if($vo['fuwu_fee']) echo number_format($vo['fuwu_fee']/100, 2)."元"; else echo "&#45;&#45;"; ?></td>-->
+        <td class="tac"><?php if($vo['tixian_fee'] || $vo['fuwu_fee'] ) echo number_format(($vo['fuwu_fee']+$vo['tixian_fee'])/100, 2)."元"; else{
+          echo "<p>0.00元</p>";
+      }
+        ?></td>
+        <?php if($status == 1){ ?>
+        <td class="tal"><p class="oh" >
+          <?php if($vo['free_tixian_times'] || $role){
+        if ($role) {
+          echo "<p>机构暂免手续费</p>";
+          }
+          else {
+          echo "<p>使用免收手续费一次</p>";}
+            if($vo['fuwu_fee']){echo '+';}
+          }else{echo $vo['real_fee']."元手续费";if($vo['fuwu_fee']){echo '+';}}
+          if($vo['fuwu_fee']) echo number_format(($vo['fuwu_fee'])/100, 2)."元提现转账费";
+
+          ?></p>
+        </td>
+        <?php } else if($status == 2 || $status == 4){ ?>
+        <td class="tal">
+          <span class="time"><?php echo date("Y-m-d H:i", $vo['mtime']); ?></span>
+        </td>
+        <td><p class="oh"><?php if($vo['free_tixian_times'] || $role){
+        if ($role) {
+          echo "<p>机构暂免手续费</p>";
+          }
+          else {
+          echo "<p>使用免收手续费一次</p>";}if($vo['fuwu_fee']){echo '+';}}else{echo $vo['real_fee']."元手续费";if($vo['fuwu_fee']){echo '+';}}
+            if($vo['fuwu_fee']) echo number_format(($vo['fuwu_fee'])/100, 2)."元提现转账费";
+            ?></p>
+        </td>
+        <?php } else if($status == 3) { ?>
+        <td class="tal"><span class="time"><?php echo date("Y-m-d H:i", $vo['mtime']); ?></span></td>
+          <td><p class="oh" ><?php if($vo['free_tixian_times']){
+        echo "<p>使用免收手续费一次</p>";if($vo['fuwu_fee']){echo '+';}}else{echo $vo['real_fee']."元手续费";if($vo['fuwu_fee']){echo '+';}}
+              if($vo['fuwu_fee']) echo number_format(($vo['fuwu_fee'])/100, 2)."元提现转账费";
+              ?></p></td>
+        <?php } ?>
+
+      </tr>
+      <?php }} else { ?>
+      <tr>
+        <td colspan="100%" class="tac">没有相关数据</td>
+      </tr>
+      <?php } ?>
+    </tbody>
+  </table>
+  <?php $pageNavCallback = "ajaxAfter_Payment_PayAccount_getMyMoneyList"; ?>
+  <include file="./app/Tpl/Public/pageAjax.html" />
+    <input type="hidden" id="totalCTodo" value="{$totalCTodo}">
+    <input type="hidden" id="totalCSuccess" value="{$totalCSuccess}">
+    <input type="hidden" id="totalCFailed" value="{$totalCFailed}">
+    <input type="hidden" id="totalCCanel" value="{$totalCCanel}">

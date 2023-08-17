@@ -1,0 +1,107 @@
+<?php
+    $status = $_GET['status'];
+    $time_type = $_GET['time_type'];
+    $start_time = $_GET['start_time'];
+    $end_time = $_GET['end_time'];
+?>
+    <input type="hidden" name="status" value="{$status}"/>
+    <input type="hidden" name="time_type" value="{$time_type}"/>
+    <div class="statusMenusLast">
+        <a <?php if(!isset($status) || $status == '0' || empty($status)){ ?>class="cur"<?php } ?>
+        href="javascript:" hidefocus="hidefocus" data-eventFn="rechargeManage.search" data-args="status,0">全部({$result.total})</a>
+        <a <?php if($status == '1'){ ?>class="cur"<?php } ?>
+        href="javascript:" hidefocus="hidefocus" data-eventFn="rechargeManage.search" data-args="status,1">待处理({$result.totalYTodo})</a>
+        <a <?php if($status == '2'){ ?>class="cur"<?php } ?>
+        href="javascript:" hidefocus="hidefocus" data-eventFn="rechargeManage.search" data-args="status,2">成功({$result.totalYSuccess})</a>
+        <a <?php if($status == '3'){ ?>class="cur"<?php } ?>
+        href="javascript:" hidefocus="hidefocus" data-eventFn="rechargeManage.search" data-args="status,3">失败({$result.totalYFailed})</a>
+    </div>
+    <div class="simple_search recharge_search">
+      时间：
+        <a <?php if($time_type == 'week'){ ?>class="cur"<?php } ?> href="javascript:" data-eventFn="rechargeManage.search" data-args="time_type,week">最近一周</a>
+        <a style="margin-left: 10px;" <?php if($time_type == 'month'){ ?>class="cur"<?php } ?> href="javascript:" data-eventFn="rechargeManage.search" data-args="time_type,month">最近一个月</a>
+        <a style="margin-left: 10px;" <?php if($time_type == '6month'){ ?>class="cur"<?php } ?> href="javascript:" data-eventFn="rechargeManage.search" data-args="time_type,6month">最近六个月</a>
+      <span class="date_label ml20">申请时间</span>
+        ：
+      <span class="date_pannel">
+        <input value="{$start_time}" type="text" datepicker="{&quot;endId&quot;: &quot;endtime&quot;}" class="ipt_search"
+               id="starttime" name="starttime" hidefocus="hidefocus" style="cursor: pointer;"> <i class="icon_time"></i>
+      </span>
+        <span class="mr10">&mdash;</span>
+      <span class="date_pannel">
+        <input value="{$end_time}" type="text" datepicker="{&quot;startId&quot;: &quot;starttime&quot;}" class="ipt_search"
+               id="endtime" name="endtime" hidefocus="hidefocus" style="cursor: pointer;"> <i class="icon_time"></i>
+      </span>
+      <span class="button-small-info">
+      <a href="javascript:" class="btns" hidefocus="hidefocus" data-eventFn="rechargeManage.search" data-args="advtime">搜索</a>
+      </span>
+    </div>
+        <table class="ui-record-table">
+            <thead>
+                <tr>
+                    <th width="8%">申请时间</th>
+                    <th class="tar" width="11%">充值金额</th>
+                    <th class="tac">充值用户</th>
+                    <th width="10%">已处理用户</th>
+                    <th width="8%">提现类型</th>
+                    <th width="8%">提现次数</th>
+                    <th width="8%">申请备注</th>
+                    <th width="8%">处理时间</th>
+                    <th width="10%">审核备注</th>
+                    <th width="8%">状态</th>
+                    <th width="8%" class="tac">操作</th>
+                </tr>
+                <tr class="line"><th colspan="100%"></th></tr>
+            </thead>
+            <tbody>
+                <?php if(!empty($list['data'])){ ?>
+                <foreach name="list.data" item="item">
+                <tr>
+                    <td><span class="time">{$item.ctime|date='Y-m-d H:i:s',###}</span></td>
+                    <td class="tar"><?php echo number_format($item['amount']/100, 2)."元";?></td>
+                    <td class="tac" textlength="10"><?php if($item['to_uid_list']){
+							$user_list = array();
+							foreach($item['to_uid_list'] as $user){
+								$user_list[] = $user['uname'];
+							}
+							echo implode(",", $user_list);
+						} ?></td>
+					<td class="tac" textlength="10"><?php  if($item['dealed_uid_list']){
+							$dealed_user_list = array();
+							foreach($item['dealed_uid_list'] as $user){
+								$dealed_user_list[] = $user['uname'];
+							}
+							echo implode(",", $dealed_user_list);
+							}?></td>
+                    <td><?php if($item['cashout_type'] == 1) echo "可提现";
+                    		if($item['cashout_type'] == 2) echo "投资后可提现";
+if($item['cashout_type'] == 4) echo "抵用券";
+if($item['cashout_type'] == 5) echo "市场部红包";
+                    		?></td>
+                    <td>{$item.cashout_times}</td>
+                    <td textlength="10">{$item.bak}</td>
+                    <td><span class="time"><?php if($item['deal_time']){ ?>{$item.deal_time|date='Y-m-d H:i:s',###}<?php } ?></span></td>
+                    <td textlength="10">{$item.deal_bak}</td>
+                    <td><?php if($item['status'] == 1) echo "待处理";
+                    		if($item['status'] == 2) echo "处理成功";
+							if($item['status'] == 3) echo "处理失败";
+							if($item['dealed_uid_list'] && $item['status'] != 2) echo '<span style="color:red">(该申请处理了部分，请联系刘俊一起修复)</span>';
+                    		?></td>
+                    <td class="tac">
+                        <?php if($item['status'] == 1 && !$item['dealed_uid_list']){ ?>
+                        <a style="color: #2c7dff" href="javascript:" data-eventFn="rechargeManage.onReSubmit" data-args="{$item.id}">重新提交</a>
+                        <?php }else{ ?>
+                        --
+                        <?php } ?>
+                    </td>
+                </tr>
+                </foreach>
+                <?php }else{ ?>
+                <tr>
+                    <td colspan="100%" class="tac">没有相关数据</td>
+                </tr>
+                <?php } ?>
+            </tbody>
+        </table>
+        <?php $pageNavCallback = "ajaxAfter_getMyRechargeListPaging"; ?>
+        <include file="./app/Tpl/Public/pageAjax.html"/>

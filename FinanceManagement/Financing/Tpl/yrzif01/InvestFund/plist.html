@@ -1,0 +1,77 @@
+<extend name="./app/Tpl/Public/base_hfhg.html"/>
+<block name="title">鑫合汇理财产品,投资理财产品,理财产品排行推荐,日益升-短期理财产品推荐,月益升理财产品,中长期理财产品推荐,年益升-企业融资,中小企业融资理财产品,新客专区</block>
+<block name="description">鑫合汇理财产品,投资理财产品,理财产品排行推荐,日益升-短期理财产品推荐,月益升理财产品,中长期理财产品推荐,年益升-企业融资,中小企业融资理财产品,新客专区</block>
+
+<block name="body">
+<div class="detailSurTab mt30 ">
+  <ul class="plistW">
+    <li <if condition="$c == 0" >class="current"</if>><span class="roundTopborGy">
+        <a href="{:U('Financing/InvestFund/plist',array('rand'=>$rand))}">所有理财项目</a>
+      </span><a class="hrwrite"></a></li>
+      <li <if condition="$c == 1" >class="current"</if>><span class="roundTopborGy">
+        <a href="{:U('Financing/InvestFund/plist',array('c'=>'1','rand'=>$rand))}">鑫湖理财</a>
+      </span><a class="hrwrite"></a></li>
+  </ul>
+</div>
+<div class="searchBox">
+  <div class="searchContainer">
+    <table class="searchList">
+      <tbody>
+      <tr>
+        <td width="7%" class="tar">项目状态：</td>
+        <td width="13%">
+          <div class="moSelectBox" data-dropDown data-name="bid_st">
+            <span class="selectValue" data-label><span>全部</span><em data-icon class="jianDown"></em></span>
+            <div class="selectPop" data-select>
+              <ul class="selectList">
+                <li data-value="0">全部</li>
+                <?php foreach ($bid_status_map as $key => $value) { ?>
+                <li data-value="{$key}">{$value}</li>
+                <?php } ?>
+              </ul>
+            </div>
+          </div>
+        </td>
+        <td width="7%" class="tar">起投额度：</td>
+        <td width="13%">
+          <div class="moSelectBox" data-dropDown data-name="min_bid_amount" style="width: 147px;">
+            <span class="selectValue" data-label><span>全部</span><em data-icon class="jianDown"></em></span>
+            <div class="selectPop" data-select>
+              <ul class="selectList">
+                <li data-value="0">全部</li>
+                <?php foreach ($min_bid_amount_map as $key => $value) { ?>
+                <li data-value="{$key}">{$value}</li>
+                <?php } ?>
+              </ul>
+            </div>
+          </div>
+        </td>
+        <td width="7%" class="tar">项目期限：</td>
+        <td width="13%">
+          <div class="moSelectBox" data-dropDown data-name="time_limit">
+            <span class="selectValue" data-label><span>全部</span><em data-icon class="jianDown"></em></span>
+            <div class="selectPop" data-select>
+              <ul class="selectList">
+                <li data-value="0">全部</li>
+                <?php foreach ($fund_prj_dateline_map as $key => $value) { ?>
+                <li data-value="{$key}">{$value}</li>
+                <?php } ?>
+              </ul>
+            </div>
+          </div>
+        </td>
+        <td width="15%">&ensp;</td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+<form action="{:U('Financing/InvestFund/ajaxList')}" ajax="1" ajax-after="ajaxAfter_Financing_InvestFund_ajaxList" method="post" id="formId_Financing_InvestFund_ajaxList" ajax-datatype="html">
+  <div class="proContainers" id="plistContain">
+  </div>
+  <input type="hidden" name="c" value="{$c}"/>
+  <input type="hidden" name="bid_st" value="{$bid_st}"/>
+  <input type="hidden" name="min_bid_amount" value="{$min_bid_amount}"/>
+  <input type="hidden" name="time_limit" value="{$time_limit}"/>
+</form>
+</block>

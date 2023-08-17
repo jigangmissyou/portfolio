@@ -1,0 +1,59 @@
+<extend name="./app/Tpl/Public/base_user.html"/>
+<block name="title">港澳台用户实名认证</block>
+<block name="keywords"></block>
+<block name="description"></block>
+
+<block name="style">
+<link href="/public/css/banklogo.css" rel="stylesheet" />
+</block>
+
+<block name="body">
+<div class="container-inner mt20">
+   <include file="./app/Tpl/Account/userMyBonusSider.html" />
+<div class="main_area body-frame">
+	<div class="ganggaotai_Cn p20">
+		<h2 class="h2tit">港澳台用户实名认证 <label for="" class="button-small-info fr"><a class="btns" href="javascript:;" id="backToPrev">返回上一页</a></label></h2>
+		<div class="ganggaotai_con">
+			<h4>进行实名认证，<em class="blue_color">只需二步即可</em>，您需要：</h4>
+			<div class="gat_renzheng_sup">
+				<em class="icon_sup_shuzi">1</em>
+				<h5>准备证件照及银行卡照片</h5>
+				<dl>准备好身份证件、通行证的正反面照片或扫描件，身份证件的姓名必须与绑定银行卡（大陆可使用银行卡）的开户姓名保持一致，且身份证件的到期日需距注册日期至少2个月。</dl>
+				<p>所需身份证件依地区不同列示如下：</p>
+				<table>
+					<tr class="title">
+						<td>香港地区</td>
+						<td>澳门地区</td>
+						<td>台湾地区</td>
+					</tr>
+					<tr>
+						<td>香港地区来往内地通行证</td>
+						<td>澳门地区来往内地通行证</td>
+						<td>台湾地区来往大陆通行证</td>
+					</tr>
+					<tr>
+						<td>香港永久性居民身份证</td>
+						<td>澳门永久性居民身份证</td>
+						<td>台湾地区身份证</td>
+					</tr>
+				</table>
+				<span style="margin-top:20px;display:block;">准备好国内银行卡正反面照片或扫描件。<br />准备好本人手持银行卡以及证件照的照片各一张。</span><br />
+				<a href="{:U('Account/User/userAuthGangaotai2')}" class="pho-btn">照片格式参考</a>
+			</div>
+			<div class="gat_renzheng_sup">
+				<em class="icon_sup_shuzi">2</em>
+				<h5>发送邮件</h5>
+				<dl>将准备好的材料通过邮件发送给客服，邮件内容如下：<br>收件人：<em class="red_color">helpdesk@xinhehui.com</em><br>主题：港澳台人士实名认证<br>内容：本人已注册鑫合汇账号&emsp;&emsp;用户名：<em class="red_color">XXXX</em>&emsp;&emsp;通行证号码：<em class="red_color">123456XX</em><br>身份证件号码：<em class="red_color">XXXXXXX</em>&emsp;&emsp;行动电话：<em class="red_color">180XXXX8888</em>&emsp;&emsp;邮箱：<em class="red_color">XXX@xx.com</em>&emsp;&emsp;<br>银行卡号：<em class="red_color">XXXXXXXXXXXXXXXXX</em>&emsp;&emsp;开户行：<em class="red_color">XXXXX银行XXXX分行XXXX支行</em>
+				<br>附件：要求1中所提及的“身份证件、通行证的正反面照片；银行卡正反面照片以及手持银行卡和证件照或扫描件”</dl>
+			</div> 
+			<div class="gat_renzheng_sup gat_renzheng_sup_nob">
+				<em class="icon_sup_shuzi icon_sup_shuzi_h"></em>
+				<h5>完成验证</h5>
+				<dl>点击发送。（客服会在收到邮件后24小时内完成审核，审核通过后会以邮件的方式及时通知您，谢谢您的配合）</dl>
+			</div>
+		</div>
+	</div>
+</div>
+</div>
+
+</block>

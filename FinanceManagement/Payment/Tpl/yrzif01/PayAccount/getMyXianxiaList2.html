@@ -1,0 +1,47 @@
+	<table class="ui-record-table">
+		<thead>
+			<tr>
+				<th width="10%">申请时间</th>
+				<th width="20%" class="tac">充值金额(元)</th>
+				<th width="20%" class="tac">实际到账金额(元)</th>
+				<th width="15%" class="tal"><span>处理时间</span></th>
+				<th width="13%" class="tac">备注</th>
+				<th width="8%" class="tac">操作</th>
+			</tr>
+		</thead>
+		<tbody>
+			<?php if(!empty($list['data'])){ foreach ($list['data'] as $key => $vo) { ?>
+			<tr>
+				<td>
+					<span class="time"><?php echo date("Y-m-d H:i", $vo['ctime']); ?></span>
+				</td>
+				<td class="tac orange"><?php echo "+".number_format($vo['apply_amount']/100, 2);?>元</td>
+				<td class="tac orange"><?php echo "+".number_format($vo['real_amount']/100, 2);?>元</td>
+				<td class="tal">
+					<span class="time"><?php echo date("Y-m-d H:i", $vo['deal_time']); ?></span>
+				</td>
+				<td class="tal" style="text-align: center">
+					<p>{$vo.explain}</p>
+				</td>
+				<td class="tac">
+					<em class="tag-records"  hovercard="div@{$vo['id']}" hovercard-options='{"direction":"up"}'></em>
+					<p><!-- {$vo.record_no} --></p>
+					<div class="dn" hovercard-id="{$vo['id']}">
+						<p class="hover-title">资金流水号</p>
+						<p class="hoverPinfo">{$vo.no}</p>
+					</div>
+				</td>
+			</tr>
+			<?php }} else { ?>
+      <tr>
+        <td colspan="100%" class="tac">没有相关数据</td>
+      </tr>
+      <?php } ?>
+		</tbody>
+	</table>
+	<?php $pageNavCallback = "ajaxAfter_Payment_PayAccount_getMyMoneyList"; ?>
+  <include file="./app/Tpl/Public/pageAjax.html" />
+  <input type="hidden" id="totalXTodo" value="{$totalXTodo}">
+    <input type="hidden" id="totalXSuccess" value="{$totalXSuccess}">
+    <input type="hidden" id="totalXFailed" value="{$totalXFailed}">
+    <input type="hidden" id="totalXTrack" value="{$totalXTrack}">

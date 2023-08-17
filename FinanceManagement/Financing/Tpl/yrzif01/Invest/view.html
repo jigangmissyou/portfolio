@@ -1,0 +1,312 @@
+<extend name="./app/Tpl/Public/base_hfhg.html"/>
+<block name="title">{$info.prj_type_name}
+      <?php if($prj_business_type_name){
+      echo '-'.$prj_business_type_name;
+      }?>-鑫合汇
+</block>
+<block name="keywords"></block>
+<block name="description">即刻投资收益自<?php echo $qixi_day;?>起算，每万元收益<?php echo $wanyuan_profit;?>元
+</block>
+<block name="style">
+  <link rel="stylesheet" href="/public/css/sasscss/act/zskh/index.css">
+  <style>
+    .nowInvest-but{display:none;}
+    .half-col{
+      width: 49%;
+      margin-right: 1%;
+      float: left;
+    }
+    .khcg {
+      width: 500px;
+      height: 241px;
+      border-radius: 5px;
+      background: #fff;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      margin-left: -250px;
+      margin-top: -120px;
+      z-index: 99;
+    }
+    .khcg .close-btn {
+      padding: 10px 10px 0 0;
+    }
+    .inputCommon{
+      width: 140px;
+      height: 34px;
+      line-height: 34px;
+    }/*
+    .new-code-get-btn {
+        text-align: center;
+        display: inline-block;
+        background: #ffffff;
+        border: 1px solid #c2c2c2;
+        border-radius: 4px;
+        width: 91px;
+        height: 34px;
+        line-height: 34px;
+        color: #C1C1C1;
+    }*/
+    li{
+      list-style: none;
+    }
+    .btn{
+      background:#27b8ff;
+      border-radius:4px;
+      width:140px;
+      height:36px;
+    }
+    .investPopWrap #colorboxClose{
+      display:none;
+    }
+    .investPop #jqueryContent{
+      width: 300px;
+    }
+    .investPop .msg-pop-box-body{
+      width:auto;
+      padding-bottom:0;
+    }
+    .investConfirm{
+      position: relative;
+      margin: 0 50px;
+    }
+    .investConfirm h3{
+      line-height:80px;
+      margin-left: 80px;
+      text-align:left;
+    }
+    .investConfirm .img{
+      position: absolute;
+      top:0;
+      left:0;
+    }
+    .investConfirm .img img{
+      width:70px;
+      height:80px
+    }
+    .investPopBox{
+      text-align:center;
+    }
+    .investPopBox h3{
+      font-size:15px;
+      color:#575757;
+    }
+    .investPopBox .btn{
+      line-height: 25px;
+      width:150px;
+      background:#ccc;
+      border-radius: 10px;
+      margin: 40px auto 0;
+      color:#fff;
+    }
+    .investPopBox .blue{
+      background:#10a0eb;
+      cursor:pointer;
+    }
+    .investPopBox-reset{
+      padding: 40px 0 40px;
+    }
+    .investPopWrap #colorboxClose{
+        display:none;
+    }
+    .investPop #jqueryContent{
+        width: 300px;
+    }
+    .investPop .msg-pop-box-body{
+        width:auto;
+        padding-bottom:0;
+    }
+    .investConfirm{
+        position: relative;
+        margin: 0 50px;
+    }
+    .investConfirm h3{
+        line-height:80px;
+        margin-left: 80px;
+        text-align:left;
+    }
+    .investConfirm .img{
+        position: absolute;
+        top:0;
+        left:0;
+    }
+    .investConfirm .img img{
+        width:70px;
+        height:80px
+    }
+    .investPopBox{
+        text-align:center;
+    }
+    .investPopBox h3{
+        font-size:15px;
+        color:#575757;
+    }
+    .investPopBox .btn{
+        line-height: 25px;
+        width:150px;
+        background:#ccc;
+        border-radius: 10px;
+        margin: 40px auto 0;
+        color:#fff;
+    }
+    .investPopBox .blue{
+        background:#10a0eb;
+        cursor:pointer;
+    }
+    .investPopBox-reset{
+        padding: 40px 0 40px;
+    }
+    .confirmBtn.button-disable {
+      background-color: #a5a5a5;
+    }
+    .confirmBtn{
+      width:140px;
+      height:35px;
+      line-height:35px;
+      background: #a5a5a5;
+      background-color: #34B9FF;
+      display:inline-block;
+      margin:auto;
+      display: inline-block;
+      margin: 20px auto;
+      border-radius: 4px;
+      color: #fff;
+    }
+    .confirmBtn:hover{
+      color:#fff;
+    }
+    .codemask {
+      background: #000;
+      filter: alpha(opacity=60);
+      opacity: 0.5;
+      background: rgba(0,0,0,0.35);
+      width: 100%;
+      height: 100%;
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 16;
+    }
+  </style>
+</block>
+<block name="script">
+  <script>
+    var URL_FINANCING_INVEST_BUY = "{:U('Financing/Invest/buy')}";  // 投资服务
+    var URL_FINANCING_INVEST_BUYSUCCESS = "{:U('Financing/Invest/buySuccess')}";  // 投资服务
+    var calculatorOptions = {
+        t: '{$info.repay_way}',  //还款类型
+        money: '{$max_invest_money_view}',  //投资金额
+        rate: '{$info.total_year_rate_view}', //利率
+        time_limit_unit: '{$info.time_limit_unit}', //期限单位
+        time_limit: '{$info.time_limit}', //投资期限
+        rate_type: '', //期限类型
+        date: '' //日期
+    };
+  </script>
+</block>
+
+<block name="body">
+  <!--存管验证码弹窗-->
+  <div class="mask dn"></div>
+  <div class="codemask dn"></div><!--用于关闭验证码的蒙层-->
+  <div class="closeZSCode khcg tac dn" style="height: 285px">
+    <div class="fr close-btn">
+        <a href="javascript:;"><img src="/public/images/zskh/close.png" alt="" /></a>
+    </div>
+    <div class="clearfix"></div>
+    <p class="tipinfo tac mt20" style="height:50px;font-size:14px;color:#404040;">
+      <!-- 短信验证码已发送至<br />{$message} -->
+    </p>
+    <p class="mt10" style="width: 87%;margin: 0 auto;font-size:12px;text-align: left;color: #717171;margin-bottom:25px;">
+      为了更安全便捷的投资体验，请进行免动态码设置，下次投资只需使用支付密码。
+    </p>
+    <li class="pr topup-amount mt10 clearfix" style="width: 340px;margin: 10px auto;">
+        <label class="li-label-name fl" style="line-height:35px;margin-left: 14px;">短信验证码：</label>
+        <span class="li-span-con">
+          <input valid-msg-options="{&quot;offset&quot;:90}" type="text" id="zsSmsClose" class="inputCommon fl" name="code" valid="required,qq,lengthRange@4~6|,此项为数字格式" hidefocus="hidefocus" style="width: 133px;">
+          <span class="" id="btnCashoutMobilecode">
+            <a href="javascript:void(0);" class="new-code-get-btn" hidefocus="hidefocus" style="float:left;">免费获取</a>
+          </span>
+          <span class="time_send count-down dn" hidefocus="hidefocus" style="float:left;">120</span>
+        </span>
+    </li>
+    <!-- <p class="tac mt10"><a href="javascript:;" class="blue">关闭验证码 </a>或稍后至账户设置关闭</p> -->
+    <a href="javascript:void(0);" style="" class="confirmBtn" hidefocus="hidefocus">确定</a>
+    <!-- <span class="email-btn_sblue button-small-info mt10" id="zsclosecode" style="margin-top:24px;"></span> -->
+  </div>
+  <div class="khcg applyWL dn">
+      <div class="fr close-btn">
+            <a href="javascript:;"><img src="/public/images/zskh/close.png" alt="" /></a>
+        </div>
+        <div class="clearfix"></div>
+        <div class="tac khcg-txt">
+            <p class="mt20"></p>
+            <p class="tac introduceTxt mt20" style="width:100%;font-size:18px;color:#575757;">存管账户正在分批激活，请您耐心等待通知。</p>
+            <a href="<?php echo C('payment.public_apply_url'); ?>" class="openAccountBtn" style="width:140px;font-size:16px;margin-top:40px;">
+              了解存管
+            </a>
+        </div>
+  </div>
+
+  <!--投资页子菜单-->
+  <include file="./app/Tpl/Public/invest-subnav.html" />
+
+  <!-- 投资详情蒙层 -->
+  <div class="mask-detail dn"></div>
+
+  <!-- 通用蒙层 -->
+  <div class="mask-detail-high dn"></div>
+
+  <!--标的内容容器-->
+  <div class="invest-container">
+    <!-- 标题 开始 -->
+    <include file="view_top" />
+    <!-- 标题 结束 -->
+
+    <!-- 标的详情 开始 -->
+    <div id="standardInfo">
+      <!-- <h3 class="standardH3">
+        <div class="standardNa"><i class="icon_itemSigh"></i>项目编号：{$info.prj_no}</div>
+        <div class="standardTi">开标时间 : <em>{$info.start_bid_time_view}</em></div>
+        <a data-callcalculator="call" href="javascript:" class="blue calculatorBtn" hidefocus="hidefocus">
+            收益计算器<i class="icon_calculator"></i>
+        </a>
+      </h3> -->
+      <div class="standardDf">
+        <!-- 项目信息 左侧 -->
+        <if condition="$bill">
+          <!--如果是银票项目-->
+          <include file="view_bill_info" />
+        <else />
+          <include file="view_info" />
+        </if>
+
+        <!-- 投资部分 右侧 -->
+        <?php if($info['act_prj_ext']['is_pre_sale'] == 1 && $info['bid_status'] == PrjModel::BSTATUS_WATING) { ?>
+          <include file="view_invest_pre" />
+        <?php } else { ?>
+          <include file="view_invest" />
+        <?php } ?>
+      </div>
+
+      <!-- 投资公告 先隐藏掉 10.18号先-->
+      <div id="InvestAnnounce" class="mt20 fixed" style="display:none;">
+        <span class="standardDi3 fl"><i class="icon_blueHorn"></i>今日投资 <em class="org_color">1万元</em>，可额外获得募集期利息 <em class="org_color">5.12元</em><i class="icon_orangeMark"></i>（募集期利率：年化10%）</span>
+        <span class="fr date">2014-07-31</span>
+      </div>
+    </div>
+    <!-- 标的详情 结束 -->
+  </div>
+
+  <!-- 项目概况 页签 开始 -->
+  <include file="view_project_info" />
+  <!-- 项目概况 页签 结束 -->
+
+  <input type="hidden" name="is_paypwd_edit" value="<?php echo $is_paypwd_edit;?>">
+  <input type="hidden" name="is_cunguanbiao" value="<?php echo $info['act_prj_ext']['is_deposit'];?>">
+  <input type="hidden" name="is_zs_invest_close" value="<?php echo $user['zs_close_invest_code'];?>">
+  <input type="hidden" name="inWhiteList" value="<?php echo $inWhiteList;?>">
+</block>
+<block name="footer">
+  <include file="./app/Tpl/Public/footer_user.html" />
+</block>

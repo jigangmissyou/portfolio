@@ -1,0 +1,40 @@
+<form action="{:U('Financing/InvestFund/fundEventList')}" method="post" id="ajaxForm_fundEventList" ajax="1"
+      ajax-after="ajaxAfter_fundEventList" ajax-datatype="html">
+  <div class="control control1">
+    <div class="pro_form_item submit_area" style="padding-left: 80px;">
+      <span class="btn_bor_orange"><input type="button" class="btn_text step_next" value="添加新事件" event-click="step4.addNewEvent"></span>
+    </div>
+  </div>
+  <div class="step step4">
+    <input type="hidden" name="prj_id" value="{$prj_id}"/>
+    <div id="listContainer" style="padding: 0 80px; min-height: 100px;">
+      <p>列表数据加载中...</p>
+    </div>
+  </div>
+</form>
+
+<div style="display: none;">
+  <div id="colorBox-newEvent">
+    <div id="titlebar">添加重大事件</div>
+    <div id="jqueryContent" class="w520">
+      <ul class="formList formList_pop">
+       <li>
+          <label class="li-label-name"><em class="red">*</em>事件标题：</label>
+          <span class="li-span-con">
+          <input type="text" name="title" class="inputCommon" valid="required">
+        </span>
+        </li>
+       <li>
+          <label class="li-label-name"><em class="red">*</em>事件内容：</label>
+          <span class="li-span-con">
+          <textarea name="message" class="ui_textarea" valid="required"></textarea>
+        </span>
+        </li>
+       <li class="lastBtns">
+         <label for="" class="li-label-name">&nbsp;</label><span class="li-span-con"><span class="button-common-blue button-blue-pop"><input type="button" class="btns" value="确定" event-click="step4.applyAdd"></span>
+        <span class="button-common-gray button-gray-pop mr20"><input type="button" class="btns" value="取消" event-click="cancel"></span></span>
+       </li>
+      </ul>
+    </div>
+  </div>
+</div>

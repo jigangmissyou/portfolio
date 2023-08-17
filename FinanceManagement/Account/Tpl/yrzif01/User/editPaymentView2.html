@@ -1,0 +1,45 @@
+<extend name="./app/Tpl/Public/base_user.html"/>
+<block name="title">找回支付密码</block>
+<block name="keywords"></block>
+<block name="description"></block>
+
+<block name="body">
+  <script>
+  var URL_SUCCESS = "{:U('Account/User/account')}";
+  </script>
+  <div class="container-inner mt20">
+
+  <include file="./app/Tpl/Account/userMyBonusSider.html" />
+  <div class="main_area body-frame">
+    <h2 class="h2tit">找回支付密码</h2>
+    <div class="account-edit-mobile">
+    <ul>
+      <li class="li-first current">1 安全验证<span class="edit-jiao"></span></li>
+      <li class="li-other current">2 重置密码<span class="edit-jiao"></span></li>
+    </ul>
+  </div>
+    <form method='post'  action="{:U('Account/User/doForgetPayPwd')}" id="form_doForgetPayPwd" ajax="1" ajax-after="Ajax_after_doForgetPayPwd">
+      <ul class="formList account-edit-form">
+        <li>
+          <label class="li-label-name">新密码</label>
+          <span class="li-span-con">
+          <input type="password" name="pwd1" class="inputCommon" value="" ghosttext="输入6位数字" valid="required,payPwd@6,ajax@{:U('Account/User/checkPaymentPwd')}">
+          </span>
+        </li>
+        <li>
+          <label class="li-label-name">确认新密码</label>
+          <span class="li-span-con">
+          <input type="password" name="pwd2" class="inputCommon" value="" valid="required,match@pwd1|密码不匹配">
+          </span>
+        </li>
+        <li class="lastBtns">
+          <label class="li-label-name">&nbsp;</label>
+          <span class="li-span-con">
+          <span class="button-common-blue button-blue-w120"><input type="submit" name="" value="提交" class="btns"></span>
+          </span>
+        </li>
+      </ul>
+    </form>
+  </div>
+    </div>
+</block>

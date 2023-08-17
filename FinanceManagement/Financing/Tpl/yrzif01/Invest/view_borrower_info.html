@@ -1,0 +1,34 @@
+<if condition="!empty($borrower_show_items) || !empty($borrower)">
+  <dl>
+    <?php
+        D('Financing/Prj');
+        if ($prjInfo['zhr_apply_id'] || $prjInfo['act_prj_ext']['is_xlb']) {
+            $h4_title = '借款人信息';
+        } else {
+            $h4_title = '原始借款人信息';
+        }
+    ?>
+    <h4><!-- <i class="icon_Greyinfo"></i> -->{$h4_title}</h4>
+    <table class="globaltable">
+        <?php if($prjInfo['act_prj_ext']['is_xlb']) {?>
+        <volist name="borrower" id="item" key="k">
+            <if condition="!empty($item['v'])">
+                <tr <?php if ($k % 2 == 1) echo 'class="GreyBgcolor"'; ?>>
+                <td class="padLeft30">{$item['k']}</td>
+                <td>{$item['v']}</td>
+                </tr>
+            </if>
+        </volist>
+        <?php } else {?>
+      <volist name="borrower_show_items" id="item" key="k">
+        <if condition="!empty($item['v'])">
+          <tr <?php if ($k % 2 == 1) echo 'class="GreyBgcolor"'; ?>>
+            <td class="padLeft30">{$item['k']}</td>
+            <td>{$item['v']}</td>
+          </tr>
+        </if>
+      </volist>
+        <?php }?>
+    </table>
+  </dl>
+</if>

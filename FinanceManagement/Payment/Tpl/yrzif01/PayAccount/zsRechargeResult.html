@@ -1,0 +1,53 @@
+<extend name="./app/Tpl/Public/base_user.html"/>
+<block name="title">我的账户-账户概况-充值</block>
+<block name="keywords">充值</block>
+<block name="description">充值</block>
+
+<block name="style">
+<link href="/public/css/banklogo.css" rel="stylesheet" />
+<link rel="stylesheet" href="/public/css/sasscss/act/zskh/index.css">
+</block>
+
+<block name="body">
+
+<div class="mt20 recharge_form_area pb50">
+    <?php if($status == 2) { ?>
+    <div class="czcg">
+        <div class="tac headtxt">
+           <img src="/public/images/zskh/czcg.png" style="margin-right:15px;">充值成功！
+        </div>  
+        <ul class="czInfo">
+            <li class="tar">充值金额：</li><li class="tal"><em class="orange">{$amount}</em>元</li>
+            <li class="tar">账户可用余额：</li><li class="tal"><em class="orange">{$remain_money}</em>元</li>
+            <li class="tar">交易流水号：</li><li class="tal">{$ticket_no}</li>
+        </ul>
+        <div class="btn-box">
+            <a class="ckzh-btn" href="{:U('Account/User/index')}">查看账户</a>
+            <a class=" ljtz-btn" href="{:U('Financing/Invest/plist')}">立即投资</a>
+        </div>
+        <div class="banner-box">
+           <a href="{$jump_url}"><img src="{$jpg_url}" alt=""></a>
+        </div>
+    </div>
+    <?php } else { ?>
+    <div class="czcg">
+        <div class="tac headtxt">
+           <img src="/public/images/zskh/czsb.png" style="margin-right:15px;">充值失败！
+        </div>
+        <ul class="czInfo">
+            <li class="tac gary" style="width:500px;">失败原因：{$fail_msg}</li><br />
+            <li class="tac" style="width:500px;">交易流水号：{$ticket_no}</li>
+        </ul>
+        <div class="btn-box btn-gap">
+            <a class=" ljtz-btn" href="{:U('Payment/PayAccount/zsRechargePage')}">重新充值</a>
+        </div>
+        <p class="tac fz14">
+        充值遇到了问题？点击了解 <a href="{:U('Help/Help/viewHelpIndex', array('tpl'=>'AboutUs-faq','type'=>'1'))}" class="blue">更多详情</a><br />
+        或致电鑫合汇客服电话 <span class="blue">400-821-8616</span><br />
+        周一至周五：09：00-21：00，双休/节假日：09：00-17：00<br />
+        </p>
+    </div>
+    <?php } ?>
+</div>
+
+</block>

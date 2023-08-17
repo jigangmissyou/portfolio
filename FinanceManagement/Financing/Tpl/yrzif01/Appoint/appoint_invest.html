@@ -1,0 +1,91 @@
+<?php 
+  if($has_appoint>0){  // 已预约
+    $disabledAttr = ' disabled="disabled"';
+  }
+?>
+<form cancle="{:U('Financing/Appoint/ajaxCancle')}" method="POST" commit="{:U('Financing/Appoint/ajaxCommit')}" edit="{:U('Financing/Appoint/doEditAppoint')}" ajax="1" id="formId_Financing_Appoint_ajaxCommit" ajax-after="ajaxAfter_Financing_Appoint_ajaxCommit">
+  <input type="hidden" name="id" value="{$appointRecord.id}">
+  <input type="hidden" name="appoint_id" value="{$appointRecord.id}">
+  <input type="hidden" name="appoint_day" <?php if(empty($appointRecord['appoint_day'])) { ?> value="30" <?php } else { ?>value="{$appointRecord.appoint_day} <?php }?>">
+  <!--<input type="hidden" name="max_time" value="{$appointRecord.max_time}">-->
+  <!--<input type="hidden" name="xyb" value="{$appointRecord.xyb}">-->
+  <!--<input type="hidden" name="qyr" value="{$appointRecord.qyr}">-->
+  <!--<input type="hidden" name="sdt" value="{$appointRecord.sdt}">-->
+  <input type="hidden" name="rys" value="1">
+  <div class="appoint-standardMs standardMs_licai">
+    <dl>
+      <dt class="prel dt-first">
+        当前账户可用余额：
+        <span class="button-small-rec"><a href="{:U('Payment/PayAccount/rechargePage')}" class="btns">立即充值</a></span>
+        <br>￥
+        <span class="moneytotle orange_dark">{$user_total_amount}</span>元
+      </dt>
+      <dd class="liCaimayCast" style="padding:0;">
+      <div class="appoint-select-type" id="productTypes" <?php if($disabledAttr){ ?> class="disabled" <?php } ?>>
+      <!--<label _target='xyb' class="label-new-pro">月益升</label>-->
+      <!--<em class="prel"></em>-->
+      <!--<label _target='qyr' class="label-new-pro">年益升</label>-->
+      <!--<label _target='sdt' class="label-new-pro">速兑通</label>-->
+      <label _target='rys' class="label-new-pro label-cur">日益升</label>
+      </div>
+        <p>设置预约年化收益率</p>
+        <div class="investMnum appsinvest prel">
+          <input type="text"  <?php if(!$disabledAttr){ ?> valid="required,number" <?php } ?> value="{$appointRecord.appoint_rate}" valid-msg-options='{"gravity": "e"}' name="appoint_rate" class="inputCommon lvInput mr10" style="width:175px;"><!--<em class="prel" style="padding:0 4px; *top:-6px !important;"> -</em><input type="text" {$disabledAttr} value="{$appointRecord.max_rate}" name="max_rate" valid="required,number" class="lvInput"><em class="baifen">%</em> --><em>%以上(含)</em>
+        </div>
+        <p>设置自动投标有效期
+        <a hovercard-options="{&quot;direction&quot;:&quot;up&quot;}" hovercard="div@ct_dayTip" class="icon_unknown" style="display:inline-block;"></a></p>
+        <div class="dn" hovercard-id="ct_dayTip"><p class="hoverPinfo">在有效期内，系统自动帮您循环投资日益升项目</p></div>
+        <div class="investMnum appsinvest" style="position:relative;z-index:10;">
+            <div class="moSelectBox" data-dropDown  data-name="appoint_day" style="width:272px;">
+              <span class="selectValue" data-label><span><?php if(!empty($appointRecord['appoint_day'])){ if($appointRecord['appoint_day']==9999){echo '不限';}else {echo $appointRecord['appoint_day'].'天';} }else{echo '30天';}?></span><em class="jianDown"></em></span>
+              <div class="selectPop" data-select style="width:100%">
+                <ul class="selectList" id="timeLimitSelect">
+                  <?php foreach ($timeLimit as $key => $vo) { ?>
+                    <li data-value="{$key}" <?php if($key == $appointRecord['appoint_day']){echo 'data-selected="1"';} ?>>{$vo}</li>
+                  <?php } ?>
+                </ul>
+              </div>
+            </div>
+        </div>
+        <?php if(!$appointRecord['is_all_money']) { ?>
+          <p>设置自动投标金额（元）</p>
+          <div class="investMnum appsinvest">
+            <input type="text"  <?php if(!$disabledAttr){ ?> valid="required,number" <?php } ?> valid-msg-options='{"gravity": "e"}' name="appoint_money" ghosttext="1000元起投，1000元递增，最高10万元"  value="{$appointRecord.appoint_money}" style="width:262px;" class="inputCommon lvInput">
+          </div>
+        <?php } ?>
+      </dd>
+      <dd class="investMnum payCipherC">
+        <input type="password"  <?php if(!$disabledAttr){ ?> valid="required" <?php } ?> class="<?php if($disabledAttr){ ?> disabled <?php } ?>inputCommon lvInput" name="safe_pwd" ghosttext="请输入支付密码" style="width:262px; left:0;">
+      </dd>
+      <?php if($has_appoint>0){  // 已预约 ?>
+      <dd class="lastButs">
+        <!--取消 修改 按钮-->
+        <div class="immInvest_btn immInvest_btn_small"><label class="button-common-gray button-gray-w120 fl"><a href="javascript:;" event-click="cancelModification" class="btns">取消</a></label><label class="button-common-blue button-blue-w120 fr"><a href="javascript:;" event-click="ajaxEdit" class="btns">修改</a></label></div>
+      </dd>
+      <?php } else {  // 未预约 ?>
+        <?php if($is_limit_apply == 0){ ?>
+          <dd>
+            <!--申请预约按钮-->
+             <div class="immInvest_btn" event-click="ajaxCommit"><label class="button-common-blue"><a href="javascript:;" ajax-submit class="btns apply-appoint">申请预约</a></label></div>
+          </dd>
+        <?php } else if($is_limit_apply == 1){ ?>
+          <dd>
+            <!--人数已达上限，请等待-->
+             <div class="immInvest_btn"><label class="button-common-gray"><a href="javascript:void(0);" class="btns">人数已达上限，请等待</a></label></div>
+          </dd>
+        <?php }?>
+      <?php } ?>
+      <dd class="agreeTransfer" style="margin-top: 4px; text-align:left;">
+        <label>
+          <input type="checkbox" name="agreeCheck" class="vam mr5" checked="checked"> 同意并阅读<a  id='viewRule' href="{:U('Index/Protocol/getProtocolView',array('name'=>'appoint'))}" class="bluecolor">《服务协议》</a>
+          <?php if($has_appoint>0){  // 已预约 ?>
+          <a id="viewDeal" href="{:U('Index/Protocol/view',array('id'=>17))}" class="bluecolor">《应收帐款转让及回购合同》</a>
+          <?php }?>
+        </label>
+      </dd>
+    </dl>
+  </div>
+</form>
+<script type="text/javascript">
+  var has_appoint = '{$has_appoint}'
+</script>

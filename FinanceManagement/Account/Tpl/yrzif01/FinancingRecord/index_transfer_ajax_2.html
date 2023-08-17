@@ -1,0 +1,56 @@
+{/*已转让*/}
+<table class="ui-record-table">
+  <thead>
+    <tr>
+      <th width="9%" order_field="1" <eq name="order_field" value="1"> order_type="{$order_type}"</eq>>还款日期</th>
+      <th>项目名称</th>
+      <th width="10%" order_field="2" <eq name="order_field" value="2"> order_type="{$order_type}"</eq>>预期年化利率</th>
+      <th width="7%" order_field="3" <eq name="order_field" value="3"> order_type="{$order_type}"</eq>>期限</th>
+      <th width="11%" class="tar" order_field="4" <eq name="order_field" value="4"> order_type="{$order_type}"</eq>>投资金额</th>
+      <th width="11%" class="tar" order_field="5" <eq name="order_field" value="5"> order_type="{$order_type}"</eq>>转让价格</th>
+      <th width="13%" class="tac">还款方式</th>
+      <th width="9%" order_field="6" <eq name="order_field" value="6"> order_type="{$order_type}"</eq>>转让时间</th>
+      <th width="7%" class="tac">状态</th>
+      <th width="8%" class="tac">合同</th>
+    </tr>
+    <tr class="line"><th colspan="100%"></th></tr>
+  </thead>
+  <tbody>
+    <?php if(!empty($list)){ ?>
+    <foreach name="list" item="item">
+                    <?php  
+$title = service("Financing/Financing")->getTitle($item);
+         ?>
+    <tr>
+      <td  <?php echo $title; ?>>{$item.expect_repay_time|date='Y-m-d',###}</td>
+      <td  <?php echo $title; ?>>
+        <p class="pro_name" style="max-width:100px">{$item.prj_name}</p>
+				   			 <?php 
+			   echo service("Financing/Financing")->getIco($item);
+			 ?>
+        <!--<p class="blue">{$item.prj_no}</p>-->
+      </td>
+      <td  <?php echo $title; ?>>
+    <?php echo number_format($item['year_rate']/10,2); ?>%
+      </td>
+      <td>
+         <?php echo $item['expire_time_limit'][2];?>
+        </td>
+      <td class="tar"  <?php echo $title; ?>>{$item.property|humanMoney=###,2,FALSE} 元</td>
+      <td class="tar"  <?php echo $title; ?>><span class="mr12">{$item.money|humanMoney=###,2,FALSE} 元</span></td>
+      <td class="tac"  <?php echo $title; ?>>{$item.repay_way|getCodeName='E004',###}</td>
+      <td class="tac"  <?php echo $title; ?>><span class="time">{$item.buy_time|date='Y-m-d H:i',###}</span></td>
+      <td>{$item.bid_status_display}</td>
+      <td class="tac"><a href="{:U('/Index/Protocol/validateView?id=' . $item["to_order_id"])}" class="btn_orange view_protocol" colorbox="1" ><span class="btns">查看</span></a></td>
+    </tr>
+    </foreach>
+    <?php } else { ?>
+    <tr>
+      <td colspan="9" class="tac">没有相关数据</td>
+    </tr>
+    <?php } ?>
+  </tbody>
+</table>
+<?php $pageNavCallback = "ajaxAfter_Account_Financing_plist"; ?>
+<include file="./app/Tpl/Public/pageAjax.html" />
+

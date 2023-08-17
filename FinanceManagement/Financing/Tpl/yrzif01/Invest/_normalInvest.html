@@ -1,0 +1,174 @@
+<?php
+  if(!$client_permission || $mustDisable){ // 专享标或新客标
+    $limitStr = 'disabled="disabled"';  // 禁用表单字符串
+    $limitAdd = 'disable_add';
+    $limitDel = 'disable_del';
+  }
+
+  $remian_money = explode('.', $info['remaining_amount_name2']);
+?>
+
+<?php if($is_login){ ?>
+  <!--已登陆 start  normal-->
+  <?php if($info['bid_status'] == PrjModel::BSTATUS_WATING){ // 待开标 ?>
+    <!-- 待开标状态 开始 -->
+    <dl class="standDl standDl2 waiting-open">
+      <!-- <dt>
+        剩余可投金额
+        <span data-flag="format_start_bid_time_view" data-inner="0" class="remaining-amount">
+          <i class="symbol">￥</i><i class="coin"><?php echo $remian_money[0];?></i><i class="decimal">.{$remian_money[1]}</i>
+        </span>元
+      </dt> -->
+      <div class="clearfix"></div>
+      <dt class="time-rest">
+        离开标还有：
+        <span data-flag="format_start_bid_time_view" data-inner="0" class="countDown org_color setout">
+        <em data-day>00</em>:<em data-hour>00</em>:<em data-min>00</em>:<em data-sec>00</em>
+      </span>
+      </dt>
+      <dd>起投金额：<em>{$info.min_bid_amount_name}</em></dd>
+      <dd>递增金额：<em>{$info.step_bid_amount_name}</em></dd>
+      <dd>最高限额：<em><?php if(!empty($info['max_bid_amount_name'])){echo $info['max_bid_amount_name'];} else {echo "不限";} ?></em></dd>
+    </dl>
+    <div class="wait-opening">
+      <label class="button-common-green button-common-green-pro">
+        <a href="javascript:void(0)" class="btns wait-btn">待开标</a>
+      </label>
+    </div>
+    <!-- 待开标状态 结束 -->
+  <?php } ?>
+
+  <?php if($info['bid_status'] == PrjModel::BSTATUS_BIDING){ // 投资中 ?>
+    <!-- 可投资状态 开始 -->
+    <?php if($money_notEnough){ // 资金不足 ?>
+      <dl class="standDl">
+        <include file="view_invest_base"/>
+        <?php if($info['act_prj_ext']['is_deposit']==1 && $user['zs_status'] != 2) { ?>
+          <!-- 存管标非存管户，去开户 -->
+          <p style="width: 320px;margin-left: -20px;color:#34b9ff;">· 该项目为浙商银行存管项目，开通存管账户即可投</p>
+          <div class="investLoginBtn button-common-blue button-prepare-btn"><a class="openZS btns invest-login-btn" href="{:U('Account/User/openAccount')}">开通浙商银行存管账户</a></div>
+        <?php } else { ?>
+          <dd class="now-remaining">
+            <?php if($info['act_prj_ext']['is_deposit']==1 && $user['zs_status'] == 2){ ?>
+            <!-- 存管标存管户，存管页充值 -->
+              <a href="{:U('Payment/PayAccount/zsRechargePage')}" class="btns" style="font-size:20px;">存管账户可用余额：</a>
+            <?php } else { ?>
+            <!-- 非存管标，普通页充值 -->
+              <a href="{:U('Payment/PayAccount/rechargePage')}" class="btns" style="font-size:20px;">普通账户可用余额：</a>
+            <?php } ?>
+          </dd>
+          <dd class="data-display">
+            <em class="org_color" data-flag="userAccountFund">数据加载中...</em>
+            <!--<span style="display:none;" data-flag="awardAmount">数据加载中...</span>-->
+          </dd>
+          <dd class="promptInade insufficient-prompt"><!-- <i class="icon_redSigh"></i> -->(不足起投金额)</dd>
+          <dd>
+            <div class="immInvest_but">
+              <label class="button-common-green button-common-green-pro">
+                <?php if($info['act_prj_ext']['is_deposit']==1 && $user['zs_status'] == 2){ ?>
+                <!-- 存管标存管户，存管页充值 -->
+                  <a href="{:U('Payment/PayAccount/zsRechargePage')}" class="btns" style="font-size:20px;">余额不足，请先充值</a>
+                <?php } else { ?>
+                <!-- 非存管标，普通页充值 -->
+                  <a href="{:U('Payment/PayAccount/rechargePage')}" class="btns" style="font-size:20px;">余额不足，请先充值</a>
+                <?php } ?>
+              </label>
+            </div>
+          </dd>
+        <?php } ?>
+      </dl>
+    <?php } else {  // 资金充足 ?>
+      <dl class="standDl">
+        <input type="hidden" name="has_money" value="1">
+        <include file="view_invest_base"/>
+
+        <dd class="prel dd-addRedShow">
+          <label for="" class="fl">预估收益：</label>
+          <span class="fl" style="width:72%;">
+            <?php if($isEndate || !$isShowPlan){  // 已结束或无还款计划 ?>
+              <span id="income" data-flag="income">0.00</span>元
+            <?php } else { ?>
+              <a class="green" id="income" data-flag="income" hovercard="ajax@{:U('Financing/Invest/ajaxShowRepay?id=')}{$info.id}&money=<?php echo $info['min_bid_amount']/100; ?>" hovercard-options='{"direction":"left","theme":"light", "ajaxCached":false}'>{$income}</a>元
+            <?php } ?>
+
+            <?php if($activity && ($activity['reward_money_rate'] > 0)){  // 有红包收益 ?>
+              <p class="includeRewardIncome">(含奖励收益<em class="green" data-flag="hongbaoGain" style="float:none;">{$redBaoProfit}</em>元)</p>
+              <div class="includeRewardIcon">
+                <i class="icon_greyMark" data-flag="rateFloatDesc">
+                  <div class="OrangeTipBox-Red dn" data-flag="rateFloatTip">
+                    <em class="OrangeTipBox_Arr1"><em class="OrangeTipBox_Arr2"></em></em>
+                  预估收益=利息收益+奖励收益
+                  </div>
+                </i>
+              </div>
+            <?php } ?>
+
+          </span>
+        </dd>
+        <dd class="investMnum payCipherC">
+          <label class="monNum payCipher">支付密码：
+            <!-- 用于防止chrome保存密码 --><input class="dn">
+            <input type="password" {$limitStr} name="paypwd" valid="required" event-focus="showApplyInvest" ></label>
+        </dd>
+        <dd class="agreeTransfer" style="margin-top: 4px;">
+          <label><input type="checkbox" {$limitStr} name="agree" checked="checked"> 我同意并接受
+            <?php if($info['act_prj_ext']['is_jjs'] == '1'){ ?>
+            <a colorbox="1" href="{:U('Index/Protocol/view',array('id'=>'70', 'prj_id'=>$info['id']))}" class="bluecolor" data-flag="protocolName">《产品说明书》</a>
+            <a colorbox="1" href="{:U('Index/Protocol/view',array('id'=>'71', 'prj_id'=>$info['id']))}" class="bluecolor" data-flag="protocolName">《认购协议》</a>
+            <?php } else { ?>
+            <a colorbox="1" href="{:U('Index/Protocol/view',array('id'=>$protocolInfo['id'], 'prj_id'=>$info['id']))}" class="bluecolor" data-flag="protocolName">《{$protocolInfo.name}》</a>
+            <?php }?>
+          </label>
+        </dd>
+        <!-- 投资按钮 -->
+        <if condition="$c eq 6">
+          <include file="fastcash_invest_btn"/>
+        <else/>
+          <include file="view_invest_btn"/>
+        </if>
+      </dl>
+    <?php } ?>
+    <!-- 可投资状态 结束 -->
+  <?php } ?>
+
+  <?php if($info['bid_status'] >= PrjModel::BSTATUS_FULL){  // 已满标 ?>
+    <!-- 已满标以上状态 开始 -->
+    <dl class="standDl standDl2">
+      <!-- <dt> -->
+        <!-- <i class="icon_greywallet"></i>&emsp; 剩余可投金额-->
+      <!-- <div class="ProgressBar_div">
+        <div class="ProgressBarOrg"><span class="ProgressBarGry" style="width:100%"><em class="bar_rt"></em><em class="propress-data finish-data">100%</em></span></div>
+      </div>
+      </dt> -->
+      <!-- <div id="view_bid_over" class="prel">
+        <div class="progressListBar" >
+          <! 进度长背景 -->
+      <!-- <span class="progressBigBar progressBOver">
+        <em class="pregress-tip-w"></em> <! 外右圆角 -->
+      <!-- <em class="propress-data">{$prj['schedule']}%</em>  --><!-- 进度数据 -->
+      <!-- </span>
+    </div>
+    </div> -->
+      <div class="progressBBar100  progressBigBar2" id="view_bid_over"><div class="progress-finish"></div></div>
+      <dd class="next_bid_time tac repayment-date">
+        <?php if($info['bid_status'] == PrjModel::BSTATUS_FULL || $info['bid_status'] == PrjModel::BSTATUS_REPAYING || $info['bid_status'] == PrjModel::BSTATUS_END || $info['bid_status'] == PrjModel::BSTATUS_REPAY_IN){  // 已满标、待还款、截止投标、还款中 ?>
+        预计<?php if(!$isEndate): ?>下次<?php endif; ?>还款日{$info.next_repay_date_view}
+        <?php } else if($info['bid_status'] == PrjModel::BSTATUS_REPAID){ // 已还款结束 ?>
+        已于{$info.actual_repay_time_view}还款完成
+        <?php } ?>
+      </dd>
+      <dd>
+        <div class="immInvest_but"><label class="grayBigBtn button-common-gray button-end-btn"><a href="javascript:;" class="btns" style="margin-top: 35px;">{$info['bid_status_view']}</a></label></div>
+      </dd>
+
+    </dl>
+    <!-- 已满标以上状态 结束 -->
+  <?php } ?>
+  <!--已登陆 end-->
+<?php }else{ ?>
+  <!--未登录 start-->
+  <include file="_nologin"/>
+  <!--未登录 end-->
+<?php } ?>
+  
+

@@ -1,0 +1,167 @@
+<!-- 月益升附加信息 -->
+<style>
+  .info_area .w50p{float: left;width: 33%;}
+  /* .wide_textarea{width: 580px;} */
+</style>
+<div class="info_wrap" >
+  <!--<div class="ui_info_tit">融资方信息介绍</div>-->
+
+  <!--股权市场挂牌机构-->
+  <div class="info_area">
+    <div class="info_tit show">
+      <h3>股权市场挂牌机构</h3><i></i>
+    </div>
+    <div class="content">
+      <ul class="formList formList_newW">
+      <li>
+        <label class="li-label-name">私募债券登记机构</label>
+        <span class="li-span-con">
+        <input type="text" name="register_place" class="inputCommon" value="{$project.ext.register_place}">
+        <span class="text"></span>
+        </span>
+      </li>
+      <li>
+        <label class="li-label-name">备案规模</label>
+        <span class="li-span-con">
+        <input type="text" name="record_scale" class="inputCommon" value="{$project.ext.record_scale}">
+        <span class="text"></span>
+        </span>
+      </li>
+      <li>
+        <label class="li-label-name">私募债券登记时间</label>
+        <span class="li-span-con">
+        <input type="text" name="register_time" class="inputCommon" value="<?php if ($project['ext']['register_time']): ?>{$project.ext.register_time|date='Y-m-d',###}<?php endif ?>" datepicker="1" placeholder="请选择">
+        <span class="text"></span>
+        </span>
+      </li>
+      <li>
+        <label class="li-label-name">备案登记文号</label>
+        <span class="li-span-con">
+        <input type="text" name="record_no" class="inputCommon" value="{$project.ext.record_no}">
+        <span class="text"></span>
+        </span>
+      </li>
+      <li>
+        <label class="li-label-name">私募债券名称</label>
+        <span class="li-span-con">
+        <input type="text" name="debt_name" class="inputCommon" value="{$project.ext.debt_name}">
+        <span class="text"></span>
+        </span>
+      </li>
+      <li>
+        <label class="li-label-name">私募债券代码</label>
+        <span class="li-span-con">
+        <input type="text" name="debt_no" class="inputCommon" value="{$project.ext.debt_no}">
+        <span class="text"></span>
+        </span>
+      </li>
+    </ul>
+    </div>
+  </div>
+
+  <!-- 担保措施及担保方式 -->
+  <div class="info_area">
+    <div class="info_tit show">
+      <h3>担保措施及担保方式</h3><i></i>
+    </div>
+    <div class="content">
+      <ul class="formList formList_newW">
+      <li>
+        <label class="li-label-name">担保金额</label>
+        <span class="li-span-con">
+        <input type="text" name="guarantee_money" class="inputCommon" value="{$project.ext.guarantee_money}">
+        <span class="text"></span>
+        </span>
+      </li>
+      <li>
+        <label class="li-label-name">担保期限</label>
+        <span class="li-span-con">
+        <input type="text" name="guarantee_timelimit" class="inputCommon" value="{$project.ext.guarantee_timelimit}">
+        <span class="text"></span>
+        </span>
+      </li>
+      <li>
+        <label class="li-label-name">担保方式</label>
+        <span class="li-span-con">
+        <input type="text" name="guarantee_way" class="inputCommon" value="{$project.ext.guarantee_way}">
+        <span class="text"></span>
+        </span>
+      </li>
+      <li>
+        <label class="li-label-name">担保范围</label>
+        <span class="li-span-con">
+        <textarea class="ui_textarea wide_textarea" name="guarantee_scope">{$project.ext.guarantee_scope}</textarea>
+        </span>
+      </li>
+      <li>
+        <label class="li-label-name">担保人基本情况</label>
+        <span class="li-span-con">
+        <textarea class="ui_textarea wide_textarea" name="guarantee_person">{$project.ext.guarantee_person}</textarea>
+        </span>
+      </li>
+      <li>
+        <label class="li-label-name">抵押或质押担保</label>
+        <span class="li-span-con">
+        <textarea class="ui_textarea wide_textarea" name="guarantee_desc">{$project.ext.guarantee_desc}</textarea>
+        </span>
+      </li>
+     </ul>
+    </div>
+  </div>
+
+  <!-- 股交中心法定承销商及财务披露 -->
+  <div class="info_area">
+    <div class="info_tit show">
+      <h3>股交中心法定承销商及财务披露</h3><i></i>
+    </div>
+    <div class="content">
+      <ul class="formList formList_newW">
+      <li>
+        <label class="li-label-name">法定承销商</label>
+        <span class="li-span-con">
+        <input type="text" name="dealer" class="inputCommon" value="{$project.ext.dealer}">
+        <span class="text"></span>
+        </span>
+      </li>
+      <li>
+        <label class="li-label-name">财务报告审计单位</label>
+        <span class="li-span-con">
+        <input type="text" name="auditor" class="inputCommon" value="{$project.ext.auditor}">
+        <span class="text"></span>
+        </span>
+      </li>
+      <li>
+        <label class="li-label-name">律师事务所</label>
+        <span class="li-span-con">
+        <input type="text" name="law_firm" class="inputCommon" value="{$project.ext.law_firm}">
+        <span class="text"></span>
+        </span>
+      </li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 私募债券募集资金用途及偿债资金来源 -->
+  <div class="info_area">
+    <div class="info_tit show">
+      <h3>私募债券募集资金用途及偿债资金来源</h3><i></i>
+    </div>
+    <div class="content">
+      <ul class="formList formList_newW">
+      <li>
+        <label class="li-label-name">资金用途</label>
+        <span class="li-span-con">
+        <textarea class="ui_textarea wide_textarea" name="money_using">{$project.ext.money_using}</textarea>
+        </span>
+      </li>
+      <li>
+        <label class="li-label-name">偿债资金来源</label>
+        <span class="li-span-con">
+        <textarea class="ui_textarea wide_textarea" name="repay_origin">{$project.ext.repay_origin}</textarea>
+        </span>
+      </li>
+    </ul>
+    </div>
+  </div>
+</div>
+<!-- infoend -->

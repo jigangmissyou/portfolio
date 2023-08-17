@@ -1,0 +1,49 @@
+<extend name="./app/Tpl/Public/base_user.html"/>
+<block name="title">重新设置安全保护问题</block>
+<block name="keywords"></block>
+<block name="description"></block>
+
+
+<block name="body">
+<div class="container-inner mt20">
+  <include file="./app/Tpl/Account/userMyBonusSider.html" />
+  <div class="main_area body-frame">
+  <div class="p20">
+  <h2 class="h2tit">修改安全保护问题</h2>
+  <div class="account-edit-mobile">
+    <ul>
+      <li class="li-first current">1 安全验证<span class="edit-jiao"></span></li>
+      <li class="li-other">2 重新设置<span class="edit-jiao"></span></li>
+    </ul>
+  </div>
+  <?php 
+    $qaList = getCodeItemList('E025');
+    for($index = 0;$index < count($qaList);$index++){
+      if($qaList[$index]['code_no'] == $user['sqa_key']){
+        $qa = $qaList[$index]['code_name'];
+      }
+    }
+  ?>
+  <form method='post'  action="{:U('Account/User/checkSQA')}">
+    <input type="hidden" name="sqa_key" value="<?php echo $user['sqa_key'];?>">
+    <ul class="formList account-edit-form">
+      <li>
+        <label class="li-label-name">原安全保护问题</label>
+        <span class="li-span-con">
+        <?php echo $qa;?>
+      </span>
+      </li>
+      <li>
+        <label class="li-label-name">问题答案</label>
+        <span class="li-span-con">
+        <input type="text" valid="required" class="inputCommon"  name="sqa_vaule" value="" autocomplete="off">
+      </span>
+      </li>
+      <li class="lastBtns"><label for="" class="li-label-name">&nbsp;</label><span class="li-span-con"><span class="button-common-blue button-blue-w120"><input type="submit" name="" value="下一步" class="btns"></span><span class="button-common-gray button-gray-w120 ml20"><input type="reset" name="" value="取 消" class="btns"></span>
+    </span></li>
+   </ul>
+  </form>
+ </div>
+ </div>
+</div>
+</block>

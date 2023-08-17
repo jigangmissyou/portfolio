@@ -1,0 +1,136 @@
+<extend name="./app/Tpl/Public/base_hfhg.html"/>
+
+<block name="title">
+  <?php
+  $ptype = $_REQUEST['c'];
+  switch ($ptype){
+    case '2':
+      $title = '日益升-鑫合汇';
+      $keyword = '日益升';
+      $description = '鑫合汇日益升,主要面向有超短期理财需求的投资者,投资期限以天计算,适合对资金流动性要求极高的投资人群。';
+    break;
+    case '3':
+      $title = '月益升-鑫合汇';
+      $keyword = '月益升';
+      $description = '鑫合汇月益升,中期理财产品,主要面向理财目标追求稳定并有一定现金储备的投资者。';
+    break;
+    case '4':
+      $title = '年益升-鑫合汇';
+      $keyword = '年益升';
+      $description = '鑫合汇年益升,长期理财产品,中小企业融资理财产品。';
+    break;
+    case '5':
+      $title = '新客专区-鑫合汇';
+      $keyword = '新客,新客专区';
+      $description = '新客专区是只有未投资过的新客才可享用的理财专区。';
+    break;
+    case '6':
+      $title = '速兑通-鑫合汇';
+      $keyword = '速兑通';
+      $description = '鑫合汇速兑通,产品是用户基于在鑫合汇平台持有的指定产品发布借款申请,由借出方向借款人借出资金的直接融资项目。';
+    break;
+    case '9':
+      $title = '鑫整点-鑫合汇';
+      $keyword = '鑫整点,高利率,高收益,整点秒杀高利率';
+      $description = '每天定时定点,整点秒杀高利率产品,限时限量。';
+    break;
+    default:
+      $title = '投资理财,投资项目,精品推荐-鑫合汇';
+      $keyword = '投资理财,投资项目,精品推荐';
+      $description = '鑫合汇是国内领先的专业理财服务平台，有合理投资理财产品投资项目，不定期有精品投资理财项目推荐，让用户收益最大化。';
+  }
+  if($_REQUEST['show_new'] == 1){
+    $title = '新手专区-鑫合汇';
+    $keyword = '投资理财,新手专区';
+    $description = '鑫合汇手把手教您投资生活大不同新用户专享超高利益预期年化收益率最高18.00%，新手理财最佳平台。';
+  }
+ ?>
+  {$title}
+</block>
+<block name="keywords">{$keyword}</block>
+<block name="description">{$description}</block>
+
+<block name="style">
+  <style>
+    .selected{border-color: #00c0ff !important;}
+    .ghosttext .gt{top:4px !important;}
+    .span-search{float:right !important;}
+    .seniorSearch:hover{cursor: pointer;}
+
+.khcg {
+  width: 500px;
+  height: 270px;
+  border-radius: 5px;
+  background: #fff;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  margin-left: -250px;
+  margin-top: -120px;
+  z-index: 99;
+}
+.khcg .close-btn {
+  padding: 10px 10px 0 0;
+}
+
+.khcg-txt {
+  width: 500px;
+  font-size: 26px;
+  vertical-align: middle;
+  margin-top: 35px;
+}
+.khcg-txt img {
+  margin-right: 10px;
+}
+
+.start-btn {
+  width: 500px;
+  height: 50px;
+  line-height: 50px;
+  background: #00aaee;
+  text-align: center;
+  color: #fff;
+  font-size: 20px;
+  position: absolute;
+  bottom: 0;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+}
+
+.khcg-content {
+  width: 300px;
+  margin: 0 auto;
+  margin-top: 10px;
+}
+
+  </style>
+</block>
+
+
+<block name="body">
+<include file="./app/Tpl/Public/invest-subnav.html" />
+  <if condition="$show_new neq 1">
+    <!--速兑通-->
+    <if condition="$c eq 6 ">
+      <div class="search-pro-Box" data-searchBlock><!-- js content --></div>
+      <elseif condition="$c eq 9"/>
+      <else/>
+      <!-- 其他 -->
+      <div class="search-pro-Box" data-searchBlock><!-- js content --></div>
+    </if>
+  </if>
+
+  <div class="Invest_ajax_plist">
+    <form action="{:U('Financing/Invest/ajaxplist')}" ajax="1" ajax-after="ajaxAfter_Financing_Invest_plist" method="post" id="formId_Financing_Invest_plist" ajax-datatype="html">
+        <div class="proContainers pro-plist" id="plistContain"><!-- ajaxContent --></div>
+        <input type="hidden" name="c" value="{$c}"/>
+        <input type="hidden" name="sort_id" value="{$sort_id}"/>
+        <input type="hidden" name="sort" value="{$sort}"/>
+        <input type="hidden" name="b_type" value="{$b_type}"/>
+        <input type="hidden" name="time_limit" value="{$time_limit}"/>
+        <input type="hidden" name="bid_st" value="{$bid_st}"/>
+        <input type="hidden" name="show_new" value="{$show_new}"/>
+    </form>
+  </div>
+</block>
+<block name="footer"><include file="./app/Tpl/Public/footer_user.html" /></block>

@@ -1,0 +1,67 @@
+<?php
+$is_show_1 = $prjInfo['ext']['register_place'] || $prjInfo['ext']['record_scale'] || $prjInfo['ext']['register_time'] || $prjInfo['ext']['record_no'] || $prjInfo['ext']['debt_name'] || $prjInfo['ext']['debt_no'];
+$is_show_2 = $prjInfo['ext']['guarantee_money'] || $prjInfo['ext']['guarantee_timelimit'] || $prjInfo['ext']['guarantee_way'] || $prjInfo['ext']['guarantee_scope'] || $prjInfo['ext']['guarantee_person'] || $prjInfo['ext']['guarantee_desc'];
+$is_show_3 = $prjInfo['ext']['dealer'] || $prjInfo['ext']['auditor'] || $prjInfo['ext']['law_firm'];
+$is_show_4 = $prjInfo['ext']['money_using'] || $prjInfo['ext']['repay_origin'];
+$is_show_all = $is_show_1 || $is_show_2 || $is_show_3 || $is_show_4;
+?>
+
+<?php if ($is_show_all ): ?>
+  <div class="prosafe"><i class="icon ico-full"></i><a class="link" target="_blank" href="{$prjInfo['ext']['announcement_url']}">本私募债券已在股权市场挂牌</a></div>
+  <?php if ($is_show_1): ?>
+  <h3 class="section_title"><span>股权市场挂牌机构</span></h3>
+  <ul class="infolist fixed">
+  <?php if ($prjInfo['ext']['register_place']): ?><li>私募债券登记机构：{$prjInfo.ext.register_place}</li><?php endif ?>
+  <?php if ($prjInfo['ext']['record_scale']): ?><li>备案规模：{$prjInfo.ext.record_scale}</li><?php endif ?>
+  <?php if ($prjInfo['ext']['register_time']): ?><li>私募债券登记时间：{$prjInfo.ext.register_time|date='Y-m-d',###}</li><?php endif ?>
+  <?php if ($prjInfo['ext']['record_no']): ?><li>备案登记文号：{$prjInfo.ext.record_no}</li><?php endif ?>
+  <?php if ($prjInfo['ext']['debt_name']): ?><li>私募债券名称：{$prjInfo.ext.debt_name}</li><?php endif ?>
+  <?php if ($prjInfo['ext']['debt_no']): ?><li>私募债券代码：{$prjInfo.ext.debt_no}</li><?php endif ?>
+  </ul>
+  <?php endif ?>
+
+  <?php if ($is_show_2): ?>
+  <h3 class="section_title"><span>担保措施及担保方式</span></h3>
+  <ul class="infolist fixed">
+  <?php if ($prjInfo['ext']['guarantee_money']): ?><li>担保金额：{$prjInfo.ext.guarantee_money}</li><?php endif ?>
+  <?php if ($prjInfo['ext']['guarantee_timelimit']): ?><li>担保期限：{$prjInfo.ext.guarantee_timelimit}</li><?php endif ?>
+  <?php if ($prjInfo['ext']['guarantee_way']): ?><li>担保方式：{$prjInfo.ext.guarantee_way}</li><?php endif ?>
+  <?php if ($prjInfo['ext']['guarantee_scope']): ?><li class="row">担保范围：{$prjInfo.ext.guarantee_scope}</li><?php endif ?>
+  <?php if ($prjInfo['ext']['guarantee_person']): ?><li class="row">担保人基本情况：{$prjInfo.ext.guarantee_person}</li><?php endif ?>
+  <?php if ($prjInfo['ext']['guarantee_desc']): ?><li class="row">抵押或质押担保：{$prjInfo.ext.guarantee_desc}</li><?php endif ?>
+  </ul>
+  <?php endif ?>
+
+  <?php if ($is_show_3): ?>
+  <h3 class="section_title"><span>股交中心法定承销商与财务披露</span></h3>
+  <ul class="infolist fixed">
+  <?php if ($prjInfo['ext']['dealer']): ?><li>法定承销商：{$prjInfo.ext.dealer}</li><?php endif ?>
+  <?php if ($prjInfo['ext']['auditor']): ?><li>财务报告审计单位：{$prjInfo.ext.auditor}</li><?php endif ?>
+  <?php if ($prjInfo['ext']['law_firm']): ?><li>律师事务所：{$prjInfo.ext.law_firm}</li><?php endif ?>
+  </ul>
+  <?php endif ?>
+
+  <?php if ($is_show_4): ?>
+  <h3 class="section_title"><span>私募债券募集资金用途及偿债资金来源</span></h3>
+  <ul class="infolist fixed">
+  <?php if ($prjInfo['ext']['money_using']): ?><li class="row">资金用途：{$prjInfo.ext.money_using}</li><?php endif ?>
+  <?php if ($prjInfo['ext']['repay_origin']): ?><li class="row">偿债资金来源：{$prjInfo.ext.repay_origin}</li><?php endif ?>
+  <?php endif ?>
+  </ul>
+<?php endif ?>
+<?php if($imgData): ?>
+<h3 class="section_title">项目材料公示</h3>
+<div class="scroll fixed">
+    <span class="btn_prev" id="btn_prev"><em></em></span>
+    <div class="list">
+        <ul style="width:1190px" id="popImageWrapBox" class="jcarousel-skin-tango">
+            <?php foreach($imgData as $k=>$v):?>
+            <li class="mod_focus_mpic" <?php if($k > 4){echo 'style="display:none"';} ?>>
+            <a href="javascript:;"><img url="<?php echo $v['big'];?>" alt="{$v.name}" src="<?php echo $v['small'];?>"></a><p><?php echo $v['name'];?></p>
+            </li>
+            <?php endforeach;?>
+        </ul>
+    </div>
+    <span class="btn_next" id="btn_next"><em></em></span>
+</div>
+<?php endif;?>

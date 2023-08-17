@@ -1,0 +1,67 @@
+<extend name="./app/Tpl/Public/base_hfhg.html"/>
+<block name="title">注册成功</block>
+<block name="style">
+  <style>
+    #container{
+      width:100%;
+    }
+    .pop-con{
+    text-align:center;
+    padding:25px 20px;
+    background:#f5f5f5;
+    width:90%;
+  }
+  .tac{
+    margin-bottom:55px;
+  }
+  </style>
+</block>
+<block name="body" >
+    <!--Help/Help/newCome-->
+<script>
+  var JUMP_URL = "<if condition='$is_gov neq 1'>{:U('/Financing/Invest/plist')}<else/>{:U('/Account/User/index')}</if>";
+//var JUMP_URL = "{:U('/Account/User/index')}";
+</script>
+<div class="register-body">
+<div class="">
+  <div class="register-success-container" id="register-success" >
+     <div id="titlebar">恭喜注册成功！</div>
+     <div id="jqueryContent">
+        <div class="register-success-content tac">
+          <div class="img-pop pop-con">
+            <img src="/public/images/login/img-pop.png" alt="">
+          </div>
+        </div>
+        <div class="register-success-btn"><label for="" class="button-common-blue button-blue-w200"><a href="/Financing/Invest/plist" class="btns">立即查看</a></label></div>
+        <p class="register-success-on"><em id="register-back-time">5</em><em class="orange-dark">秒以后</em>开启理财之旅...</p>
+     </div> 
+  </div>
+</div>
+<script>
+  //添加注册转化代码
+  !function(w,d,e){
+    var _orderno='{$useruid}';
+    var b=location.href,c=d.referrer,f,s,g=d.cookie,h=g.match(/(^|;)\s*ipycookie=([^;]*)/),i=g.match(/(^|;)\s*ipysession=([^;]*)/);if (w.parent!=w){f=b;b=c;c=f;};u='//stats.ipinyou.com/cvt?a='+e('Rls.m5s.LCPacxc2SVLDZf4KJS8-IX')+'&c='+e(h?h[2]:'')+'&s='+e(i?i[2].match(/jump\%3D(\d+)/)[1]:'')+'&u='+e(b)+'&r='+e(c)+'&rd='+(new Date()).getTime()+'&OrderNo='+e(_orderno)+'&e=';
+    function _(){if(!d.body){setTimeout(_(),100);}else{s= d.createElement('script');s.src = u;d.body.insertBefore(s,d.body.firstChild);}}_();
+  }(window,document,encodeURIComponent);
+</script>
+
+<?php if($prize){ ?>
+<?php
+    $config = C("PRIZE_PERIOD_MONEY");
+    $startTime = strtotime($config['start']);
+    $nowtime = strtotime(date('Y-m-d'));
+    if($nowtime>=$startTime):
+ ?>
+    <p class="org f16 tc" style="margin-top:33px;">恭喜您！获得<strong class="red"><?php echo $prize/100; ?>元</strong>的红包奖金，请10分钟后在<strong class="red">我的账户</strong>中查看！</p>
+   <?php else:?>
+    <p class="org f16 tc" style="margin-top:33px;">恭喜您！获得了<strong class="red">新手红包<?php echo $prize/100; ?>元</strong>，红包奖励将于2个工作日内发放到您的账户，请注意查收哦 O(∩_∩)O</p>
+    <?php endif;?>
+    <?php } ?>
+<!-- <div class="reg_success_tip tc">
+  <p><em id="time">7000000</em> 秒后进入首页</p>
+  <p><a href="{:U('/Help/Help/newCome')}" id="gourl" class="reg_sub db">点击跳转到新人指引页面</a></p>
+</div> -->
+
+ </div>
+</block>

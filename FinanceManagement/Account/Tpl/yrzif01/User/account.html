@@ -1,0 +1,635 @@
+<extend name="./app/Tpl/Public/base_user.html"/>
+<block name="title">账户设置</block>
+<block name="keywords"></block>
+<block name="description"></block>
+<block name="style">
+<link href="/public/css/banklogo.css" rel="stylesheet" />
+<link rel="stylesheet" href="/public/css/sasscss/act/zskh/index.css">
+</block>
+<block name="body">
+<script>
+    UPDATE_USERINFO = "{:U('Account/User/updateUserInfoNew')}";
+</script>
+<input type="hidden" name="is_paypwd_edit" value="<?php echo $is_paypwd_edit;?>">
+<input type="hidden" name="inWhiteList" value="<?php echo $if_white_name;?>">
+<div class="container-inner mt20">
+  <include file="./app/Tpl/Account/userMyBonusSider.html" />
+  <div class="main_area body-frame">
+    <div class="hidden-area">
+        <input type="hidden" id="is_id_auth" value="{$user['is_id_auth']}"/>
+        <input type="hidden" id="is_personal" value="{$user['uid_type']}"/>
+    </div>
+    <div class="grid_list p20" >
+
+      <!-- 浙商存管账户start -->
+      <?php if($is_zs_open) { ?>
+        <div class="grid300_list_item">
+          <ul class="grid300" style="background:#f5f5f5;">
+            <li class="grid-name" style="line-height:20px;">浙商存管账户<br /><span class="orange">保障用户资金安全</span></li>
+            <li class="grid-content" style="color:#717171;">{$zs_account_id}</li>
+            <li class="grid-tool"><a class="blue" id="check-zsAccount" href="https://e.czbank.com/APPINSPECT/zxLogon.jsp" target="_blank">查看</a></li>
+          </ul>
+        </div>
+        <div id="div_zsaccount">
+          <form method="post" action="{:U('Account/User/updatePwd')}" ajax="1" ajax-after="ajaxAfter_Account_User_updatePwd" id="formId_ajaxAfter_Account_User_updatePwd" >
+            <ul class="grid-no-verify" style="font-size:14px;color:#717171;background:#fff;">
+              <li><span style="width:314px;text-align:right;display:inline-block;margin-right:20px;">实名认证：</span><em style="width:394px;display:inline-block;">{$zs_real_name}（已认证）</em></li>
+              <li>
+                <span style="width:314px;text-align:right;display:inline-block;margin-right:20px;">银行卡：</span>
+                <em style="width:339px;display:inline-block;"><img src="/public/images/bank/{$bank}.png" width="20px;" />&nbsp;{$bank_name}（{$zs_bind_bank_card}）</em>
+                  <i class="orange" style="width:42px;display:inline-block;">
+                    <?php if($bank_status == 1){ ?>
+                      变更中
+                    <?php } ?>
+                  </i>
+                <a class="blue" style="margin-right:5px;" href="{:U('Account/User/editZsBankview')}">修改</a>
+                <br />
+<!--                 <span class="grid-tool orange">修改银行审核中</span> -->
+              </li>
+              <li><span style="width:314px;text-align:right;display:inline-block;margin-right:20px;">银行预留手机号：</span><em style="width:394px;display:inline-block;">{$zs_bank_mobile}</em><span class="grid-tool"><a class="blue" href="{:U('Account/User/editBankMobileView')}">更换</a></span></li>
+            </ul>
+          </form>
+        </div>
+      <?php } else { ?>
+        <div class="grid300_list_item">
+          <ul class="grid300">
+            <li class="grid-name" style="line-height:20px;">浙商存管账户<br /><span class="orange">保障用户资金安全</span></li>
+            <li class="grid-content">未开通</li>
+            <li class="grid-tool"><a class="blue openZS" href="{:U('Account/User/openAccount')}">立即开通</a></li>
+          </ul>
+        </div>
+      <?php } ?>
+      <!--  浙商存管账户end -->
+
+      <!-- 登录密码 -->
+      <div class="grid300_list_item">
+        <ul class="grid300">
+          <li class="grid-name">登录密码</li>
+          <li class="grid-content">**********</li>
+          <li class="grid-tool"><a class="blue" href="javascript:void(0);" id="modify-pwd" event-click="toggleLoginPwd">修改</a></li>
+        </ul>
+      </div>
+      <!--  修改登录密码start -->
+      <div id="div_account_user_updatePwd" class="dn">
+        <form method="post" action="{:U('Account/User/updatePwd')}" ajax="1" ajax-after="ajaxAfter_Account_User_updatePwd" id="formId_ajaxAfter_Account_User_updatePwd" >
+          <ul class="grid-no-verify">
+          <li>
+          <label class="grid-label">修改登录密码</label><span class="grid-span"><input type="password" ghosttext="当前密码" class="inputCommon" name="oldPwd" valid="required"></span>
+          </li>
+          <li>
+          <label class="grid-label">&nbsp;</label><span class="grid-span"><input type="password" ghosttext="新密码" name="pwd1" class="inputCommon" valid="required,lengthRange@6~16,ajax@{:U('Account/User/checkPwd')}"></span>
+          </li>
+          <li>
+          <label class="grid-label">&nbsp;</label><span class="grid-span"><input type="password" class="inputCommon" name="pwd2" ghosttext="确认新密码" valid="required,match@pwd1|密码不匹配" ></span>
+          </li>
+          <li  class="grid-button-box">
+            <span class="button-small-gray mr15">
+              <input type="reset" value="取消" class="btns">
+            </span>
+            <span class="button-common-blue button-small-blue">
+              <input type="submit" class="btns" value="提交" done-text1="设置成功">
+            </span>
+          </li>
+          </ul>
+        </form>
+      </div>
+      <!--  修改登录密码end -->
+
+      <!-- 支付密码 -->
+      <div class="grid300_list_item">
+        <ul class="grid300">
+          <li class="grid-name">支付密码<i class="icon_unknown dn" hovercard-options='{"direction":"up"}' hovercard="div@ctl1"></i>
+          <div class="dn" hovercard-id="ctl1"><p class="hoverPinfo">投资人投标、提现及转让时需输入的密码，初始支付密码与登录密码相同</p></div>
+          </li>
+          <li class="grid-content pwd-content">
+            <?php if($is_paypwd_edit != 1){ ?>
+            <!--未设置-->
+            未设置
+            <?php }else{ ?>
+            <!--已设置-->
+            **********
+            <?php }?>
+          </li>
+          <li class="grid-tool">
+            
+            <a class="blue <?php if($is_paypwd_edit != 1){}else { echo 'dn'; }?>" href="javascript:void(0);" id="set-paypwd" event-click="toggleSetPayPwd">设置</a>
+
+            <a class="blue <?php if($is_paypwd_edit != 1){ echo 'dn'; }else {  }?>" href="javascript:void(0);" id="modify-paypwd" event-click="togglePayPwd">修改</a>
+            <a class="ml20 blue <?php if($is_paypwd_edit != 1){ echo 'dn'; }else {  }?>" href="{:U('Account/User/chooseFindPayPwd')}" id="find-pwd">找回</a>
+
+          </li>
+        </ul>
+      </div>
+      <!--  修改支付密码start -->
+      <div id="div_account_user_updatePayPwd" class="dn">
+        <form method="post" action="{:U('Account/User/updatePayPwd')}" ajax="1" ajax-after="ajaxAfter_Account_User_updatePayPwd" id="formId_Account_User_updatePayPwd">
+          <ul class="grid-no-verify">
+            <li><label class="grid-label">修改支付密码</label> <span class="grid-span"><input type="password" class="inputCommon" ghosttext="当前密码"  name="oldPwd" valid="required"></span></li>
+            <li><label class="grid-label">&nbsp;</label> <span class="grid-span"><input type="password" class="inputCommon" name="pwd1" ghosttext="新密码" valid="required,payPwd@6,ajax@{:U('Account/User/checkPaymentPwd')}"></span></li>
+            <li>
+              <label class="grid-label">&nbsp;</label>
+              <span class="grid-span"><input type="password"  name="pwd2"  valid="required,match@pwd1|,两次密码不匹配" ghosttext="确认新密码" class="inputCommon">
+              </span>
+            </li>
+            <li class="grid-button-box">温馨提示：电脑端和移动端的支付密码一致统一为6位数字</li>
+            <li  class="grid-button-box">
+              <span class="button-small-gray mr15">
+                <input type="reset" value="取消" class="btns">
+              </span>
+              <span class="button-common-blue button-small-blue">
+                <input type="submit" id="changpaypwd" class="btns" value="提交" done-text1="设置成功">
+              </span>
+            </li>
+          </ul>
+        </form>
+      </div>
+      <!--  修改支付密码  end -->
+      <!--  设置支付密码start -->
+      <div id="div_account_user_setPayPwd" class="dn">
+        <form method="post" action="{:U('Account/User/setPayPassword')}" ajax="1" ajax-after="ajaxAfter_Account_User_setPayPwd" id="formId_Account_User_setPayPwd">
+          <ul class="grid-no-verify">
+            <li><label class="grid-label">设置支付密码</label> <span class="grid-span"><input type="password" class="inputCommon" name="password" ghosttext="设置支付密码" valid="required,payPwd@6"></span></li>
+            <li>
+              <label class="grid-label">&nbsp;</label>
+              <span class="grid-span"><input type="password"  name="password_repeat"  valid="required,match@password|两次密码不匹配" ghosttext="确认支付密码" class="inputCommon">
+              </span>
+            </li>
+            <li class="grid-button-box" style="padding-right: 510px;">*支付密码为6位数字</li>
+            <li  class="grid-button-box">
+              <span class="button-small-gray mr15">
+                <input type="reset" value="取消" class="btns">
+              </span>
+              <span class="button-common-blue button-small-blue">
+                <input type="submit" class="btns" value="提交" done-text1="设置成功">
+              </span>
+            </li>
+          </ul>
+        </form>
+      </div>
+      <!--  设置支付密码end -->
+
+      <!-- 理财机构展示 start -->
+      <?php if($user['uid_type']==2) {  ?>
+        <div class="grid300_list_item">
+          <!-- <h3 class="grid_tit"><em class="lineIcon"></em>机构认证</h3> -->
+          <ul class="grid300">
+            <li class="grid-name">机构认证</li>
+            <li class="grid-content">
+              <if condition="$getorginfo['status'] eq 2">
+                待审核
+                <else/>
+                已认证
+              </if>
+            </li>
+            <if condition="$getorginfo['status'] eq 2">
+              <else/>
+              <li class="grid-tool">
+                <a class="blue" href="javascript:void(0);" id="checkCorpName" event-click="toggleCorpName">查看</a>
+              </li>
+            </if>
+          </ul>
+        </div>
+        <div id="div_account_corp_name" class="dn">
+          <ul class="grid-no-verify">
+            <li style="height: 34px;line-height: 34px">
+              <label class="grid-label" style="width: 334px;">机构名全称：</label>
+              <span class="grid-span">{$getorginfo['org_name']}</span>
+            </li>
+            <li style="height: 34px;line-height: 34px">
+              <label class="grid-label" style="width: 334px;">营业执照注册号：</label>
+              <span class="grid-span">{$getorginfo['busin_license_No']|substr=2}</span>
+            </li>
+            <li style="height: 34px;line-height: 34px">
+              <label class="grid-label" style="width: 334px;">组织机构代码证代码：</label>
+              <span class="grid-span">{$getorginfo['org_code']}</span>
+            </li>
+          </ul>
+        </div>
+
+        <div class="grid300_list_item">
+          <ul class="grid300">
+            <li class="grid-name">实名认证</li>
+            <!--<?php echo $getorginfo['status']?>-->
+            <li class="grid-content">
+              <if condition="$getorginfo['status'] eq 2">
+                待审核
+                <else/>
+                已认证
+              </if>
+            </li>
+            <if condition="$getorginfo['status'] eq 2">
+              <else/>
+              <li class="grid-tool">
+                <a class="blue" href="javascript:void(0);" id="checkLegalPerson" event-click="toggleLegalPerson">查看</a>
+              </li>
+            </if>
+          </ul>
+        </div>
+        <div id="div_account_legal_person" class="dn">
+          <ul class="grid-no-verify">
+            <li style="height: 34px;line-height: 34px">
+              <label class="grid-label" style="width: 334px;">姓&emsp;名：</label>
+              <span class="grid-span">
+                <if condition="$getorginfo['legal_name']">
+                  {$getorginfo['legal_name']} <span class="color999">（法人）</span>
+                </if>
+              </span>
+            </li>
+            <li style="height: 34px;line-height: 34px">
+              <label class="grid-label" style="width: 334px;">身份证：</label>
+              <span class="grid-span">
+                <if condition="$getorginfo['legal_person_id']">
+                  {$getorginfo['legal_person_id']|person_id_view}
+                </if>
+              </span>
+            </li>
+            <if condition="$getorginfo['proposer'] == 2">
+            <li style="height: 34px;line-height: 34px">
+              <label class="grid-label" style="width: 334px;">姓&emsp;名：</label>
+              <span class="grid-span">
+                <if condition="$getorginfo['agent_representative_realname']">
+                  {$getorginfo['agent_representative_realname']} <span class="color999">（法定代理人）</span>
+                </if>
+              </span>
+            </li>
+            <li style="height: 34px;line-height: 34px">
+              <label class="grid-label" style="width: 334px;">身份证：</label>
+              <span class="grid-span">
+                <if condition="$getorginfo['agent_representative_personcode']">
+                  {$getorginfo['agent_representative_personcode']|person_id_view}
+                </if>
+              </span>
+            </li>
+            </if>
+          </ul>
+        </div>
+      <!-- 理财机构展示 end -->
+      <?php  } else if(!$is_zs_open) {?>
+      <!-- 实名认证start -->
+        <div id="div_idauth" class="grid300_list_item">
+         <!--thinkphp的bug-->
+         <span class="dn">{}</span>
+          <ul class="grid300">
+            <li class="grid-name">实名认证</li>
+            <li class="grid-content">
+              <if condition="$user['is_id_auth'] eq 0">
+                未认证
+                <else/>
+                已认证
+              </if>
+            </li>
+            <if condition="$user['is_id_auth'] eq 0">
+              <li class="grid-tool"><a href="/index.php/Account/Bank/identify" class="blue">立即认证</a></li>
+            </if>
+          </ul>
+
+          <if condition="$user['is_id_auth'] eq 0">
+                <?php
+                    $idcheck=true;
+                    $marketConfig = C("MARKET_CONFIG");
+                    $id_down_time = $marketConfig['ID_DOWN_TIME'];
+                if($id_down_time){
+                  foreach($id_down_time as $id_time_param){
+                    $start = strtotime($id_time_param['start']);
+                    $end = strtotime($id_time_param['end']);
+                    $now = time();
+                    if($now>=$start && $now<=$end) $idcheck=false;
+                  }
+                }
+                if($idcheck){ ?>
+              <!--<form method="post" action="{:U('Account/IdAuth/verifyId')}" ajax="1" ajax-after="ajaxAfter_Account_IdAuth_verifyId" id="formId_Account_IdAuth_verifyId">-->
+                <!--<ul class="formList formList_pop">-->
+                  <!--<li><label class="li-label-name">实名认证</label><span class="li-span-con"><input type="text" name="name" class="inputCommon" ghosttext="姓名"  valid="required,chinese" /></span></li>-->
+                  <!--<li><label class="li-label-name</label><span class="li-span-con"><input type="text" ghosttext="身份证" name="personId" class="inputCommon"  valid="required,idcard" /><p class="text-point">*实名认证的姓名必须与绑定大陆银行卡的开户名一致，否则无法提现<a href="{:U('Account/User/userAuthGangaotai')}" class="blue ml12" title="">港澳台认证</a></p></span></li>-->
+                  <!--<li class="grid-button-box">-->
+                    <!--<span class="button-small-gray mr15"><input type="reset" value="取消" class="btns"></span><span class="button-common-blue button-small-blue">-->
+                      <!--<?php if($user['uid_type'] == 2){?>-->
+                        <!--<input type="submit" class="btns" value="提 交">-->
+                      <!--<?php }else{?>-->
+                      <!--<input type="submit" class="btns" class="btns" id="verifyId" value="提 交">-->
+                      <!--<?php }?>-->
+                    <!--</span>-->
+                  <!--</li>-->
+                <!--</ul>-->
+                <!--<input type="hidden" name="isAjax" value="1" />-->
+              <!--</form>-->
+              <?php } else { ?>
+              <!-- <ul class="grid300">
+                <li class="grid-container">
+                   <p class="orange"><em class="icon-note-heart"></em>温馨提示</p>
+                   <p>由于全国公民身份系统于<em class="orange">2014年6月20日20:00至6月21日01:00</em>（5小时）、<em class="orange">6月28日18:00至6月29日18:00</em>（24小时）进行2次系统停机搬迁，在此期间暂时停止认证 服务，本站临时支持人工审核方式,<a href="http://bbs.xinhehui.com/thread-903-1-1.html" class="blue">点这里完成</a> </p>
+                </li>
+              </ul> -->
+              <?php } ?>
+          <else />
+
+           </if>
+        </div>
+      <?php } ?>
+      <!-- 实名认证end -->
+
+      <!-- 绑定邮箱start -->
+      <div class="grid300_list_item" id="email-area">
+          <ul class="grid300">
+            <li class="grid-name">绑定邮箱</li>
+            <li class="grid-content">
+              <if condition="$user['is_email_auth'] eq 1">
+                {$email}
+                <else/>
+                未绑定
+              </if>
+            </li>
+            <li class="grid-tool">
+              <if condition="$user['is_email_auth'] eq 1">
+                <a href="{:U('Account/User/editEmailView')}" class="blue mr15">修改</a>
+                <else/>
+                <a href="javascript:void(0);" class="blue" id="set-email" event-click="toggleEmail">绑定</a>
+              </if>
+              <if condition="$user['is_email_auth'] eq 1">
+                <a href="javascript:;" event-click="toggleUnbindEmail" class="blue">解绑</a>
+              </if>
+            </li>
+          </ul>
+      </div>
+      <if condition="$user['is_email_auth'] eq 0">
+        <form method="post" action="{:U('Account/User/emailAuth')}" id="set-email-area" class="dn">
+          <ul class="grid-no-verify">
+            <li>
+              <label class="grid-label">绑定邮箱</label>
+              <span class="grid-span">
+                <input type="text" ghosttext="邮箱" class="inputCommon" name="email"  valid="required,email">
+              </span>
+            </li>
+            <li class="grid-button-box">
+              <span class="button-small-gray mr15">
+                <input type="reset" value="取消" class="btns">
+              </span>
+              <span class="button-common-blue button-small-blue">
+                <input type="submit" class="btns" value="提 交" done-text1="设置成功">
+              </span>
+            </li>
+          </ul>
+        </form>
+      <else />
+        <form method="post" action="{:U('Account/User/unbindEmail')}" ajax="1" ajax-after="ajaxAfter_unbind_email" class="dn" id="unbind-email-area" novalidate>
+          <ul class="grid-no-verify">
+          <li>
+            <label class="grid-label">当前邮箱</label>
+            <span class="grid-span">
+              <input type="email" ghosttext="当前邮箱" class="inputCommon" name="email" valid="required,email"></span>
+          </li>
+          <li  class="grid-button-box">
+            <span class="button-small-gray mr15">
+              <input type="reset" value="取消" class="btns">
+            </span>
+            <span class="button-common-blue button-small-blue">
+              <input type="submit" class="btns" value="提交" done-text1="设置成功">
+            </span>
+          </li>
+          </ul>
+        </form>
+      </if>
+      <!-- 绑定邮箱end -->
+
+      <!-- 绑定手机start -->
+      <div id="div_mobile_auth" class="grid300_list_item">
+        <ul class="grid300">
+          <li class="grid-name">绑定手机</li>
+          <li class="grid-content">{$mobile}</li>
+          <li class="grid-tool"><a href="{:U('Account/User/editMobileView')}" class="blue">更换</a></li>
+        </ul>
+      </div>
+      <if condition="$user['is_mobile_auth'] eq 0">
+         <form method="post" action="{:U('Account/User/mobileAuth')}" ajax="1" ajax-after="ajaxAfter_Account_MobileAuth_checkVerifyCode" id="formId_Account_MobileAuth_checkVerifyCode" class="dn">
+          <ul class="grid-no-verify">
+            <li><label class="grid-label">绑定手机</label><span class="grid-span"><input type="text" name="mobile" class="inputCommon"   valid="required"></span></li>
+            <li><label class="grid-label">&nbsp;</label><span class="grid-span"><input style="width:125px" name="code" ghosttext="验证码" type="text" class="inputCommon"   valid="required"><span class="ml10 btn_sblue" id="span_get_code"><a class="btns" href="javascript:void(0);" id="btn_get_code">获取</a></span><span class="ml10 btn_sgray" id="span_time" style="display:none"><a class="btns" href="javascript:;">120</a></span></span></li>
+            <li class="grid-button-box"><span class="button-small-gray mr15"><input type="reset" value="取消" class="btns"></span><span class="button-common-blue button-small-blue"><input type="submit" class="btns" value="提 交" done-text1="设置成功"></span></li>
+          </ul>
+        </form>
+      </if>
+      <!-- 绑定手机end -->
+
+      <!-- 存管1.2于2016/10/9取消该功能 -->
+      <!-- 投资短信验证码start -->
+<!--         <div id="div_mobile_auth" class="grid300_list_item">
+          <ul class="grid300">
+            <li class="grid-name">投资短信验证码</li>
+            <li class="grid-content" style="width: 210px;">已开启</li>
+            <li class="grid-tool" style="width: 210px;color: #BDBDBD;">（关闭后投资无需短信验证）<a href="{:U('Account/User/changeInvestCodeView')}" class="blue">关闭</a></li>
+          </ul>
+        </div> -->
+      <!-- 投资短信验证码end -->
+
+      <!-- 银行卡管理start -->
+      <div class="grid300_list_item">
+        <ul class="grid300">
+          <li class="grid-name"><?php if($is_zs_open) {echo "普通账户";}?>银行卡管理</li>
+          <li class="grid-content" id="bank-status"><em class="blue"></em></li>
+          <li class="grid-tool">
+            <a href="javascript:;" class="blue ml12"><!--添加银行卡--></a>
+          </li>
+        </ul>
+      </div>
+      <div class="grid_list">
+        <div id="bindBankWrap" class="gird-list-content" url="{:U('Account/User/getMyBindBanks')}"></div>
+
+        <?php if($user['uid_type'] == 2 && $getorginfo['status'] != 3) { ?>
+          <!-- 机构理财添加银行卡提醒 -->
+          <div class="inline-block instInvsetAdd"><i class="icon-note-heart"></i><em class="text">资料都审核通过后，才能绑定银行卡</em></div>
+          <!-- 机构理财添加银行卡提醒-end -->
+        <?php } ?>
+      </div>
+      <!-- 银行卡管理end -->
+    </div>
+  </div>
+</div>
+
+
+
+
+<!-- 重置支付密码start -->
+<div id="div_account_user_resetPayPwd" style="display:none;">
+  <div id="titlebar">找回支付密码</div>
+  <div id="jqueryContent">
+    <div class="w520">
+      <form method="post" action="{:U('Account/User/resetPayPwd')}"
+       ajax="1" ajax-after="ajaxAfter_Account_User_resetPayPwd" id="formId_Account_User_resetPayPwd" autocomplete='off' >
+          <ul class="formList formList_pop">
+              <li><label class="li-label-name">找回支付密码</label><span class="li-span-con"><input type="text" name="person_id" class="inputCommon" ghosttext="身份证号"  valid="required,ajax@{:U('Account/User/checkPersonId')}"></span></li>
+              <li><label class="li-label-name">&nbsp;</label><span class="li-span-con"><input type="text" ghosttext="手机验证码" autocomplete='off'  class="inputCommon" name="code" valid="required" style="width:80px">
+              <a href="javascript:sendResetPayPwdMobilecode();"  id="btnResetPayPwdMobilecode" class="button-code-no button-code-pop" >获取</a><a href="javascript:void(0)" id="span_pay_time"  class="button-code-on button-code-pop" style="display:none">120</a>
+              </span></li>
+              <li><label class="li-label-name">&nbsp;</label><span class="li-span-con"><input type="password" class="inputCommon" name="pwd1" autocomplete='off'  ghosttext="新密码" valid="required,lengthRange@6~16,ajax@{:U('Account/User/checkPwd')}" valid="required"></span></li>
+              <li><label class="li-label-name">&nbsp;</label><span class="li-span-con"><input type="password" class="inputCommon" name="pwd2" autocomplete='off' ghosttext="确认新密码"   valid="match@pwd1|密码不匹配"></span></li>
+              <li  class="grid-button-box"><span class="button-small-gray mr15"><input type="reset" value="取消" class="btns"></span><span class="button-common-blue button-small-blue"><input type="submit" class="btns" value="提 交"></span></li>
+            </ul>
+      </form>
+    </div>
+    </div>
+</div>
+<!-- 重置支付密码end -->
+
+<!-- 修改手机认证start -->
+<div id="div_account_user_editMobile" style="display:none;">
+  <div id="titlebar">修改手机认证</div>
+  <div id="jqueryContent">
+    <div class="w520">
+      <form method="post" action="{:U('Account/User/editMobile')}" ajax="1" ajax-after="ajaxAfter_Account_User_editMobile" id="formId_Account_User_editMobile" autocomplete='off' >
+          <ul class="formList formList_pop">
+            <li><label class="li-label-name">修改手机认证</label><span class="li-span-con"><input type="text" ghosttext="原手机号码" name="oldmobile" class="inputCommon" autocomplete='off'  valid="required,mobile"></span></li>
+            <li><label class="li-label-name">&nbsp;</label><span class="li-span-con"><input type="text" ghosttext="新手机号码" name="mobile" class="inputCommon"   valid="required,mobile"></span></li>
+            <li><label class="li-label-name">&nbsp;</label><span class="li-span-con"><input style="width:196px" ghosttext="验证码" name="code" type="text" class="inputCommon" valid="required"><a href="javascript:;" id="span_get_code" class="button-code-no button-code-pop" onclick="sendEditMobileCode()">获取</a><a href="javascript:;" id="span_time" class="button-code-on button-code-pop"  style="display:none">120</a></span></li>
+            <li  class="grid-button-box"><span class="button-small-gray mr15"><input type="reset" value="取消" class="btns"></span><span class="button-common-blue button-small-pop"><input type="submit" class="btns" value="提  交"></span></li>
+          </ul>
+      </form>
+    </div>
+  </div>
+</div>
+<!-- 修改手机认证end -->
+
+<!--解绑银行卡start-->
+<div id="div_delBankCard" style="display:none;">
+  <div id="titlebar">解绑银行卡</div>
+  <div id="jqueryContent">
+    <div class="w520">
+      <form>
+        <ul class="formList formList_pop">
+          <li>
+            <label class="li-label-name">支付密码</label>
+            <span class="li-span-con">
+              <input type="password" placeholder="支付密码"  name="payPwd" class="inputCommon" event-blur="blurPayPwd">
+              <em class="fillNote red" style="display: none;color:red;font-size: 12px;">请填写支付密码</em>
+            </span>
+          </li>
+          <li>
+            <input type="hidden" id="bankCardId" value=""/>
+            <label class="li-label-name">手机动态码</label>
+            <span class="li-span-con">
+              <input style="width:196px" placeholder="手机动态码" name="delBankCardCode" type="text" class="inputCommon" event-blur="blurCode">
+              <a href="javascript:;"  id="delCard_get_code" class="button-code-no button-code-pop"  event-click="sendDelCardCode">免费获取</a>
+              <a href="javascript:;" id="delCard__time"  class="button-code-on button-code-pop" style="display:none">120</a>
+               <em class="fillNote red delCode" style="display: none;color:red;font-size: 12px;">请填写手机动态码</em>
+            </span>
+          </li>
+          <li class="grid-button-box">
+            <label for="" class="li-label-name">&nbsp;</label><span class="li-span-con"><span class="button-common-blue button-blue-pop mr15"><input type="button" event-click="applyDelCard" class="btns del-card" value="确定"></span><span class="button-common-gray button-gray-pop "><input type="reset" value="取消" class="btns" event-click="bankCard.cancel"></span>
+            </span>
+          </li>
+        </ul>
+      </form>
+    </div>
+  </div>
+</div>
+<!--解绑银行卡end-->
+
+<!--提示用户设置支付密码start-->
+<div class="mask mask-dark <if condition='$is_popup neq 1'>dn</if>"></div>
+<div class="<if condition='$is_popup neq 1'>dn</if>" id="setPayPwdPop" style="width: 430px;position: absolute;top: 300px;left: 50%;margin-left: -215px;z-index: 99;">
+  <div id="titlebar">修改支付密码<em event-click="closePayPwdPop" style="right:15px;position:absolute;cursor:pointer;"><img src="/public/images/colorbox/close.png" /></em></div>
+  <div id="jqueryContent" style="width:380px;">
+    <div class="indent_list li-label-name_w110">
+      <p>为了您的账户安全及投资体验，网站端支付密码和手机端都统一为6位数字。您可前往“用户中心-账户设置”页面修改。</p>
+      <div style="width:170px;margin:20px auto;">
+        <div class="recharge-btn" style="cursor: pointer;" event-click="togglePayPwd">立即设置</div>
+        <div class="recharge-btn" style="cursor: pointer;background:#bdbdbd;margin-left:20px;" event-click="closePayPwdPop">暂不设置</div>
+      </div>
+    </div>
+  </div>
+</div>
+<!--提示用户设置支付密码end-->
+
+<!--银行卡修改成功提示start-->
+<div  style="display: none">
+  <div id="modify-bank-success">
+    <div class="pop-name-auth">
+      <div id="titlebar">银行卡修改</div>
+      <div id="jqueryContent" class="tac">
+        <img src="/public/images/pop/sprite_global_01.png" alt="">
+        <p id="editbankfor" class="green font26 mt20 mb28">银行卡修改成功</p>
+        <p><a href="javascript:;" class="btn-pop-auth" event-click="closeColorbox">确定</a></p>
+      </div>
+    </div>
+  </div>
+</div>
+<!--银行卡修改成功提示end-->
+
+<!--ajax内容容器 start-->
+<div id="ajaxLoad" class="second-pop dn" >
+  <div class="area" >
+    <div class="pop-name-auth" style="max-height: 200px;">
+      <a href="javascript:;" class="close" style="right: -135px;"></a>
+      <div class="ajax-container">
+
+      </div>
+    </div>
+    </div>
+</div>
+<!--ajax内容容器 end-->
+<!-- 存管项目弹窗 -->
+<div class="zsmask mask dn"></div>
+<!--申请加入白名单-->
+<div class="khcg applyWL openSuccess dn">
+  <div class="fr close-btn">
+      <a href="javascript:;"><img src="/public/images/zskh/close.png" alt="" /></a>
+  </div>
+  <div class="clearfix"></div>
+  <div class="tac khcg-txt">
+      <p class="mt20"></p>
+      <p class="tac introduceTxt mt20" style="width:100%;font-size:18px;color:#575757;">存管账户正在分批激活，请您耐心等待通知。</p>
+      <a href="<?php echo C('payment.public_apply_url'); ?>" class="openAccountBtn " style="width:140px;font-size:16px;margin-top:40px;">
+        了解存管
+      </a>
+  </div>
+</div>
+<div class="khcg openSuccess dn" style="height:271px;">
+    <div class="fr close-btn">
+        <a href="javascript:;"><img src="/public/images/zskh/close.png" alt="" /></a>
+    </div>
+    <div class="clearfix"></div>
+    <div class="tac khcg-txt">
+        <img src="/public/images/zskh/dui.png" alt="" />提交成功
+        <p class="mt20"></p>
+        <p class="tac introduceTxt mt20" style="width:100%;font-size:18px;">
+        你已向浙商银行提交存管账户银行卡变更申请，请等待<br />
+        浙商银行审核，预计1个工作日内变更成功，遇节假日顺延。</p>
+        <a href="javascript:;" class="openAccountBtn mt20" style="width:140px;">
+            关闭
+        </a>
+    </div>
+</div>
+<div id="modifyzscardpop" class="khcg openSuccess dn" style="height:271px;">
+    <div class="fr close-btn">
+        <a href="javascript:;"><img src="/public/images/zskh/close.png" alt="" /></a>
+    </div>
+    <div class="clearfix"></div>
+    <div class="tac khcg-txt" style="margin-top: 15px;">
+        <p class="tac introduceTxt " style="width:100%;font-size:14px;">
+        你在修改存管账户绑定的银行卡，输入正确的短信动态码并点击<br />
+        【确认】后将跳转至浙商银行页面进行修改。
+        </p>
+        <p style="font-size:14px;color:#404040;" class="mb20 mt20 dn tip">短信验证码已发送至&nbsp;&nbsp;<span class="blue">1101101110</span></p>
+
+        <li style="font-size:14px;list-style:none;">
+          <label class="li-label-name">短信验证码：</label>
+          <span class="li-span-con">
+            <input valid-msg-options="{&quot;offset&quot;:90}" type="text" class="inputCommon zschangebankcode" style="width:138px;height:34px;" name="code" valid="required" hidefocus="hidefocus">
+            <span><a href="javascript:void(0);" id="delCard_get_code" class="codeBtn greenBg" >免费获取</a></span>
+            <span><a href="javascript:void(0);" id="delCard__time" class="codeBtn" style="display:none;">120s</a></span>
+        </li>
+        <a href="javascript:;" id="confirm_chg" class="codeBtn mt20 blueBg" style="width:140px;">
+            确定
+        </a>
+    </div>
+</div>
+<div class="success-validation-popup khcg khcglm dn">
+    <h2 id="titlebar">新银行卡信息提交成功了么？</h2><a id="colorboxClose" href="javascript:;" class="del" style="z-index:503;" hidefocus="hidefocus"></a>
+    <div class="pay-txt" style="padding: 20px 0px 20px;height:auto;">
+        <h3>请您在新打开的浙商页面填写新的银行卡信息，完成后请选择</h3>
+        <p><span>提交成功</span> | 您可以选择： <a href="javascript:;">重新修改</a></p>
+        <p style="width:490px;"><em>提交失败</em> | 请等待浙商银行审核，预计1个工作日内变更成功，遇节假日顺延。变更成功前，你仍可通过现有银行卡对存管户充值、提现。
+</p>
+    </div>
+    <div class="server-tel">您也可以致电我们的客服热线<br />400-821-8616</div>
+</div>
+</block>

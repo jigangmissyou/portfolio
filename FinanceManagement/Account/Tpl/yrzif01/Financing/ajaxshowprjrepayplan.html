@@ -1,0 +1,77 @@
+<div class="hoverRecord">
+  <div class="hoverArrow">
+      <em>◆</em>
+      <span>◆</span>
+  </div>
+  <div class="hd">
+    <table class="hover-table">
+      <thead>
+        <tr>
+          <th width="12%" class="tac">期次</th>
+          <th width="12%" class="tac">还款日</th>
+		  <th width="15%" class="tar">应收本息（元）</th>
+          <th width="15%" class="tar">应收利息（元）</th>
+          <th width="15%" class="tar">应收本金（元）</th>
+          <th width="15%" class="tar">剩余本金（元）</th>
+          <th class="tac">还款状态</th>
+         </tr>
+      </thead>
+    </table>
+  </div>
+  <div class="bd">
+    <table class="hover-table">
+      <tbody>
+        <?php if ($bidInfo['incomeView'] > 0): ?>
+        <tr>
+          <td width="12%" class="tac">募集期<br>资金占用费</td>
+          <td width="12%" class="tac">{$bidInfo['repayDate']}</td>
+      <td width="15%" class="tar">
+          {$bidInfo['incomeView']}
+          </td>
+          <td width="15%" class="tar">{$bidInfo['incomeView']}</td>
+      <td width="15%" class="tar">-</td>
+          <td width="15%" class="tar">{$bidInfo['amountView']}</td>
+            <td class="tac">
+          <?php echo $bidInfo['status_view'];?>
+          </td>
+        </tr>
+        <?php else: ?>
+        <tr>
+          <td width="12%" class="tac">募集期<br>资金占用费</td>
+          <td width="12%" class="tac">-</td>
+          <td width="15%" class="tar">0.00</td>
+          <td width="15%" class="tar">0.00</td>
+          <td width="15%" class="tar">-</td>
+          <td width="15%" class="tar">{$bidInfo['amountView']}</td>
+          <td class="tac">{$bidInfo['status_view']}</td>
+        </tr>
+        <?php endif ?>
+
+     	<?php if($tableResult):?>
+     	<?php foreach($tableResult as $v):?>
+        <tr>
+          <td width="12%" class="tac"><?php echo $v['no']; ?></td>
+          <td width="12%" class="tac"><?php echo $v['repay_date']; ?></td>
+		  <td width="15%" class="tar"><?php echo $v['repay_money_view']; ?></td>
+          <td width="15%" class="tar"><?php echo $v['profit_view']; ?></td>
+          <td width="15%" class="tar"><?php echo $v['capital_view']; ?></td>
+          <td width="15%" class="tar"><?php echo $v['last_capital_view']; ?></td>
+          <td class="tac">
+          <?php echo $v['status_view'];?>
+          </td>
+        </tr>
+        <?php endforeach;?>
+        <?php else:?>
+        <tr>
+            <td colspan="100%">数据未生成</td>
+        </tr>
+       <?php endif; ?>
+      </tbody>
+    </table>
+  </div>
+</div>
+<script>
+  $(function(){
+    $(".hover-table tbody tr:odd").css('color','#0081E6');
+  })
+</script>

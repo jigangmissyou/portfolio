@@ -1,0 +1,84 @@
+<div id="colorBox-viewPrj">
+  <if condition="$is_tab neq 1">
+    <div id="titlebar">查看项目信息</div>
+  </if>
+  <div id="jqueryContent" style="width:600px;">
+    <if condition="$is_tab neq 1">
+    <div class="jqueryscroll">
+    </if>
+    <dl class="viewPrjdl">
+      <dt><strong>项目信息</strong></dt>
+      <dd>基金管理人：{$fund_prj_data.fund_manager}</dd>
+      <dd>基金名称：{$fund_prj_data.fund_name}</dd>
+      <dd>基金经理：{$fund_prj_data.fund_ceo}</dd>
+      <dd>基金托管人：{$fund_prj_data.fund_custodian}</dd>
+      <dd>产品备案：{$fund_prj_data.fund_filing}</dd>
+      <dd>产品发起：{$fund_prj_data.fund_launch}</dd>
+      <dd>产品名称：{$fund_prj_data.prj_name}</dd>
+      <dd>募集规模：{$fund_prj_data._demand_amount}</dd>
+      <dd>募集期限：{$fund_prj_data.raise_dateline}个月以内（以实际募集天数为准）</dd>
+      <dd>存续期：{$fund_prj_data.duration}个月</dd>
+      <dd>基金评级：{$fund_prj_data.fund_level}</dd>
+      <dd class="nofloat">
+        <span class="fl">预期年化收益率：</span>
+        <ul class="fl">
+          <foreach name="fund_prj_data.rate.rate_list" item="vo">
+            <li>{$vo._time_limit} {$vo._year_rate}<if condition="$vo.extra_income eq 1">　浮动收益</if></li>
+          </foreach>
+        </ul>
+      </dd>
+      <dd>回款方式：{$fund_prj_data._payment_way}</dd>
+      <dd>起投额度：{$fund_prj_data._min_bid_amount}</dd>
+      <dd>最高额度：{$fund_prj_data._max_bid_amount}</dd>
+      <dd>递增额度：{$fund_prj_data._step_bid_amount}</dd>
+      <dd>最高投资人数：{$fund_prj_data.invest_max_user}</dd>
+      <dd>托管账户户名：{$fund_prj_data.loanbank.acount_name}</dd>
+      <dd>托管账户开户行：{$fund_prj_data.loanbank.bank_name}</dd>
+      <dd>托管账户：{$fund_prj_data.loanbank.account_no}</dd>
+
+      <dd>基金类别：{$fund_prj_data._fund_class}</dd>
+      <dd>投资人类别：{$fund_prj_data._investor_class}</dd>
+      <dd>收益分配方式：{$fund_prj_data.earning_assign_mode}</dd>
+      <dd>运作方式：{$fund_prj_data._operate_mode}</dd>
+      <dd class="nofloat">基金支付费用及方式：{$fund_prj_data.fund_payee_mode}</dd>
+      <dd class="nofloat"><span class="fl">基金投向：</span><ul class="fl">
+        <li>{$fund_prj_data.fund_direction}</li>
+      </ul></dd>
+      <dd class="nofloat"><span class="fl">项目介绍：</span><ul class="fl">
+        <li>{$fund_prj_data.project_introduce}</li></ul></dd>
+      <dd class="nofloat"><span class="fl">风险提示：</span><ul class="fl">
+        <li>{$fund_prj_data.risk_tip}</li></ul></dd>
+
+      <dt class="pt10"><strong>项目材料</strong></dt>
+      <dd class="nofloat">
+        <?php if(!empty($fund_prj_material)){ ?>
+        <div class="project_materials bor_t" id="evidenceListBox">
+          <div class="title"><span class="fl">材料名称<if condition="$product.status eq '1'"><a href="javascript:void(0)" id="addMateriaBtn" class="ml20 blue">新增</a></if></span><span class="fr">内容</span></div>
+          <div id="ajaxColtent_audit_data" prjid="{$prj_id}">
+            <?php foreach ($fund_prj_material as $key => $vo) { ?>
+            <div class="content" data-imgType="{$vo.id}" style="position: relative">
+              <div class="info mainWrapBox">
+                <input type="text" class="file_ipt" style="background:none; width: 280px" value="{$vo.code_name}" oldval="{$vo.name}" readonly>
+                <?php foreach ($vo['child'] as $imgs) { ?>
+                <div event-click="viewThumbImg" class="thumbnail thumbnailWrap" style="cursor: pointer;" url="{$imgs.thumbs.big}"><img width="50" height="50" src="{$imgs.thumbs.tiny}"></div>
+                <?php } ?>
+              </div>
+              <div class="uploading"><span>资料上传中...</span></div>
+            </div>
+            <?php } ?>
+          </div>
+        </div>
+        <?php } else { ?>
+        <div class="content">
+          <div class="info">
+            无材料<i class="i_edit"></i> <i class="i_del"></i>
+          </div>
+        </div>
+        <?php } ?>
+      </dd>
+    </dl>
+    <if condition="$is_tab neq 1 ">
+    </div>
+    </if>
+  </div>
+</div>

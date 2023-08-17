@@ -1,0 +1,339 @@
+<extend name="./app/Tpl/Public/base_hfhg.html"/>
+<block name="title">新用户注册</block>
+<block name="style">
+	<link href="/public/css/sasscss/act/drainlogin/drain_login_way.css"  rel="stylesheet"/>
+	<style>
+	#container{width:auto;min-width: 1000px;}
+	.listCom li .drain_input.textMess_bd{border:#f96e10 solid 1px;}
+	#header,#drain_banner,#footer_box,.bodyBd{min-width: 1022px;}
+	.drain_wraper{width:100%;}
+	#top{
+		display:none;
+	}
+	.yinqirong{
+		display:none;
+	}
+	#popCaptcha {
+		position: fixed;
+		left: 50%;
+		top: 50%;
+		width: 300px;
+		height: 300px;
+		/* background-color: rgba(0,0,0,0.5); */
+		text-align: center;
+		overflow: auto;
+		z-index: 16;
+		margin-left: -150px;
+		margin-top: -150px;
+	}
+	</style>
+
+  <script src="/public/js/jquery.flexslider-min.js"></script>
+<script>
+$(window).load(function() {
+	$('.flexslider').flexslider({
+		directionNav: true,
+		pauseOnAction: false
+	});
+});
+</script>
+
+
+
+</block>
+<block name="body">
+	<div class="posr">
+		<div id="drain_banner" class="ovh">
+			<!-- banner js 轮播 star-->
+		  	 <div class="pics_switch">
+				<div class="pb">
+				   <div class="pic_box"><a class="pic_banner_009" href="javascript:;" style="background: url('<?php echo 'http:'.$jpg_url; ?>') center top no-repeat;"></a></div>
+				</div>
+			</div>
+
+		    <div class="login_content">
+		    <div class="login_wrap">
+		    	<form ajax="1" ajax-after="after_Account_User_Register" action="{:U('Account/User/doregister')}" method="post" id="formId_Account_User_Register">
+			    	<div class="login_box">
+			    		<h4 class="topbar">新客福利888元红包</h4>
+			    		<ul class="listCom">
+							<span class="drain_error drain_foucs dn" id="form_err_tips" style="margin-left: 25px;color: #f96e10;"></span>
+			    			<li>
+			    				<input type="text" value=""  validurl="{:U('Account/User/checkMobile')}" name="mobile" ghosttext="请输入您的手机号" class="drain_input" />
+			    				<span class="drain_error drain_foucs" id="mobile_err_tips"></span>
+			    			</li>
+			    			<li class="prel" id="pwdWrap">
+			    				<i id="togglePwd" class="icon-eye-pwd"></i>
+			    				<input id="password" type="password" value=""  validurl="" name="pwd" ghosttext="请输入您的密码" class="drain_input"/>
+			    				<span class="drain_error drain_foucs" id="pwd_err_tips"></span>
+			    			</li>
+						<!-- 	<li>
+			    				<input type="text"  value="" ghosttext="验证码" name="authCode" validurl="{:U('Index/Index/checkAuthCode')}" class="drain_input drain_sw"/>
+			    				<img class="yanImg" src="{:U('Index/Index/verify',array('version'=>uniqid()))}"  id="VerifyCodeImg"  alt=""/>
+			    				<p class="VerifyCodeText"><a href="javascript:;" id="refreshVerifyCode">看不清，请换一张</a></p>
+			            		<span class="drain_error drain_foucs" id="authCode_err_tips">验证码错误，请重新输入</span>
+			    			</li>
+			   -->  			<li>
+			    				<input type="text" value="" ghosttext="请输您的手机验证码" validurl="{:U('Account/User/checkRegisterCode')}"  class="drain_input drain_sw"  name="code"/>
+			    				<input type="button" value="点击获取" class="drain_clickBtn show_send_btn"/>
+			    				<a class="drain_noClickBtn" id="time_send" href="javascript:;" style="display:none">60秒后失效</a>
+			    				<span class="drain_error" id="code_err_tips"></span>
+			    				<span class="drain_errors" id="code_err_tips_notes">如2次收不到验证码请致电<i class="org ft14 fwb"> 400-821-8616</i></span>
+			    			</li>
+			    			
+			    			<li class="lipd"><input type="button" id="submit_Account_User_Register" class="barin_subBtn" value="注册领红包" ajax-submit /></li>
+			    			<li class="lipd-b"><label for="" class="fl" style="display:none;" ><input type="checkbox" name="degree" checked="checked"/></label><span>点击“注册领红包”意味着同意《<a colorbox="1" href="{:U('Index/Protocol/view',array('id'=>1))}">鑫合汇注册协议</a>》</span>
+			    			</li>
+			    		</ul>
+			    		<span class="bottomBar"></span>
+			    	</div>
+	          </form>
+		    </div>
+		    </div>
+		</div>
+	<!-- body内容区 star-->
+		<div class="drain_wraper">
+		    <ul class="data-ul">
+		        <li>
+		            <em class="em_icn_item1"></em>
+		            <p><i class="orange fz26">{$userCount}</i>万用户数</p>
+		        </li>
+		        <li>
+		            <em class="em_icn_item2"></em>
+		            <p><i class="orange fz26">{$investCount}</i>亿累计成交额</p>
+		        </li>
+		        <li>
+		            <em class="em_icn_item3"></em>
+		            <p>近7天成交额<i class="orange fz26">{$weekCount}</i>亿</p>
+		        </li>
+		        <li>
+		            <em class="em_icn_item4"></em>
+		            <p>投资者已赚取<i class="orange fz26">{$profitall}</i>万</p>
+		        </li>
+		    </ul>
+		</div>
+
+		<div class="grayBox" id="emProduct">
+			<div class="index-title-name index-main-title prel mb30">
+			  <ul>
+			    <li><span class="roundTopborGy">优选产品</span><a class="hrwrite uppercase" hidefocus="hidefocus">PRODUCTS</a></li>
+			  </ul>
+			</div>
+			<ul class="objectUl" id="emProductUl">
+				<li class="posr">
+					<img src="<?php echo $semwayurls['yxone_url']?>" alt="" />
+					<a href="javascript:;" class="getBtn orangeBtn">立即投资</a>
+
+				</li>
+				<li class="posr">
+					<img src="<?php echo $semwayurls['yxtwo_url']?>" alt="" />
+					<a href="javascript:;" class="getBtn greenBtn">立即投资</a>
+				</li>
+				<li class="posr">
+					<img src="<?php echo $semwayurls['yxthree_url']?>" alt="" />
+					<a href="javascript:;" class="getBtn blueBtn">立即投资</a>
+				</li>
+			</ul>
+		</div>
+		<div class="whiteBox" id="newCourtesy">
+			<div class="index-title-name index-main-title prel mb30">
+			  <ul>
+			    <li><span class="roundTopborGy">新人礼遇</span><a class="hrwrite uppercase" hidefocus="hidefocus">Novice</a></li>
+			  </ul>
+			</div>
+			<ul class="quanUl tac">
+				<li><img src="<?php echo $semwayurls['newgift_url']?>" alt="" /></li>
+				<a href="javascript:;" class="getBtn newCourtesyReceive">立即领取</a>
+			</ul>
+		</div>
+		<div class="grayBox" id="shareholderBackground">
+			<div class="index-title-name index-main-title prel mb30">
+			  <ul>
+			    <li><span class="roundTopborGy">股东背景</span><a class="hrwrite uppercase" hidefocus="hidefocus">shareholders</a></li>
+			  </ul>
+			</div>
+			<ul class="objectUl tac">
+				<img src="<?php echo $semwayurls['shareholder_url']?>" alt="" />
+			</ul>
+		</div>
+		<div class="whiteBox" id="advantage">
+			<div class="index-title-name index-main-title prel mb30">
+			  <ul>
+			    <li><span class="roundTopborGy">为什么选择鑫合汇</span><a class="hrwrite uppercase" hidefocus="hidefocus">why us</a></li>
+			  </ul>
+			</div>
+			<ul class="objectUl">
+				<li><img src="<?php echo $semwayurls['xhhone_url']?>" alt="" /></li>
+				<li><img src="<?php echo $semwayurls['xhhtwo_url']?>" alt="" /></li>
+			</ul>
+		</div>
+		<div class="grayBox" id="brandHonor" style="margin-bottom:100px;">
+			<div class="index-title-name index-main-title prel mb30">
+			  <ul>
+			    <li><span class="roundTopborGy">品牌荣誉</span><a class="hrwrite uppercase" hidefocus="hidefocus">The honor</a></li>
+			  </ul>
+			</div>
+			<ul class="objectUl">
+				<li>
+					<img src="<?php echo $semwayurls['brand_url']?>" alt="" />
+				</li>
+			</ul>
+		</div>
+
+		<div class="blueBar dn">
+			<ul class="barUl">
+				<li class="current"><img src="/public/images/drain_login/icon1.png" alt="" /><br />优选产品</li>
+				<li><img src="/public/images/drain_login/icon2.png" alt="" /><br />新人礼遇</li>
+				<li><img src="/public/images/drain_login/icon3.png" alt="" /><br />股东背景</li>
+				<li><img src="/public/images/drain_login/icon4.png" alt="" /><br />为什么选择鑫合汇</li>
+				<li><img src="/public/images/drain_login/icon5.png" alt="" /><br />品牌荣誉</li>
+				<a href="javascript:;"><img src="/public/images/drain_login/btn.png" class="newCourtesyReceive" style="margin-top:-38px;" /></a>
+			</ul>
+		</div>
+	</div>
+	<!-- 弹窗 -->
+<div class="mask dn"></div>
+<div class="success-validation-popup registerBox registerPop1 dn" style="z-index: 16;">
+      <h2 id="titlebar">免费注册体验短期理财服务，立得新人礼+新客独享产品</h2><a id="closeOpen" href="javascript:;" class="del" style="z-index:503;" hidefocus="hidefocus"></a>
+      <div class="fl sidebar1"><img src="/public/images/drain_login/sidebar1.jpg" alt=""></div>
+      <div class="fl">
+		    <div class="login_wrap">
+				<form ajax="1" ajax-after="after_Account_User_RegisterPop" action="{:U('Account/User/doregister')}" method="post" id="formId_Account_User_RegisterPop">
+					<div class="login_box" style="margin:50px 0 0 0;">
+						<ul class="listCom" style="width:400px;">
+							<span class="drain_error drain_foucs dn" id="form_err_tips" style="margin-left: 25px;color: #f96e10;"></span>
+							<li>
+								<input type="text" value=""  validurl="{:U('Account/User/checkMobile')}" name="mobile" ghosttext="手机号码" class="drain_input" />
+								<span class="drain_error drain_foucs" id="mobile_err_tips"></span>
+							</li>
+							<li class="prel" id="pwdWrap">
+								<!-- <i id="togglePwd" class="icon-eye-pwd"></i> -->
+								<input type="password" value=""  validurl="" name="pwd" ghosttext="密码" class="drain_input"/>
+								<span class="drain_error drain_foucs" id="pwd_err_tips"></span>
+							</li>
+						<!-- 	<li>
+								<input type="text"  value="" ghosttext="验证码" name="authCode" validurl="{:U('Index/Index/checkAuthCode')}" class="drain_input drain_sw"/>
+								<img class="yanImg" src="{:U('Index/Index/verify',array('version'=>uniqid()))}"  id="VerifyCodeImg"  alt=""/>
+								<p class="VerifyCodeText"><a href="javascript:;" id="refreshVerifyCode">看不清，请换一张</a></p>
+								<span class="drain_error drain_foucs" id="authCode_err_tips">验证码错误，请重新输入</span>
+							</li>
+			   -->  		<li>
+								<input type="text" value="" ghosttext="手机验证码" validurl="{:U('Account/User/checkRegisterCode')}"  class="drain_input drain_sw"  name="code"/>
+								<input type="button" value="点击获取" class="drain_clickBtn show_send_btn" style="background:#34b9ff;border-radius:3px;" />
+								<a class="drain_noClickBtn" id="time_send" href="javascript:;" style="display:none">60秒后失效</a>
+								<span class="drain_error" id="code_err_tips"></span>
+								<span class="drain_errors" id="code_err_tips_notes">如2次收不到验证码请致电<i class="org ft14 fwb"> 400-821-8616</i></span>
+							</li>
+
+							<li class="lipd"><input type="button" id="submit_Account_User_RegisterPop" class="barin_subBtn" value="提交注册" ajax-submit style="background:#34b9ff;border-radius:3px;" /></li>
+							<li class="lipd-b"><label for="" class="fl" style="display:none;" ><input type="checkbox" name="degree" checked="checked"/></label><span>点击“提交注册”表示同意《<a colorbox="1" href="{:U('Index/Protocol/view',array('id'=>1))}">鑫合汇注册协议</a>》</span>
+							</li>
+						</ul>
+					</div>
+				</form>
+			</div>
+      </div>
+</div>
+<div class="success-validation-popup registerBox registerPop2 dn" style="z-index: 16;">
+      <h2 id="titlebar">免费注册体验短期理财服务，立得新人礼+新客独享产品</h2><a href="javascript:;" class="del colorboxClose" style="z-index:503;" hidefocus="hidefocus"></a>
+      <div class="fl sidebar2"><img src="/public/images/drain_login/sidebar2.jpg" alt=""></div>
+      <div class="fl stay">
+		<img src="/public/images/drain_login/stay.jpg" alt="">
+		<p class="tac joinedP">截止今日，共有<span class="orange"><?php echo $allpeople?></span>位用户选择加入我们</p>
+		<div class="btnBox">
+			<a href="javascript:;" class="giveUpBtn colorboxClose">遗憾错过</a>
+			<a href="javascript:;" class="giveUpBtn joinBtn">领取奖励</a>
+		</div>
+      </div>
+</div style="z-index: 16;">
+<div id="popCaptcha" class="dn"></div>
+<script type="text/javascript">
+	$('body').attr('style', 'margin-bottom:70px;');
+	window.HBase = {
+		stick:function(obj){
+			var boolScroll = true;
+			obj.liItem.click(function(){
+				if(boolScroll){
+					boolScroll = false;
+					newIndex = $(this).index();
+					$(this).addClass(obj.itemHover).siblings().removeClass(obj.itemHover);
+					$("html,body").animate({scrollTop:$(obj.parts[$(this).index()]).offset().top},600,function(){
+						boolScroll = true;
+					});
+				}
+			});
+			//对应区块开始位置离最上方距离.最下方离上方的距离.下标.节点
+			var listOff = [],lastScrollTop = 0,newIndex = 0;
+			for (var index in obj.parts) {
+				var objOff = {};
+				objOff['scrollTops'] = $(obj.parts[index]).offset().top;
+				objOff['bootScrollTop'] = objOff['scrollTops'] + $(obj.parts[index]).height();
+				objOff['index'] = index;
+				objOff['item'] = obj.parts[index];
+				listOff.push(objOff);
+			}
+			var a;
+			$(window).scroll(function(){
+				if(boolScroll){
+					a && clearTimeout(a);
+					a = setTimeout(function (){
+						var scrollOffest = parseInt($(document).scrollTop()),
+								scrollDir = scrollOffest > lastScrollTop ? 'down' : 'up';//向下 或 向上
+						//设置如果点击右侧回到最上方的按钮
+						if(scrollOffest == 0){
+							$(obj.liItem[0]).addClass(obj.itemHover).siblings().removeClass(obj.itemHover);
+							newIndex = 0;
+						}
+						//计算传入的dom所处的展示区块 进入时离最上方距离 离开时距离
+						//事件改动可能一次滑动多个区块，此处需要使用for循环处理
+						if(place(scrollOffest,scrollDir)){
+							$(obj.liItem[newIndex]).addClass(obj.itemHover).siblings().removeClass(obj.itemHover);
+						}
+						lastScrollTop = scrollOffest;
+					}, 300);
+				}
+			});
+			function place(scrollOffest,scrollDir){
+				//往下 就从当前的向后找；往上 就直接向上找
+				var k = listOff.length-1,bool = true;
+				if(scrollDir == 'up'){
+					scrollOffest += 220;
+					for(var w = newIndex;w<=k;w--){
+						if(listOff[w]['bootScrollTop'] < scrollOffest){
+							break;
+						}
+						if(listOff[w]['scrollTops'] < scrollOffest && scrollOffest <= listOff[w]['bootScrollTop']){
+							w != newIndex ? newIndex = w : bool = false;
+							break;
+						}else if(w == 0){
+							newIndex = w;
+							listOff[w]['scrollTops'] > scrollOffest ? obj.liItem.parent().parent().addClass('dn') : '';
+							break;
+						}
+					}
+				}
+				if(scrollDir == 'down'){
+					//scrollTop   bootScrollTop
+					//根据方向判断 离要去的区块查200px 时开始显示
+					scrollOffest += 200;
+					for(var m = newIndex;m<=k;m++){
+						if(scrollOffest < listOff[m]['scrollTops']){
+							break;
+						}
+						if(listOff[m]['scrollTops'] < scrollOffest && scrollOffest <= listOff[m]['bootScrollTop']){
+							m != newIndex ? newIndex = m : bool = false;
+							newIndex == 0 || obj.liItem.parent().parent().has('dn') ? obj.liItem.parent().parent().removeClass('dn') : '';
+							break;
+						}else if(m == k){
+							newIndex = m;
+							break;
+						}
+					}
+				}
+				return bool;
+			}
+		}
+	};
+</script>
+<script src="https://static.geetest.com/static/tools/gt.js"></script>
+</block>

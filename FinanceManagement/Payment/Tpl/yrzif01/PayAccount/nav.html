@@ -1,0 +1,17 @@
+<div class="detailSurTab surTabUl mt30 mb20">
+  <ul>
+    <li <?php if(ACTION_NAME=='index' && MODULE_NAME =='User' || MODULE_NAME=='PayAccount' && ACTION_NAME=='getApplyCashout') {?> class="current"<?php }?>><span class="roundTopborGy"><a href="{:U('Account/User/index')}">账户概况</a></span><a class="hrwrite"></a></li>
+    <li <?php if(ACTION_NAME=='index' && MODULE_NAME =='Financing') {?> class="current"<?php }?>><span class="roundTopborGy"><a href="{:U('Account/Financing/index')}">理财记录</a></span><a class="hrwrite"></a></li>
+    <li <?php if(ACTION_NAME=='getMyMoneyList' && MODULE_NAME =='PayAccount'){ ?>class="current"<?php } ?> ><span class="roundTopborGy"><a href="{:U('Payment/PayAccount/getMyMoneyList')}">资金记录</a></span><a class="hrwrite"></a></li>
+    <li <?php if((ACTION_NAME=='getJavaMyBonusList' || ACTION_NAME=='getMyBonusList') && MODULE_NAME =='MyBonus'){ ?>class="current"<?php } ?> ><span class="roundTopborGy"><a href="{:U('Account/MyBonus/getJavaMyBonusList')}">我的红包</a></span><a class="hrwrite"></a></li>
+    <li <?php if(ACTION_NAME=='index' && MODULE_NAME =='TyjBonus'){ ?>class="current"<?php } ?> ><span class="roundTopborGy"><a href="{:U('Account/TyjBonus/index')}">专享理财金</a></span><a class="hrwrite"></a></li>
+    <li <?php if(ACTION_NAME=='account' && MODULE_NAME =='User') { ?> class="current"<?php }?>><span class="roundTopborGy"><a href="{:U('Account/User/account')}">用户资料</a></span><a class="hrwrite"></a></li>
+    <li><span class="roundTopborGy"><a href="{:U('Message/Message/getMessageList')}">消息中心</a></span><a class="hrwrite"></a></li>
+    <if condition="$is_gov neq 1">
+    <?php $user_tmp=BaseModel::newSession('USER_LOGIN_KEY'); if($user_tmp['uid_type'] != 2) { ?>
+    	<li><span class="roundTopborGy"><a href="{:U('Account/Recommend/index');}">推荐好友</a></span><a class="hrwrite"></a></li>
+    <?php } ?>
+    </if>
+  </ul>
+</div>
+

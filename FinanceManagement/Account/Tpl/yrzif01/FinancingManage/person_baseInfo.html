@@ -1,0 +1,64 @@
+<input id="companyId" type="hidden" name="id" value="{$corpinfo.id}"/>
+<ul class="formList">
+  <?php if(!$corpinfo){ ?>
+  <li>
+    <label class="li-label-name"><em class="red">*</em>用户类型</label>
+    <span class="li-span-con">
+    <label><input event-click="selectBorrowType" type="radio" name="borrowerType" value="2" <if condition="$borrowerType eq 2">checked</if> />个人用户</label>
+    &nbsp;&nbsp;
+    <label><input event-click="selectBorrowType" type="radio" name="borrowerType" value="1" <if condition="$borrowerType eq 1">checked</if> />企业用户</label>
+    </span>
+  </li>
+  <?php }else{ ?>
+  <li class="dn"><input type="hidden" name="borrowerType" value="{$borrowerType}"/></li>
+  <?php } ?>
+  <li>
+    <label class="li-label-name"><em class="red">*</em>姓名</label>
+    <span class="li-span-con">{$userInfo.real_name}</span>
+  </li>
+  <li>
+    <label class="li-label-name"><em class="red">*</em>证件号码</label>
+    <span class="li-span-con">
+    {$userInfo.person_id|person_id_view}
+   </span>
+  </li>
+  <li>
+    <label class="li-label-name"><em class="red">*</em>手机号</label>
+    <span class="li-span-con">
+    <?php echo preg_replace('/\d{4}$/', '****', $userInfo['mobile']); ?>
+   </span>
+  </li>
+  <li>
+    <label class="li-label-name"><em class="red">*</em>年龄</label>
+    <span class="li-span-con">
+    <input type="text" name="age" valid="required" class="inputCommon" value="{$corpinfo.age}">
+   </span>
+  </li>
+  <li>
+    <label class="li-label-name"><em class="red">*</em>婚姻状况</label>
+    <span class="li-span-con">
+    <select name="marital_status" multipleone="1" multiselect-options='{"minWidth": "280"}' valid="required">
+      <option value="1" <if condition="$corpinfo.marital_status eq 1">selected</if>>已婚</option>
+      <option value="0" <if condition="($corpinfo.marital_status eq 0) or (is_null(corpinfo.marital_status))">selected</if>>未婚</option>
+      <option value="2" <if condition="$corpinfo.marital_status eq 2">selected</if>>离异</option>
+    </select>
+   </span>
+  </li>
+  <li>
+    <label class="li-label-name"><em class="red">*</em>主要资产</label>
+    <span class="li-span-con">
+    <textarea name="prime_assets" cols="60" rows="5" valid="required" class="ui_textarea">{$corpinfo.prime_assets}</textarea>
+   </span>
+  </li>
+  <li>
+    <label class="li-label-name"><em class="red">*</em>主要经济来源</label>
+    <span class="li-span-con">
+    <textarea name="income_source" cols="60" rows="5" valid="required" class="ui_textarea">{$corpinfo.income_source}</textarea>
+   </span>
+  </li>
+  <li class="lastBtns"><label for="" class="li-label-name">&nbsp;</label><span class="li-span-con">
+    <span class="blueBigBtn_100">
+      <input type="button" class="btns w250" value="保存并继续" event-click="companyInfo.save"/>
+    </span>
+  </span></li>
+</ul>

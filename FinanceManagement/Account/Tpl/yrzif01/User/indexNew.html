@@ -1,0 +1,665 @@
+<extend name="./app/Tpl/Public/base_user.html"/>
+<block name="title">账户总览</block>
+<block name="style">
+<link rel="stylesheet" href="/public/css/sasscss/act/zskh/index.css">
+<script src="/public/componentjs/highcharts/js/highcharts2016.js"></script>
+</block>
+<block name="body">
+  <?php
+  //用于格式化一些值
+    function separateDecimal($str){
+      return explode('.', $str);
+    }
+    $top_amount_view = separateDecimal($account['top_amount_view']);
+    $net_asse = separateDecimal($account['net_asse']);
+    $money_invest = separateDecimal($account['money_invest']);
+    $money_debt = separateDecimal($account['money_debt']);
+    $total_profit = separateDecimal($sumary['total_profit']);
+    $will_profit_view = separateDecimal($sumary['will_profit_view']);
+    $profit_view = separateDecimal($account['profit_view']);
+    $recharge_url = U('Payment/PayAccount/rechargePage');
+    $cashout_url = U('Payment/PayAccount/getApplyCashout');
+    if($userStatus['xhh_status'] < $userStatus['zs_status']){
+      $recharge_url = U('Payment/PayAccount/zsRechargePage');
+      $cashout_url = U('Payment/PayAccount/zsGetApplyCashout');
+    }
+  ?>
+<div class="account-user-container">
+    <div class="earnings">
+      <!--左侧 余额，日历 start-->
+      <div class="earnings-left">
+        <div class="remaining">
+          <h2>账户余额</h2>
+          <h1><i>￥</i>{$top_amount_view[0]}<span>.{$top_amount_view[1]}</span></h1>
+          <!-- <h3 style="font-size:14px;margin: 3px 0;">普通账户<a href="javascript:;" style="color:#32bb30;margin-right:5px;" class="onwaymoney">￥{$moving.moving_view}</a><img src="/public/images/zskh/wenhao.png" alt="" style="vertical-align: text-bottom;" /></h3> -->
+          <h3 style="font-size:14px;margin: 3px 0;margin-bottom:8px;">普通账户&nbsp;&nbsp;<a href="javascript:;" style="color:#32bb30;" class="onwaymoney">￥{$account.xhh_amount_view}</a>
+            <if condition="$moving.moving_view gt 0">
+            <br /><!-- <span style="color:#c2c2c2;margin-top:5px;display: inline-block;font-size:12px;">其中{$moving.moving_view}元正在转入存管户中</span> --></h3>
+            </if>
+          <h3 style="font-size:14px;margin: 3px 0;line-height:30px;border-top:1px dashed #ccc;">存管账户&nbsp;&nbsp;<?php
+              if($user['zs_status'] == 2 || $user['is_init'] == 1 ){
+                echo '<a href="javascript:;">￥'.$account["zs_amount_view"].'</a>';
+              } else {
+                echo '<a href="/Account/User/openAccount" class="blue openzs_btn">立即开通</a>';
+              }
+            ?>
+          </h3>
+          <div class="turnover">
+            <?php if(!$user['finance_uid_type'] && !$guarantor_id){ ?>
+              <a class="recharge-btn" href="{$recharge_url}" title="充值" event-click="recharge">充值</a>
+              <?php if(!$account['top_amount_view']) { ?>
+                <a class="recharge-btn withdrawal-btn" href="javascript:;" title="提现" event-click="withdraw">提现</a>
+              <?php } else {?>
+                <a class="recharge-btn withdrawal-btn" title="提现" event-click="withdraw" href="<?php echo $cashout_url; ?>">提现</a>
+              <?php }?>
+            <?php } ?>
+          </div>
+        </div>
+        <!--回款日历-->
+        <div class="calendar ">
+          <div class="menology">
+            <div id="datepicker" class="schedule"></div>
+            <div class="reminder"><a href="javascript:;" id="go-return-remind"><i class="icon-account-tip"></i>回款提醒</a></div>
+          </div>
+          <div class="return-remind dn">
+            <div class="reminder">
+              <i class="icon_receive_reminder_date"></i>
+              回款提醒
+              <span>
+                <if condition="$list">
+                  <a href="{:U('Account/Financing/index', Array('status'=>2))}">更多>></a>
+                </if>
+              </span>
+            </div>
+            <div class="text-info">
+              <if condition="$list">
+                <ul>
+                  <foreach name="list" item="v">
+                    <li>
+                      <h3><i class="clock"></i>{$v['expect_repay_time_view']}</h3>
+                      <if condition="$v.type eq 1">
+                        <p>
+                          投资{$v['prj_name']}将收到{$v['money_view']}本金
+                          <?php if($v['order_ext_totle'] > 0): ?>
+                            <span>(
+                              <?php echo "含".humanMoney($v['order_ext_totle'],2,false)."元";?>奖励)
+                            </span>
+                          <?php endif; ?>
+                          和{$v['rest_income_view']}收益
+
+                          <?php echo $v['notice_tail'];?>
+                        </p>
+                      <else/>
+                        <p>
+                          加入司马小鑫{$v['time_limit_day']}，将收到{$v['money_view']}本金和{$v['rest_income_view']}收益{$v['notice_tail']}
+                        </p>
+                      </if>
+                    </li>
+                  </foreach>
+                </ul>
+                <else/>
+              <!-- 提醒列表 区 end -->
+              <div class="not-return">
+                <div class="text-info">
+                  <div class="msg">暂无回款消息！</div>
+                </div>
+              </div>
+            </if>
+              <div class="cale"><i class="cale"></i><a href="javascript:;" id="go-calendar">返回日历</a></div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+      <!--左侧 余额，日历 end-->
+
+      <!--右侧 资产，收益 start-->
+      <div class="earnings-right">
+        <div class="decorate-circle">
+          <div class="title"><!--<i class="icon-account-safe"></i>-->&nbsp;&nbsp;<span>单位：元</span></div>
+          <div class="graph">
+            <ul>
+              <li class="assets">
+                <div class="round round1">
+                  账户净资产
+                </div>
+                <p><span>￥</span>{$net_asse[0]}<i>.{$net_asse[1]}</i></p>
+              </li>
+              <li class="symbol">=</li>
+              <li class="assets">
+                <div class="round round2">
+                  <p>
+                    账户余额<br />
+                    <i class="icon-account-issue"><em>账户内可以自由支配的资金</em></i>
+                  </p>
+                </div>
+                <p><span>￥</span>{$top_amount_view[0]}<i>.{$top_amount_view[1]}</i></p>
+              </li>
+              <li class="symbol">+</li>
+              <li class="assets">
+                <div class="round round3">
+                  <p>
+                    我的投资<br />
+                    <i class="icon-account-issue"><em>在投项目的投资本金之和</em></i>
+                  </p>
+                </div>
+                <p><span>￥</span>{$money_invest[0]}<i>.{$money_invest[1]}</i></p>
+              </li>
+              <li class="symbol">-</li>
+              <li class="assets">
+                <div class="round round4">
+                  <p>
+                    变现借款<br />
+                    <i class="icon-account-issue"><em>当前待偿还的借款金额</em></i>
+                  </p>
+                </div>
+                <p><span>￥</span>{$money_debt[0]}<i>.{$money_debt[1]}</i></p>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="vouchers">
+          <div class="income-title" title="预期总收益=待收收益+已赚收益"><i class="steady"></i>预期总收益</div>
+          <div class="value">
+            <span class="total"><i>¥</i>{$total_profit[0]}<em>.{$total_profit[1]}</em></span>
+            <span class="wait">待收收益<i>￥</i><em>{$sumary['will_profit_view']}</em></span>
+            <span class="already">已赚收益<i>￥</i><em>{$account['profit_view']}</em></span>
+          </div>
+          <div class="red-envelope-coupon">
+            <ul>
+              <li class="width18">
+                <a href="{:U('Account/MyBonus/getMyCouponsList')}">
+                  <i class="icon-account-gold"></i>满减券 ￥{$myCoupons}
+                </a>
+              </li>
+              <li>
+                <a href="{:U('Account/MyBonus/getJavaMyBonusList')}">
+                  <i class="icon-account-red"></i>
+                  红包 ￥{$account['haobao_totalmoney']}
+                </a>
+              </li>
+              <li class="width14">
+                <a href="{:U('Account/MyBonus/getRateCouponsList')}">
+                  <i class="icon-account-coupon"></i>
+                  加息券 {$myInterest}
+                </a>
+              </li>
+              <li>
+                <a href="{:U('Account/MyBonus/getJavaMyLcj')}">
+                  <i class="icon-account-lcj"></i>
+                  理财金 ￥{$myLcj}
+                </a>
+              </li>
+              <!--<li><i class="icon-account-integral"></i>积分 26,000</li>-->
+              <li>
+                <a href="{:U('Account/XinPartner/index')}">
+                  <i class="icon-account-invite"></i>邀请好友 {$basicUserInfo.friends_amount}
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <!--右侧 资产，收益 end-->
+    </div>
+    <!-- 机构理财状态流程 -->
+     <?php if ($user['uid_type'] == 2) { ?>
+     <div class="instionNoSub fixed">
+        <!-- 未提交 -->
+        <?php if(!$step1 && $getorginfo['status']!==1) { ?>
+        <div class="instionNoSubs font14">
+          <em class="accountinRegPrs accountinRegPrs1 accountLtIcon"></em>机构信息
+          <label for="" class="button-small-orange button-orange-w120"><a target="_blank" href="{:U('Account/User/infostep1')}" class="btns">立即填写</a></label>
+        </div>
+        <?php } ?>
+        <?php if(!$step2 && $getorginfo['status']!==1) { ?>
+          <div class="instionNoSubs font14">
+            <em class="accountinRegPrs accountinRegPrs2 accountLtIcon"></em>法定代表人信息
+            <label for="" class="button-small-orange button-orange-w120"><a target="_blank" href="{:U('Account/User/infostep2')}" class="btns">立即填写</a></label>
+          </div>
+        <?php } ?>
+        <?php if(!$step3 && $getorginfo['status']!==1) { ?>
+          <div class="instionNoSubs font14">
+            <em class="accountinRegPrs accountinRegPrs3 accountLtIcon"></em>代理人信息
+            <label for="" class="button-small-orange button-orange-w120"><a target="_blank" href="{:U('Account/User/infostep3')}" class="btns">立即填写</a></label>
+          </div>
+        <?php } ?>
+        <if condition="!$step4  and $getorginfo['status']==1">
+          <div class="instionNoSubs font14">
+            您提交的信息未确认，点击 <label for="" class="button-small-orange button-orange-w120"><a target="_blank" href="/Account/User/infostep4" class="btns" hidefocus="hidefocus">立即确认</a></label>
+          </div>
+        </if>
+        <!-- 已提交待审核 -->
+        <if condition="$getorginfo[status] == 2" >
+          <div class="instionNoStatus font14">
+            <div class="instionNoStatusIg fixed">
+               <if condition="$getorginfo['proposer'] == 1">
+                  <div class="instionNoStatusIg1 accountinRegPrs"></div>
+                  <ul class="instionNoStatusFt">
+                   <li class="li01 fl tac">提交受理</li>
+                   <li class="li02 fl tac">机构信息审核</li>
+                   <li class="li03 fl tac">法定代表人信息审核</li>
+                   <li class="li04 fl tac">身份认证成功</li>
+                  </ul>
+                  <div class="arrOut"></div>
+                  <div class="arrIn"></div>
+                <elseif condition="$getorginfo['proposer'] == 2" />
+                  <div class="instionNoStatusIg2 accountinRegPrs"></div>
+                  <ul class="instionNoStatusFt">
+                   <li class="li01 fl tac">提交受理</li>
+                   <li class="li02 fl tac">机构信息审核</li>
+                   <li class="li03 fl tac">法定代表人信息审核</li>
+                   <li class="li04 fl tac">代理人信息审核</li>
+                   <li class="li05 fl tac">身份认证成功</li>
+                  </ul>
+                  <div class="arrOut"></div>
+                  <div class="arrIn"></div>
+                </if>
+            </div>
+            <!-- 等待审核 -->
+            <ul class="instionInfoStatus">
+              <li>机构名全称：{$getorginfo['org_name']}</li>
+              <li>申请人：
+                <if condition="$getorginfo['proposer'] == 2" >
+                  {$getorginfo['agent_representative_realname']}
+                <else />
+                  {$getorginfo['legal_name']}
+                </if>
+              </li>
+              <li>申请时间：{$getorginfo['aplication_time']|date='Y-m-d',###}</li>
+              <li>审核进度：提交受理</li>
+            </ul>
+            <div class="inline-block instInvsetAdd"><i class="icon-note-heart"></i><em class="text">温馨提示：</em>
+              <p>鑫合汇工作人员将在2天内为您审核,请您及时登录账号查看您的审核进度。若您想重新认证，请点击 <a href="{:U('Account/User/cancelApply')}" target="_blank" class="cancalBut">撤销本次认证申请</a></p>
+            </div>
+          </div>
+        </if>
+        <if condition="$getorginfo[status] == 5">
+        <!-- 审核不通过信息错误 -->
+          <ul class="instionInfoStatus">
+            <li>机构名全称：<span class="red">{$getorginfo['org_name']}</span></li>
+            <li>申请人：
+              <span class="red">
+                <if condition="$getorginfo['proposer'] == 2" >
+                  {$getorginfo['agent_representative_realname']}
+                <else />
+                  {$getorginfo['legal_name']}
+                </if>
+              </span>
+            </li>
+            <li>申请时间：{$getorginfo['aplication_time']|date='Y-m-d',###}</li>
+            <li>审核进度：<span class="red">未审核通过</span><label for="" class="button-small-orange button-orange-w120"><a href="{:U('Account/User/doFailCheck')}" target="_blank" class="btns">修改提交</a></label></li>
+          </ul>
+          <p class="notByReasonIns"><i class="icon_redSigh"></i>备注：{$getorginfo['remarks']}</p>
+        </if>
+        <!-- 审核通过 -->
+        <if condition="$getorginfo[status] == 3" >
+          <p class="accessReason">恭喜您审核通过，即将开启鑫合汇理财之旅！</p>
+        </if>
+     </div>
+     <?php } ?>
+    <!-- 机构理财状态流程-end -->
+    <!--推荐标 start-->
+    <div class="exclusive">
+      <ul>
+        <if condition="$list_newbie.act neq null">
+        <?php
+          $vo=$list_newbie['prj'][0];
+          $year_rate = separateDecimal($vo['year_rate']['year_rate']);
+        ?>
+          <li class="new">
+            <?php if($vo['is_new']){ ?>
+            <i class="new-mark"></i>
+            <?php }else if($vo['is_vip']){ ?>
+            <i class="vip-mask"></i>
+            <?php } ?>
+            <h1>{$vo.prj_type_display}-{$vo.prj_business_type_name}{$vo.prj_name}</h1>
+            <div class="yield">
+              <div class="rate">
+                <i>{$year_rate[0]}</i>.{$year_rate[1]}
+                <if condition="$vo['year_rate']['activity_year_rate']">
+                  <span>+{$vo['year_rate']['activity_year_rate']}(奖)</span>
+                </if>
+                <em>预期年化收益率</em>
+              </div>
+              <!--<div class="progress"><em>进度<br /><span>60%</span></em></div>-->
+            </div>
+            <div><a class="button-index-invest button-index-invest-day invest-btn" href="{:U('Financing/Invest/view',array('id'=>$vo['id']))}">立即投资</a></div>
+          </li>
+          <li class="new-guest-posters">
+            <a href="{$list_newbie.act.href}"><img src="{$list_newbie.act.img_url}"></a>
+          </li>
+       <else/>
+          <foreach name="list_newbie.prj" item="vo" key="k">
+            <?php $year_rate = separateDecimal($vo['year_rate']['year_rate']);?>
+            <li <?php if(($k+1)%2==1){?>class="new"<?php }?>>
+            <?php if($vo['is_new']){ ?>
+            <i class="new-mark"></i>
+            <?php }else if($vo['is_vip']){ ?>
+            <i class="vip-mask"></i>
+            <?php } ?>
+            <h1>{$vo.prj_type_display}-{$vo.prj_business_type_name}{$vo.prj_name}</h1>
+            <div class="yield">
+              <div class="rate">
+                <i>{$year_rate[0]}</i>.{$year_rate[1]}
+                <if condition="$vo['year_rate']['activity_year_rate']">
+                  <span>+{$vo['year_rate']['activity_year_rate']}(奖)</span>
+                </if>
+                <em>预期年化收益率</em>
+              </div>
+              <!--<div class="progress"><em>进度<br /><span>60%</span></em></div>-->
+            </div>
+            <div><a class="button-index-invest button-index-invest-day invest-btn" href="{:U('Financing/Invest/view',array('id'=>$vo['id']))}">立即投资</a></div>
+            </li>
+          </foreach>
+        </if>
+      </ul>
+    </div>
+    <!--收支记录start-->
+    <div class="records">
+      <div class="more">收支记录
+        <if condition="$income_records">
+          <span>
+            <a href="{:U('Payment/PayAccount/getMyMoneyList')}">查看更多</a>
+          </span>
+        </if>
+      </div>
+      <div class="records-tab">
+        <table>
+          <tr>
+          <th width="20%">时间</th>
+          <th width="15%">类型</th>
+          <th width="20%">交易金额</th>
+          <th width="15%">账户结余</th>
+          <th width="30%">摘要</th>
+          <th width="10%"></th></tr>
+          <if condition="$income_records">
+            <foreach name="income_records" item="vo" key="k">
+              <tr <?php if(($k+1)%2==0){?>style="background: #f8f5f5;"<?php }?>>
+                <td>
+                  <?php
+                   $date_str = date("Y-m-d H:i:s", $vo['ctime']);
+                   $date_arr = explode(' ',$date_str);
+                   echo $date_arr[0].'</br>'.$date_arr[1];
+                  ?>
+                  <!--2015-11-01<br />23:35:36</td>-->
+                </td>
+                <td>{$vo.type}</td>
+                <td <?php if($vo['in_or_out']==1){?>class="red"<?php }else{?>class="green"<?php }?>>
+                  <?php
+                    D("Payment/PayAccount");
+                    if($vo['mod_money'] && $vo['in_or_out'] == 1 ){
+                  ?>
+
+                  <?php
+                    if($vo['obj_type'] == PayAccountModel::OBJ_TYPE_USE_COUPON){
+                      echo '+'.number_format($vo['give_free_money']/100, 2);
+                    } else {
+                      if($vo['to_amount']< $vo['from_amount']){
+                        echo "";
+                      } else {
+                        echo '+'.number_format($vo['mod_money']/100, 2);
+                      }
+                  ?>
+                  <?php if($vo['is_repay'] == 1){ ?>
+                    <i class="icon ico-q" hovercard="ajax@{:U('Payment/PayAccount/getMyPrjProfitInfo?recordId=')}{$vo['id']}" hovercard-options='{"direction":"down","theme":"red"}'></i>
+                  <?php }?>
+                  </p>
+                  <?php if($vo['transfer_fee']){
+                    echo "(另扣除手续费";
+                    echo number_format(($vo['transfer_fee'])/100, 2)."元)";
+                  }
+                  ?>
+                  <?php
+              }
+            }
+
+                  if($vo['obj_type'] == PayAccountModel::OBJ_TYPE_PAY  AND  $vo['in_or_out'] !=1){
+                  echo number_format($vo['mod_money']/100, 2);
+                  }
+                  if($vo['obj_type'] == PayAccountModel::OBJ_TYPE_CASHOUTDONE && $vo['in_or_out'] != 2){
+                  echo number_format($vo['mod_money']/100, 2);
+                  }
+                  ?>
+
+              <!--支出-->
+              <?php if($vo['mod_money'] && $vo['in_or_out'] == 2){ echo "-".number_format($vo['mod_money']/100, 2)."";}
+                else if($vo['mod_money'] && $vo['to_amount'] < $vo['from_amount']){echo "-".number_format($vo['mod_money']/100, 2)."";}?>
+
+                <?php
+                  if($vo['obj_type'] == PayAccountModel::OBJ_TYPE_REPAY) echo "-".number_format($vo['freeze_money']/100, 2);
+                  if($vo['obj_type'] == PayAccountModel::OBJ_TYPE_PAYFREEZE) echo "-".number_format($vo['freeze_money']/100, 2);
+                  ?>
+                </td>
+                <td><?php echo number_format($vo['amount']/100, 2)."";?></td>
+                <td>
+                  <?php
+                  if($vo['is_zs'] == 1){
+                    echo '【存管账户】';
+                  }else{
+                    echo '【普通账户】';
+                  }
+                  if($vo['obj_type'] == PayAccountModel::OBJ_TYPE_USER_TYJ_CASH_BONUS || $vo['obj_type'] == PayAccountModel::OBJ_TYPE_REWARD_ZS){
+                    echo $vo['adesc'];
+                  }else{
+                    echo $vo['remark'];
+                  }
+                  ?>
+                </td>
+                <td><i class="tag-records"><em><h3>资金流水号：</h3><p>{$vo.record_no}</p></em></i></td>
+              </tr>
+            </foreach>
+            <else/>
+            <tr><td colspan="5">暂无记录</td></tr>
+          </if>
+        </table>
+      </div>
+    </div>
+    <!--收支记录end-->
+    <div class="hidden-area">
+      <input type="hidden" id="is_id_auth" value="{$verifyInfo.is_id_auth}"/>
+      <input type="hidden" id="is_personal" value="1"/>
+      <input type="hidden" id="is_bank_auth" value="{$verifyInfo.is_bank_auth}"/>
+    </div>
+    <!--债券转让start-->
+    <?php if($CREDITOR_TRANSFER_SHOW){ ?>
+    <div class="bond-point"><em class="icon_OrangeSigh anim-css3-icn"></em><i class="orange_dark">债权转让提醒：</i>您所投资的
+      <?php foreach ($CREDITOR_TRANSFER_DATA as $key => $vo) { ?>
+      {$vo.CREDITOR_TRANSFER_PRJ_TYPE}-{$vo.CREDITOR_TRANSFER_PRJ_NAME}项目在{$vo.CREDITOR_TRANSFER_REPAY_DATE_F}到期还款，
+      <?php } ?>
+      为确保您的投资本息能按时到达账户，请务必进行如下操作： <a href="{:U('Account/User/bondDetailed')}" colorbox="1" class="orange_dark">点我查看详情</a>
+    </div>
+    <?php } ?>
+    <!-- 弹窗 start 遮罩层 -->
+    <div class="mask" style="display:none;" id="maskLayer"></div>
+    <!--点击充值和提现时未实名认证时的弹窗-->
+    <div  style="display:none">
+      <div id="should_id_auth">
+        <div id="titlebar">温馨提示</div>
+        <div id="jqueryContent">
+          <div class="w520 tac">
+            <p class="tac"><img src="/public/images/pop/sprite_global_04.png" alt=""></p>
+            <p class="font20 mt20 mb28">请先去进行实名认证</p>
+            <p class="pop-auth-id font16">
+              可以去<a href="{:U('/Account/User/account')}" class="blue">账户设置</a>处，进行<a href="{:U('/Account/User/account', array(popVerify => '1'))}" class="blue">实名认证</a>操作
+            </p>
+            <p><a href="javascript:void(0);" class="btn-pop-auth" event-click="closeColorBox">我知道了</a></p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div  style="display:none">
+      <div id="should_bind_bank">
+        <div id="titlebar">温馨提示</div>
+        <div id="jqueryContent">
+          <div class="w520 tac">
+            <p class="tac"><img src="/public/images/pop/sprite_global_04.png" alt=""></p>
+            <p class="font20 mt20 mb28">请先去绑定提现银行卡</p>
+            <p class="pop-auth-id font16">
+              可以去<a href="{:U('/Account/User/account')}" class="blue">账户设置</a>处，进行<a href="{:U('/Account/Bank/identify', array(addbank => '1'))}" class="blue">银行卡绑定</a>操作
+            </p>
+            <p><a href="javascript:void(0);" class="btn-pop-auth" event-click="closeColorBox">我知道了</a></p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="khcg applyWL openSuccess dn">
+        <div class="fr close-btn">
+            <a href="javascript:;"><img src="/public/images/zskh/close.png" alt="" /></a>
+        </div>
+        <div class="clearfix"></div>
+        <div class="tac khcg-txt">
+            <p class="mt20"></p>
+            <p class="tac introduceTxt mt20" style="width:100%;font-size:18px;color:#575757;">存管账户正在分批激活，请您耐心等待通知。</p>
+            <a href="<?php echo C('payment.public_apply_url'); ?>" class="openAccountBtn " style="width:140px;font-size:16px;margin-top:40px;">
+              了解存管
+            </a>
+        </div>
+    </div>
+  <input type="hidden" id="is_whitelist_user" name="is_whitelist_user" value="{$userStatus['if_white_name']}" />
+  <input type="hidden" id="is_zscg_user" name="is_zscg_user" value="{$user['zs_status']}" />
+    <!--弹窗 end-->
+<!-- 在途资金弹窗start -->
+<!--   <div class="mask dn onwaypopbg"></div>
+  <div class="success-validation-popup khcg wid750 khcglm dn onwaypop" style="overflow-y:scroll">
+      <h2 id="titlebar">在途金额</h2><a id="colorboxClose" href="javascript:;" class="del" style="z-index:503;" hidefocus="hidefocus"></a>
+      <div class="AmountInTransit ">
+          <p class="margin10">指资金已转入浙商银行指定账户，因银行未划拨至投资人存管户，暂时不可提现和投资的资金。<br />
+这个过程一般有几分钟，请耐心等待。</p>
+<ul class="mt30">
+  <li class="tar wid30">已还款未到账资金（{$moving.repaying_100_view}%）<br /><span class="orange"><span class="onwayleft">{$moving.repaying_view}</span>元</span></li>
+  <li id="onwaypie" class="tac wid30" style="height:200px;width:200px;"></li>
+  <li class="tal wid30">余额转移未到账资金（{$moving.transfer_100_view}%）<br /><span class="green"><span class="onwayright">{$moving.transfer_view}</span>元</span></li>
+</ul>
+<div class="mt30">
+  <h4 class="blue lh30">已还款但资金未到账项目</h4>
+  <table width="600px;">
+    <tr>
+        <td class="tdHead tal wid25 ">项目名称</td>
+        <td class="tdHead tac">投资金额（元）</td>
+        <td class="tdHead tac">收益（元）</td>
+        <td class="tdHead tac">还款日期</td>
+        <td class="tdHead tac">项目进度</td>
+    </tr>
+    <foreach name="account.noArrive_list" item="no_arrive" key="key">
+    <tr>
+        <td class="tdFoot tal pl10">{$no_arrive.prj_name}</td>
+        <td class="tdFoot tac orange">{$no_arrive.money}</td>
+        <td class="tdFoot tac green">{$no_arrive.income}</td>
+        <td class="tdFoot tac">{$no_arrive.expect_repay_time}</td>
+        <td class="tdFoot tac blue"><a href="{$no_arrive.financing_url}" target="_blank">查看</a></td>
+    </tr>
+    </foreach>
+  </table>
+</div>
+<div class="mt30">
+  <h4 class="blue lh30">原账户余额转移至存管户资金</h4>
+  <table width="600px;">
+    <tr>
+        <td class="tdHead tal wid25 ">开始转移时间</td>
+        <td class="tdHead tac">转出账户</td>
+        <td class="tdHead tac">转入账户</td>
+        <td class="tdHead tac">转移金额（元）</td>
+    </tr>
+    <foreach name="moving.moving_list" item="money" key="k">
+    <tr>
+        <td class="tdFoot tal pl10">{$money.ctime}</td>
+        <td class="tdFoot tac">投资人原鑫合汇账户</td>
+        <td class="tdFoot tac">投资人浙商存管户</td>
+        <td class="tdFoot tac orange">{$money.move_amount}</td>
+    </tr>
+    </foreach>
+  </table>
+</div>
+  </div>
+</div> -->
+<!-- 弹窗end -->
+<!--     <div class="mask mask-dark <if condition='$is_popup neq 1'>dn</if>"></div>
+    <div class="<if condition='$is_popup neq 1'>dn</if>" id="setPayPwdPop" style="width: 430px;position: absolute;top: 300px;left: 50%;margin-left: -215px;z-index: 99;">
+      <div id="titlebar">修改支付密码<em event-click="closePayPwdPop" style="right:15px;position:absolute;cursor:pointer;"><img src="/public/images/colorbox/close.png" /></em></div>
+      <div id="jqueryContent" style="width:380px;">
+        <div class="indent_list li-label-name_w110">
+          <p>为了您的账户安全及投资体验，网站端支付密码和手机端都统一为6位数字。您可前往“用户中心-账户设置”页面修改。</p>
+          <div style="width:170px;margin:20px auto;">
+            <div class="recharge-btn" style="cursor: pointer;"><a href="{:U('/Account/User/account')}" style="color: #fff;">立即设置</a></div>
+            <div class="recharge-btn" style="cursor: pointer;background:#bdbdbd;margin-left:20px;" event-click="closePayPwdPop">暂不设置</div>
+          </div>
+        </div>
+      </div>
+    </div> -->
+</div>
+<div class="mask mask-dark <if condition='$new_guest neq 1'>dn</if>" id="first-pop"></div>
+<div class="guideNextStepContainer <if condition='$new_guest neq 1'>dn</if>" id="first-pop">
+  <div class="guideContainer">
+    <div class="new-guider-first">
+      <div class="first"><img src="/public/images/account/new-guider.png" alt=""></div>
+      <div class="button-common-blue button-blue-w120"><a class="btns" href="javascript:;" id="guide-next-btn">下一步</a></div>
+    </div>
+    <div class="new-guider-second" id="new-guider-second">
+      <div class="second"><img src="/public/images/account/new-guider-second.png" alt=""></div>
+      <div class="new-guider-know"><a href="javascript:;"><img src="/public/images/account/new-guider-know.png" alt="" id="guide-close"></a></div>
+    </div>
+  </div>
+</div>
+<div id="div_delBankCard" style="display:none;">
+  <div id="titlebar"></div>
+  <div id="jqueryContent">
+    <div class="w520">
+      <ul class="formList formList_pop">
+        <li class="tac">32322323</li>
+        <li class="grid-button-box" style="text-align:center;">
+          <span class=""><a href="javascript:;" class="button-common-orange button-blue-pop mr15"><span event-click="bankCard.cancel" class="btns del-card">知道了</span></a><a href="/Activity/XinPartner3/index" class="button-common-orange button-gray-pop "><span class="btns" >去抽奖</span></a>
+        </span>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- 修改密码弹窗 -->
+<div class="dn" id="popbox-safe">
+  <div class="popbox-safe">
+    <h4>账户安全小贴士</h4>
+    <div class="safe-con">
+      <img src="/public/images/account/warn.png" alt="" width="150px;">
+      <div class="right">
+        <span>小鑫发现您已经超过2个月没有修改登录密码了，为了您的账户安全，建议您经常更换哦~</span>
+        <a href="{:U('/Account/User/account')}" class="xiugaimima">修改登录密码</a>
+      </div>
+    </div>
+  </div>
+</div>
+</block>
+
+<block name="news">
+  <style>
+    .notice  .textScroll, .notice  .textScroll a{
+      text-align: left;
+      width: 1000px;
+      margin: 0 auto;
+      color: #d3d3d3;
+    }
+    .textScroll{height: 40px; line-height: 40px; overflow: hidden}
+
+  </style>
+  <?php if(!empty($importantNews)){ ?>
+  <div class="notice" style="position: fixed;bottom: 0;width: 100%;">
+    <div id="imptWrap" class="textScroll">
+      <span class="msg-close" event-click="hideMsg"></span>
+
+      <ul class="scroll-wrap">
+        <foreach name="importantNews" item="vo">
+          <li>
+            重要公告：<a href="/aboutUs?id={$vo.id}" target="_blank">{$vo.title}</a>
+          </li>
+        </foreach>
+      </ul>
+    </div>
+  </div>
+  <?php }?>
+</block>
+
+

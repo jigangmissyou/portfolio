@@ -1,0 +1,42 @@
+
+<div id="uselinebox" class="usage-record" style="top: 95%;left: -199%;background-color: #FFFEDF;padding-right: 0px;position:absolute;z-index: 99999999999">
+    <style type="text/css">
+        .usage-record table td{
+            padding:7px 10px 0 10px;
+        }
+        .record-txt p.date{
+            padding-left: 10px;
+            text-align: left;
+            color: #777777;
+        }
+    </style>
+    <div class="record-txt" style="width:258px">
+        <div style="height: 8px"></div>
+        <p class="date" style="height: 15px">使用记录</p>
+        <table>
+            <tr>
+                <td class="date">使用日期</td>
+                <?php if($type != 3){ ?>
+                    <!-- <td class="money">金额</td>-->
+                <?php }?>
+                <td class="product">投资理财产品</td>
+            </tr>
+            <?php if($result):?>
+                <!-- --><?php /*foreach($data as $key => $vo):
+    */?>
+                <tr>
+                    <td><?php echo $result['usedTime']; ?></td>
+                    <?php if($type != 3){ ?>
+                        <!--<td><?php /*echo $vo['usedAmount']; */?>元</td>-->
+                    <?php }?>
+                    <td><?php echo $result['prjName']; ?></td>
+                </tr>
+                <!--    --><?php //endforeach;?>
+            <?php else:?>
+                <tr>
+                    <td colspan="3" style="text-align:center;"><?php if($msg){ echo $msg; }else{ echo '暂无数据';} ?></td>
+                </tr>
+            <?php endif; ?>
+        </table>
+    </div>
+</div>

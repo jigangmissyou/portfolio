@@ -1,0 +1,161 @@
+<div class="statistics">
+  <?php
+    $repayDateDisPlay = '';
+    if($prjInfo['value_date_shadow']==0){
+      $repayDateDisPlay = '13:00之前';
+    } else {
+      $repayDateDisPlay = '16:00-24:00';
+    }
+   ?>
+  <?php if(!$isFed):?>
+  <span class="item" style="margin:0;">以下数据根据"投资金额{$demand_amount_name}元,期限{$prjInfo['time_limit']}{$prjInfo['time_limit_unit_view']}"计算,<br />您的收益以实际收益为准，预计还款日当天{$repayDateDisPlay}到账{$notice_addon}
+  <br />
+    <?php
+      $is_show = $is_early_close || $is_extend || $is_earlyRepay;
+    ?>
+    <?php if($is_show){
+      $show_num = 1;
+    ?>
+    本项目募集期和用款期不固定，项目属性：
+    <i>
+      <?php
+        if($is_early_close){
+          echo $show_num.'、可提前结束募集  ';
+          $show_num++;
+        }
+        if($is_extend){
+          echo $show_num.'、允许最长'.$extend_days.'展期  ';
+          $show_num++;
+        }
+        if($is_earlyRepay){
+          echo $show_num.'、允许最长'.$earlyRepay_days.'天提前还款  ';
+          $show_num++;
+        }
+      ?>
+    </i>
+    <br />
+    <?php }?>
+    展期、提前还款后还款日、应收本息、应收利息会发生变化，请投资者关注平台公示信息。
+  </span>
+  <?php else:?>
+  <span class="item" style="margin:0;">以下数据根据"投资金额{$demand_amount_name}元,期限<?php echo $timeLimit[1]; ?>"计算,<br />您的收益以实际收益为准，预计还款日当天{$repayDateDisPlay}到账</span>
+  <?php endif;?>
+</div>
+
+<div>
+  <table class="ui-record-table thin">
+    <thead>
+      <tr>
+        <th class="tac">款项</th>
+        <th class="tac">期次</th>
+        <th class="tac"></th>
+        <th class="tac">还款日</th>
+        <th class="tal">应收本息（元）</th>
+        <th class="tal">应收利息（元）</th>
+        <th class="tal">应收本金（元）</th>
+        <th class="tal"><span style="margin-right:80px">剩余本金（元）</span></th>
+      </tr>
+      <tr class="line">
+        <th colspan="100%"></th>
+      </tr>
+    </thead>
+    <tbody>
+      <?php if(!$isFed):?>
+      <tr>
+        <td class="tac">募集期<br />资金占用费<a class="icon_unknown" hovercard="div@ct4" hovercard-options='{"direction":"down"}'></a>
+          <div class="dn" hovercard-id="ct4"><p class="hoverPinfo">募集期资金占用费=募集期间每天的募集期资金占用费之和<br/>（每天的募集期资金占用费=当日投资总金额×年化利率/365）</p></div>
+        </td>
+        <td></td>
+        <td></td>
+        <td class="tac">{$bidInfo['repayDate']}</td>
+        <td class="tal">
+          <?php if($isEnd || $isFull):?>
+          {$bidInfo['incomeView']}
+          <?php else: ?>
+          <p>
+            <?php if(!$isEnd && $prj_type == 'H'){ ?>
+            0
+            <?php }else{ ?>
+            实际金额以融资<br/>截止日显示为准
+            <?php } ?>
+          </p>
+          <?php endif;?>
+        </td>
+        <td class="tal">
+          <?php if($isEnd || $isFull):?>
+          {$bidInfo['incomeView']}
+          <?php else: ?>
+            <?php if(!$isEnd && $prj_type == 'H'){ ?>
+            0
+            <?php }else{ ?>
+            实际金额以融资<br/>截止日显示为准
+            <?php } ?>
+          <?php endif;?>
+        </td>
+        <td class="tal">-</td>
+        <td class="tal"><span style="margin-right:80px">{$bidInfo['amountView']}</span></td>
+      </tr>
+      <?php endif;?>
+      <!--募集期利息 END-->
+
+      <!--
+        目前$tableResult 只可能出现两种情况
+        1. 只有$tableResult[1],表明正常还款，是个嵌套数组
+        2. 有$tableResult[1]、$tableResult[4],依次表示正常还款和展期还款
+      -->
+      <?php
+if($tableResult){
+  foreach ($tableResult as $key=>$arr) {
+    $ptype_display = '';
+      if($key==1){
+      $ptype_display="正常还款日期";
+    } else if($key==4){
+      $ptype_display="展期";
+    } else if($key == 3){
+      $ptype_display="罚息";
+    }
+    $len = count($arr);
+    for($i=0; $i<$len; $i++){
+      if($key == 3 || $key == 4) {
+        $_no = 1;
+      } else {
+        $_no = $arr[$i]['no'];
+      }
+      ?>
+      <tr>
+        <?php if($i==0){ ?>
+        <td class="tac" rowspan="<?php echo $len;?>">
+          <?php echo $ptype_display; ?>
+        </td>
+        <?php } ?>
+
+        <td class="tac"><?php echo $_no; ?></td>
+        <td></td>
+        <td class="tac"><?php echo $arr[$i]['repay_date']; ?></td>
+        <td class="tal"><?php echo $arr[$i]['repay_money_view']; ?></td>
+        <td class="tal"><?php echo $arr[$i]['profit_view']; ?></td>
+        <td class="tal"><?php echo $arr[$i]['capital_view']; ?></td>
+        <td class="tal"><span style="margin-right:80px"><?php echo $arr[$i]['last_capital_view']; ?></span>
+        </td>
+      </tr>
+      <?php }}} ?>
+
+      <tr class="lastrow ftC01">
+        <td class="tac">合计</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td class="tal">{$totalMoney}</td>
+        <td class="tal">{$totalProfit}</td>
+        <td class="tal">{$total_principal}</td>
+        <td class="tal"></td>
+      </tr>
+    </tbody>
+  </table>
+    <!-- <div style="padding-top: 30px">提示：展期、提前还款后还款日、应收本息、应收利息会发生变化，请投资者关注平台公示信息。</div> -->
+</div>
+<script>
+  seajs.use(['hovercard/hovercard'], function (hovercard) {
+    hovercard.init();
+  });
+</script>

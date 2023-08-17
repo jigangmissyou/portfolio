@@ -1,0 +1,9 @@
+<div class="detailSurTab surTabUl mt30 mb20 surP">
+  <ul>
+    <li <?php if(MODULE_NAME == 'FinancingManage' && in_array(ACTION_NAME, array('index', 'applyView'))) {?> class="current"<?php }?>><span class="roundTopborGy"><a href="{:U('Account/FinancingManage/index')}">我的借款</a></span><a class="hrwrite"></a></li>
+    <li <?php if(MODULE_NAME == 'FinancingManage' && in_array(ACTION_NAME, array('project', 'projectView'))) {?> class="current"<?php }?>><span class="roundTopborGy"><a href="{:U('Account/FinancingManage/project')}">项目管理</a></span><a class="hrwrite"></a></li>
+    <li <?php if(ACTION_NAME=='getMyMoneyList') {?> class="current"<?php }?>><span class="roundTopborGy"><a href="{:U('Account/FinancingManage/getMyMoneyList')}">资金记录</a></span><a class="hrwrite"></a></li>
+    <li <?php if(MODULE_NAME=='FinancingManage' && (ACTION_NAME=='contractManagement')) {?> class="current"<?php }?>><span class="roundTopborGy"><a href="{:U('Account/FinancingManage/contractManagement')}">合同管理</a></span><a class="hrwrite"></a><i class="topReddot contractManagement-num dn" id="contractManagement-num"></i></li>
+    <li <?php if((ACTION_NAME=='companyInfo' || ACTION_NAME=='accountInfo') && MODULE_NAME =='FinancingManage') {?> class="current"<?php }?>><span class="roundTopborGy"><a href="{:U('Account/FinancingManage/accountInfo')}">账户设置</a></span><a class="hrwrite"></a></li>
+  </ul>
+</div>

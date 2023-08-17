@@ -1,0 +1,41 @@
+<div style="color: red"><strong>注意：请上传jpg, jpeg, png, gif格式的图片文件</strong></div>
+<input type="hidden" id="companyId" value=""/>
+<div class="project_materials pro_item_list bor_t" style="padding-right: 50px">
+  <?php if($corpinfo){ ?>
+    <?php foreach ($corpinfo['material'] as $vo) { ?>
+    <div class="content" data-imgType="{$vo.code_no}" style="position: relative">
+      <div class="info mainWrapBox" style="width: 580px;">
+        <input type="text" class="file_ipt" style="background:none; width: 280px" value="{$vo.code_name}" oldval="{$vo.name}" readonly>
+        <?php foreach ($vo['material'] as $imgs) { ?>
+        <div event-click="viewThumbImg" class="thumbnail thumbnailWrap" style="cursor: pointer;" url="{$imgs.thumbs.big}"><img width="50" height="50" src="{$imgs.thumbs.tiny}"><if condition="!$imgs['can_not_del']"><i event-click="delThumbImg" mid="{$imgs.id}" class="close delMateriaBtn" title="删除材料">×</i></if></div>
+        <?php } ?>
+      </div>
+      <div class="tool">
+        <a href="javascript:void(0)" id="uploadEvidence_{$vo.code_no}" class="uploadEvidence">上传</a>
+      </div>
+      <div class="uploading"><span>资料上传中...</span></div>
+    </div>
+    <?php } ?>
+  <?php }else{ ?>
+    <?php foreach ($materialList as $vo) { ?>
+    <div class="content" data-imgType="{$vo.code_no}">
+      <div class="info mainWrapBox">
+        <input type="text" class="file_ipt" style="background:none;  width: 280px" value="{$vo.code_name}" oldval="{$vo.name}" readonly>
+      </div>
+      <div class="tool">
+        <a href="javascript:void(0)" id="uploadEvidence_{$vo.code_no}" class="uploadEvidence">上传</a>
+      </div>
+      <div class="uploading"><span>资料上传中...</span></div>
+    </div>
+    <?php } ?>
+  <?php } ?>
+</div>
+
+<!--
+<div class="control control1">
+  <div class="pro_form_item submit_area">
+    <span class="btn_bor_orange" style="margin-top: 40px; margin-left: 180px">
+      <input type="button" class="btn_text step_next" value="下一步" event-click="upload.next"/>
+    </span>
+  </div>
+</div>-->
