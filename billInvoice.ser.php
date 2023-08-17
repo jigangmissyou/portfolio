@@ -1,7 +1,7 @@
 <?php
 
 /**
- * 账套信息管理
+ * 发票管理
  */
 
 include_once '/inc/auth.inc.php';
@@ -10,8 +10,6 @@ include_once '/inc/utility_org.php';
 
 include_once '/general/erp4/lib/dbTool/mssqlDB.class.php';
 include_once '/general/erp4/lib/dbTool/mysqlDB2.class.php';
-
-
 include_once '/general/erp4/service/common.ser.php';
 include_once '/general/erp4/service/flows.ser.php';
 include_once '/general/erp4/service/order.ser.php';
@@ -42,10 +40,9 @@ class billInvoice{
     }
 
     /**
-     * 
-     * @param type $pars
-     * @param type $page
-     * @param type $limit
+     * List of all invoices
+     * @param Array $params
+     * @return Array
      */
     public function getPageList($params){
         $where="(1=1)";
@@ -97,11 +94,7 @@ class billInvoice{
                 }
             }
 
-        }else if(empty($params["show_type"])&&$_SESSION['LOGIN_USER_PRIV']!=1&&!$this->isInWhiteNameList()){
-            $where.=" and a.creator_id={$_SESSION['LOGIN_UID']} ";
         }
-
-        
 
         //按销货单号筛选
         if(!empty($params["sales_num_like"])){
@@ -147,7 +140,6 @@ class billInvoice{
         $page=!empty($params['page'])?$params['page']:1;
         $limit=!empty($params['limit'])?$params['limit']:10;
         
-        
         if($limit==1){
             $dataList=$this->db->get_one($table,$filter,$where);
         }else{
@@ -156,18 +148,8 @@ class billInvoice{
                 foreach ($dataList["data"] as $key=>$val){
                     $dataList["data"][$key]["create_user"]= GetUserNameByUid($val['creator_id']);
                     $this->timeFilter($dataList["data"][$key],$this->timeField);
-                    /*$u8Deliver=$this->customerSer->getDeliverData(array("sales_num"=>$val["sales_num"]));
-                    $dataList["data"][$key]["expiry_date"]=$dataList["data"][$key]["approver"]="";
-                    if(!empty($u8Deliver)&&$u8Deliver!=-1){
-                        $dataList["data"][$key]["expiry_date"]=!empty($u8Deliver["dgatheringdate"])?$u8Deliver["dgatheringdate"]->format('Y-m-d'):"";//到期日
-                        $dataList["data"][$key]["approver"]=$u8Deliver["cverifier"];//审批人
-                    }*/
-                    
-                    
                     $dataList["data"][$key]["adjust_money"]= 0.00;
                     $dataList["data"][$key]["settle_total"]= 0.00;
-                    
-                    
                     $frozenInfo= $this->db->get_one("dev_collection_verify_frozen", " sum(frozen_total) as frozen_total " , " case_id={$val["id"]} and capital_type='invoice' ");
                     $frozenTotal=!empty($frozenInfo["frozen_total"])?$frozenInfo["frozen_total"]:0;
                     $dataList["data"][$key]["total_balance"]= doubleval($val["total_balance"])-doubleval($frozenTotal); 
@@ -175,8 +157,6 @@ class billInvoice{
                 }
             }
         }
-        
-        
         return $dataList;
     }
     
@@ -189,23 +169,11 @@ class billInvoice{
         }
     }
 
-    public function isInWhiteNameList(){
-        $orderSer = new orderChange();
-        $retInfo = $orderSer->getUserGroupIds(["name"=>"发票可以查看全部"]);
-        if(!empty($retInfo)){
-            $arr = explode(",", $retInfo);
-            if(in_array($_SESSION['LOGIN_UID'], $arr)){
-                return true;
-            }else{
-                return false;
-            }
-        }else{
-            return false;
-        }
-    }
-
-
-    //初始化
+    /**
+     * Init invoice info
+     * @param $params
+     * @return array
+     */
     public function initInvoiceInfo($params){
         $retInfo=array("status"=>200,"msg"=>"成功！","data"=>array());
         $invoice=$deliver=$provebill=$cabinet=$orderInfo=$accountInfo=$accountSet=$exportInfo=$flowInfo=array();
@@ -219,7 +187,6 @@ class billInvoice{
             $deliver=$this->db->get_one("dev_provebill_deliver", "*", " id in ({$params["deliver_id"]}) "); 
         }
         
-
         if(!empty($deliver["bill_ids"])){
             $provebill=$this->db->get_one("dev_provebill", "*", " id={$deliver["bill_ids"]} ");
             $orderInfo=$this->db->get_one("dev_provebill_product as a inner join dev_ordernum as b on a.order_id=b.status inner join dev_order as c on c.id=a.order_id "
@@ -244,8 +211,6 @@ class billInvoice{
     
         }
    
-
-        
         if(!empty($invoice)){
             $retInfo["data"]=$invoice;
         }else{
@@ -274,27 +239,20 @@ class billInvoice{
                 "exchange_rate"=>1,
             );
             
-            
             if(!empty($deliver["account_type"])){
-                
-    
                 $config = $this->db->select_one('dev_config','*',"zhangTao='{$deliver["account_type"]}'");
                 if(!empty($config)) {
                     //切换u8数据库连接
                     $this->msdb = new mssqlDB($config['ip'],array('Database'=>$config['db1'],'UID'=>'sa','PWD'=>$config['pass']));
                     $u8Info=$this->msdb->select_one("ex_consignment","csscode,dcreditstart,dgatheringdate,icreditdays,fexchrate"," ccode = '{$deliver["sales_num"]}' ");
-    
                     if(!empty($u8Info)&& is_array($u8Info)){
                         $retInfo["data"]["pay_type"]=!empty($u8Info["csscode"])?$u8Info["csscode"]:"";
                         $retInfo["data"]["account_date"]=!empty($u8Info["dcreditstart"])?$u8Info["dcreditstart"]->format('Y-m-d H:i:s'):"";
                         $retInfo["data"]["expire_date"]=!empty($u8Info["dgatheringdate"])?$u8Info["dgatheringdate"]->format('Y-m-d H:i:s'):"";
                         $retInfo["data"]["account_term"]=$u8Info["icreditdays"];
-                        // $retInfo["data"]["exchange_rate"]=$u8Info["fexchrate"]; //汇率暂时不用
                     }               
                 }
-               
             }
-
         }
         $config = $this->db->select_one('dev_config','*',"zhangTao='{$deliver["account_type"]}'");
         $this->msdb = new mssqlDB($config['ip'],array('Database'=>$config['db1'],'UID'=>'sa','PWD'=>$config['pass'])); 
@@ -315,12 +273,11 @@ class billInvoice{
     }
 
     /**
-     * 更新发票数据
-     * @param type $params
-     * @return type
+     * Update invoice info
+     * @param array $params
+     * @return array
      */
     public function updateInfo($params){ 
-
         $data=$params["data"];
         $ids=array();
         $id=!empty($data["id"])?$data["id"]:array(); 
@@ -328,187 +285,195 @@ class billInvoice{
         unset($data['products']);
         unset($data["id"]);
         $this->db->query("BEGIN");//事务开始
-       
-      
-        
         try {
             if(empty($id)){
-                $data['creator_id']=$_SESSION['LOGIN_UID'];
-                $data['create_time']= date('Y-m-d H:i:s');
-                $data["invoice_num"]= $billNum = $this->getBillNum(); //发票号
-                if(!empty($products)){
-                    $total=0;
-                    foreach ($products as $key=>$val){
-                        $curItem= current($val);
-                        $orderNum = $this->db->get_one("dev_ordernum", "*", " status={$curItem["orderId"]} ");
-                        $data['account_type']=$orderNum["zhangTao"];
-                        //手册的取关单号
-                        if(!empty($curItem['gd_number'])){
-                            $data["invoice_num"] = $curItem['gd_number'];
-                        }else{
-                            $data["invoice_num"] = $billNum;
-                        }
-                        $id=$this->db->insert($this->tabName, $data);
-                        $total=0;
-                        $updateTemp=array("bill_id"=>array(),"cabinet_id"=>array(),"deliver_id"=>array(),"sales_num"=>array(),"invoice_num"=>array());
-
-                        foreach ($val as $k=>$v){
-                            $addData = array(
-                                "invoice_id"=>$id,
-                                "order_list_id"=>$v["id"],
-                                "order_id"=>$v["orderId"],
-                                "invoice_num"=>!empty($v["deliver_num"])?$v["deliver_num"]:$v["invoice_num"],  //发票数量
-                                "invoice_total"=>$v["invoice_total"], 
-                                "invoice_price"=>$v["invoice_price"], 
-                                
-                                "adjust_money"=>$v["adjust_money"], 
-                                "adjust_price"=>$v["adjust_price"], 
-                                
-                                "exchange_rate"=>$v["exchange_rate"], 
-                                "order_num"=>$v["orderNum"],
-                                    
-                                "freight"=>$v["freight"],
-                                "insure"=>$v["insure"],
-                                "fob_total"=>$v["fob_total"],
-                                
-                                "sales_num"=>$v["sales_num"],
-                                "deliver_id"=>$v["deliver_id"],
-
-                            );
-                            if(!empty($v["productId"])){
-                                $productInfo = $this->db->get_one("dev_product", "*", " id={$v["productId"]} ");
-                                if(!empty($productInfo)){
-                                    $hsInfo = $this->db->get_one('dev_product_hscode','*',"hs_code = '{$productInfo['hsCode']}' and hs_code_name = '{$productInfo['hsCodeName']}' ");
-                                    $addData["hs_code"]=$productInfo["hsCode"];
-                                    $addData["hs_name"]=$hsInfo["grade_name"];
-                                }
-                            }
-                            $this->db->insert("dev_provebill_invoice_item", $addData);
-                            
-                            $total+=$v["invoice_total"];
-                            
-                           
-                            if(!empty($v["deliver_id"])&&!in_array($v["deliver_id"], $updateTemp["deliver_id"])){
-                                $tempData=$this->db->get_one(" dev_provebill as a left join dev_provebill_cabinet as b on b.bill_id=a.id ", "a.id as bill_id,b.id as cabinet_id,a.invoice_num ", " a.deliver_id={$v["deliver_id"]} ");
-                                if(!empty($tempData["bill_id"])) $updateTemp["bill_id"][]=$tempData["bill_id"];
-                                if(!empty($tempData["cabinet_id"])) $updateTemp["cabinet_id"][]=$tempData["cabinet_id"];
-                                if(!empty($tempData["invoice_num"])&& !in_array($tempData["invoice_num"],$updateTemp["invoice_num"])) $updateTemp["invoice_num"][]=$tempData["invoice_num"];
-                                
-                                $updateTemp["deliver_id"][]=$v["deliver_id"];
-                                $updateTemp["sales_num"][]=$v["sales_num"];
-                            }
-                            
-                        }
-                        
-                        
-                        
-                        $ids[]=$id;
-                   
-                        $this->db->update($this->tabName, array(
-                            "total"=>$total,
-                            "total_balance"=>$total,
-                            "order_num"=>implode(",", $updateTemp["invoice_num"]),
-                            "bill_id"=> implode(",", $updateTemp["bill_id"]),
-                            "cabinet_id"=> implode(",", $updateTemp["cabinet_id"]),
-                            "deliver_id"=> implode(",", $updateTemp["deliver_id"]),
-                            "sales_num"=> implode(",", $updateTemp["sales_num"]),
-                        )," id={$id} ");
-                    }
-                   
-                }   
+                $this->handleNewInvoice($data,$products);
             }else{
-                if($id == "[object Object]"){
-                    //抛出异常提示
-                    throw new Exception("参数不正确");
-                }
-                $this->db->update($this->tabName, $data," id in({$id}) ");//更新单证信息
-                $this->db->delete("dev_provebill_invoice_item", " invoice_id in({$id}) ");
-                if(!empty($products)){
-                    $totalArray=$updateTemp=array();
-                    foreach ($products as $key=>$val){
-                     
-                        foreach ($val as $k=>$v){
-                            if(empty($updateTemp[$v["invoice_id"]])){
-                                $updateTemp[$v["invoice_id"]]=array("bill_id"=>array(),"cabinet_id"=>array(),"deliver_id"=>array(),"sales_num"=>array(),"invoice_num"=>array());
-                            }
-                            $addData = array(
-                                "invoice_id"=>$v["invoice_id"],
-                                "order_list_id"=>$v["id"],
-                                "order_id"=>$v["orderId"],
-                                "invoice_num"=>!empty($v["deliver_num"])?$v["deliver_num"]:$v["invoice_num"], 
-                                "invoice_total"=>$v["invoice_total"], 
-                                "invoice_price"=>$v["invoice_price"], 
-                                
-                                "adjust_money"=>$v["adjust_money"], 
-                                "adjust_price"=>$v["adjust_price"], 
-                                
-                                "exchange_rate"=>$v["exchange_rate"], 
-                                "order_num"=>$v["orderNum"],
-                                
-                                "freight"=>$v["freight"],
-                                "insure"=>$v["insure"],
-                                "fob_total"=>$v["fob_total"],
-                                "sales_num"=>$v["sales_num"],
-                                "deliver_id"=>$v["deliver_id"],
-                            );
-                            if(!empty($v["productId"])){
-                                $productInfo = $this->db->get_one("dev_product", "*", " id={$v["productId"]} ");
-                                if(!empty($productInfo)){
-                                    $addData["hs_code"]=$productInfo["hsCode"];
-                                    $addData["hs_name"]=$productInfo["hsCodeName"];
-                                }
-                            }
-                            $this->db->insert("dev_provebill_invoice_item", $addData);
-                            
-                            $totalArray[$v["invoice_id"]]+=$v["invoice_total"];
-                            
-                            if(!empty($v["deliver_id"])&&!in_array($v["deliver_id"], $updateTemp[$v["invoice_id"]]["deliver_id"])){
-                                $tempData=$this->db->get_one(" dev_provebill as a left join dev_provebill_cabinet as b on b.bill_id=a.id ", "a.id as bill_id,b.id as cabinet_id,a.invoice_num ", " a.deliver_id={$v["deliver_id"]} ");
-                                if(!empty($tempData["bill_id"]))  $updateTemp[$v["invoice_id"]]["bill_id"][]=$tempData["bill_id"];
-                                if(!empty($tempData["cabinet_id"]))  $updateTemp[$v["invoice_id"]]["cabinet_id"][]=$tempData["cabinet_id"]; 
-                                if(!empty($tempData["invoice_num"])&& !in_array($tempData["invoice_num"],$updateTemp[$v["invoice_id"]]["invoice_num"])) $updateTemp[$v["invoice_id"]]["invoice_num"][]=$tempData["invoice_num"];
-
-                                $updateTemp[$v["invoice_id"]]["deliver_id"][]=$v["deliver_id"];
-                                $updateTemp[$v["invoice_id"]]["sales_num"][]=$v["sales_num"];
-                            }
-
-                        }
-
-                    }
-                } 
-                
-                if(!empty($totalArray)){
-                    foreach ($totalArray as $key=>$val){
-                        $this->db->update($this->tabName, array(
-                            "total"=>$val,
-                            "total_balance"=>$val,
-                            "order_num"=>implode(",", $updateTemp[$key]["invoice_num"]),
-                            "bill_id"=> implode(",", $updateTemp[$key]["bill_id"]),
-                            "cabinet_id"=> implode(",", $updateTemp[$key]["cabinet_id"]),
-                            "deliver_id"=> implode(",", $updateTemp[$key]["deliver_id"]),
-                            "sales_num"=> implode(",", $updateTemp[$key]["sales_num"]),
-                        )," id={$key} ");
-                    }
-                }
-                $ids= explode(",", $id);
+                $this->handleExistingInvoice($data,$products,$id);
             }
-
             $this->db->query("COMMIT");//提交事务
-
         } catch (Exception $e) {
             $this->db->query("ROLLBACK");//事务回滚
             return array("status"=>500,"msg"=>$e->getMessage(),"data"=>array());   
         }
-        
-
-    
         return array("status"=>200,"msg"=>"更新成功！","data"=> implode(",", $ids) );
     }
 
+    /**
+     * Handle new invoice
+     * @param array $data
+     * @param array $products
+     * @return boolean
+     */
+    private function handleNewInvoice($data, $products) {
+        $data['creator_id']=$_SESSION['LOGIN_UID'];
+        $data['create_time']= date('Y-m-d H:i:s');
+        $data["invoice_num"]= $billNum = $this->getBillNum(); //发票号
+        if(!empty($products)){
+            $total=0;
+            foreach ($products as $key=>$val){
+                $curItem= current($val);
+                $orderNum = $this->db->get_one("dev_ordernum", "*", " status={$curItem["orderId"]} ");
+                $data['account_type']=$orderNum["zhangTao"];
+                //手册的取关单号
+                if(!empty($curItem['gd_number'])){
+                    $data["invoice_num"] = $curItem['gd_number'];
+                }else{
+                    $data["invoice_num"] = $billNum;
+                }
+                $id=$this->db->insert($this->tabName, $data);
+                $total=0;
+                $updateTemp=array("bill_id"=>array(),"cabinet_id"=>array(),"deliver_id"=>array(),"sales_num"=>array(),"invoice_num"=>array());
 
+                foreach ($val as $k=>$v){
+                    $addData = array(
+                        "invoice_id"=>$id,
+                        "order_list_id"=>$v["id"],
+                        "order_id"=>$v["orderId"],
+                        "invoice_num"=>!empty($v["deliver_num"])?$v["deliver_num"]:$v["invoice_num"],  //发票数量
+                        "invoice_total"=>$v["invoice_total"], 
+                        "invoice_price"=>$v["invoice_price"], 
+                        
+                        "adjust_money"=>$v["adjust_money"], 
+                        "adjust_price"=>$v["adjust_price"], 
+                        
+                        "exchange_rate"=>$v["exchange_rate"], 
+                        "order_num"=>$v["orderNum"],
+                            
+                        "freight"=>$v["freight"],
+                        "insure"=>$v["insure"],
+                        "fob_total"=>$v["fob_total"],
+                        
+                        "sales_num"=>$v["sales_num"],
+                        "deliver_id"=>$v["deliver_id"],
+
+                    );
+                    if(!empty($v["productId"])){
+                        $productInfo = $this->db->get_one("dev_product", "*", " id={$v["productId"]} ");
+                        if(!empty($productInfo)){
+                            $hsInfo = $this->db->get_one('dev_product_hscode','*',"hs_code = '{$productInfo['hsCode']}' and hs_code_name = '{$productInfo['hsCodeName']}' ");
+                            $addData["hs_code"]=$productInfo["hsCode"];
+                            $addData["hs_name"]=$hsInfo["grade_name"];
+                        }
+                    }
+                    $this->db->insert("dev_provebill_invoice_item", $addData);
+                    
+                    $total+=$v["invoice_total"];
+                    
+                    
+                    if(!empty($v["deliver_id"])&&!in_array($v["deliver_id"], $updateTemp["deliver_id"])){
+                        $tempData=$this->db->get_one(" dev_provebill as a left join dev_provebill_cabinet as b on b.bill_id=a.id ", "a.id as bill_id,b.id as cabinet_id,a.invoice_num ", " a.deliver_id={$v["deliver_id"]} ");
+                        if(!empty($tempData["bill_id"])) $updateTemp["bill_id"][]=$tempData["bill_id"];
+                        if(!empty($tempData["cabinet_id"])) $updateTemp["cabinet_id"][]=$tempData["cabinet_id"];
+                        if(!empty($tempData["invoice_num"])&& !in_array($tempData["invoice_num"],$updateTemp["invoice_num"])) $updateTemp["invoice_num"][]=$tempData["invoice_num"];
+                        
+                        $updateTemp["deliver_id"][]=$v["deliver_id"];
+                        $updateTemp["sales_num"][]=$v["sales_num"];
+                    }
+                    
+                }
+                
+                $ids[]=$id;
+                $this->db->update($this->tabName, array(
+                    "total"=>$total,
+                    "total_balance"=>$total,
+                    "order_num"=>implode(",", $updateTemp["invoice_num"]),
+                    "bill_id"=> implode(",", $updateTemp["bill_id"]),
+                    "cabinet_id"=> implode(",", $updateTemp["cabinet_id"]),
+                    "deliver_id"=> implode(",", $updateTemp["deliver_id"]),
+                    "sales_num"=> implode(",", $updateTemp["sales_num"]),
+                )," id={$id} ");
+            }
+            
+        }   
+    }
     
-    
-   
+    /**
+     * Handle existing invoice
+     * @param array $data
+     * @param string $id
+     * @param array $products
+     * @return boolean
+     */
+    private function handleExistingInvoice($data, $id, $products) {
+        $this->db->update($this->tabName, $data," id in({$id}) ");//更新单证信息
+        $this->db->delete("dev_provebill_invoice_item", " invoice_id in({$id}) ");
+        if(!empty($products)){
+            $totalArray=$updateTemp=array();
+            foreach ($products as $key=>$val){
+                
+                foreach ($val as $k=>$v){
+                    if(empty($updateTemp[$v["invoice_id"]])){
+                        $updateTemp[$v["invoice_id"]]=array("bill_id"=>array(),"cabinet_id"=>array(),"deliver_id"=>array(),"sales_num"=>array(),"invoice_num"=>array());
+                    }
+                    $addData = array(
+                        "invoice_id"=>$v["invoice_id"],
+                        "order_list_id"=>$v["id"],
+                        "order_id"=>$v["orderId"],
+                        "invoice_num"=>!empty($v["deliver_num"])?$v["deliver_num"]:$v["invoice_num"], 
+                        "invoice_total"=>$v["invoice_total"], 
+                        "invoice_price"=>$v["invoice_price"], 
+                        
+                        "adjust_money"=>$v["adjust_money"], 
+                        "adjust_price"=>$v["adjust_price"], 
+                        
+                        "exchange_rate"=>$v["exchange_rate"], 
+                        "order_num"=>$v["orderNum"],
+                        
+                        "freight"=>$v["freight"],
+                        "insure"=>$v["insure"],
+                        "fob_total"=>$v["fob_total"],
+                        "sales_num"=>$v["sales_num"],
+                        "deliver_id"=>$v["deliver_id"],
+                    );
+                    if(!empty($v["productId"])){
+                        $productInfo = $this->db->get_one("dev_product", "*", " id={$v["productId"]} ");
+                        if(!empty($productInfo)){
+                            $addData["hs_code"]=$productInfo["hsCode"];
+                            $addData["hs_name"]=$productInfo["hsCodeName"];
+                        }
+                    }
+                    $this->db->insert("dev_provebill_invoice_item", $addData);
+                    
+                    $totalArray[$v["invoice_id"]]+=$v["invoice_total"];
+                    
+                    if(!empty($v["deliver_id"])&&!in_array($v["deliver_id"], $updateTemp[$v["invoice_id"]]["deliver_id"])){
+                        $tempData=$this->db->get_one(" dev_provebill as a left join dev_provebill_cabinet as b on b.bill_id=a.id ", "a.id as bill_id,b.id as cabinet_id,a.invoice_num ", " a.deliver_id={$v["deliver_id"]} ");
+                        if(!empty($tempData["bill_id"]))  $updateTemp[$v["invoice_id"]]["bill_id"][]=$tempData["bill_id"];
+                        if(!empty($tempData["cabinet_id"]))  $updateTemp[$v["invoice_id"]]["cabinet_id"][]=$tempData["cabinet_id"]; 
+                        if(!empty($tempData["invoice_num"])&& !in_array($tempData["invoice_num"],$updateTemp[$v["invoice_id"]]["invoice_num"])) $updateTemp[$v["invoice_id"]]["invoice_num"][]=$tempData["invoice_num"];
+
+                        $updateTemp[$v["invoice_id"]]["deliver_id"][]=$v["deliver_id"];
+                        $updateTemp[$v["invoice_id"]]["sales_num"][]=$v["sales_num"];
+                    }
+
+                }
+
+            }
+        } 
+        
+        if(!empty($totalArray)){
+            foreach ($totalArray as $key=>$val){
+                $this->db->update($this->tabName, array(
+                    "total"=>$val,
+                    "total_balance"=>$val,
+                    "order_num"=>implode(",", $updateTemp[$key]["invoice_num"]),
+                    "bill_id"=> implode(",", $updateTemp[$key]["bill_id"]),
+                    "cabinet_id"=> implode(",", $updateTemp[$key]["cabinet_id"]),
+                    "deliver_id"=> implode(",", $updateTemp[$key]["deliver_id"]),
+                    "sales_num"=> implode(",", $updateTemp[$key]["sales_num"]),
+                )," id={$key} ");
+            }
+        }
+        $ids= explode(",", $id);
+        return $ids;
+    }
+
+    /**
+     * Delete Invoice
+     * @param array $params
+     * @return array
+     */
     public function del($params){
         if(empty($params["id"])){
            return array("status"=>500,"msg"=>"参数错误！","data"=>array()); 
@@ -525,7 +490,11 @@ class billInvoice{
     }
     
     
-    //
+    /**
+     * Get Invoice Items List
+     * @param array $params
+     * @return array
+     */
     public function getInvoiceItems($params){
         if(empty($params["deliver_id"])&&empty($params["id"])&&empty($params["deliver_ids"])){
            return array("status"=>500,"msg"=>"参数错误！","data"=>array()); 
@@ -558,11 +527,14 @@ class billInvoice{
         return array("status"=>200,"msg"=>"成功！","data"=>$retInfo);
     }
     
+    /**
+     * Get Deliver Items List
+     * @param array $params
+     * @return array
+     */
 
-    public function getProbillItems($params) {
+    private function getProbillItems($params) {
         $productList=$this->db->select_raw("dev_provebill_product", "*", " FIND_IN_SET(provebill_id,'{$params["bill_id"]}') "); 
-        
-        
         $products=$retList=$ids=array();
         foreach ($productList as $key=>$val){
             $ids[]=$val["order_list_id"];
@@ -605,24 +577,16 @@ class billInvoice{
            
 
             $adjustMoney= floatval($val["apportion_total"])!=0?floatval($val["apportion_total"]):$val["total_1"];
-            
- 
-            
             //调账
             $adjustBill=$this->db->get_one("dev_provebill_product_adjust", "*", " provebill_id={$val["provebill_id"]} and order_list_id={$val["order_list_id"]} and status = 1 ");
             //$adjustBill=$this->db->get_one("dev_provebill_product_adjust", "*", " provebill_id={$val["provebill_id"]} and order_list_id={$val["order_list_id"]} ");
             if(!empty($adjustBill)){
                 $productList[$key]=$val=$adjustBill;
             }
-
             $product=$products[$val["order_list_id"]];
-            
-
             $product["huanSuanLv"]=!empty($product["huanSuanLv"])?$product["huanSuanLv"]:1;
-
             $totalNum = $product["invoice_num"]=floatval($val["num"])*$product["huanSuanLv"];
             $totalManualNum = 0;
-           
             $product["sales_num"]=!empty($deliverInfo["sales_num"])?$deliverInfo["sales_num"]:0;
             $product["deliver_id"]=!empty($deliverInfo["id"])?$deliverInfo["id"]:0;
             //echo $product["invoice_num"]."||";
@@ -692,11 +656,14 @@ class billInvoice{
  
     }
     
+    /**
+     * Get Deliver Items
+     * @param array $params
+     * @return array
+     */
     public function getDeliverItems($params) {
         $productList=$this->db->select_raw("dev_provebill_deliver_item", "*", " deliver_id in ({$params["deliver_id"]}) "); 
-        
-        
-        
+        if (empty($productList)) return [];
         $product=$retList=$ids=array();
         foreach ($productList as $key=>$val){
             $ids[]=$val["order_list_id"];
@@ -716,8 +683,6 @@ class billInvoice{
         }
 
         foreach ($productList as $key=>$val){
-            
-            
             $item=$product[$val["order_list_id"]];
             //$item["huanSuanLv"]=!empty($item["huanSuanLv"])?floatval($item["huanSuanLv"]):1;
             if(floatval($val["deliver_num"])==0)         continue;
@@ -739,6 +704,11 @@ class billInvoice{
         return $retList;
     }
     
+    /**
+     * Get invoice list
+     * @param array $params
+     * @return array
+     */
     public function getInvoiceList($params){
         $productList=$this->db->select_raw("dev_provebill_invoice_item", "*", " invoice_id={$params["invoice_id"]} "); 
         
@@ -789,7 +759,12 @@ class billInvoice{
         return $retList;
     }
     
-    //产品数据计算
+    /**
+     * Compute the data
+     * @param array $dataInfo
+     * @param int $exchangeRate
+     * @return array
+     */
     public function dataCompute(&$dataInfo,$exchangeRate){
         $exchangeRate=!empty($exchangeRate)?$exchangeRate:1;
         foreach ($dataInfo as $key=>$val){
@@ -803,7 +778,11 @@ class billInvoice{
     }
 
 
-    //删除操作
+    /**
+     * Delete the invoice
+     * @param array $params
+     * @return array
+     */
     public function delInvoice($params){
         if(empty($params["id"])){
             return array("status"=>500,"msg"=>"参数错误！","data"=>array()); 
@@ -813,16 +792,9 @@ class billInvoice{
         if(empty($invoice["deliver_id"])){
             return array("status"=>500,"msg"=>"参数错误！","data"=>array()); 
         }
-        
-        $deliverIds= implode(",", $invoice["deliver_id"]); 
         $this->db->query("BEGIN");//事务开始  
         try { 
-            if(count($deliverIds)>1){
-                $dataList=$this->db->select_raw("dev_provebill_invoice", "*", " id={$params["id"]} ");
-            }else{
-                $dataList=$this->db->select_raw("dev_provebill_invoice", "*", " deliver_id in ({$invoice["deliver_id"]}) ");
-            }
-            
+            $dataList=$this->db->select_raw("dev_provebill_invoice", "*", " id={$params["id"]} ");
             foreach ($dataList as $key=>$val){
                 $this->rebackToU8(array("id"=>$params["id"],"deliver_id"=>$val["deliver_id"]));
                 $this->db->delete("dev_provebill_invoice", " id={$val["id"]} ");
@@ -846,6 +818,11 @@ class billInvoice{
         
     }
     
+    /**
+     * Reback to U8
+     * @param array $params
+     * @return array
+     */
     public function rebackToU8($params){
         $invoice=$this->db->get_one("dev_provebill_invoice", "*", " id={$params["id"]} ");
         $deliverInfo=$this->db->get_one("dev_provebill_deliver", "*", " id in ({$params["deliver_id"]}) ");
@@ -873,7 +850,6 @@ class billInvoice{
             }else{
                 return false;      
             }
-         
         }
         
         $success=true;
@@ -895,16 +871,17 @@ class billInvoice{
         }
     }
 
+    /**
+     * Submit invoice info
+     * @param array $params
+     * @return array
+     */
 
     public function submitInvoiceInfo($params){
         if(empty($params["id"])){
             return array("status"=>500,"msg"=>"参数错误！","data"=>array()); 
         }
-        
         $ids= explode(",", $params["id"]);
-        
-       
-        
         foreach ($ids as $key=>$val){
             $invoice=$this->db->get_one("dev_provebill_invoice", "*", " id={$val} ");
             if(empty($invoice)){
@@ -918,21 +895,14 @@ class billInvoice{
                 "dCreateDate"=>date("Y-m-d H:i:s"),
             ));
             
-            
-
             if(!empty($flowId)){ 
                 $userPriv=$this->db->get_one("dev_runpriv", "*", " name='财务审核' and type='开票流程' ");
-
-                $userId="";
                 if(!empty($userPriv["user_groups"])){
                     $userGroups= string::autoCharset(json_decode(string::autoCharset($userPriv["user_groups"],'gbk','utf-8'), true),'utf-8','gbk');
                     foreach ($userGroups as $key=>$val){
                         if($val["name"]==$invoice["account_type"]) $userId=$val["uids"];
                     }
                 }
-                
-                //$this->flows->nextStep(array("flowId"=>$flowId,"userId"=>$userId));
-                	
                 $this->db->update("dev_flows_step", array("prcsFlag"=>"办理完毕")," flowId='{$flowId}' and flowPrcs='填写单据' ");
                 $retInfo = $this->sendMsg(array("flowId"=>$flowId));
                 if($retInfo['status'] == '500'){
@@ -940,11 +910,14 @@ class billInvoice{
                 }
             } 
         }
-        
-        
         return array("status"=>200,"msg"=>"成功！","data"=>array()); 
     }
     
+    /**
+     * Audit invoice info
+     * @param array $params
+     * @return array
+     */
     public function auditInvoiceInfo($params){
         if(empty($params["flow_id"])){
             return array("status"=>500,"msg"=>"参数错误！","data"=>array()); 
@@ -953,7 +926,11 @@ class billInvoice{
         $this->sendMsg(array("flowId"=>$params["flow_id"]));
     }
 
-
+    /**
+     * Send msg
+     * @param array $params
+     * @return array
+     */
     public function sendMsg($params){
         if(empty($params["flowId"])) return false;
         $flowInfo=$this->flows->get_current_flow(array("flowId"=>$params["flowId"]));
@@ -963,7 +940,6 @@ class billInvoice{
         if(!empty($privInfo["uids"])) $msgIds=$privInfo["uids"];
         $invoice=$this->db->select_one("dev_provebill_invoice","*"," id={$flowInfo["flowCaseId"]} ");    
         if($flowInfo["status"]=="财务审核"&&$flowInfo["prcsFlag"]=="未接收"){
-            
             $this->commSer->sendMsg(array(
                 "uids"=>$msgIds,
                 "msg"=>"您有一单开票记录【订单号：{$invoice["order_num"]}】需要审核",
@@ -975,7 +951,6 @@ class billInvoice{
             if(empty($retInfo)||$retInfo["status"]!="200"){
                 return $retInfo; 
             }else{
-                
                 $this->db->update("dev_provebill_deliver", array("is_invoice"=>1)," id={$invoice["deliver_id"]} ");
                 $this->commSer->sendMsg(array(
                     "uids"=>$flowInfo["beginUser"],
@@ -988,8 +963,12 @@ class billInvoice{
 
     }
     
+    /**
+     * Sync declaration invoice
+     * @param string $orderNum
+     * @return array
+     */
     public function invoiceToU8($params){
-        
         if(empty($params["id"])) return array("status"=>500,"msg"=>"参数错误！","data"=>array());
         $invoice=$this->db->select_one("dev_provebill_invoice","*"," id={$params["id"]} ");
         $deliver=$this->db->get_one("dev_provebill_deliver", "*", " id in ({$invoice["deliver_id"]}) ");
@@ -998,14 +977,9 @@ class billInvoice{
         $config = $this->db->select_one('dev_config','*',"zhangTao='{$deliver["account_type"]}'");
         if(!$config) return array("status"=>500,"msg"=>"配置信息获取失败！","data"=>array());
         $this->msdb = new mssqlDB($config['ip'],array('Database'=>'MiddleBase','UID'=>'sa','PWD'=>$config['pass']));
-        
-     
-        
-        
         if(empty($this->msdb)){
             return array("status"=>500,"msg"=>"无法连接u8数据库！","data"=>array());
         }
-
         // 启动事务
         if (sqlsrv_begin_transaction($this->msdb->conn) === false) {
             return array("status"=>500,"msg"=>"启动事务失败！","data"=>array());
@@ -1033,7 +1007,6 @@ class billInvoice{
             "cTrade"=>$invoice['cTrade'],    //贸易方式
         );
         
-        
         if(!empty($invoice["invoice_date"])&&$invoice["invoice_date"]!="0000-00-00") $updateInfo["dDate"]=$invoice["invoice_date"];//发票日期
         if(!empty($invoice["account_date"])&&$invoice["account_date"]!="0000-00-00") $updateInfo["dLiZhang"]=$invoice["account_date"];//立账日期
         if(!empty($invoice["expire_date"])&&$invoice["expire_date"]!="0000-00-00") $updateInfo["dDaoQi"]=$invoice["expire_date"]; //到期日
@@ -1041,11 +1014,7 @@ class billInvoice{
         if(!empty($invoice["arrival_date"])&&$invoice["arrival_date"]!="0000-00-00") $updateInfo["dJinGang"]=$invoice["arrival_date"];//进港日期
         if(!empty($invoice["export_date"])&&$invoice["export_date"]!="0000-00-00") $updateInfo["dChuKou"]=$invoice["export_date"];//出口日期
         if(!empty($invoice["pre_arrival_date"])&&$invoice["pre_arrival_date"]!="0000-00-00") $updateInfo["dYuJiDangGang"]=$invoice["pre_arrival_date"];//预计到港日期
-
         $ret=$this->msdb->insert("Tbl_YG_Invoice",$updateInfo);
-        
-        
-
         if($ret!=1) $success=false;
         if(!empty($invoiceItems)&&$success){
             $retInfo= $this->msdb->select_one("Tbl_YG_Invoice"," max(Id) as Id ");
@@ -1069,23 +1038,22 @@ class billInvoice{
                 if($temp!=1) $success=false;
             }          
         }
-
-       
-        
         if($success){
             sqlsrv_commit($this->msdb->conn); //提交事务
         }else{
             sqlsrv_rollback($this->msdb->conn); // 事务回滚
             return array("status"=>500,"msg"=>$temp,"data"=>array());   
         }
-        
         return array("status"=>200,"msg"=>"成功！","data"=>array());   
         
     }
     
     
-     
-    public function getBillNum(){
+    /**
+     * Generate bill num
+     * @return string
+     */
+    protected function getBillNum(){
         $invoice_num =$invoiceInfo= "";//获取订单号
         $maxLoop=100;//最大循环数
         $loopNum=0; //循环数
@@ -1098,6 +1066,11 @@ class billInvoice{
         return $invoice_num; 
     }
 
+    /**
+     * Sync declaration invoice
+     * @param string $cCode
+     * @return boolean
+     */
     protected function syncDeclarationInvoice($cCode){
         $declarationInfo=$this->db->get_one("dev_declaration_invoice","*"," Code='{$cCode}' ");
         if(empty($declarationInfo)) return false;
@@ -1107,6 +1080,11 @@ class billInvoice{
         return true;
     }
 
+    /**
+     * Get hs code
+     * @param array $orderListInfo
+     * @return string
+     */
     protected function getHsCode($orderListInfo){
         $category = $orderListInfo['category'];
         $model = $orderListInfo['model'];
@@ -1114,6 +1092,13 @@ class billInvoice{
         return $this->filterHsCode($category, $model, $customerCode);
     }
 
+    /**
+     * Filter hs code
+     * @param string $category
+     * @param string $model
+     * @param string $customerCode
+     * @return array
+     */
     protected function filterHsCode($category, $model, $customerCode){
         if(in_array($category, ["清洁胶带"])){
             if(in_array($model, ["","无手柄"])){                   

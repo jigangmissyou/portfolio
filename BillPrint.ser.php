@@ -171,9 +171,6 @@ class billPrintSer{
         return $retInfo;
     }
 
-
-
-
     /**
      * Print invoice-related data
      * @param array $params
@@ -215,7 +212,7 @@ class billPrintSer{
 
 
     /**
-     * init print data
+     * Init print data
      * @param type $params
      * @return type
      * @throws Exception
