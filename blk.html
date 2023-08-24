@@ -6,7 +6,7 @@
 -->
 <html>
 	<head>
-		<title>Project 3 - Baidu Map Transit Tycoon</title>
+		<title>Project 3 - Nearby Stores for Local Shopping</title>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 		<link rel="stylesheet" href="assets/css/main.css" />
@@ -30,7 +30,7 @@
 							<li><a href="yg.html">Project 2</a></li>
 							<li><a href="baidu.html">Project 3</a></li>
 							<li class="active"><a href="blk.html">Project 4</a></li>
-							<li><a href="tencent.html">Project 5</a></li>
+							<li><a href="aboutme.html">About me</a></li>
 						</ul>
 						
 					</nav>
@@ -40,7 +40,7 @@
 						<!-- Post -->
 							<section class="post">
 								<header class="major">
-									<h1>Baidu Map Transit Tycoon</h1>
+									<h1>Nearby Stores for Local Shopping</h1>
 								</header>						
 
 	<!-- Image -->
@@ -58,59 +58,44 @@
 		</div>
 		<h3>Project Overview</h3>
 		<p>
-			The "Baidu Public Transit Tycoon" app, developed by Baidu, offers a unique way to earn money while using public transportation. Users complete simple tasks during their daily bus rides, such as taking photos and checking in, to receive rewards and save on commuting costs. Additionally, the app provides real-time bus route information and rewards users for submitting accurate data about bus stops and stations across China.
-			<div class="row">
+			The "Nearby Stores For Local Shopping" combines online and offline experiences, allowing users to visit physical stores to try out products and then place orders online. This offers a more convenient way for users to find and purchase products that meet their preferences.			<div class="row">
 				<div class="col-12-small">
 					<h3>Role and Responsibilities</h3>
 					<ul>
-						<li>Developed the task list module to display current city's public transit tasks, allowing users to filter tasks based on criteria such as distance and points.</li>
-						<li>Constructed the task collection interface, enabling users to capture photos and data at initial, final, and midpoint stations, with features like station management.</li>
-						<li>Implemented the task upload functionality, enabling users to submit completed tasks for backend review</li>
-						<li>Designed the backend review system to ensure the legitimacy of submitted task data, rewarding points upon successful verification</li>
+						<li>Developed a distance-based sorting feature, allowing users to effortlessly filter nearby Bricks Store locations from closest to farthest.</li>
+						<li>Created an intuitive user interface for browsing product details, facilitating quick identification of desired LEGO products available in nearby stores.</li>
+						<li>Designed the online ordering system, enabling users to seamlessly place orders for their preferred products through the mini program.
+						</li>
+						<li>Integrated a logistics tracking feature, enabling users to query the real-time delivery progress of their orders and set up timely reminders for package acceptance.
+						</li>
+						<li>Implemented security measures to protect user data and financial transactions during online payments.</li>
 					</ul>
 
 					<h3>Technologies and Tools Used</h3>
 					<ul class="alt">
-						<li>Back-end: PHP, Yaf framework, PostgreSQL, Kafaka</li>
+						<li>Back-end: PHP, D, MySQL, Redis</li>
 						<li>Version Control: Git</li>
-						<li>DevOps: Baidu cloud, CI, CD pipeline</li>
 					</ul>
 
 					<h3>Project Challenges and Solutions</h3>
 					<ul class="alt">
-						<li>Challenge: Task Filtering and Management.</li>
-						<li>Solution: Addressing the need for efficient task management, we developed a task list module that allowed users to filter tasks based on distance and points. This streamlined users' ability to find tasks that matched their preferences.
+						<li>Challenge: Geolocation Accuracy.</li>
+						<li>Solution: Implemented a combination of GPS and Wi-Fi positioning systems, optimizing for accuracy by applying data filtering and error correction algorithms. Regular updates to the geolocation library were conducted to enhance precision.
 						</li>
-						<li>Challenge: Data Integrity and Security.</li>
-						<li>Solution: Compress, package, and slice large-sized images to improve upload success rate and user experience. In addition, we employed encryption techniques helped safeguard sensitive information.</li>
-						<li>Challenge: Real-Time Map Integration.
+						<li>Challenge: Preventing Inventory Overselling.</li>
+						<li>Solution: Implemented concurrency control mechanisms to handle simultaneous purchases of the same product. This prevented multiple customers from purchasing the last available item simultaneously.</li>
+						<li>Challenge:Logistics Tracking Integration.</li>
+						<li>Solution: Integrating third-party logistics tracking APIs to provide users with real-time delivery updates required overcoming compatibility and data synchronization issues.</li>
+						<li>Challenge: Performance Optimization
 						</li>
 						<li>
-							Solution: We integrated real-time map services. This provided users with a dynamic visual representation of their progress within the app.
+							Solution: Employed a combination of lazy loading, image optimization, and code profiling techniques to enhance the mini program's performance. Regularly monitored and fine-tuned the application's performance metrics based on user feedback.
 						</li>
 					</ul>
-
-					<h3>Project Goals and Achievements</h3>
-					<ul class="alt">
-						<li>The rewarding of points and their conversion into cash has significantly boosted user engagement, ensuring sustained user activity over the long term. This approach has also enhanced the efficiency and accuracy of maintaining our public transit routes and stations, ultimately providing users with more precise and convenient data.</li>
-						<li>Recommend local tasks based on the user's proximity, making it easier for users to participate in tasks.						</li>
-					</ul>
-
-					<h3>Team Collaboration and Communication</h3>
-					<ul class="alt">
-						<li>Throughout the project, I collaborated closely with cross-functional teams, discussing requirements with product managers, coordinating interface design with designers, and troubleshooting issues with testing engineers.</li>
-						<li>Through ongoing communication and collaboration, we were able to address challenges promptly and ensure the project's progress as planned.</li>
-					</ul>
-
 				</div>
 			</div>
 		</p>
 
-	<!-- Box -->
-		<h2>Self-Assessment</h2>
-		<div class="box">
-			<p>In this project, I not only enhanced my technical skills but also developed teamwork and problem-solving abilities. By contributing to critical functionalities and overcoming technical challenges, I played a role in realizing a successful financial platform, offering valuable financial transaction opportunities to individuals and businesses.</p>
-		</div>
 
 		<hr />
 
