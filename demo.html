@@ -1527,7 +1527,7 @@
 				</div>
 
 			</div>
-		
+          
 	</div>
 
 </div>  
@@ -1596,5 +1596,15 @@
     domain="www.chatbase.co"
     defer>
     </script>
+<script>
+    window.addEventListener('load', function() {
+       
+        var chatButton = document.getElementById('chatbase-bubble-button');
+        if (chatButton) {
+            chatButton.style.bottom = '5rem'; 
+            chatButton.style.right = '1.5rem';
+        }
+    });
+</script>
 </body>
 </html>
